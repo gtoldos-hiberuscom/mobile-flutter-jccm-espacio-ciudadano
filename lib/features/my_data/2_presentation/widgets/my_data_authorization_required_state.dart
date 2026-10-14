@@ -15,6 +15,7 @@ class MyDataAuthorizationRequiredState extends StatelessWidget {
     required this.returnTo,
     this.onAuthorized,
     this.message,
+    this.showTextAction = true,
     this.scrollable = true,
     super.key,
   });
@@ -31,6 +32,9 @@ class MyDataAuthorizationRequiredState extends StatelessWidget {
 
   final String? message;
 
+  /// Uses the centered text link variant shown in the detail pages.
+  final bool showTextAction;
+
   /// `true` cuando es el cuerpo completo de la página (lleva el margen de
   /// página y su propio scroll); `false` cuando va anidado en una página ya
   /// acolchada, donde conserva su inset propio de 16 dp.
@@ -42,6 +46,7 @@ class MyDataAuthorizationRequiredState extends StatelessWidget {
       padding: scrollable ? appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space16) : const EdgeInsets.all(AppDimensions.space16),
       child: MyDataAuthorizationContextualHelper(
         message: message,
+        showTextAction: showTextAction,
         onOpenSettings: () async {
           await context.push(
             Uri(

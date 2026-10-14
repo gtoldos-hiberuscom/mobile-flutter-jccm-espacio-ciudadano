@@ -23,7 +23,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-const _registrarLabel = 'Registrar documentos aportados';
+const _registrarLabel = 'Enviar documentos';
 const _avisoParcial = 'Algunos ficheros no se han podido enviar. Puedes reintentarlo.';
 const _tercero = TerceroIdentificacion(tipodoc: 'NIF', documentNumber: '99999999R');
 
@@ -50,6 +50,15 @@ Future<void> esperar(final WidgetTester tester, final bool Function() condicion,
     }
   });
   await tester.pump(const Duration(milliseconds: 300));
+}
+
+/// Deja pasar el «Completado» de una tarjeta recién subida.
+///
+/// En tiempo real: el temporizador nace en la reconstrucción que dispara
+/// [esperar], dentro de `runAsync`, así que el reloj falso no lo mueve.
+Future<void> esperarFinCompletado(final WidgetTester tester) async {
+  await tester.runAsync(() => Future<void>.delayed(aportacionDuracionCompletado + const Duration(milliseconds: 50)));
+  await tester.pump();
 }
 
 void main() {
@@ -282,7 +291,7 @@ void main() {
     expect(tester.widget<AppFileUpload>(find.byType(AppFileUpload)).status, AppFileUploadStatus.uploading);
 
     // El fake solo se destraba abortando; al reintentarlo sí llega el hash y
-    // la tarjeta pasa a «Subido»: barra completa y ya se puede eliminar.
+    // la tarjeta pasa a «Completado» (barra completa) y luego a la papelera.
     await tester.runAsync(() async => vueltaDeSegundoPlano.add(null));
     await esperar(tester, () => !container.read(_provider).haySubidasEnCurso);
     repository.colgarPath = null;
@@ -290,6 +299,38 @@ void main() {
     await esperar(tester, () => container.read(_provider).todosSubidos);
 
     expect(tester.widget<AppFileUpload>(find.byType(AppFileUpload)).status, AppFileUploadStatus.complete);
+    expect(find.text('Completado'), findsOneWidget);
+    expect(find.byTooltip('Eliminar archivo'), findsNothing);
+
+    await esperarFinCompletado(tester);
+
+    expect(tester.widget<AppFileUpload>(find.byType(AppFileUpload)).status, AppFileUploadStatus.uploaded);
+    expect(find.text('Completado'), findsNothing);
+    expect(find.byTooltip('Eliminar archivo'), findsOneWidget);
+  });
+
+  testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'un fichero en cola se pinta cargando, sin papelera, y se puede cancelar', (final tester) async {
+    // JCCMEC-245: el que esperaba turno salía con la papelera, como si ya
+    // estuviera subido, antes de pasar a cargando.
+    final primero = file('primero.pdf');
+    final segundo = file('segundo.pdf');
+    final repository = _FakeDocumentoRepository(colgarPath: primero.path);
+    final container = await pumpPage(tester, repository);
+
+    container.read(_provider.notifier).addArchivos([primero, segundo]);
+    await esperar(tester, () => container.read(_provider).haySubidasEnCurso);
+
+    final tarjetas = tester.widgetList<AppFileUpload>(find.byType(AppFileUpload)).toList();
+    expect(tarjetas.map((final t) => t.status), [AppFileUploadStatus.uploading, AppFileUploadStatus.pending]);
+    expect(find.byTooltip('Eliminar archivo'), findsNothing);
+    // La página tiene su propio «Cancelar»: solo cuentan los de las tarjetas.
+    final cancelarEnTarjeta = find.descendant(of: find.byType(AppFileUpload), matching: find.widgetWithText(TextButton, 'Cancelar'));
+    expect(cancelarEnTarjeta, findsNWidgets(2));
+
+    await tester.tap(cancelarEnTarjeta.last);
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(container.read(_provider).archivos.map((final a) => a.path), [primero.path]);
   });
 
   testWidgets(timeout: const Timeout(Duration(seconds: 60)), 'una subida sin progreso se aborta y deja reintentar', (final tester) async {
@@ -360,8 +401,9 @@ void main() {
 
     container.read(_provider.notifier).addArchivos([primero, segundo]);
     await esperar(tester, () => container.read(_provider).todosSubidos);
+    await esperarFinCompletado(tester);
 
-    await tester.tap(find.widgetWithText(TextButton, 'Eliminar').first);
+    await tester.tap(find.byTooltip('Eliminar archivo').first);
     await tester.pump(const Duration(milliseconds: 300));
 
     // C-41: antes no hacía nada; luego abandonaba el intento entero. Ahora el

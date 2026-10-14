@@ -134,7 +134,8 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
         (final builder) => builder
           ..pnumdoc = documentNumber
           ..pregistro = numRegistro
-          // El backend rechaza ptipodoc='DNI' con 403; igual que
+          // El backend rechaza ptipodoc='DNI' con 403: el llamador debe pasar
+          // el tipo que entiende el backend (NIF/NIE/CIF), nunca `DNI`.
           ..ptipodoc = tipodoc,
       ),
       extra: {
@@ -220,7 +221,10 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       // "Oficina tramitadora": mejor candidato disponible es `desuniorg`
       // (descripción de la unidad orgánica, campo paralelo a `desconsej`).
       oficinaTramitadora: _string(data, 'desuniorg'),
-      fechaInicio: _nonSentinelDate(_string(data, 'fechareg')) ?? _nonSentinelDate(_string(data, 'fechaini')),
+      // «Fecha de inicio» es `fechaini` (inicio del expediente), la que pinta
+      // la web; `fechareg` es la del registro de entrada y puede ser anterior
+      // (JCCMEC-238). Solo se usa como respaldo si `fechaini` no viene.
+      fechaInicio: _nonSentinelDate(_string(data, 'fechaini')) ?? _nonSentinelDate(_string(data, 'fechareg')),
       // "0000-00-00" es el sentinel SAP de fecha nula; se trata como ausente.
       fechaFin: _nonSentinelDate(_string(data, 'fechafin')),
       estado: _estadoDescripcion(data),
@@ -294,7 +298,7 @@ final class GestionExpedienteRepositoryImpl implements GestionExpedienteReposito
       titulo: _string(data, 'desasunto') ?? _string(data, 'titulo') ?? _string(data, 'desproc') ?? _string(data, 'asunto') ?? '',
       consejeria: _string(data, 'desconsej') ?? _string(data, 'consej') ?? '',
       oficinaTramitadora: _string(data, 'desuniorg'),
-      fechaInicio: _nonSentinelDate(_string(data, 'fechareg')) ?? _nonSentinelDate(_string(data, 'fechaini')),
+      fechaInicio: _nonSentinelDate(_string(data, 'fechaini')) ?? _nonSentinelDate(_string(data, 'fechareg')),
       estado: _estadoDescripcion(data),
     );
   }

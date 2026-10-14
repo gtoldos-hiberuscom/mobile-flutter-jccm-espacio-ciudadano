@@ -55,54 +55,73 @@ class _GestionExpedientesPageState extends ConsumerState<GestionExpedientesPage>
         color: AppColors.backgroundBlueLighter,
         child: SafeArea(
           top: false,
-          child: expedientesAsync.when(
-            // Al reintentar, `refresh` conserva el error mientras recarga y por
-            // defecto `.when` seguiría pintándolo, con "Reintentar" activo: cada
-            // pulsación lanzaba otra petición. Se muestra la carga en su lugar.
-            skipLoadingOnRefresh: false,
-            loading: () => const LoadingStateWidget(),
-            // La retirada de la cláusula obligatoria ya está cerrando la
-            // sesión: decir "no se han podido cargar" sería mentir en el
-            // parpadeo previo a volver al landing. Cualquier otro fallo,
-            // incluida una autorización que no se pudo comprobar, es error
-            // reintentable.
-            error: (final error, final _) => error is ConsentRevoked
-                ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
-                : ErrorStateWidget(
-                    message: l10n.gestionExpedientesLoadError,
-                    onRetry: () => ref.refresh(expedientesProvider),
-                  ),
-            data: (final expedientes) {
-              if (expedientes.isEmpty) {
-                return EmptyStateWidget(message: l10n.gestionExpedientesEmpty);
-              }
-              final filteredExpedientes = _filterExpedientes(expedientes);
-              if (filteredExpedientes.isEmpty) {
-                return EmptyStateWidget(
-                  message: l10n.caseworkSearchNoResults,
-                  subtitle: l10n.caseworkSearchNoResultsHint,
-                  icon: AppIcons.search,
-                );
-              }
-              // Todas las tarjetas se construyen: una lista perezosa no crea
-              // las que están fuera de la vista y el teclado no llega a ellas
-              // sin deslizar antes (WCAG 2.1.1). El recorrido del foco ya las
-              // trae a la vista.
-              return SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: appPageHorizontalPadding(context),
-                  vertical: AppDimensions.space24,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  left: appPageHorizontalPadding(context),
+                  top: AppDimensions.space24,
+                  right: appPageHorizontalPadding(context),
                 ),
-                child: Column(
-                  children: [
-                    for (final (index, expediente) in filteredExpedientes.indexed) ...[
-                      if (index > 0) const SizedBox(height: AppDimensions.space16),
-                      _GestionExpedienteCard(expediente: expediente),
-                    ],
-                  ],
+                child: Text(
+                  l10n.gestionExpedientesDescription,
+                  style: AppTypography.bodyRegular.copyWith(color: AppColors.textBase),
                 ),
-              );
-            },
+              ),
+              Expanded(
+                child: expedientesAsync.when(
+                  // Al reintentar, `refresh` conserva el error mientras recarga y por
+                  // defecto `.when` seguiría pintándolo, con "Reintentar" activo: cada
+                  // pulsación lanzaba otra petición. Se muestra la carga en su lugar.
+                  skipLoadingOnRefresh: false,
+                  loading: () => const LoadingStateWidget(),
+                  // La retirada de la cláusula obligatoria ya está cerrando la
+                  // sesión: decir "no se han podido cargar" sería mentir en el
+                  // parpadeo previo a volver al landing. Cualquier otro fallo,
+                  // incluida una autorización que no se pudo comprobar, es error
+                  // reintentable.
+                  error: (final error, final _) => error is ConsentRevoked
+                      ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
+                      : ErrorStateWidget(
+                          message: l10n.gestionExpedientesLoadError,
+                          onRetry: () => ref.refresh(expedientesProvider),
+                        ),
+                  data: (final expedientes) {
+                    if (expedientes.isEmpty) {
+                      return EmptyStateWidget(message: l10n.gestionExpedientesEmpty);
+                    }
+                    final filteredExpedientes = _filterExpedientes(expedientes);
+                    if (filteredExpedientes.isEmpty) {
+                      return EmptyStateWidget(
+                        message: l10n.caseworkSearchNoResults,
+                        subtitle: l10n.caseworkSearchNoResultsHint,
+                        icon: AppIcons.search,
+                      );
+                    }
+                    // Todas las tarjetas se construyen: una lista perezosa no crea
+                    // las que están fuera de la vista y el teclado no llega a ellas
+                    // sin deslizar antes (WCAG 2.1.1). El recorrido del foco ya las
+                    // trae a la vista.
+                    return SingleChildScrollView(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: appPageHorizontalPadding(context),
+                        vertical: AppDimensions.space16,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (final (index, expediente) in filteredExpedientes.indexed) ...[
+                            if (index > 0) const SizedBox(height: AppDimensions.space16),
+                            _GestionExpedienteCard(expediente: expediente),
+                          ],
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -167,7 +186,7 @@ class _GestionExpedienteCard extends StatelessWidget {
       showArrow: true,
       refNumber: expediente.numexp,
       refNumberLabel: l10n.gestionExpedientesNumExpedienteLabel,
-      expiryDate: _formatDate(context, expediente.fechaInicio),
+      expiryDate: _formatDate(expediente.fechaInicio),
       expiryDateLabel: l10n.gestionExpedientesFechaInicioLabel,
       extraLabel: expediente.estado != null ? l10n.gestionExpedientesEstadoLabel : null,
       extraText: expediente.estado == null ? null : _sentenceCase(expediente.estado!),
@@ -177,21 +196,13 @@ class _GestionExpedienteCard extends StatelessWidget {
     );
   }
 
-  String _formatDate(final BuildContext context, final String? rawDate) {
+  // dd/mm/aaaa, el mismo formato que la web y que el detalle (JCCMEC-238).
+  String _formatDate(final String? rawDate) {
     final date = rawDate == null ? null : DateTime.tryParse(rawDate);
     if (date == null) {
       return rawDate ?? '-';
     }
-    final formatted = DateFormat(
-      'd MMM yyyy',
-      Localizations.localeOf(context).languageCode,
-    ).format(date);
-    final parts = formatted.split(' ');
-    if (parts.length < 3 || parts[1].isEmpty) {
-      return formatted;
-    }
-    parts[1] = '${parts[1][0].toUpperCase()}${parts[1].substring(1)}';
-    return parts.join(' ');
+    return DateFormat('dd/MM/yyyy').format(date);
   }
 
   String _sentenceCase(final String value) {

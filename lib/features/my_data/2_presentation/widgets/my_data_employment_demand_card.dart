@@ -12,6 +12,7 @@ class MyDataEmploymentDemandCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isActive = demand.status?.trim().toLowerCase() == 'activa';
 
     return AppInfoCard(
       leadingBorderWidth: AppDimensions.space4,
@@ -31,19 +32,21 @@ class MyDataEmploymentDemandCard extends StatelessWidget {
                 _display(demand.status).toUpperCase(),
                 style: AppTypography.captionUppercase.copyWith(color: AppColors.textSecondary),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
-                child: Divider(height: 1, thickness: 1, color: AppColors.neutral100),
-              ),
-              Text(
-                l10n.myDataEmploymentRegistrationDateLabel.toUpperCase(),
-                style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
-              ),
-              const SizedBox(height: AppDimensions.space4),
-              Text(
-                _formatDate(context, demand.uninterruptedRegistrationDate),
-                style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
-              ),
+              if (isActive) ...[
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: AppDimensions.space8),
+                  child: Divider(height: 1, thickness: 1, color: AppColors.neutral100),
+                ),
+                Text(
+                  l10n.myDataEmploymentRegistrationDateLabel.toUpperCase(),
+                  style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
+                ),
+                const SizedBox(height: AppDimensions.space4),
+                Text(
+                  _formatDate(context, demand.uninterruptedRegistrationDate),
+                  style: AppTypography.smallRegular.copyWith(color: AppColors.primary),
+                ),
+              ],
             ],
           ),
         ),

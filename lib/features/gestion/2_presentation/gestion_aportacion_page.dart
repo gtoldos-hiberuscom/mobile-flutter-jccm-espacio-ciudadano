@@ -22,25 +22,11 @@ class GestionAportacionPage extends ConsumerStatefulWidget {
 
 class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
   _DocType _selectedDocType = _DocType.dni;
+  _ExpedienteIdentifier _selectedExpedienteIdentifier = _ExpedienteIdentifier.registro;
   final _docNumberController = TextEditingController();
   final _numRegistroController = TextEditingController();
   final _codIdentificadorController = TextEditingController();
   bool _isSearching = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // Solo puede consultarse por uno de los dos identificadores. Al escribir
-    // en uno, el otro se deshabilita; al limpiarlo, ambos vuelven a habilitarse.
-    _numRegistroController.addListener(_onExpedienteFieldChanged);
-    _codIdentificadorController.addListener(_onExpedienteFieldChanged);
-  }
-
-  void _onExpedienteFieldChanged() {
-    if (mounted) {
-      setState(() {});
-    }
-  }
 
   @override
   void dispose() {
@@ -76,9 +62,8 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
       return;
     }
 
-    final numRegistro = _numRegistroController.text.trim();
-    final numExpediente = _codIdentificadorController.text.trim();
-    if (numRegistro.isEmpty == numExpediente.isEmpty) {
+    final expedienteIdentifier = _selectedExpedienteIdentifier == _ExpedienteIdentifier.registro ? _numRegistroController.text.trim() : _codIdentificadorController.text.trim();
+    if (expedienteIdentifier.isEmpty) {
       AppAlertSnackbar.show(context, message: l10n.gestionAportacionCamposExpedienteError, severity: AppAlertSeverity.error);
       return;
     }
@@ -91,8 +76,8 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
       citizenId: ref.read(citizenEndpointIdsProvider).requireIdAgente(),
       documentNumber: documentNumber,
       tipodoc: _selectedDocType.tipodoc,
-      numRegistro: numRegistro.isEmpty ? null : numRegistro,
-      numExpediente: numExpediente.isEmpty ? null : numExpediente,
+      numRegistro: _selectedExpedienteIdentifier == _ExpedienteIdentifier.registro ? expedienteIdentifier : null,
+      numExpediente: _selectedExpedienteIdentifier == _ExpedienteIdentifier.codigo ? expedienteIdentifier : null,
     );
     if (!mounted) {
       return;
@@ -125,24 +110,10 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
     // ignore: discarded_futures
     AppBottomSheet.show<void>(
       context: context,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            l10n.gestionAportacionInfoHeading,
-            style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-          ),
-          const SizedBox(height: AppDimensions.space8),
-          Text(
-            l10n.gestionAportacionInfoBody,
-            style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
-          ),
-          const SizedBox(height: AppDimensions.space8),
-          AppBulletItem(text: l10n.gestionAportacionInfoBullet1),
-          AppBulletItem(text: l10n.gestionAportacionInfoBullet2),
-          AppBulletItem(text: l10n.gestionAportacionInfoBullet3),
-        ],
+      title: l10n.gestionAportacionInfoHeading,
+      body: Text(
+        l10n.gestionAportacionInfoBody,
+        style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
       ),
     );
   }
@@ -186,12 +157,25 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
           boxShadow: AppShadows.low,
         ),
         padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space24),
-        child: AppButton(
-          label: l10n.gestionAportacionFindButton,
-          onPressed: _isSearching ? null : () => _onFindExpediente(l10n),
-          isLoading: _isSearching,
-          isExpanded: true,
-          leadingIcon: AppIcons.check,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppButton(
+              label: l10n.gestionAportarDocumentacionCancelarButton,
+              hierarchy: AppButtonHierarchy.tertiary,
+              onPressed: () => context.go(Routes.gestion),
+              isExpanded: true,
+              leadingIcon: AppIcons.close,
+            ),
+            const SizedBox(height: AppDimensions.space8),
+            AppButton(
+              label: l10n.gestionAportacionFindButton,
+              onPressed: _isSearching ? null : () => _onFindExpediente(l10n),
+              isLoading: _isSearching,
+              isExpanded: true,
+              leadingIcon: AppIcons.check,
+            ),
+          ],
         ),
       ),
       appBar: AppNavBar(
@@ -232,7 +216,7 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
                       _SectionLabel(text: l10n.gestionAportacionPersonaLabel),
                       const SizedBox(height: AppDimensions.space8),
                       AppPhoneInputCase(
-                        label: l10n.gestionAportacionTipoIdLabel,
+                        label: l10n.gestionAportacionTipoIdShortLabel,
                         controller: _docNumberController,
                         countryLabel: _selectedDocType.label(l10n),
                         hint: _selectedDocType.hint(l10n),
@@ -243,28 +227,18 @@ class _GestionAportacionPageState extends ConsumerState<GestionAportacionPage> {
                       ),
                       const SizedBox(height: AppDimensions.space16),
                       _SectionLabel(text: l10n.gestionAportacionExpedienteLabel),
-                      const SizedBox(height: AppDimensions.space4),
-                      Text(
-                        l10n.gestionAportacionExpedienteNote,
-                        style: AppTypography.smallRegular.copyWith(color: AppColors.textBase),
+                      const SizedBox(height: AppDimensions.space8),
+                      _CaseIdentifierSelector(
+                        value: _selectedExpedienteIdentifier,
+                        onChanged: (final value) => setState(() => _selectedExpedienteIdentifier = value),
                       ),
                       const SizedBox(height: AppDimensions.space8),
                       AppInputCase(
-                        label: l10n.gestionAportacionNumRegistroLabel,
-                        hint: l10n.gestionAportacionNumRegistroHint,
-                        controller: _numRegistroController,
-                        helperText: l10n.gestionAportacionNumRegistroHelper,
+                        label: _selectedExpedienteIdentifier.fieldLabel(l10n),
+                        hint: _selectedExpedienteIdentifier.hint(l10n),
+                        controller: _selectedExpedienteIdentifier == _ExpedienteIdentifier.registro ? _numRegistroController : _codIdentificadorController,
+                        helperText: _selectedExpedienteIdentifier.helper(l10n),
                         prefixIcon: const Icon(AppIcons.docs),
-                        enabled: _codIdentificadorController.text.trim().isEmpty,
-                      ),
-                      const SizedBox(height: AppDimensions.space8),
-                      AppInputCase(
-                        label: l10n.gestionAportacionCodIdentificadorLabel,
-                        hint: l10n.gestionAportacionCodIdentificadorHint,
-                        controller: _codIdentificadorController,
-                        helperText: l10n.gestionAportacionCodIdentificadorHelper,
-                        prefixIcon: const Icon(AppIcons.docs),
-                        enabled: _numRegistroController.text.trim().isEmpty,
                       ),
                     ],
                   ),
@@ -294,6 +268,70 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
+class _CaseIdentifierSelector extends StatelessWidget {
+  const _CaseIdentifierSelector({required this.value, required this.onChanged});
+
+  final _ExpedienteIdentifier value;
+  final ValueChanged<_ExpedienteIdentifier> onChanged;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.gestionAportacionExpedienteIdentifierTypeLabel,
+          style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
+        ),
+        const SizedBox(height: AppDimensions.space8),
+        DropdownButtonFormField<_ExpedienteIdentifier>(
+          key: ValueKey(value),
+          initialValue: value,
+          isExpanded: true,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: AppDimensions.space8, vertical: AppDimensions.space4),
+            filled: true,
+            fillColor: AppColors.backgroundWhite,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXs),
+              borderSide: const BorderSide(color: AppColors.borderBlueMutedBase),
+            ),
+          ),
+          items: _ExpedienteIdentifier.values.map((final identifier) => DropdownMenuItem(value: identifier, child: Text(identifier.optionLabel(l10n)))).toList(growable: false),
+          onChanged: (final selected) {
+            if (selected != null) {
+              onChanged(selected);
+            }
+          },
+        ),
+      ],
+    );
+  }
+}
+
+enum _ExpedienteIdentifier {
+  registro,
+  codigo;
+
+  String optionLabel(final AppLocalizations l10n) => switch (this) {
+    _ExpedienteIdentifier.registro => l10n.gestionAportacionRegistroOption,
+    _ExpedienteIdentifier.codigo => l10n.gestionAportacionCodigoOption,
+  };
+
+  String fieldLabel(final AppLocalizations l10n) => optionLabel(l10n);
+
+  String hint(final AppLocalizations l10n) => switch (this) {
+    _ExpedienteIdentifier.registro => l10n.gestionAportacionNumRegistroHint,
+    _ExpedienteIdentifier.codigo => l10n.gestionAportacionCodIdentificadorHint,
+  };
+
+  String helper(final AppLocalizations l10n) => switch (this) {
+    _ExpedienteIdentifier.registro => l10n.gestionAportacionNumRegistroHelper,
+    _ExpedienteIdentifier.codigo => l10n.gestionAportacionCodIdentificadorHelper,
+  };
+}
+
 enum _DocType {
   dni,
   nie,
@@ -317,11 +355,14 @@ enum _DocType {
     _DocType.cee => l10n.gestionAportacionCeeHint,
   };
 
-  /// Valor enviado al backend en `ptipodoc`/`identificacion.category`. Sin
-  /// enum documentado para NIE/CIF/PASAPORTE/CEE en el swagger — se envía
-  /// el tipo seleccionado tal cual, a petición explícita.
+  /// Valor enviado al backend en `ptipodoc` (búsqueda y detalle del
+  /// expediente del tercero). El backend no conoce `DNI`: lo rechaza con 403
+  /// en `selectbynumreg` y con «numero de DNI incorrecto» en `inicproc`, y
+  /// llama `NIF` al DNI — los mismos literales NIF/NIE/CIF que el flujo
+  /// propio obtiene de `documentTypeOf`. PASAPORTE/CEE no tienen valor
+  /// documentado en el swagger y se envían tal cual, pendientes de backend.
   String get tipodoc => switch (this) {
-    _DocType.dni => 'DNI',
+    _DocType.dni => 'NIF',
     _DocType.nie => 'NIE',
     _DocType.cif => 'CIF',
     _DocType.pasaporte => 'PASAPORTE',

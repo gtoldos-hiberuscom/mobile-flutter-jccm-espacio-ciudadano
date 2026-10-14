@@ -132,6 +132,29 @@ class PreferencesPage extends ConsumerStatefulWidget {
   ConsumerState<PreferencesPage> createState() => _PreferencesPageState();
 }
 
+class _PreferencesLoadError extends StatelessWidget {
+  const _PreferencesLoadError({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SingleChildScrollView(
+      padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space64),
+      child: AppAlertContextual(
+        message: l10n.preferencesLoadError,
+        action: AppButton(
+          label: l10n.preferencesLoadRetry,
+          hierarchy: AppButtonHierarchy.ghost,
+          trailingIcon: AppIcons.autorenew,
+          onPressed: onRetry,
+        ),
+      ),
+    );
+  }
+}
+
 class _PreferencesPageState extends ConsumerState<PreferencesPage> {
   bool _updatingBiometrics = false;
 
@@ -167,8 +190,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
       ),
       body: state.when(
         loading: () => const AppLoadingIndicator(),
-        error: (final _, final _) => ErrorStateWidget(
-          message: l10n.errorStateDefault,
+        error: (final _, final _) => _PreferencesLoadError(
           onRetry: () => ref.invalidate(_preferencesStateProvider(preferencesArgs)),
         ),
         data: (final preferences) => _buildPreferencesContent(
@@ -208,7 +230,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           pendingDescription: l10n.preferencesLifeEventsPendingDescription,
           activeDescription: l10n.preferencesLifeEventsActiveDescription,
           actionLabel: l10n.preferencesSelectAction,
-          actionIcon: preferences.lifeEventsStatus == AppPreferenceStatus.enabled ? null : AppIcons.edit,
+          actionIcon: null,
           onAction: preferences.lifeEventsStatus != AppPreferenceStatus.disabled ? () => unawaited(_openLifeEvents(preferencesArgs)) : null,
           filledAction: preferences.lifeEventsStatus != AppPreferenceStatus.disabled,
           summaryItems: preferences.selectedLifeEvents.map((final event) => event.label).toList(growable: false),
@@ -229,12 +251,13 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           AppPreferenceCard(
             title: l10n.preferencesNotificationContactTitle,
             icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
-            status: preferences.notificationContact == null ? AppPreferenceStatus.pending : AppPreferenceStatus.enabled,
+            status: preferences.notificationContact == null ? AppPreferenceStatus.disabled : AppPreferenceStatus.enabled,
             inactiveDescription: l10n.preferencesNotificationContactInactiveDescription,
             pendingDescription: l10n.preferencesNotificationContactPendingDescription,
             activeDescription: l10n.preferencesNotificationContactActiveDescription,
-            actionLabel: l10n.preferencesManageAction,
+            actionLabel: preferences.notificationContact == null ? l10n.preferencesAddContactAction : l10n.preferencesManageAction,
             actionIcon: AppIcons.edit,
+            showActiveStatus: true,
             summaryItems: [
               ?preferences.notificationContact?.phone,
               ?preferences.notificationContact?.email,
@@ -248,16 +271,17 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           ),
         const SizedBox(height: AppDimensions.space16),
         AppPreferenceCard(
-          title: 'Activación de acceso biométrico',
+          title: l10n.preferencesBiometricTitle,
           icon: const AppIcon(AppIcons.fingerprint, color: AppColors.textPrimary),
           status: preferences.biometricEnabled ? AppPreferenceStatus.enabled : AppPreferenceStatus.disabled,
-          inactiveDescription: 'No se ha activado el acceso biométrico a la aplicación.',
-          pendingDescription: 'No se ha activado el acceso biométrico a la aplicación.',
-          activeDescription: 'El acceso biométrico a la aplicación está activado.',
-          actionLabel: preferences.biometricEnabled ? 'Desactivar' : 'Activar',
+          inactiveDescription: l10n.preferencesBiometricInactiveDescription,
+          pendingDescription: l10n.preferencesBiometricInactiveDescription,
+          activeDescription: l10n.preferencesBiometricActiveDescription,
+          actionLabel: preferences.biometricEnabled ? l10n.preferencesBiometricDisableAction : l10n.preferencesBiometricEnableAction,
           actionIcon: preferences.biometricEnabled ? AppIcons.close : AppIcons.check,
           onAction: _updatingBiometrics ? null : () => unawaited(_toggleBiometrics(preferencesArgs, preferences.biometricEnabled)),
           showInactiveIcon: true,
+          showActiveStatus: true,
         ),
         const SizedBox(height: AppDimensions.space24),
         AppButton(
@@ -384,6 +408,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
       description: l10n.preferencesRevokeDialogDescription,
       cancelLabel: l10n.lifeEventsResetCancel,
       confirmLabel: l10n.preferencesRevokeDialogConfirm,
+      icon: null,
     );
     if (confirmed != true || !mounted) {
       return;

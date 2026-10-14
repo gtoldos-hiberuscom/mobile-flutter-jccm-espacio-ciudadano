@@ -37,10 +37,10 @@ void main() {
     final message = find.semantics.byLabel('Autoriza el acceso para consultar estos datos.').evaluate().single.getSemanticsData();
     expect(message.flagsCollection.isButton, isFalse);
     expect(message.hasAction(SemanticsAction.tap), isFalse);
-    expect(find.byType(AppIconButton), findsOneWidget);
+    expect(find.byType(AppButton), findsOneWidget);
   });
 
-  testWidgets('el botón ejecuta su acción semántica y mide 48 dp', (
+  testWidgets('el enlace ejecuta su acción semántica', (
     final tester,
   ) async {
     var calls = 0;
@@ -58,7 +58,7 @@ void main() {
     expect(data.hasAction(SemanticsAction.tap), isTrue);
     node.owner!.performAction(node.id, SemanticsAction.tap);
     expect(calls, 1);
-    expect(tester.getSize(find.byType(AppIconButton)), const Size(48, 48));
+    expect(find.byType(AppButton), findsOneWidget);
   });
 
   testWidgets('permite personalizar la pronunciación de mensaje y acción', (
@@ -129,7 +129,7 @@ void main() {
 
     expect(tester.widget<Text>(find.text(message)).maxLines, isNull);
     expect(
-      tester.getTopLeft(find.byType(AppIconButton)).dy,
+      tester.getTopLeft(find.byType(AppButton)).dy,
       greaterThan(tester.getBottomLeft(find.text(message)).dy),
     );
     expect(tester.takeException(), isNull);

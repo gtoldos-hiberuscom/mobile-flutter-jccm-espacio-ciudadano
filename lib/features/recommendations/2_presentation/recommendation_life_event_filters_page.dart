@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
@@ -29,6 +30,8 @@ class RecommendationLifeEventFiltersPage extends StatefulWidget {
 class _RecommendationLifeEventFiltersPageState extends State<RecommendationLifeEventFiltersPage> {
   late Set<int> _selectedIds;
 
+  bool get _hasSelectionChanges => !setEquals(_selectedIds, widget.args.selectedIds);
+
   @override
   void initState() {
     super.initState();
@@ -47,7 +50,7 @@ class _RecommendationLifeEventFiltersPageState extends State<RecommendationLifeE
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
+      backgroundColor: AppColors.backgroundBlueLighter,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.backgroundBlueLighter,
@@ -75,14 +78,6 @@ class _RecommendationLifeEventFiltersPageState extends State<RecommendationLifeE
                 style: AppTypography.h3.copyWith(color: AppColors.textPrimary),
               ),
             ),
-            IconButton(
-              icon: const AppIcon(AppIcons.info, color: AppColors.textPrimary),
-              onPressed: () => AppAlertSnackbar.show(
-                context,
-                message: l10n.recommendationsFilterInfoMessage,
-              ),
-              tooltip: l10n.a11yInformation,
-            ),
           ],
         ),
       ),
@@ -105,8 +100,9 @@ class _RecommendationLifeEventFiltersPageState extends State<RecommendationLifeE
         ],
       ),
       bottomNavigationBar: AppFilterActionsBar(
-        onClear: () => setState(_selectedIds.clear),
-        onApply: () => context.pop(Set<int>.from(_selectedIds)),
+        clearLabel: l10n.lifeEventsClearAllAction,
+        onClear: _selectedIds.isEmpty ? null : () => setState(_selectedIds.clear),
+        onApply: _hasSelectionChanges ? () => context.pop(Set<int>.from(_selectedIds)) : null,
       ),
     );
   }

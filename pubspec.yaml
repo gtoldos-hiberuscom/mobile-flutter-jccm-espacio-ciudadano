@@ -1,7 +1,7 @@
 name: jccm_espacio_ciudadano
 description: "Carpeta Ciudadana CLM — citizen-facing mobile application for JCCM digital services."
 publish_to: 'none'
-version: 0.1.8+10
+version: 0.1.9+11
 
 environment:
   sdk: ^3.10.1
@@ -59,6 +59,14 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/icons/carnets/
+    - assets/icons/carnets/discapacidad.svg
+    - assets/icons/carnets/discapacidad.png
+    - assets/icons/carnets/familia.svg
+    - assets/icons/carnets/familia.png
+    - assets/icons/carnets/joven.svg
+    - assets/icons/carnets/logo_fondo.svg
+    - assets/icons/carnets/download.svg
   fonts:
     - family: Roboto
       fonts:

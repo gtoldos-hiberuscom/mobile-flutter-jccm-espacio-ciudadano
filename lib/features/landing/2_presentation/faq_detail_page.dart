@@ -22,6 +22,8 @@ String _faqQuestion4(final AppLocalizations l10n) => l10n.faqQuestion4;
 String _faqAnswer4(final AppLocalizations l10n) => l10n.faqAnswer4;
 String _faqQuestion5(final AppLocalizations l10n) => l10n.faqQuestion5;
 String _faqAnswer5(final AppLocalizations l10n) => l10n.faqAnswer5;
+String _faqQuestion6(final AppLocalizations l10n) => l10n.faqQuestion6;
+String _faqAnswer6(final AppLocalizations l10n) => l10n.faqAnswer6;
 
 const faqEntries = <FaqEntry>[
   FaqEntry(
@@ -45,13 +47,15 @@ const faqEntries = <FaqEntry>[
     answer: _faqAnswer4,
   ),
   FaqEntry(
-    id: 'agenda',
+    id: 'expedientes-tramites',
     question: _faqQuestion5,
     answer: _faqAnswer5,
   ),
-  // Las preguntas nuevas se añaden aquí cuando el cliente entregue su
-  // contenido definitivo — nunca como entradas placeholder: tres «Preguntas a
-  // trabajar para app» llegaron a verse en producción (N-08).
+  FaqEntry(
+    id: 'agenda',
+    question: _faqQuestion6,
+    answer: _faqAnswer6,
+  ),
 ];
 
 FaqEntry? faqEntryById(final String id) {

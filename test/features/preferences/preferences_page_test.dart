@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
@@ -54,7 +55,8 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(find.byType(ErrorStateWidget), findsOneWidget);
+    expect(find.byType(AppAlertContextual), findsOneWidget);
+    expect(find.text('No hemos podido cargar tus preferencias. Vuelve a intentarlo más tarde.'), findsOneWidget);
     expect(find.textContaining('primero debes aceptar'), findsNothing);
   });
 

@@ -58,6 +58,7 @@ class AppButton extends StatefulWidget {
     this.isLoading = false,
     this.isExpanded = false,
     this.isExternalLink = false,
+    this.showDisabledOutline = false,
     // ignore: deprecated_member_use_from_same_package
     @Deprecated('Use hierarchy instead') final AppButtonVariant? variant,
   }) : _legacyVariant = variant;
@@ -77,6 +78,10 @@ class AppButton extends StatefulWidget {
   /// Abre una dirección web externa: se anuncia como enlace, con el aviso de
   /// que sale al navegador, en lugar de como botón (WCAG 4.1.2).
   final bool isExternalLink;
+
+  /// Conserva el contorno cuando la acción está deshabilitada, por ejemplo en
+  /// las barras fijas de filtros, para que el control siga siendo reconocible.
+  final bool showDisabledOutline;
   // ignore: deprecated_member_use_from_same_package
   final AppButtonVariant? _legacyVariant;
 
@@ -204,9 +209,9 @@ class _AppButtonState extends State<AppButton> {
       return ElevatedButton(
         onPressed: null,
         style: baseStyle.copyWith(
-          backgroundColor: WidgetStateProperty.all(AppColors.blueMuted100),
+          backgroundColor: WidgetStateProperty.all(widget.showDisabledOutline ? AppColors.backgroundBlueLighter : AppColors.blueMuted100),
           foregroundColor: WidgetStateProperty.all(AppColors.blueMuted500),
-          side: WidgetStateProperty.all(BorderSide.none),
+          side: WidgetStateProperty.all(widget.showDisabledOutline ? const BorderSide(color: AppColors.blueMuted500) : BorderSide.none),
         ),
         child: content(AppColors.blueMuted500),
       );

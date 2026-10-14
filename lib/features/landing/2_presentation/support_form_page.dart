@@ -26,7 +26,6 @@ class SupportFormPage extends ConsumerStatefulWidget {
 class _SupportFormPageState extends ConsumerState<SupportFormPage> {
   static const _maxAttachmentBytes = 20 * 1024 * 1024;
 
-  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _emailConfirmController = TextEditingController();
   final _subjectController = TextEditingController();
@@ -44,7 +43,6 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _emailConfirmController.dispose();
     _subjectController.dispose();
@@ -74,12 +72,10 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
                 onAction: _resetForm,
               )
             : _FormView(
-                nameController: _nameController,
                 emailController: _emailController,
                 emailConfirmController: _emailConfirmController,
                 subjectController: _subjectController,
                 descriptionController: _descriptionController,
-                nameError: _nameError,
                 emailError: _emailError,
                 emailConfirmError: _emailConfirmError,
                 subjectError: _subjectError,
@@ -89,7 +85,6 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
                 captchaVerified: _captchaVerified,
                 attachment: _attachment,
                 attachmentBytes: _attachmentBytes,
-                showNameField: !isAuthenticated,
                 showConsent: !isAuthenticated,
                 showCaptcha: !isAuthenticated,
                 onChanged: _refreshValidation,
@@ -257,9 +252,9 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
   Future<SupportRequest> _buildSupportRequest() async {
     final attachment = _attachment;
     final claims = ref.read(jwtClaimsProvider);
-    // Con sesión el formulario no pide el nombre: la incidencia lo toma del
-    // token para que SIGUE reciba siempre `nombreApellidos`.
-    final name = claims == null ? _nameController.text.trim() : (claims.fullName ?? '');
+    // El formulario no solicita el nombre. Si la sesión aporta uno se envía
+    // como dato complementario; en el endpoint público se omite.
+    final name = claims?.fullName ?? '';
     return SupportRequest(
       name: name,
       email: _emailController.text.trim(),
@@ -277,7 +272,6 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
 
   void _resetForm() {
     setState(() {
-      _nameController.clear();
       _emailController.clear();
       _emailConfirmController.clear();
       _subjectController.clear();
@@ -292,16 +286,9 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
     });
   }
 
-  String? get _firstValidationError => _nameError ?? _emailError ?? _emailConfirmError ?? _subjectError ?? _descriptionError ?? _consentError;
+  String? get _firstValidationError => _emailError ?? _emailConfirmError ?? _subjectError ?? _descriptionError ?? _consentError;
 
   bool get _requiresPublicVerification => ref.read(jwtClaimsProvider) == null;
-
-  String? get _nameError {
-    if (!_submitted || !_requiresPublicVerification) {
-      return null;
-    }
-    return _nameController.text.trim().isEmpty ? AppLocalizations.of(context).supportErrorNameRequired : null;
-  }
 
   String? get _emailError {
     if (!_submitted) {
@@ -358,12 +345,10 @@ class _SupportFormPageState extends ConsumerState<SupportFormPage> {
 
 class _FormView extends StatelessWidget {
   const _FormView({
-    required this.nameController,
     required this.emailController,
     required this.emailConfirmController,
     required this.subjectController,
     required this.descriptionController,
-    required this.nameError,
     required this.emailError,
     required this.emailConfirmError,
     required this.subjectError,
@@ -373,7 +358,6 @@ class _FormView extends StatelessWidget {
     required this.captchaVerified,
     required this.attachment,
     required this.attachmentBytes,
-    required this.showNameField,
     required this.showConsent,
     required this.showCaptcha,
     required this.onChanged,
@@ -384,12 +368,10 @@ class _FormView extends StatelessWidget {
     required this.onOpenPrivacyInfo,
   });
 
-  final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController emailConfirmController;
   final TextEditingController subjectController;
   final TextEditingController descriptionController;
-  final String? nameError;
   final String? emailError;
   final String? emailConfirmError;
   final String? subjectError;
@@ -399,7 +381,6 @@ class _FormView extends StatelessWidget {
   final bool captchaVerified;
   final XFile? attachment;
   final int? attachmentBytes;
-  final bool showNameField;
   final bool showConsent;
   final bool showCaptcha;
   final VoidCallback onChanged;
@@ -420,18 +401,6 @@ class _FormView extends StatelessWidget {
           style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
         ),
         const SizedBox(height: AppDimensions.space24),
-        if (showNameField) ...[
-          AppInputCase(
-            label: l10n.supportFieldFullName,
-            hint: l10n.supportFieldFullNameHint,
-            controller: nameController,
-            isRequired: true,
-            state: _inputState(nameError),
-            errorText: nameError,
-            onChanged: (_) => onChanged(),
-          ),
-          const SizedBox(height: AppDimensions.space24),
-        ],
         AppInputCase(
           label: l10n.supportFieldEmail,
           hint: l10n.supportFieldEmailHint,
@@ -470,6 +439,7 @@ class _FormView extends StatelessWidget {
         const SizedBox(height: AppDimensions.space24),
         AppInputCase(
           label: l10n.supportFieldMessage,
+          hint: l10n.supportFieldMessageHint,
           controller: descriptionController,
           isRequired: true,
           state: _inputState(descriptionError),

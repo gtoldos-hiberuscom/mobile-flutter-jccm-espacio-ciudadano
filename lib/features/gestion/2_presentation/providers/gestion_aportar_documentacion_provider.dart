@@ -637,7 +637,9 @@ bool _esCancelacion(final Object error) => error is DioException && error.type =
 /// para 10 líneas usadas en dos sitios.
 String? _documentNumber(final JwtClaims? claims) {
   final candidates = [
-    claims?.personIdentifier,
+    // Efectivo y normalizado, igual que el detalle: sin el prefijo
+    // `ES/ES/` de Cl@ve y con la entidad representada si la hay.
+    claims?.effectivePersonIdentifier,
     claims?.preferredUsername,
     claims?.sub,
   ];

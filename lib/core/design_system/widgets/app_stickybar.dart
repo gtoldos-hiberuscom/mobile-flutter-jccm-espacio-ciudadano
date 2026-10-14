@@ -30,18 +30,35 @@ class AppStickybar extends StatelessWidget {
     required this.children,
     super.key,
     this.semanticLabel,
+    this.bottomPadding = AppDimensions.space48,
+    this.bottomPaddingIncludesSafeArea = false,
+    this.backgroundColor,
   }) : assert(children.length > 0, 'children must not be empty'),
-       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty');
+       assert(semanticLabel == null || semanticLabel != '', 'semanticLabel must not be empty'),
+       assert(bottomPadding >= 0, 'bottomPadding must not be negative');
 
   /// Ordered list of actions (top to bottom). Typically [AppButton] instances.
   final List<Widget> children;
   final String? semanticLabel;
+
+  /// Bottom content padding before the device safe-area inset is applied.
+  final double bottomPadding;
+
+  /// Whether [bottomPadding] represents the total spacing including the
+  /// device safe-area inset instead of spacing added before that inset.
+  final bool bottomPaddingIncludesSafeArea;
+
+  /// Optional opaque background override for screens whose Figma variant does
+  /// not use the default translucent sticky surface.
+  final Color? backgroundColor;
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final isLandscape = MediaQuery.orientationOf(context) == Orientation.landscape;
     final usesVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    final safeAreaBottom = MediaQuery.paddingOf(context).bottom;
+    final contentBottomPadding = bottomPaddingIncludesSafeArea ? (bottomPadding - safeAreaBottom).clamp(0.0, bottomPadding) : bottomPadding;
     return Semantics(
       container: true,
       explicitChildNodes: true,
@@ -54,7 +71,7 @@ class AppStickybar extends StatelessWidget {
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: AppColors.surface.withValues(alpha: 0.94),
+              color: backgroundColor ?? AppColors.surface.withValues(alpha: 0.94),
               border: Border.all(
                 color: const Color(0xFF0C0D0D).withValues(alpha: 0.08),
               ),
@@ -80,7 +97,7 @@ class AppStickybar extends StatelessWidget {
                     padding: appPagePadding(
                       context,
                       top: AppDimensions.space16,
-                      bottom: isLandscape ? AppDimensions.space16 : AppDimensions.space48,
+                      bottom: isLandscape ? AppDimensions.space16 : contentBottomPadding,
                     ),
                     child: isLandscape && children.length > 1 && !usesVerticalLayout
                         ? Row(

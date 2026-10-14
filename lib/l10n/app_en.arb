@@ -8,15 +8,15 @@
   "@landingTitle": {
     "description": "Main title displayed in the hero section of the public landing screen."
   },
-  "landingTagline": "Agile and online management of procedures for the citizens of Castilla-La Mancha",
+  "landingTagline": "Access and consult the procedures and services available to the citizens of Castilla-La Mancha digitally.",
   "@landingTagline": {
     "description": "Subtitle shown below the title on the landing screen."
   },
-  "landingTaglinePrefix": "Agile and online management of procedures for the citizens of ",
+  "landingTaglinePrefix": "Access and consult the procedures and services available to the citizens of ",
   "@landingTaglinePrefix": {
     "description": "First part of the tagline (regular weight) preceding the region name."
   },
-  "landingTaglineHighlight": "Castilla-La Mancha",
+  "landingTaglineHighlight": "Castilla-La Mancha digitally.",
   "@landingTaglineHighlight": {
     "description": "Region name highlighted with H2 typography in the tagline."
   },
@@ -81,11 +81,15 @@
   "@landingAboutBodySuffix": {
     "description": "Closing text of the descriptive paragraph (after the bold fragment)."
   },
-  "landingAboutWhatYouFindTitle": "What will you find?",
+  "landingAboutBody": "Citizen Space is a digital space where you can check your procedures, find others that may interest you, and access information and services that make it easier to interact with the Administration.",
+  "@landingAboutBody": {
+    "description": "Descriptive paragraph on the Citizen Space about screen."
+  },
+  "landingAboutWhatYouFindTitle": "What can I check?",
   "@landingAboutWhatYouFindTitle": {
     "description": "Section heading for the list of available content."
   },
-  "landingAboutWhatYouFindIntro": "You will have access to various information such as:",
+  "landingAboutWhatYouFindIntro": "In Citizen Space you will find:",
   "@landingAboutWhatYouFindIntro": {
     "description": "Introduction to the list of available content."
   },
@@ -112,6 +116,10 @@
   "landingAboutBullet6": "Personalized recommendations based on your interests.",
   "@landingAboutBullet6": {
     "description": "Sixth bullet item in the content list."
+  },
+  "landingAboutHelpLink": "Show Help and contact information",
+  "@landingAboutHelpLink": {
+    "description": "Link to Help and contact information from the about screen."
   },
   "landingAboutAccessButton": "Access my Citizen Space",
   "@landingAboutAccessButton": {
@@ -416,6 +424,10 @@
   "externalNavigationDialogTitle": "You are about to leave the application",
   "@externalNavigationDialogTitle": {
     "description": "Title of the confirmation dialog shown before opening an external link."
+  },
+  "drawerElectronicOfficeDialogTitle": "We are going to redirect you to the Electronic Office",
+  "@drawerElectronicOfficeDialogTitle": {
+    "description": "Title of the confirmation dialog shown when opening the Electronic Office from the side menu."
   },
   "externalNavigationDialogBody": "The content will open in a browser window",
   "@externalNavigationDialogBody": {
@@ -1217,7 +1229,7 @@
   "@socialWelfareDisabilityNavDescription": {
     "description": "Social welfare data — disability card description."
   },
-  "socialWelfareDisabilityInfoSheetTitle": "About My disability title",
+  "socialWelfareDisabilityInfoSheetTitle": "Learn more about My disability title",
   "@socialWelfareDisabilityInfoSheetTitle": {
     "description": "Social welfare data — disability info sheet title."
   },
@@ -1329,7 +1341,7 @@
   "@socialWelfareTermalismoNavDescription": {
     "description": "Social welfare data — thermal-spa card description."
   },
-  "socialWelfareTermalismoInfoSheetTitle": "About Thermal spas",
+  "socialWelfareTermalismoInfoSheetTitle": "Learn more about Thermal spas",
   "@socialWelfareTermalismoInfoSheetTitle": {
     "description": "Social welfare data — thermal-spa info sheet title."
   },
@@ -1377,7 +1389,7 @@
   "@socialWelfareParkingNavDescription": {
     "description": "Social welfare data — parking card description."
   },
-  "socialWelfareParkingInfoSheetTitle": "About My parking card",
+  "socialWelfareParkingInfoSheetTitle": "Learn more about My parking card",
   "@socialWelfareParkingInfoSheetTitle": {
     "description": "Social welfare data — parking card info sheet title."
   },
@@ -1425,7 +1437,7 @@
   "@socialWelfareDependenciaNavDescription": {
     "description": "Social welfare data — dependency support card description."
   },
-  "socialWelfareDependenciaInfoSheetTitle": "About Dependency care",
+  "socialWelfareDependenciaInfoSheetTitle": "Learn more about Dependency care",
   "@socialWelfareDependenciaInfoSheetTitle": {
     "description": "Social welfare data — dependency care info sheet title."
   },
@@ -1923,7 +1935,7 @@
   "@digitalCardsTypeFamiliaNumerosa": {
     "description": "Cards — label for the familia numerosa type."
   },
-  "digitalCardsTypeJoven": "Youth",
+  "digitalCardsTypeJoven": "Youth card",
   "@digitalCardsTypeJoven": {
     "description": "Cards — label for the carnet joven type."
   },
@@ -2013,6 +2025,18 @@
   "lifeEventsHeaderDescription": "Select the life events that best describe your situation to receive personalized recommendations.",
   "@lifeEventsHeaderDescription": {
     "description": "Personalization — descriptive header on the life-events screen."
+  },
+  "lifeEventsOnboardingTitle": "Personalized recommendations",
+  "@lifeEventsOnboardingTitle": {
+    "description": "Personalization — main heading during first access."
+  },
+  "lifeEventsOnboardingDescription": "Select the situations, interests, or needs that best match you to receive personalized recommendations.",
+  "@lifeEventsOnboardingDescription": {
+    "description": "Personalization — introduction during first access."
+  },
+  "lifeEventsCompleteLaterAction": "Complete later",
+  "@lifeEventsCompleteLaterAction": {
+    "description": "Personalization — action to postpone setup during first access."
   },
   "lifeEventsIntroHeading": "Select the topics you would like to receive information about",
   "@lifeEventsIntroHeading": {
@@ -2284,7 +2308,7 @@
     "description": "Casework upload — status: failed."
   },
   "fileUploadCancel": "Cancel",
-  "fileUploadRemove": "Remove",
+  "fileUploadCompleted": "Completed",
   "fileUploadDelete": "Delete file",
   "fileUploadRetry": "Retry",
   "a11yFileUpload": "File: {fileName}, {fileInfo}. Status: {status}",
@@ -3323,7 +3347,19 @@
   "myDataHealthAppointmentsNoDataMessage": "We could not find primary-care appointments associated with your details in the SESCAM consultation service.\n\nIf this is incorrect or outdated, contact your health centre.",
   "myDataHealthHospitalAppointmentsNoDataMessage": "We could not find any hospital appointments linked to your data in the SESCAM query service.\n\nIf this is not correct or up to date, contact your hospital.",
   "myDataEmploymentDemandNoDataMessage": "We could not find job-seeker information associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.",
-  "myDataEmploymentOffersNoDataMessage": "We could not find job-offer registrations associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.",
+  "myDataEmploymentOffersNoDataMessage": "You have not registered for any offer yet.\n\nIf this information is incorrect or out of date, check your personal area in the Castilla-La Mancha Employment Portal.",
+  "myDataEmploymentOffersAuthorizationRequiredMessage": "Authorise the use of your data in Preferences to view your employment offer registrations.",
+  "@myDataEmploymentOffersAuthorizationRequiredMessage": {
+    "description": "Message shown when authorisation is required to view employment offer registrations."
+  },
+  "myDataEmploymentDemandAuthorizationRequiredMessage": "Authorise the use of your data in Preferences to check the status of your job-seeker registration.",
+  "@myDataEmploymentDemandAuthorizationRequiredMessage": {
+    "description": "Message shown when authorisation is required to view employment demand status."
+  },
+  "myDataHealthAppointmentsAuthorizationRequiredMessage": "Authorise the use of your data in Preferences to view your primary-care appointments.",
+  "@myDataHealthAppointmentsAuthorizationRequiredMessage": {
+    "description": "Message shown when authorisation is required to view primary-care appointments."
+  },
   "discapacidadServiceUnavailableMessage": "The service for consulting your disability title is unavailable. You can reload the information or try again later.",
   "socialWelfareParkingServiceUnavailableMessage": "The service for consulting your parking card is unavailable. You can reload the information or try again later.",
   "socialWelfareThermalSpaServiceUnavailableMessage": "The service for consulting your thermal-spa information is unavailable. You can reload the information or try again later.",
@@ -3611,11 +3647,11 @@
   "@recommendationsLifeEventsComingSoon": {
     "description": "Recommendations — STORY-57 SnackBar shown when tapping the 'View my life events' secondary CTA before that surface ships."
   },
-  "recommendationsLoadingError": "We couldn't load the recommendations.",
+  "recommendationsLoadingError": "We couldn't load your recommendation information. Please try again later.",
   "@recommendationsLoadingError": {
     "description": "Recommendations — generic error message when the list cannot be loaded."
   },
-  "recommendationsLoadingErrorRetry": "Retry",
+  "recommendationsLoadingErrorRetry": "Refresh",
   "@recommendationsLoadingErrorRetry": {
     "description": "Recommendations — retry button label in the error state."
   },
@@ -3865,6 +3901,14 @@
   "@preferencesResetError": {
     "description": "Curated message when deleting preferences/authorisations fails."
   },
+  "preferencesLoadError": "We could not load your preferences. Please try again later.",
+  "@preferencesLoadError": {
+    "description": "Message shown when the preferences screen cannot be loaded."
+  },
+  "preferencesLoadRetry": "Refresh",
+  "@preferencesLoadRetry": {
+    "description": "Action to reload the preferences screen."
+  },
   "drawerPreferences": "Preferences",
   "drawerGreeting": "Hello, {userName}",
   "@drawerGreeting": {
@@ -3931,19 +3975,19 @@
   "@myDataEmploymentDescription": {
     "description": "Description of the Employment card on the My data screen."
   },
-  "myDataEmploymentInfoSheetTitle": "About My Employment data",
+  "myDataEmploymentInfoSheetTitle": "Learn more about Employment demand",
   "@myDataEmploymentInfoSheetTitle": {
     "description": "Title of the My Employment data information modal."
   },
-  "myDataEmploymentInfoSheetDescription": "Check your current situation as a job seeker and your latest offer registrations.",
+  "myDataEmploymentInfoSheetDescription": "Check your current situation as a job seeker.",
   "@myDataEmploymentInfoSheetDescription": {
     "description": "Main description of the My Employment data information modal."
   },
-  "myDataEmploymentInfoSheetFooter": "If any of your data is incorrect or not up to date, contact the Castilla-La Mancha Regional Ministry of Social Welfare.",
+  "myDataEmploymentInfoSheetFooter": "If any of your data is incorrect or out of date, contact the State Public Employment Service (SEPE).",
   "@myDataEmploymentInfoSheetFooter": {
     "description": "Contact text in the My Employment data information modal."
   },
-  "myDataEmploymentInfoSheetOfficeContactsButton": "Contact",
+  "myDataEmploymentInfoSheetOfficeContactsButton": "More information",
   "@myDataEmploymentInfoSheetOfficeContactsButton": {
     "description": "External button to offices and contacts in the My Employment data information modal."
   },
@@ -3987,7 +4031,7 @@
   "@myDataEmploymentServiceUnavailableReload": {
     "description": "Button label to reload employment demand when the service is unavailable."
   },
-  "myDataEmploymentOffersServiceUnavailableMessage": "The offer registrations service is currently unavailable. You can reload the information or try again later.",
+  "myDataEmploymentOffersServiceUnavailableMessage": "We could not load your employment offer registrations. Please try again later.",
   "@myDataEmploymentOffersServiceUnavailableMessage": {
     "description": "Contextual helper message shown when the offer registrations service is unavailable."
   },
@@ -4011,7 +4055,7 @@
   "@myDataEmploymentOffersTitle": {
     "description": "Offer registrations card title."
   },
-  "myDataEmploymentOffersDescription": "Job offers you have registered for",
+  "myDataEmploymentOffersDescription": "History of job offers you have applied for",
   "@myDataEmploymentOffersDescription": {
     "description": "Offer registrations card description."
   },
@@ -4020,11 +4064,15 @@
     "description": "Title of the employment offer registrations screen."
   },
   "myDataEmploymentOffersPortalLink": "Employability Portal of the Regional Government of Castilla-La Mancha",
-  "myDataEmploymentOffersInfoSheetFooter": "If your job offer applications are not correct, check your Employability Portal of the Regional Government of Castilla-La Mancha.",
+  "myDataEmploymentOffersInfoSheetTitle": "Learn more about employment offer registration",
+  "@myDataEmploymentOffersInfoSheetTitle": {
+    "description": "Title of the employment offer registration information sheet."
+  },
+  "myDataEmploymentOffersInfoSheetFooter": "If any of your data is incorrect or out of date, check your personal area in the Castilla-La Mancha Employment Portal.",
   "@myDataEmploymentOffersInfoSheetFooter": {
     "description": "Footer text of the job offer applications screen help modal."
   },
-  "myDataEmploymentOffersInfoSheetDescription": "Check the job offers you have registered for and the status of your application.",
+  "myDataEmploymentOffersInfoSheetDescription": "Check your latest employment offer registrations.",
   "@myDataEmploymentOffersInfoSheetDescription": {
     "description": "Information sheet description for the offer registrations screen."
   },
@@ -4116,19 +4164,19 @@
   "@myDataHousingRealEstateTitle": {
     "description": "Title of the real estate card on the Housing detail screen."
   },
-  "myDataHousingRealEstateDescription": "Cadastral data for my properties",
+  "myDataHousingRealEstateDescription": "Property cadastral information",
   "@myDataHousingRealEstateDescription": {
     "description": "Description of the real estate card on the Housing detail screen."
   },
-  "myDataHousingRealEstateInfoSheetTitle": "About your real-estate assets",
+  "myDataHousingRealEstateInfoSheetTitle": "Learn more about Real estate",
   "@myDataHousingRealEstateInfoSheetTitle": {
     "description": "Title of the real estate detail information modal."
   },
-  "myDataHousingRealEstateInfoSheetDescription": "Check the cadastral data for your properties registered with the Directorate General for Cadastre.",
+  "myDataHousingRealEstateInfoSheetDescription": "Check the cadastral information for the properties registered in your name with the Cadastre.",
   "@myDataHousingRealEstateInfoSheetDescription": {
     "description": "Main description of the real estate detail information modal."
   },
-  "myDataHousingRealEstateInfoSheetFooter": "If any of your data is incorrect, go to or contact the Cadastre electronic office.",
+  "myDataHousingRealEstateInfoSheetFooter": "If any of your data is incorrect or out of date, contact the Cadastre e-office.",
   "@myDataHousingRealEstateInfoSheetFooter": {
     "description": "Footer of the real estate detail information modal."
   },
@@ -4221,19 +4269,19 @@
   "@myDataHousingAddressTitle": {
     "description": "Title of the address card on the Housing detail screen."
   },
-  "myDataHousingAddressDescription": "Data in the municipal register database",
+  "myDataHousingAddressDescription": "Municipal-register information",
   "@myDataHousingAddressDescription": {
     "description": "Description of the address card on the Housing detail screen."
   },
-  "myDataHousingAddressInfoSheetTitle": "About your address",
+  "myDataHousingAddressInfoSheetTitle": "Learn more about Address in Castilla-La Mancha",
   "@myDataHousingAddressInfoSheetTitle": {
     "description": "Title of the address detail information modal."
   },
-  "myDataHousingAddressInfoSheetDescription": "Check your data in the municipal register database of the National Statistics Institute (INE) within Castilla-La Mancha, which collects information from all municipal registers in Castilla-La Mancha. This information is updated every month with data sent by town councils, so it may not match your current situation if you recently changed your registration.",
+  "myDataHousingAddressInfoSheetDescription": "Check your registration details recorded by the National Statistics Institute (INE). This information comes from Castilla-La Mancha municipal registers and is updated monthly with data sent by local councils.\n\nIf you have recently changed your registration, this information may not yet be up to date.",
   "@myDataHousingAddressInfoSheetDescription": {
     "description": "Main description of the address detail information modal."
   },
-  "myDataHousingAddressInfoSheetFooter": "If any of your data is incorrect, go to or contact your town council.",
+  "myDataHousingAddressInfoSheetFooter": "If any of your data is incorrect or out of date, contact the relevant local council.",
   "@myDataHousingAddressInfoSheetFooter": {
     "description": "Footer of the address detail information modal."
   },
@@ -4293,11 +4341,11 @@
   "@myDataHousingLinksTitle": {
     "description": "Title of the links section in the Housing Information and services tab."
   },
-  "myDataHousingLinkClmHousing": "Castilla-La Mancha Housing",
+  "myDataHousingLinkClmHousing": "Castilla-La Mancha Housing Portal",
   "@myDataHousingLinkClmHousing": {
     "description": "Link to Castilla-La Mancha Housing."
   },
-  "myDataHousingLinkCadastre": "Cadastre office",
+  "myDataHousingLinkCadastre": "Cadastre e-office",
   "@myDataHousingLinkCadastre": {
     "description": "Link to the Cadastre office."
   },
@@ -4309,7 +4357,7 @@
   "@myDataHousingProcedureRentalHousingAid": {
     "description": "Housing rental aid procedure."
   },
-  "myDataHousingProcedureProtectedHousingRegister": "Registration in the CLM protected public housing applicant register",
+  "myDataHousingProcedureProtectedHousingRegister": "Registration in the Housing Applicants Register",
   "@myDataHousingProcedureProtectedHousingRegister": {
     "description": "Procedure to register in the CLM protected public housing applicant register."
   },
@@ -4325,19 +4373,19 @@
   "@myDataVehiclesDescription": {
     "description": "Description of the Vehicles card on the My data screen."
   },
-  "myDataVehiclesInfoSheetTitle": "About My Vehicles data",
+  "myDataVehiclesInfoSheetTitle": "Learn more about Vehicles",
   "@myDataVehiclesInfoSheetTitle": {
     "description": "Title of the My Vehicles data information modal."
   },
-  "myDataVehiclesInfoSheetDescription": "Check the license plate of the vehicles registered with the General Directorate of Traffic (DGT) in which you are the owner.",
+  "myDataVehiclesInfoSheetDescription": "Check the information for vehicles registered in your name with the General Directorate of Traffic (DGT).",
   "@myDataVehiclesInfoSheetDescription": {
     "description": "Main description of the My Vehicles data information modal."
   },
-  "myDataVehiclesInfoSheetFooter": "If any of your data is incorrect or not up to date, contact the General Directorate of Traffic (DGT)",
+  "myDataVehiclesInfoSheetFooter": "If any of your data is incorrect or out of date, contact the General Directorate of Traffic (DGT).",
   "@myDataVehiclesInfoSheetFooter": {
     "description": "Footer text of the My Vehicles data information modal."
   },
-  "myDataVehiclesInfoSheetContactButton": "Contact",
+  "myDataVehiclesInfoSheetContactButton": "More information",
   "@myDataVehiclesInfoSheetContactButton": {
     "description": "Contact button label in the My Vehicles data information modal."
   },
@@ -4607,7 +4655,7 @@
   "@gestionExpedientesTitle": {
     "description": "Title of the navigation card to My cases."
   },
-  "gestionExpedientesDescription": "View and manage your administrative cases",
+  "gestionExpedientesDescription": "View the information and status of the cases you have started with the Regional Government of Castilla-La Mancha.",
   "@gestionExpedientesDescription": {
     "description": "Description of the navigation card to My cases."
   },
@@ -4699,9 +4747,17 @@
   "@gestionAportarDocumentacionTitle": {
     "description": "Title of the document submission screen."
   },
-  "gestionAportarDocumentacionHelperText": "You can attach up to 5 files of max. 20MB each, in PDF, DOC, DOCX, ZIP, XLS or XLSX format.",
+  "gestionAportarDocumentacionHelperText": "You can attach up to 5 files of a maximum of 20 MB each. PDF, DOC, DOCX, ZIP, XLS and XLSX files are supported.",
   "@gestionAportarDocumentacionHelperText": {
     "description": "Persistent notice with the file upload conditions."
+  },
+  "gestionAportarDocumentacionInfoTitle": "Learn more about submitting documents",
+  "@gestionAportarDocumentacionInfoTitle": {
+    "description": "Title of the submit-documents information sheet."
+  },
+  "gestionAportarDocumentacionInfoBody": "Submitted documents will only be available for consultation by the Administration and cannot be viewed from the case file.",
+  "@gestionAportarDocumentacionInfoBody": {
+    "description": "Body of the submit-documents information sheet."
   },
   "gestionAportarDocumentacionCancelarButton": "Cancel",
   "@gestionAportarDocumentacionCancelarButton": {
@@ -4711,7 +4767,7 @@
   "@gestionAportarDocumentacionSeleccionarButton": {
     "description": "Button to open the file picker."
   },
-  "gestionAportarDocumentacionRegistrarButton": "Register submitted documents",
+  "gestionAportarDocumentacionRegistrarButton": "Send documents",
   "@gestionAportarDocumentacionRegistrarButton": {
     "description": "Button to register the submitted documents."
   },
@@ -4751,11 +4807,11 @@
   "@gestionAportarDocumentacionUploadErrorParcial": {
     "description": "Message when some of the files uploaded in parallel fail."
   },
-  "gestionAportarDocumentacionExitoTitulo": "The documents have been sent successfully",
+  "gestionAportarDocumentacionExitoTitulo": "Documents sent. Download the submission receipt.",
   "@gestionAportarDocumentacionExitoTitulo": {
     "description": "Title of the success dialog when the document submission is completed."
   },
-  "gestionAportarDocumentacionExitoDescripcion": "The document submission has been registered, although the documents will not be visible from the case.\n\nWe recommend downloading the submission receipt before continuing: it will not be available later",
+  "gestionAportarDocumentacionExitoDescripcion": "Your documents have been sent successfully and the submission has been registered.\n\nDownload the receipt now to keep a copy of the submission. You will not be able to download it again later.",
   "@gestionAportarDocumentacionExitoDescripcion": {
     "description": "Description of the success dialog when the document submission is completed."
   },
@@ -4851,6 +4907,22 @@
   "@gestionAportacionTipoIdLabel": {
     "description": "Label for the identification type and number field on the submission screen."
   },
+  "gestionAportacionTipoIdShortLabel": "Identification type",
+  "@gestionAportacionTipoIdShortLabel": {
+    "description": "Label of the interested person's identification selector and number."
+  },
+  "gestionAportacionExpedienteIdentifierTypeLabel": "Identification type",
+  "@gestionAportacionExpedienteIdentifierTypeLabel": {
+    "description": "Label of the case identifier selector."
+  },
+  "gestionAportacionRegistroOption": "Registration number",
+  "@gestionAportacionRegistroOption": {
+    "description": "Option to identify a case by its registration number."
+  },
+  "gestionAportacionCodigoOption": "Case number",
+  "@gestionAportacionCodigoOption": {
+    "description": "Option to identify a case by its identifier code."
+  },
   "gestionAportacionTipoIdHint": "000000000A",
   "@gestionAportacionTipoIdHint": {
     "description": "Placeholder for the identification number field on the submission screen."
@@ -4879,7 +4951,7 @@
   "@gestionAportacionNumRegistroLabel": {
     "description": "Label for the case registration number field."
   },
-  "gestionAportacionNumRegistroHint": "Enter the registration number",
+  "gestionAportacionNumRegistroHint": "Registration number",
   "@gestionAportacionNumRegistroHint": {
     "description": "Placeholder for the case registration number field."
   },
@@ -4891,7 +4963,7 @@
   "@gestionAportacionCodIdentificadorLabel": {
     "description": "Label for the case identifier code field."
   },
-  "gestionAportacionCodIdentificadorHint": "Enter the identifier code",
+  "gestionAportacionCodIdentificadorHint": "Case number",
   "@gestionAportacionCodIdentificadorHint": {
     "description": "Placeholder for the case identifier code field."
   },
@@ -4899,11 +4971,11 @@
   "@gestionAportacionCodIdentificadorHelper": {
     "description": "Helper text for the identifier code field."
   },
-  "gestionAportacionInfoHeading": "Submit documents to a case",
+  "gestionAportacionInfoHeading": "Learn more about submitting documents to a case",
   "@gestionAportacionInfoHeading": {
     "description": "Heading of the informative bottom sheet for document submission."
   },
-  "gestionAportacionInfoBody": "You can submit documents to a case while the procedure is in progress and before the final decision is issued, only if you are:",
+  "gestionAportacionInfoBody": "You can submit documents to a case only if you are an authorised person and the procedure is still in progress and has not yet reached a final decision. To submit documents to one of your own cases, go to My cases.",
   "@gestionAportacionInfoBody": {
     "description": "Body of the informative bottom sheet for document submission."
   },
@@ -4943,7 +5015,7 @@
   "@gestionAportacionCee": {
     "description": "CEE option in the document type selector."
   },
-  "gestionAportacionFindButton": "Find case",
+  "gestionAportacionFindButton": "Search case",
   "@gestionAportacionFindButton": {
     "description": "Main button of the document submission form."
   },
@@ -4955,15 +5027,15 @@
   "@gestionAportacionCamposExpedienteError": {
     "description": "Validation error when exactly one of the two case fields has not been filled in."
   },
-  "gestionNotificacionesContextualMessage": "Register your contact details to start receiving notifications from the Regional Government of Castilla-La Mancha.",
+  "gestionNotificacionesContextualMessage": "Enter your contact details to enable alerts and receive them when you have a new notification.",
   "@gestionNotificacionesContextualMessage": {
     "description": "Text of the contextual helper under the disabled notifications card."
   },
-  "gestionNotificacionesContextualAction": "Activate",
+  "gestionNotificacionesContextualAction": "Enter details and enable alerts",
   "@gestionNotificacionesContextualAction": {
     "description": "Label of the ghost button in the contextual notifications helper."
   },
-  "gestionNotificacionesAltaTitle": "Activate notifications",
+  "gestionNotificacionesAltaTitle": "My notifications",
   "@gestionNotificacionesAltaTitle": {
     "description": "NavBar title of the notifications activation screen."
   },
@@ -4971,7 +5043,7 @@
   "@gestionNotificacionesAltaIntro": {
     "description": "Intro text of the notifications activation screen."
   },
-  "gestionNotificacionesAltaRequiredNote": "*You must fill in at least one of the contact methods",
+  "gestionNotificacionesAltaRequiredNote": "You must complete at least one of the fields marked with (*)",
   "@gestionNotificacionesAltaRequiredNote": {
     "description": "Required-field note on the notifications activation screen."
   },
@@ -4979,11 +5051,11 @@
   "@gestionNotificacionesAltaPhoneLabel": {
     "description": "Label of the phone field on the activation screen."
   },
-  "gestionNotificacionesAltaPhoneHint": "600 000 000",
+  "gestionNotificacionesAltaPhoneHint": "Example: 000 000 000",
   "@gestionNotificacionesAltaPhoneHint": {
     "description": "Placeholder of the phone field on the activation screen."
   },
-  "gestionNotificacionesAltaPhoneHelper": "To receive the notifications by SMS",
+  "gestionNotificacionesAltaPhoneHelper": "Receive notifications by SMS on your mobile phone.",
   "@gestionNotificacionesAltaPhoneHelper": {
     "description": "Helper text under the phone field on the activation screen."
   },
@@ -4999,7 +5071,7 @@
   "@gestionNotificacionesAltaEmailHelper": {
     "description": "Helper text under the email field on the activation screen."
   },
-  "gestionNotificacionesAltaSaveButton": "Sign up for notifications",
+  "gestionNotificacionesAltaSaveButton": "Activate",
   "@gestionNotificacionesAltaSaveButton": {
     "description": "Label of the sticky main button on the activation screen."
   },
@@ -5169,9 +5241,13 @@
   "@appQrCodeLabel": {
     "description": "Accessibility label for the QR code preview in the download bottom sheet."
   },
-  "appQrDownloadFormatTitle": "Download format",
+  "appQrDownloadFormatTitle": "Would you like to save the card?",
   "@appQrDownloadFormatTitle": {
-    "description": "Heading of the format section in the card download bottom sheet."
+    "description": "Question heading the format section in the card download bottom sheet."
+  },
+  "appQrDownloadFormatDescription": "Choose how you want to download it:",
+  "@appQrDownloadFormatDescription": {
+    "description": "Introductory text for the card download options."
   },
   "appQrDownloadWalletLabelAndroid": "Wallet",
   "@appQrDownloadWalletLabelAndroid": {
@@ -5251,11 +5327,23 @@
   "@preferencesInfoSheetBody": {
     "description": "Preferences — body of the page info bottom sheet."
   },
-  "preferencesLifeEventsInactiveDescription": "To select your life events and receive recommendations, you must first accept the use of this data in Terms of use and authorizations.",
+  "consentAuthorizationsInfoTitle": "Learn more about Terms of use and authorization",
+  "@consentAuthorizationsInfoTitle": {
+    "description": "Consent — title of the information sheet opened from the information button."
+  },
+  "consentAuthorizationsInfoBody": "If you do not authorize the use of your data, public administrations will not be able to show you the information they hold about you.",
+  "@consentAuthorizationsInfoBody": {
+    "description": "Consent — explanation shown in the terms and authorizations information sheet."
+  },
+  "consentAuthorizationsInfoClose": "Close",
+  "@consentAuthorizationsInfoClose": {
+    "description": "Consent — action to close the terms and authorizations information sheet."
+  },
+  "preferencesLifeEventsInactiveDescription": "Accept the use of your life-event data in Terms of use and authorizations so you can select them and receive personalized recommendations.",
   "@preferencesLifeEventsInactiveDescription": {
     "description": "Preferences — life events card description when the authorization is inactive."
   },
-  "preferencesLifeEventsPendingDescription": "You have not yet selected the topics you want to receive updates about in your recommendations section",
+  "preferencesLifeEventsPendingDescription": "Select the situations, interests, or needs that best suit you to receive personalized recommendations.",
   "@preferencesLifeEventsPendingDescription": {
     "description": "Preferences — life events card description when nothing is selected yet."
   },
@@ -5267,11 +5355,11 @@
   "@preferencesSelectAction": {
     "description": "Preferences — action to select life events."
   },
-  "preferencesNotificationContactTitle": "Contact details for notifications",
+  "preferencesNotificationContactTitle": "Contact details for notification alerts",
   "@preferencesNotificationContactTitle": {
     "description": "Preferences — title of the notification contact details card."
   },
-  "preferencesNotificationContactInactiveDescription": "To receive electronic notifications you must provide at least one contact method for alerts.",
+  "preferencesNotificationContactInactiveDescription": "Enter a mobile phone number or email address to receive alerts when you have new notifications.",
   "@preferencesNotificationContactInactiveDescription": {
     "description": "Preferences — notification contact card description when inactive."
   },
@@ -5287,11 +5375,35 @@
   "@preferencesManageAction": {
     "description": "Preferences — action to manage contact details."
   },
-  "preferencesRevokeDialogTitle": "Permission revocation",
+  "preferencesAddContactAction": "Add details",
+  "@preferencesAddContactAction": {
+    "description": "Preferences — action to add contact details when none are configured."
+  },
+  "preferencesBiometricTitle": "Biometric access",
+  "@preferencesBiometricTitle": {
+    "description": "Preferences — title of the biometric access card."
+  },
+  "preferencesBiometricInactiveDescription": "Enable fingerprint or facial recognition access to enter the application more quickly.",
+  "@preferencesBiometricInactiveDescription": {
+    "description": "Preferences — description shown when biometric access is disabled."
+  },
+  "preferencesBiometricActiveDescription": "Biometric access to the application is enabled.",
+  "@preferencesBiometricActiveDescription": {
+    "description": "Preferences — description shown when biometric access is enabled."
+  },
+  "preferencesBiometricEnableAction": "Enable",
+  "@preferencesBiometricEnableAction": {
+    "description": "Preferences — action to enable biometric access."
+  },
+  "preferencesBiometricDisableAction": "Disable",
+  "@preferencesBiometricDisableAction": {
+    "description": "Preferences — action to disable biometric access."
+  },
+  "preferencesRevokeDialogTitle": "You are about to delete your preferences",
   "@preferencesRevokeDialogTitle": {
     "description": "Preferences — title of the delete-preferences confirmation dialog."
   },
-  "preferencesRevokeDialogDescription": "Do you want to delete your selection of terms of use, authorizations, and life events?\nDoing so will end your current session, and if you sign in again you will have to complete the process from the beginning.",
+  "preferencesRevokeDialogDescription": "Deleting your preferences will remove the authorizations you granted the organization to access your personal data.\n\nIf you access the application again, you will need to complete the authentication process and accept the Terms of use and authorizations again.",
   "@preferencesRevokeDialogDescription": {
     "description": "Preferences — description of the delete-preferences confirmation dialog."
   },
@@ -5363,7 +5475,7 @@
   "@myDataHealthFilterDateLabel": {
     "description": "Health — label of the appointment date range filter."
   },
-  "recommendationsFilterPageTitle": "Filter recommendations by life event",
+  "recommendationsFilterPageTitle": "Filter by life events",
   "@recommendationsFilterPageTitle": {
     "description": "Recommendations — title of the life event filters page."
   },
@@ -5371,7 +5483,7 @@
   "@recommendationsFilterInfoMessage": {
     "description": "Recommendations — info snackbar on the life event filters page."
   },
-  "recommendationsFilterIntro": "You can filter recommendations by the life events you have set up in your preferences to receive information personalized and tailored to your situation.",
+  "recommendationsFilterIntro": "Select the life events you want to use to filter recommendations. You can expand the list and add new life events from your preferences.",
   "@recommendationsFilterIntro": {
     "description": "Recommendations — intro text on the life event filters page."
   },
@@ -5383,19 +5495,19 @@
   "@recommendationsPreferencesHint": {
     "description": "Recommendations — hint to personalize life events from Preferences."
   },
-  "recommendationsEmptyNoMatches": "There are currently no recommendations available that match your preferences. Adjust your life events to explore more options, or wait for new updates.",
+  "recommendationsEmptyNoMatches": "There are currently no recommendations for you. You can change your current life-event selection in Preferences or wait for new updates.",
   "@recommendationsEmptyNoMatches": {
     "description": "Recommendations — notice when no recommendations match the preferences."
   },
-  "recommendationsEditLifeEventsCta": "Edit preferences - life events",
+  "recommendationsEditLifeEventsCta": "Go to Preferences",
   "@recommendationsEditLifeEventsCta": {
     "description": "Recommendations — button to edit life events from the empty state."
   },
-  "recommendationsEmptyFiltered": "There are no recommendations for the applied filter.",
+  "recommendationsEmptyFiltered": "There are currently no recommendations for the selected filters. You can change the filter selection or wait for new updates.",
   "@recommendationsEmptyFiltered": {
     "description": "Recommendations — notice when the applied filter returns no results."
   },
-  "recommendationsResetFilterCta": "Reset filter",
+  "recommendationsResetFilterCta": "Restart filter",
   "@recommendationsResetFilterCta": {
     "description": "Recommendations — button to reset the life events filter."
   },
@@ -5725,11 +5837,19 @@
   "@helpContactGuidesTitle": {
     "description": "Help and contact — heading and card of the help guides."
   },
-  "helpContactGuidesIntro": "If you need additional help, these Help Guides are available to you",
+  "helpFaqIntro": "Find answers to the most common questions about Citizen Space.",
+  "@helpFaqIntro": {
+    "description": "Help and contact — introduction to the frequently asked questions list."
+  },
+  "helpContactGuidesIntro": "Browse the available guides to resolve your questions step by step.",
   "@helpContactGuidesIntro": {
     "description": "Help and contact — introduction to the help guides."
   },
-  "helpContactGoToJccmPortal": "Go to the JCCM web portal",
+  "helpContactShowAllGuides": "Show all guides",
+  "@helpContactShowAllGuides": {
+    "description": "Help and contact — title of the card that opens all guides."
+  },
+  "helpContactGoToJccmPortal": "Go to the Castilla-La Mancha portal",
   "@helpContactGoToJccmPortal": {
     "description": "Help and contact — subtitle of the cards linking to the JCCM web portal."
   },
@@ -5737,15 +5857,15 @@
   "@helpContactInfoHeading": {
     "description": "Help and contact — heading of the contact tab."
   },
-  "helpContactPhonesIntro": "For general inquiries and administrative information you can get in touch through the citizen service phone lines.",
+  "helpContactPhonesIntro": "For general inquiries or administrative information, you can contact the Citizen Service.",
   "@helpContactPhonesIntro": {
     "description": "Help and contact — introduction to the citizen service phone lines."
   },
-  "helpContactPhonesIntroBold1": "general inquiries and administrative information",
+  "helpContactPhonesIntroBold1": "general inquiries or administrative information",
   "@helpContactPhonesIntroBold1": {
     "description": "Help and contact — first bold fragment of the phones intro (must be an exact substring of helpContactPhonesIntro)."
   },
-  "helpContactPhonesIntroBold2": "citizen service phone lines",
+  "helpContactPhonesIntroBold2": "Citizen Service",
   "@helpContactPhonesIntroBold2": {
     "description": "Help and contact — second bold fragment of the phones intro (must be an exact substring of helpContactPhonesIntro)."
   },
@@ -5753,7 +5873,7 @@
   "@helpContactCallCitizenService": {
     "description": "Help and contact — subtitle of the citizen service phone cards."
   },
-  "helpContactExpedienteIntro": "If you need to know more details about a case file, contact the processing office or the competent regional ministry.",
+  "helpContactExpedienteIntro": "For more details about a case file, contact the processing office or the responsible regional ministry.",
   "@helpContactExpedienteIntro": {
     "description": "Help and contact — introduction to case file contact."
   },
@@ -5765,7 +5885,7 @@
   "@helpContactOfficesListTitle": {
     "description": "Help and contact — card linking to the list of information and registry offices."
   },
-  "helpContactSupportIntro": "If you need technical assistance, contact us through the Technical Support form.",
+  "helpContactSupportIntro": "If you need technical assistance, you can contact the technical support team through a form.",
   "@helpContactSupportIntro": {
     "description": "Help and contact — introduction to the technical support form."
   },
@@ -5773,11 +5893,11 @@
   "@helpContactSupportIntroBold": {
     "description": "Help and contact — bold fragment of the support intro (must be an exact substring of helpContactSupportIntro)."
   },
-  "helpContactSupportFormButton": "Support Form",
+  "helpContactSupportFormButton": "Complete support form",
   "@helpContactSupportFormButton": {
     "description": "Help and contact — button that opens the support form."
   },
-  "faqQuestion1": "What is Citizen Space and what can I find in it?",
+  "faqQuestion1": "What is Citizen Space and what can I view?",
   "@faqQuestion1": {
     "description": "FAQ — question about what Citizen Space is."
   },
@@ -5785,7 +5905,7 @@
   "@faqAnswer1": {
     "description": "FAQ — answer about what Citizen Space is."
   },
-  "faqQuestion2": "What do I need to sign in?",
+  "faqQuestion2": "What do I need to access my Citizen Space?",
   "@faqQuestion2": {
     "description": "FAQ — question about access requirements."
   },
@@ -5793,7 +5913,7 @@
   "@faqAnswer2": {
     "description": "FAQ — answer about access requirements."
   },
-  "faqQuestion3": "What personal data is stored in Citizen Space?",
+  "faqQuestion3": "What personal data is stored?",
   "@faqQuestion3": {
     "description": "FAQ — question about stored personal data."
   },
@@ -5801,7 +5921,7 @@
   "@faqAnswer3": {
     "description": "FAQ — answer about stored personal data."
   },
-  "faqQuestion4": "The data shown contains an error. Can I correct it?",
+  "faqQuestion4": "How can I correct incorrect data?",
   "@faqQuestion4": {
     "description": "FAQ — question about correcting wrong data."
   },
@@ -5809,13 +5929,21 @@
   "@faqAnswer4": {
     "description": "FAQ — answer about correcting wrong data."
   },
-  "faqQuestion5": "What events are shown in My Agenda?",
+  "faqQuestion5": "Which case files and procedures can I view?",
   "@faqQuestion5": {
     "description": "FAQ — question about My Agenda events."
   },
-  "faqAnswer5": "Appointments, notices, and administrative events related to your services are shown.",
+  "faqAnswer5": "You can view available case files and procedures associated with your identity and the services integrated into Citizen Space.",
   "@faqAnswer5": {
-    "description": "FAQ — answer about My Agenda events."
+    "description": "FAQ — answer about available case files and procedures."
+  },
+  "faqQuestion6": "Which events will appear in my agenda?",
+  "@faqQuestion6": {
+    "description": "FAQ — question about agenda events."
+  },
+  "faqAnswer6": "Appointments, notices, and administrative events related to your services are shown.",
+  "@faqAnswer6": {
+    "description": "FAQ — answer about agenda events."
   },
   "supportFormPageTitle": "Support form",
   "@supportFormPageTitle": {
@@ -5860,6 +5988,10 @@
   "supportFieldMessage": "Message",
   "@supportFieldMessage": {
     "description": "Support form — label of the message field."
+  },
+  "supportFieldMessageHint": "Describe the details of your query",
+  "@supportFieldMessageHint": {
+    "description": "Support form — hint of the message field."
   },
   "supportAttachmentSectionLabel": "ATTACH SUPPORTING DOCUMENTS",
   "@supportAttachmentSectionLabel": {
@@ -6085,6 +6217,8 @@
   "@privacyAepdTextBeforeLink": {
     "description": "Privacy page — AEPD section text before the link to its website (ends with a comma and a space)."
   },
+  "privacyAepdLinkLabel": "Spanish Data Protection Agency (AEPD)",
+  "@privacyAepdLinkLabel": {"description": "Privacy page — AEPD link text."},
   "privacyAepdTextAfterLink": ". You may also lodge a complaint with the data protection officer, whose contact details are included in this information.",
   "@privacyAepdTextAfterLink": {
     "description": "Privacy page — AEPD section text after the link to its website (starts with a period)."
@@ -6249,7 +6383,7 @@
   "@accessibilityOptionalItemDecreaseText": {
     "description": "Accessibility page — bullet item in the list of keyboard shortcuts."
   },
-  "legalNoticeHeading": "Legal notice (...)",
+  "legalNoticeHeading": "Legal notice",
   "@legalNoticeHeading": {
     "description": "Legal notice page — H1 heading of the page (the original text includes \"(...)\")."
   },
@@ -6313,10 +6447,9 @@
   "sessionContinueBiometricTitle": "Continue in your space",
   "sessionContinueBiometricReason": "Your session needs renewing. Confirm your identity to continue.",
   "biometricAccessDialogTitle": "Would you like to enable quick access with fingerprint or facial recognition?",
-  "biometricAccessDialogDescription": "This will let you enter the app without signing in again. Authentication will be requested periodically to keep your data protected.",
-  "biometricAccessDialogCancel": "Not now",
-  "biometricAccessDialogConfirm": "Enable quick access"
-,
+  "biometricAccessDialogDescription": "You will be able to access the application more quickly without having to authenticate every time. To protect your data, we will ask you to authenticate again periodically.",
+  "biometricAccessDialogCancel": "Complete later",
+  "biometricAccessDialogConfirm": "Enable",
   "appUpdateRequiredTitle": "Update required",
   "@appUpdateRequiredTitle": {
     "description": "Título del aviso a pantalla completa cuando la versión instalada ya no tiene soporte y es obligatorio actualizar."

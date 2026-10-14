@@ -192,17 +192,17 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _FilterNavigation(
-          selectedFilter: _selectedFilter,
-          onSelected: _selectRecommendationFilter,
-        ),
-        const SizedBox(height: AppDimensions.space24),
         _LifeEventsFilterControls(
           activeFilterCount: _activeLifeEventFilterCount(
             state.selectedLifeEventOptions,
           ),
           onFilter: state.hasConfiguredLifeEvents && state.recommendations.isNotEmpty ? () => unawaited(_openLifeEventFilters(state)) : null,
           onEditLifeEvents: () => unawaited(_openLifeEvents()),
+        ),
+        const SizedBox(height: AppDimensions.space24),
+        _FilterNavigation(
+          selectedFilter: _selectedFilter,
+          onSelected: _selectRecommendationFilter,
         ),
         const SizedBox(height: AppDimensions.space24),
         if (showNoRecommendationsHelper) ...[
@@ -249,7 +249,13 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
           selectedFilter: _selectedFilter,
           onSelected: _selectRecommendationFilter,
         ),
-        const SizedBox(height: AppDimensions.space32),
+        const SizedBox(height: AppDimensions.space16),
+        _LifeEventsFilterControls(
+          activeFilterCount: 0,
+          onFilter: null,
+          onEditLifeEvents: () => unawaited(_openLifeEvents()),
+        ),
+        const SizedBox(height: AppDimensions.space24),
         // Mismo tratamiento visual que el error de servicio de "Mis datos":
         // aviso contextual con la acción de recarga dentro, en vez de un título
         // suelto con un botón primario debajo.
@@ -257,7 +263,8 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
           message: l10n.recommendationsLoadingError,
           action: AppButton(
             label: l10n.recommendationsLoadingErrorRetry,
-            hierarchy: AppButtonHierarchy.tertiary,
+            hierarchy: AppButtonHierarchy.ghost,
+            size: AppButtonSize.small,
             trailingIcon: AppIcons.autorenew,
             onPressed: () => ref.invalidate(recommendationsProvider(_selectedFilter.segment)),
           ),
@@ -276,7 +283,7 @@ class _LifeEventsFilterControls extends StatelessWidget {
 
   final int activeFilterCount;
   final VoidCallback? onFilter;
-  final VoidCallback onEditLifeEvents;
+  final VoidCallback? onEditLifeEvents;
 
   @override
   Widget build(final BuildContext context) {
@@ -316,10 +323,22 @@ class _RecommendationsAuthorizationRequired extends StatelessWidget {
         const _FilterNavigation(
           selectedFilter: _RecommendationFilter.all,
         ),
+        const SizedBox(height: AppDimensions.space16),
+        const _LifeEventsFilterControls(
+          activeFilterCount: 0,
+          onFilter: null,
+          onEditLifeEvents: null,
+        ),
         const SizedBox(height: AppDimensions.space24),
-        _PreferencesHint(
-          message: l10n.recommendationsEmptyUnauthorisedBody,
-          onEditPreferences: onReviewConsents,
+        AppAlertContextual(
+          message: l10n.myDataJccmAuthorizationRequiredMessage,
+          action: AppButton(
+            label: l10n.myDataJccmAuthorizationRequiredCta,
+            onPressed: onReviewConsents,
+            hierarchy: AppButtonHierarchy.ghost,
+            size: AppButtonSize.small,
+            trailingIcon: AppIcons.callMade,
+          ),
         ),
       ],
     );
@@ -478,54 +497,6 @@ class _FloatingNavigationArrow extends StatelessWidget {
           onPressed: onPressed,
           tooltip: tooltip,
         ),
-      ),
-    );
-  }
-}
-
-class _PreferencesHint extends StatelessWidget {
-  const _PreferencesHint({
-    required this.onEditPreferences,
-    this.message,
-  });
-
-  final VoidCallback onEditPreferences;
-  final String? message;
-
-  @override
-  Widget build(final BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.space4,
-        vertical: AppDimensions.space8,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const AppIcon(AppIcons.info, color: AppColors.primaryDark),
-          const SizedBox(width: AppDimensions.space8),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: AppDimensions.space4),
-              child: Text(
-                message ?? l10n.recommendationsPreferencesHint,
-                style: AppTypography.smallRegular.copyWith(color: AppColors.primaryDark),
-              ),
-            ),
-          ),
-          const SizedBox(width: AppDimensions.space16),
-          SizedBox(
-            width: AppDimensions.minTouchTarget,
-            height: AppDimensions.minTouchTarget,
-            child: AppIconButton(
-              icon: AppIcons.settings,
-              onPressed: onEditPreferences,
-              hierarchy: AppButtonHierarchy.secondary,
-              semanticsLabel: l10n.drawerPreferences,
-            ),
-          ),
-        ],
       ),
     );
   }

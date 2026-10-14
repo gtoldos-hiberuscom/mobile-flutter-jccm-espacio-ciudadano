@@ -8,17 +8,17 @@
   "@landingTitle": {
     "description": "Título principal mostrado en la sección hero de la pantalla de inicio pública."
   },
-  "landingTagline": "Gestión ágil y online de trámites para la ciudadanía de Castilla-La Mancha",
+  "landingTagline": "Accede y consulta de forma digital los trámites y servicios disponibles para la ciudadanía de Castilla-La Mancha.",
   "@landingTagline": {
     "description": "Subtítulo o eslogan mostrado debajo del título en la pantalla de inicio."
   },
-  "landingTaglinePrefix": "Gestión ágil y online de trámites para la ciudadanía de ",
+  "landingTaglinePrefix": "Accede y consulta de forma digital los trámites y servicios disponibles para la ciudadanía de ",
   "@landingTaglinePrefix": {
-    "description": "Primera parte del eslogan (peso regular) que precede al nombre de la región."
+    "description": "Primera parte del eslogan que precede al nombre de la región."
   },
-  "landingTaglineHighlight": "Castilla-La Mancha",
+  "landingTaglineHighlight": "Castilla-La Mancha.",
   "@landingTaglineHighlight": {
-    "description": "Nombre de la región resaltado con tipografía H2 en el eslogan."
+    "description": "Nombre de la región al final del eslogan."
   },
   "landingAccessStepLabel": "Paso {stepNumber}",
   "@landingAccessStepLabel": {
@@ -33,7 +33,7 @@
   "@landingCtaButton": {
     "description": "Texto del botón principal de acción que inicia el flujo de autenticación con Cl@ve."
   },
-  "landingAboutButton": "Información y ayuda sobre el espacio",
+  "landingAboutButton": "Saber más sobre Espacio ciudadano",
   "@landingAboutButton": {
     "description": "Botón secundario que navega a la pantalla de información sobre el Espacio Ciudadano."
   },
@@ -61,11 +61,11 @@
   "@landingHelpExternalLink": {
     "description": "Enlace de texto externo en la pantalla de ayuda."
   },
-  "landingAboutPageTitle": "Saber más sobre el Espacio Ciudadano",
+  "landingAboutPageTitle": "Saber más sobre Espacio Ciudadano",
   "@landingAboutPageTitle": {
     "description": "Título del AppBar de la pantalla de información sobre el Espacio Ciudadano."
   },
-  "landingAboutTitle": "Espacio ciudadano",
+  "landingAboutTitle": "¿Qué es el Espacio ciudadano?",
   "@landingAboutTitle": {
     "description": "Título principal de la pantalla de información sobre el Espacio Ciudadano."
   },
@@ -81,11 +81,15 @@
   "@landingAboutBodySuffix": {
     "description": "Texto final del párrafo descriptivo (tras el fragmento en negrita)."
   },
-  "landingAboutWhatYouFindTitle": "¿Qué encontrarás?",
+  "landingAboutBody": "Espacio ciudadano es un espacio digital donde puedes consultar tus trámites, encontrar otros que pueden interesarte y acceder a información y servicios que facilitan tu relación con la Administración.",
+  "@landingAboutBody": {
+    "description": "Párrafo descriptivo de la pantalla de información sobre Espacio ciudadano."
+  },
+  "landingAboutWhatYouFindTitle": "¿Qué puedo consultar?",
   "@landingAboutWhatYouFindTitle": {
     "description": "Encabezado de la sección de contenidos de la pantalla about."
   },
-  "landingAboutWhatYouFindIntro": "Tus datos en relación con la Junta de Comunidades de Castilla-La Mancha:",
+  "landingAboutWhatYouFindIntro": "En el Espacio ciudadano encontrarás:",
   "@landingAboutWhatYouFindIntro": {
     "description": "Introducción a la lista de contenidos disponibles."
   },
@@ -105,15 +109,19 @@
   "@landingAboutBullet4": {
     "description": "Cuarto elemento de la lista de contenidos."
   },
-  "landingAboutBullet5": "Tus citas o eventos.",
+  "landingAboutBullet5": "Tus citas y eventos.",
   "@landingAboutBullet5": {
     "description": "Quinto elemento de la lista de contenidos."
   },
-  "landingAboutBullet6": "Recomendaciones personalizadas basadas en tus intereses.",
+  "landingAboutBullet6": "Recomendaciones personalizadas según tus intereses.",
   "@landingAboutBullet6": {
     "description": "Sexto elemento de la lista de contenidos."
   },
-  "landingAboutAccessButton": "Acceder a mi Espacio Ciudadano",
+  "landingAboutHelpLink": "Mostrar información de Ayuda y contacto",
+  "@landingAboutHelpLink": {
+    "description": "Enlace a la información de ayuda y contacto desde la pantalla about."
+  },
+  "landingAboutAccessButton": "Acceder a mi Espacio ciudadano",
   "@landingAboutAccessButton": {
     "description": "Botón de acción principal de la pantalla about que inicia el flujo de autenticación."
   },
@@ -416,6 +424,10 @@
   "externalNavigationDialogTitle": "Vas a salir de la aplicación",
   "@externalNavigationDialogTitle": {
     "description": "Título del diálogo de confirmación antes de abrir un enlace externo."
+  },
+  "drawerElectronicOfficeDialogTitle": "Te vamos a redirigir a la Sede Electrónica",
+  "@drawerElectronicOfficeDialogTitle": {
+    "description": "Título del diálogo de confirmación al abrir la Sede Electrónica desde el menú lateral."
   },
   "externalNavigationDialogBody": "El contenido se abrirá en una ventana de tu navegador",
   "@externalNavigationDialogBody": {
@@ -1028,15 +1040,15 @@
   "@educationUniversityTitlesError": {
     "description": "Educación — error títulos universitarios."
   },
-  "educationUniversityTitlesInfoTitle": "Sobre tus títulos universitarios",
+  "educationUniversityTitlesInfoTitle": "Saber más sobre Mis datos de títulos universitarios",
   "@educationUniversityTitlesInfoTitle": {
     "description": "Educación — título del modal de ayuda de títulos universitarios."
   },
-  "educationUniversityTitlesInfoBody": "Consulta los datos de los títulos que figuren en el registro Nacional de Titulados universitarios oficiales del Ministerio de Ciencia, Innovación y Universidades.\nSi tu título es anterior a 1996 es posible que tus datos no puedan visualizarse automáticamente.",
+  "educationUniversityTitlesInfoBody": "Consulta la información de tus títulos universitarios inscritos en el Registro Nacional de Titulados Universitarios Oficiales del Ministerio de Ciencia, Innovación y Universidades.\n\nSi obtuviste tu título antes de 1996, es posible que tus datos no estén disponibles automáticamente.",
   "@educationUniversityTitlesInfoBody": {
     "description": "Educación — cuerpo principal del modal de ayuda de títulos universitarios."
   },
-  "educationUniversityTitlesInfoFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Sede Electrónica de Universidades.",
+  "educationUniversityTitlesInfoFooter": "Si alguno de tus datos es incorrecto o no está actualizado, contacta con el Ministerio de Ciencia, Innovación y Universidades.",
   "@educationUniversityTitlesInfoFooter": {
     "description": "Educación — texto de pie del modal de ayuda de títulos universitarios."
   },
@@ -1044,17 +1056,21 @@
   "@educationUniversityTitlesInfoContactButton": {
     "description": "Educación — botón de contacto en el modal de ayuda de títulos universitarios."
   },
-  "educationNonUniversityTitlesInfoTitle": "Sobre tus títulos no universitarios",
+  "educationNonUniversityTitlesInfoTitle": "Saber más sobre Mis datos de títulos no universitarios",
   "@educationNonUniversityTitlesInfoTitle": {
     "description": "Educación — título del modal de ayuda de títulos no universitarios."
   },
-  "educationNonUniversityTitlesInfoBody": "Consulta los datos de los títulos no universitarios que figuren en el registro.",
+  "educationNonUniversityTitlesInfoBody": "Consulta la información de tus títulos no universitarios inscritos en el Registro Nacional de Titulados no Universitarios Oficiales del Ministerio de Educación, Formación profesional y Deportes.",
   "@educationNonUniversityTitlesInfoBody": {
     "description": "Educación — cuerpo principal del modal de ayuda de títulos no universitarios."
   },
   "educationNonUniversityTitlesInfoFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con el Ministerio de Educación, Formación Profesional y Deportes.",
   "@educationNonUniversityTitlesInfoFooter": {
     "description": "Educación — texto de pie del modal de ayuda de títulos no universitarios."
+  },
+  "educationTitlesInfoMoreInformation": "Consultar más información",
+  "@educationTitlesInfoMoreInformation": {
+    "description": "Enlace externo de los paneles informativos de títulos educativos."
   },
   "educationNonUniversityTitlesTitle": "Títulos no universitarios",
   "@educationNonUniversityTitlesTitle": {
@@ -1185,15 +1201,15 @@
   "@socialWelfareTemporaryResidentialStayProcedure": {
     "description": "Mis datos de Bienestar — enlace al trámite de estancias temporales en centros residenciales."
   },
-  "socialWelfareInfoSheetTitle": "Sobre Mis datos de Bienestar social",
+  "socialWelfareInfoSheetTitle": "Saber más sobre Mis datos de Bienestar social",
   "@socialWelfareInfoSheetTitle": {
     "description": "Mis datos de Bienestar — título del modal informativo."
   },
-  "socialWelfareInfoSheetDescription": "Consulta la información de tus expedientes en el ámbito de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.",
+  "socialWelfareInfoSheetDescription": "Consulta la información de tus expedientes de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.",
   "@socialWelfareInfoSheetDescription": {
     "description": "Mis datos de Bienestar — descripción del modal informativo."
   },
-  "myDataJccmAuthorizationRequiredMessage": "Debes autorizar la consulta de los hechos administrativos que obren en poder de la JCCM desde tus preferencias.",
+  "myDataJccmAuthorizationRequiredMessage": "Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.",
   "@myDataJccmAuthorizationRequiredMessage": {
     "description": "Mensaje mostrado cuando la consulta de datos JCCM no está autorizada."
   },
@@ -1205,7 +1221,7 @@
   "@myDataJccmAuthorizationRequiredCta": {
     "description": "Texto accesible del botón para abrir condiciones de uso y autorizaciones."
   },
-  "myDataAgeAuthorizationRequiredMessage": "Debes autorizar la consulta de los datos que la Administración General del Estado tiene sobre ti desde tus preferencias.",
+  "myDataAgeAuthorizationRequiredMessage": "Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.",
   "@myDataAgeAuthorizationRequiredMessage": {
     "description": "Mensaje mostrado cuando la consulta de datos AGE no está autorizada."
   },
@@ -1213,7 +1229,7 @@
   "@socialWelfareFamilyTitle": {
     "description": "Bienestar — sección familia numerosa."
   },
-  "socialWelfareFamilyNavDescription": "Detalles del título y personas beneficiarias",
+  "socialWelfareFamilyNavDescription": "Título y personas beneficiarias",
   "@socialWelfareFamilyNavDescription": {
     "description": "Mis datos de Bienestar — descripción de la tarjeta de familia numerosa."
   },
@@ -1221,11 +1237,11 @@
   "@socialWelfareDisabilityTitle": {
     "description": "Mis datos de Bienestar — título de la tarjeta de discapacidad."
   },
-  "socialWelfareDisabilityNavDescription": "Detalles del título de discapacidad",
+  "socialWelfareDisabilityNavDescription": "Certificado de discapacidad",
   "@socialWelfareDisabilityNavDescription": {
     "description": "Mis datos de Bienestar — descripción de la tarjeta de discapacidad."
   },
-  "socialWelfareDisabilityInfoSheetTitle": "Sobre Mi título de discapacidad",
+  "socialWelfareDisabilityInfoSheetTitle": "Saber más sobre Mi título de discapacidad",
   "@socialWelfareDisabilityInfoSheetTitle": {
     "description": "Mis datos de Bienestar — título del panel informativo de discapacidad."
   },
@@ -1337,7 +1353,7 @@
   "@socialWelfareTermalismoNavDescription": {
     "description": "Mis datos de Bienestar — descripción de la tarjeta de termalismo."
   },
-  "socialWelfareTermalismoInfoSheetTitle": "Sobre Termalismo",
+  "socialWelfareTermalismoInfoSheetTitle": "Saber más sobre Termalismo",
   "@socialWelfareTermalismoInfoSheetTitle": {
     "description": "Mis datos de Bienestar — título del panel informativo de termalismo."
   },
@@ -1377,15 +1393,15 @@
   "@socialWelfareParkingTitle": {
     "description": "Bienestar — sección tarjeta de estacionamiento (external link)."
   },
-  "socialWelfareParkingNavTitle": "Tarjeta estacionamiento",
+  "socialWelfareParkingNavTitle": "Tarjeta de estacionamiento",
   "@socialWelfareParkingNavTitle": {
     "description": "Mis datos de Bienestar — título de la tarjeta de estacionamiento."
   },
-  "socialWelfareParkingNavDescription": "Detalles de tu tarjeta de estacionamiento",
+  "socialWelfareParkingNavDescription": "Datos de la tarjeta y condiciones de uso",
   "@socialWelfareParkingNavDescription": {
     "description": "Mis datos de Bienestar — descripción de la tarjeta de estacionamiento."
   },
-  "socialWelfareParkingInfoSheetTitle": "Sobre Mi tarjeta de estacionamiento",
+  "socialWelfareParkingInfoSheetTitle": "Saber más sobre Mi tarjeta de estacionamiento",
   "@socialWelfareParkingInfoSheetTitle": {
     "description": "Mis datos de Bienestar — título del panel informativo de tarjeta de estacionamiento."
   },
@@ -1433,7 +1449,7 @@
   "@socialWelfareDependenciaNavDescription": {
     "description": "Mis datos de Bienestar — descripción de la tarjeta de dependencia."
   },
-  "socialWelfareDependenciaInfoSheetTitle": "Sobre Atención a la dependencia",
+  "socialWelfareDependenciaInfoSheetTitle": "Saber más sobre Atención a la dependencia",
   "@socialWelfareDependenciaInfoSheetTitle": {
     "description": "Mis datos de Bienestar — título del panel informativo de dependencia."
   },
@@ -1931,7 +1947,7 @@
   "@digitalCardsTypeFamiliaNumerosa": {
     "description": "Carnets — etiqueta del tipo familia numerosa."
   },
-  "digitalCardsTypeJoven": "Joven",
+  "digitalCardsTypeJoven": "Carnet Joven",
   "@digitalCardsTypeJoven": {
     "description": "Carnets — etiqueta del tipo carnet joven."
   },
@@ -2022,6 +2038,18 @@
   "@lifeEventsHeaderDescription": {
     "description": "Personalization — descriptive header on the hechos vitales screen."
   },
+  "lifeEventsOnboardingTitle": "Recomendaciones personalizadas",
+  "@lifeEventsOnboardingTitle": {
+    "description": "Personalización — título principal durante el primer acceso."
+  },
+  "lifeEventsOnboardingDescription": "Selecciona las situaciones, intereses o necesidades que más se ajustan a ti para recibir recomendaciones personalizadas.",
+  "@lifeEventsOnboardingDescription": {
+    "description": "Personalización — introducción durante el primer acceso."
+  },
+  "lifeEventsCompleteLaterAction": "Completar más tarde",
+  "@lifeEventsCompleteLaterAction": {
+    "description": "Personalización — acción para posponer la configuración durante el primer acceso."
+  },
   "lifeEventsIntroHeading": "Selecciona las temáticas sobre las que te gustaría recibir información",
   "@lifeEventsIntroHeading": {
     "description": "Personalization — large intro heading on the hechos vitales screen."
@@ -2042,7 +2070,7 @@
   "@lifeEventsFillLaterAction": {
     "description": "Personalization — skip action label for first-login onboarding."
   },
-  "lifeEventsClearAllAction": "Desmarcar todo",
+  "lifeEventsClearAllAction": "Desmarcar todos",
   "@lifeEventsClearAllAction": {
     "description": "Personalization — clear all selected life events action label."
   },
@@ -2292,7 +2320,7 @@
     "description": "Casework upload — status: failed."
   },
   "fileUploadCancel": "Cancelar",
-  "fileUploadRemove": "Eliminar",
+  "fileUploadCompleted": "Completado",
   "fileUploadDelete": "Eliminar archivo",
   "fileUploadRetry": "Reintentar",
   "a11yFileUpload": "Archivo: {fileName}, {fileInfo}. Estado: {status}",
@@ -3145,7 +3173,7 @@
   "@familiaNumerosaDetailTitle": {
     "description": "Familia numerosa detail page — AppBar title."
   },
-  "familiaNumerosaInfoSheetTitle": "Sobre Familia numerosa",
+  "familiaNumerosaInfoSheetTitle": "Saber más sobre Familia numerosa",
   "@familiaNumerosaInfoSheetTitle": {
     "description": "Familia numerosa detail — título del panel informativo."
   },
@@ -3231,9 +3259,17 @@
   "@familiaNumerosaNo": {
     "description": "Familia numerosa detail — valor negativo."
   },
-  "familiaNumerosaNoDataMessage": "No existe el título de familia numerosa indicado.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "familiaNumerosaNoDataMessage": "No hemos encontrado información sobre tu título de familia numerosa.",
   "@familiaNumerosaNoDataMessage": {
     "description": "Familia numerosa detail — helper mostrado cuando no hay datos."
+  },
+  "familiaNumerosaNoDataContactHint": "Si esta información es incorrecta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "@familiaNumerosaNoDataContactHint": {
+    "description": "Texto de contacto mostrado cuando no hay datos de familia numerosa."
+  },
+  "familiaNumerosaContactListButton": "Consultar el listado de contactos",
+  "@familiaNumerosaContactListButton": {
+    "description": "Enlace externo al listado de contactos de Bienestar Social."
   },
   "familiaNumerosaContactHint": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
   "@familiaNumerosaContactHint": {
@@ -3242,6 +3278,10 @@
   "familiaNumerosaOfficeContactsButton": "Contacto",
   "@familiaNumerosaOfficeContactsButton": {
     "description": "Familia numerosa detail — botón externo hacia oficinas y contactos."
+  },
+  "familiaNumerosaMoreInformation": "Consultar más información",
+  "@familiaNumerosaMoreInformation": {
+    "description": "Enlace externo del panel informativo de familia numerosa."
   },
   "familiaNumerosaCardNumberLabel": "Número de carnet: {number}",
   "@familiaNumerosaCardNumberLabel": {
@@ -3337,7 +3377,19 @@
   "myDataHealthAppointmentsNoDataMessage": "No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.",
   "myDataHealthHospitalAppointmentsNoDataMessage": "No hemos encontrado citas hospitalarias asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu centro hospitalario.",
   "myDataEmploymentDemandNoDataMessage": "No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.",
-  "myDataEmploymentOffersNoDataMessage": "Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.",
+  "myDataEmploymentOffersNoDataMessage": "Aún no te has inscrito a ninguna oferta.\n\nSi la información es incorrecta o no está actualizada, revisa tu espacio personal en el Portal de empleo de Castilla-La Mancha.",
+  "myDataEmploymentOffersAuthorizationRequiredMessage": "Autoriza el uso de tus datos desde tus preferencias para consultar tus inscripciones en ofertas de empleo.",
+  "@myDataEmploymentOffersAuthorizationRequiredMessage": {
+    "description": "Mensaje mostrado cuando falta autorización para consultar las inscripciones en ofertas de empleo."
+  },
+  "myDataEmploymentDemandAuthorizationRequiredMessage": "Autoriza el uso de tus datos desde tus preferencias para consultar el estado de tu demanda de empleo.",
+  "@myDataEmploymentDemandAuthorizationRequiredMessage": {
+    "description": "Mensaje mostrado cuando falta autorización para consultar la demanda de empleo."
+  },
+  "myDataHealthAppointmentsAuthorizationRequiredMessage": "Autoriza el uso de tus datos desde tus preferencias para consultar tus citas de Atención Primaria.",
+  "@myDataHealthAppointmentsAuthorizationRequiredMessage": {
+    "description": "Mensaje mostrado cuando falta autorización para consultar las citas de Atención Primaria."
+  },
   "discapacidadServiceUnavailableMessage": "El servicio de consulta de tu título de discapacidad no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
   "socialWelfareParkingServiceUnavailableMessage": "El servicio de consulta de tu tarjeta de estacionamiento no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
   "socialWelfareThermalSpaServiceUnavailableMessage": "El servicio de consulta de tu información de termalismo no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
@@ -3625,11 +3677,11 @@
   "@recommendationsLifeEventsComingSoon": {
     "description": "Recommendations — STORY-57 SnackBar shown when tapping the 'Ver mis hechos vitales' secondary CTA before that surface ships."
   },
-  "recommendationsLoadingError": "No hemos podido cargar las recomendaciones.",
+  "recommendationsLoadingError": "No hemos podido cargar la información de tus recomendaciones. Vuelve a intentarlo más tarde.",
   "@recommendationsLoadingError": {
     "description": "Recommendations — generic error message when the list cannot be loaded."
   },
-  "recommendationsLoadingErrorRetry": "Reintentar",
+  "recommendationsLoadingErrorRetry": "Actualizar",
   "@recommendationsLoadingErrorRetry": {
     "description": "Recommendations — retry button label in the error state."
   },
@@ -3827,7 +3879,7 @@
     }
   },
   "a11yBottomSheet": "Panel inferior",
-  "a11yBottomSheetClose": "Salir",
+  "a11yBottomSheetClose": "Cerrar",
   "a11yCalendar": "Calendario",
   "a11yCalendarMonth": "Mes mostrado: {monthYear}",
   "@a11yCalendarMonth": {
@@ -3880,6 +3932,14 @@
   "@preferencesResetError": {
     "description": "Mensaje curado cuando el borrado de preferencias/autorizaciones falla."
   },
+  "preferencesLoadError": "No hemos podido cargar tus preferencias. Vuelve a intentarlo más tarde.",
+  "@preferencesLoadError": {
+    "description": "Mensaje mostrado cuando no se puede cargar la pantalla de preferencias."
+  },
+  "preferencesLoadRetry": "Actualizar",
+  "@preferencesLoadRetry": {
+    "description": "Acción para volver a cargar la pantalla de preferencias."
+  },
   "drawerPreferences": "Preferencias",
   "drawerGreeting": "Hola, {userName}",
   "@drawerGreeting": {
@@ -3910,7 +3970,7 @@
   "@myDataTitle": {
     "description": "Título de la sección Mis datos en la barra superior y navegación principal."
   },
-  "myDataIntro": "Consulta tu información disponible en la Administración y accede a servicios y trámites asociados a cada área.",
+  "myDataIntro": "Consulta tu información disponible en la Administración y accede a los servicios relacionados.",
   "@myDataIntro": {
     "description": "Texto introductorio de la pantalla Mis datos."
   },
@@ -3926,7 +3986,7 @@
   "@myDataHealthTitle": {
     "description": "Título de la tarjeta de Salud en la pantalla Mis datos."
   },
-  "myDataHealthDescription": "SESCAM y servicios de salud",
+  "myDataHealthDescription": "Datos sanitarios y gestión de citas médicas",
   "@myDataHealthDescription": {
     "description": "Descripción de la tarjeta de Salud en la pantalla Mis datos."
   },
@@ -3934,7 +3994,7 @@
   "@myDataSocialWelfareTitle": {
     "description": "Título de la tarjeta de Bienestar Social en la pantalla Mis datos."
   },
-  "myDataSocialWelfareDescription": "Servicios disponibles",
+  "myDataSocialWelfareDescription": "Familia numerosa, discapacidad, dependencia y otras ayudas",
   "@myDataSocialWelfareDescription": {
     "description": "Descripción de la tarjeta de Bienestar Social en la pantalla Mis datos."
   },
@@ -3942,23 +4002,23 @@
   "@myDataEmploymentTitle": {
     "description": "Título de la tarjeta de Empleo en la pantalla Mis datos."
   },
-  "myDataEmploymentDescription": "Demanda y servicios de empleo",
+  "myDataEmploymentDescription": "Demanda de empleo, ofertas e inscripciones",
   "@myDataEmploymentDescription": {
     "description": "Descripción de la tarjeta de Empleo en la pantalla Mis datos."
   },
-  "myDataEmploymentInfoSheetTitle": "Sobre Mis datos de Empleo",
+  "myDataEmploymentInfoSheetTitle": "Saber más sobre Demanda de Empleo",
   "@myDataEmploymentInfoSheetTitle": {
     "description": "Título del modal informativo de Mis datos de Empleo."
   },
-  "myDataEmploymentInfoSheetDescription": "Consulta tu situación actual como demandante de empleo y tus últimas inscripciones en ofertas.",
+  "myDataEmploymentInfoSheetDescription": "Consulta tu situación actual como demandante de empleo.",
   "@myDataEmploymentInfoSheetDescription": {
     "description": "Descripción principal del modal informativo de Mis datos de Empleo."
   },
-  "myDataEmploymentInfoSheetFooter": "Si tus datos como demandante de empleo no son correctos, contacta con Servicio Público de Empleo Estatal (SEPE).",
+  "myDataEmploymentInfoSheetFooter": "Si alguno de tus datos es incorrecto o no está actualizado, contacta con Servicio Público de Empleo Estatal (SEPE).",
   "@myDataEmploymentInfoSheetFooter": {
     "description": "Texto de contacto del modal informativo de Mis datos de Empleo."
   },
-  "myDataEmploymentInfoSheetOfficeContactsButton": "Contacto",
+  "myDataEmploymentInfoSheetOfficeContactsButton": "Consultar más información",
   "@myDataEmploymentInfoSheetOfficeContactsButton": {
     "description": "Botón externo hacia oficinas y contactos en el modal informativo de Mis datos de Empleo."
   },
@@ -4002,7 +4062,7 @@
   "@myDataEmploymentServiceUnavailableReload": {
     "description": "Etiqueta del botón para recargar la demanda de empleo cuando el servicio no está disponible."
   },
-  "myDataEmploymentOffersServiceUnavailableMessage": "El servicio de inscripciones en ofertas actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "myDataEmploymentOffersServiceUnavailableMessage": "No hemos podido cargar tus inscripciones en ofertas de empleo. Vuelve a intentarlo más tarde.",
   "@myDataEmploymentOffersServiceUnavailableMessage": {
     "description": "Mensaje del helper contextual mostrado cuando el servicio de inscripciones en ofertas no está disponible."
   },
@@ -4026,7 +4086,7 @@
   "@myDataEmploymentOffersTitle": {
     "description": "Título de la tarjeta de inscripciones en ofertas."
   },
-  "myDataEmploymentOffersDescription": "Ofertas de empleo en las que te has inscrito",
+  "myDataEmploymentOffersDescription": "Historial de las ofertas de empleo solicitadas",
   "@myDataEmploymentOffersDescription": {
     "description": "Descripción de la tarjeta de inscripciones en ofertas."
   },
@@ -4035,11 +4095,15 @@
     "description": "Título de la pantalla de inscripciones en ofertas de empleo."
   },
   "myDataEmploymentOffersPortalLink": "Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha",
-  "myDataEmploymentOffersInfoSheetFooter": "Si las inscripciones en ofertas de empleo no son correctas, revisa tu Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha.",
+  "myDataEmploymentOffersInfoSheetTitle": "Saber más sobre Inscripción en ofertas de empleo",
+  "@myDataEmploymentOffersInfoSheetTitle": {
+    "description": "Título del panel informativo de inscripciones en ofertas de empleo."
+  },
+  "myDataEmploymentOffersInfoSheetFooter": "Si alguno de tus datos es incorrecto o no está actualizado, revisa tu espacio personal en el Portal de empleo de Castilla-La Mancha.",
   "@myDataEmploymentOffersInfoSheetFooter": {
     "description": "Texto de pie del modal informativo de la pantalla de inscripciones en ofertas."
   },
-  "myDataEmploymentOffersInfoSheetDescription": "Consulta las ofertas de empleo en las que te has inscrito y el estado de tu candidatura.",
+  "myDataEmploymentOffersInfoSheetDescription": "Consulta tus últimas inscripciones en ofertas de empleo.",
   "@myDataEmploymentOffersInfoSheetDescription": {
     "description": "Descripción del modal informativo de la pantalla de inscripciones en ofertas."
   },
@@ -4099,7 +4163,7 @@
   "@myDataEducationTitle": {
     "description": "Título de la tarjeta de Educación en la pantalla Mis datos."
   },
-  "myDataEducationDescription": "Titulos formativos",
+  "myDataEducationDescription": "Títulos universitarios y no universitarios",
   "@myDataEducationDescription": {
     "description": "Descripción de la tarjeta de Educación en la pantalla Mis datos."
   },
@@ -4107,7 +4171,7 @@
   "@myDataHousingTitle": {
     "description": "Título de la tarjeta de Vivienda en la pantalla Mis datos."
   },
-  "myDataHousingDescription": "Titularidad de bienes inmueble",
+  "myDataHousingDescription": "Datos catastrales y titularidad de inmuebles",
   "@myDataHousingDescription": {
     "description": "Descripción de la tarjeta de Vivienda en la pantalla Mis datos."
   },
@@ -4131,19 +4195,19 @@
   "@myDataHousingRealEstateTitle": {
     "description": "Título de la tarjeta de bienes inmuebles en el detalle de Vivienda."
   },
-  "myDataHousingRealEstateDescription": "Datos catastrales de mis inmuebles",
+  "myDataHousingRealEstateDescription": "Datos catastrales de la propiedad",
   "@myDataHousingRealEstateDescription": {
     "description": "Descripción de la tarjeta de bienes inmuebles en el detalle de Vivienda."
   },
-  "myDataHousingRealEstateInfoSheetTitle": "Sobre Bienes Inmuebles",
+  "myDataHousingRealEstateInfoSheetTitle": "Saber más sobre Bienes Inmuebles",
   "@myDataHousingRealEstateInfoSheetTitle": {
     "description": "Título del modal informativo de bienes inmuebles."
   },
-  "myDataHousingRealEstateInfoSheetDescription": "Consulta los datos catastrales de tus inmuebles registrados en la Dirección General de Catastro.",
+  "myDataHousingRealEstateInfoSheetDescription": "Consulta la información catastral de los inmuebles que tienes registrados a tu nombre en el Catastro.",
   "@myDataHousingRealEstateInfoSheetDescription": {
     "description": "Descripción principal del modal informativo de bienes inmuebles."
   },
-  "myDataHousingRealEstateInfoSheetFooter": "Si alguno de tus datos no es correcto dirígete o contacta con la Sede Electrónica de Catastro",
+  "myDataHousingRealEstateInfoSheetFooter": "Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Sede Electrónica del Catastro.",
   "@myDataHousingRealEstateInfoSheetFooter": {
     "description": "Pie del modal informativo de bienes inmuebles."
   },
@@ -4236,19 +4300,19 @@
   "@myDataHousingAddressTitle": {
     "description": "Título de la tarjeta de domicilio en el detalle de Vivienda."
   },
-  "myDataHousingAddressDescription": "Datos en la base padronal",
+  "myDataHousingAddressDescription": "Datos padronales",
   "@myDataHousingAddressDescription": {
     "description": "Descripción de la tarjeta de domicilio en el detalle de Vivienda."
   },
-  "myDataHousingAddressInfoSheetTitle": "Sobre tu domicilio",
+  "myDataHousingAddressInfoSheetTitle": "Saber más sobre Domicilio en Castilla-La Mancha",
   "@myDataHousingAddressInfoSheetTitle": {
     "description": "Título del modal informativo del detalle de domicilio."
   },
-  "myDataHousingAddressInfoSheetDescription": "Consulta tus datos en la base padronal del Instituto Nacional de Estadística (INE) dentro de Castilla-La Mancha, que recoge información de todos los Padrones municipales de Castilla-La Mancha. Esta información se actualiza cada mes con datos enviados por los ayuntamientos, por lo que podría no coincidir con tu situación actual si modificaste tu empadronamiento recientemente.",
+  "myDataHousingAddressInfoSheetDescription": "Consulta los datos de tu empadronamiento registrados en el Instituto Nacional de Estadística (INE). Esta información procede de los padrones municipales de Castilla-La Mancha y se actualiza cada mes con los datos que envían los ayuntamientos.\n\nSi has cambiado recientemente tu empadronamiento, es posible que esta información todavía no esté actualizada.",
   "@myDataHousingAddressInfoSheetDescription": {
     "description": "Descripción principal del modal informativo del detalle de domicilio."
   },
-  "myDataHousingAddressInfoSheetFooter": "Si alguno de tus datos no es correcto dirígete o contacta con tu Ayuntamiento.",
+  "myDataHousingAddressInfoSheetFooter": "Si alguno de tus datos es incorrecto o no está actualizado, contacta con el Ayuntamiento correspondiente.",
   "@myDataHousingAddressInfoSheetFooter": {
     "description": "Pie del modal informativo del detalle de domicilio."
   },
@@ -4308,11 +4372,11 @@
   "@myDataHousingLinksTitle": {
     "description": "Título de la sección de enlaces de interés en la pestaña Información y servicios de Vivienda."
   },
-  "myDataHousingLinkClmHousing": "Vivienda Castilla-La Mancha",
+  "myDataHousingLinkClmHousing": "Portal de Vivienda de Castilla-La Mancha",
   "@myDataHousingLinkClmHousing": {
     "description": "Enlace al portal de Vivienda Castilla-La Mancha."
   },
-  "myDataHousingLinkCadastre": "Sede del catastro",
+  "myDataHousingLinkCadastre": "Sede Electrónica del Catastro",
   "@myDataHousingLinkCadastre": {
     "description": "Enlace a la Sede del Catastro."
   },
@@ -4324,7 +4388,7 @@
   "@myDataHousingProcedureRentalHousingAid": {
     "description": "Trámite de ayudas al alquiler de viviendas."
   },
-  "myDataHousingProcedureProtectedHousingRegister": "Inscripción en el registro de demandantes de vivienda con protección pública de CLM",
+  "myDataHousingProcedureProtectedHousingRegister": "Inscripción en el Registro de Demandantes de Vivienda",
   "@myDataHousingProcedureProtectedHousingRegister": {
     "description": "Trámite de inscripción en el registro de demandantes de vivienda con protección pública de CLM."
   },
@@ -4336,23 +4400,23 @@
   "@myDataVehiclesTitle": {
     "description": "Título de la tarjeta de Vehículos en la pantalla Mis datos."
   },
-  "myDataVehiclesDescription": "Tus vehículos registrados",
+  "myDataVehiclesDescription": "Matriculación y titularidad de vehículos registrados",
   "@myDataVehiclesDescription": {
     "description": "Descripción de la tarjeta de Vehículos en la pantalla Mis datos."
   },
-  "myDataVehiclesInfoSheetTitle": "Sobre Mis datos de Vehículos",
+  "myDataVehiclesInfoSheetTitle": "Saber más sobre Vehículos",
   "@myDataVehiclesInfoSheetTitle": {
     "description": "Título del modal informativo de Mis datos de Vehículos."
   },
-  "myDataVehiclesInfoSheetDescription": "Consulta la matrícula de los vehículos registrados en la Dirección General de Tráfico (DGT) en los que eres titular.",
+  "myDataVehiclesInfoSheetDescription": "Consulta la información de los vehículos que tienes registrados a tu nombre en la Dirección General de Tráfico (DGT).",
   "@myDataVehiclesInfoSheetDescription": {
     "description": "Descripción principal del modal informativo de Mis datos de Vehículos."
   },
-  "myDataVehiclesInfoSheetFooter": "Si alguno de tus datos no es correcto o no está actualizado, contacta con la Dirección General de Tráfico (DGT)",
+  "myDataVehiclesInfoSheetFooter": "Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Dirección General de Tráfico (DGT).",
   "@myDataVehiclesInfoSheetFooter": {
     "description": "Texto del pie de página del modal informativo de Mis datos de Vehículos."
   },
-  "myDataVehiclesInfoSheetContactButton": "Contacto",
+  "myDataVehiclesInfoSheetContactButton": "Consultar más información",
   "@myDataVehiclesInfoSheetContactButton": {
     "description": "Etiqueta del botón de contacto en el modal informativo de Mis datos de Vehículos."
   },
@@ -4454,6 +4518,10 @@
   "@myDataEducationTitlesDescription": {
     "description": "Descripción de las tarjetas de títulos educativos."
   },
+  "myDataEducationNonUniversityTitlesDescription": "Formación profesional y otras titulaciones",
+  "@myDataEducationNonUniversityTitlesDescription": {
+    "description": "Descripción de la tarjeta de títulos no universitarios en Mis datos de Educación."
+  },
   "myDataEducationServicesEmpty": "Información y servicios de Educación disponible próximamente.",
   "@myDataEducationServicesEmpty": {
     "description": "Estado vacío temporal de la pestaña Información y servicios de Educación."
@@ -4502,6 +4570,10 @@
   "@myDataHealthInfoSheetContactHint": {
     "description": "Texto de ayuda previo al CTA de contacto del modal informativo de Salud."
   },
+  "myDataHealthInfoSheetMoreInformation": "Consultar más información",
+  "@myDataHealthInfoSheetMoreInformation": {
+    "description": "Enlace externo del modal informativo de Salud hacia la web del SESCAM."
+  },
   "myDataHealthDataTab": "Mis datos de Salud",
   "@myDataHealthDataTab": {
     "description": "Primera pestaña del detalle de Salud."
@@ -4538,13 +4610,22 @@
   "@myDataHealthLinkDigitalHealth": {
     "description": "Enlace a Mi Salud Digital."
   },
-  "myDataHealthLinkClinicalHistory": "Historia clínica Digital (Sistema Nacional de Salud)",
+  "myDataHealthLinkClinicalHistory": "Historia clínica del Sistema Nacional de Salud (HCDSNS)",
   "@myDataHealthLinkClinicalHistory": {
-    "description": "Enlace a Historia clínica Digital del Sistema Nacional de Salud."
+    "description": "Enlace a Historia clínica del Sistema Nacional de Salud (HCDSNS)"
   },
   "myDataHealthAppointmentsTitle": "Citas de Atención Primaria",
   "@myDataHealthAppointmentsTitle": {
     "description": "Título principal del bloque de citas sanitarias."
+  },
+  "myDataHealthCipLabel": "Código de Identificación Personal (CIP): {cip}",
+  "@myDataHealthCipLabel": {
+    "description": "Código de identificación personal mostrado encima de las citas de Atención Primaria.",
+    "placeholders": {
+      "cip": {
+        "type": "String"
+      }
+    }
   },
   "myDataHealthAppointmentsEmpty": "No hay citas para mostrar.",
   "@myDataHealthAppointmentsEmpty": {
@@ -4622,7 +4703,7 @@
   "@gestionExpedientesTitle": {
     "description": "Título de la tarjeta de navegación a Mis expedientes."
   },
-  "gestionExpedientesDescription": "Consulta y gestiona tus expedientes administrativos",
+  "gestionExpedientesDescription": "Consulta la información y el estado de los expedientes que has iniciado con la Junta de Comunidades de Castilla-La Mancha (JCCM).",
   "@gestionExpedientesDescription": {
     "description": "Descripción de la tarjeta de navegación a Mis expedientes."
   },
@@ -4714,9 +4795,17 @@
   "@gestionAportarDocumentacionTitle": {
     "description": "Título de la pantalla de aportar documentación."
   },
-  "gestionAportarDocumentacionHelperText": "Puedes aportar hasta 5 ficheros de 20MB máx. cada uno, en formato PDF, DOC, DOCX, ZIP, XLS o XLSX.",
+  "gestionAportarDocumentacionHelperText": "Puedes adjuntar hasta 5 archivos de un máximo de 20 MB cada uno. Se admiten archivos en formato PDF, DOC, DOCX, ZIP, XLS y XLSX.",
   "@gestionAportarDocumentacionHelperText": {
     "description": "Aviso persistente con las condiciones de subida de ficheros."
+  },
+  "gestionAportarDocumentacionInfoTitle": "Saber más sobre Aportar documentación",
+  "@gestionAportarDocumentacionInfoTitle": {
+    "description": "Título de la hoja de información de aportar documentación."
+  },
+  "gestionAportarDocumentacionInfoBody": "Los documentos aportados solo estarán disponibles para su consulta por la Administración y no podrán consultarse desde el expediente.",
+  "@gestionAportarDocumentacionInfoBody": {
+    "description": "Texto de la hoja de información de aportar documentación."
   },
   "gestionAportarDocumentacionCancelarButton": "Cancelar",
   "@gestionAportarDocumentacionCancelarButton": {
@@ -4726,7 +4815,7 @@
   "@gestionAportarDocumentacionSeleccionarButton": {
     "description": "Botón para abrir el selector de ficheros."
   },
-  "gestionAportarDocumentacionRegistrarButton": "Registrar documentos aportados",
+  "gestionAportarDocumentacionRegistrarButton": "Enviar documentos",
   "@gestionAportarDocumentacionRegistrarButton": {
     "description": "Botón para registrar los documentos aportados."
   },
@@ -4766,11 +4855,11 @@
   "@gestionAportarDocumentacionUploadErrorParcial": {
     "description": "Mensaje cuando alguno de los ficheros subidos en paralelo falla."
   },
-  "gestionAportarDocumentacionExitoTitulo": "Los documentos han sido enviados correctamente",
+  "gestionAportarDocumentacionExitoTitulo": "Documentos enviados. Descarga el justificante de la aportación.",
   "@gestionAportarDocumentacionExitoTitulo": {
     "description": "Título del diálogo de éxito al completar la aportación de documentación."
   },
-  "gestionAportarDocumentacionExitoDescripcion": "La aportación de documentación ha sido registrada aunque los documentos no serán visibles desde el expediente.\n\nRecomendamos descargar el justificante de su aportación antes de continuar: no estará disponible más adelante",
+  "gestionAportarDocumentacionExitoDescripcion": "Has enviado la documentación correctamente y la aportación ha quedado registrada.\n\nDescarga el justificante ahora para conservar una copia de la aportación. Después, no podrás volver a descargarlo.",
   "@gestionAportarDocumentacionExitoDescripcion": {
     "description": "Descripción del diálogo de éxito al completar la aportación de documentación."
   },
@@ -4866,23 +4955,39 @@
   "@gestionAportacionTipoIdLabel": {
     "description": "Label del campo de tipo de identificación y número en la pantalla de aportación."
   },
+  "gestionAportacionTipoIdShortLabel": "Tipo de identificación",
+  "@gestionAportacionTipoIdShortLabel": {
+    "description": "Label del selector y número de identificación de la persona interesada."
+  },
+  "gestionAportacionExpedienteIdentifierTypeLabel": "Tipo de identificación",
+  "@gestionAportacionExpedienteIdentifierTypeLabel": {
+    "description": "Label del selector del identificador del expediente."
+  },
+  "gestionAportacionRegistroOption": "Número de registro",
+  "@gestionAportacionRegistroOption": {
+    "description": "Opción para identificar el expediente por su número de registro."
+  },
+  "gestionAportacionCodigoOption": "Número de expediente",
+  "@gestionAportacionCodigoOption": {
+    "description": "Opción para identificar el expediente por su código identificador."
+  },
   "gestionAportacionTipoIdHint": "000000000A",
   "@gestionAportacionTipoIdHint": {
     "description": "Placeholder del campo de número de identificación en la pantalla de aportación."
   },
-  "gestionAportacionTipoIdHelper": "El número debe corresponder a un NIF, CIF, Pasaporte, NIE o CEE válidos",
+  "gestionAportacionTipoIdHelper": "El número de identificación debe ser el que figura en el expediente.",
   "@gestionAportacionTipoIdHelper": {
     "description": "Texto de ayuda del campo de tipo de identificación."
   },
-  "gestionAportacionIntroText": "Consulta el expediente sobre el que quieres aportar documentación",
+  "gestionAportacionIntroText": "Para aportar documentos, primero tienes que identificar el expediente al que quieres asociarlos e introducir los siguientes datos:",
   "@gestionAportacionIntroText": {
     "description": "Texto introductorio de la pantalla de aportación de documentos."
   },
-  "gestionAportacionPersonaLabel": "IDENTIFICA A LA PERSONA INTERESADA QUE FIGURA EN EL EXPEDIENTE",
+  "gestionAportacionPersonaLabel": "DATOS DE LA PERSONA INTERESADA",
   "@gestionAportacionPersonaLabel": {
     "description": "Etiqueta de sección para identificar a la persona interesada."
   },
-  "gestionAportacionExpedienteLabel": "INDICA EL EXPEDIENTE SOBRE EL QUE SE APORTA DOCUMENTACIÓN",
+  "gestionAportacionExpedienteLabel": "DATOS DEL EXPEDIENTE",
   "@gestionAportacionExpedienteLabel": {
     "description": "Etiqueta de sección para indicar el expediente."
   },
@@ -4894,11 +4999,11 @@
   "@gestionAportacionNumRegistroLabel": {
     "description": "Label del campo número de registro del expediente."
   },
-  "gestionAportacionNumRegistroHint": "Introduce el número de registro",
+  "gestionAportacionNumRegistroHint": "Número de registro",
   "@gestionAportacionNumRegistroHint": {
     "description": "Placeholder del campo número de registro del expediente."
   },
-  "gestionAportacionNumRegistroHelper": "Este número se obtiene en el momento de la presentación del expediente",
+  "gestionAportacionNumRegistroHelper": "Este número lo encontrarás en el justificante de presentación de la solicitud.",
   "@gestionAportacionNumRegistroHelper": {
     "description": "Texto de ayuda del campo número de registro."
   },
@@ -4906,7 +5011,7 @@
   "@gestionAportacionCodIdentificadorLabel": {
     "description": "Label del campo código identificador del expediente."
   },
-  "gestionAportacionCodIdentificadorHint": "Introduce el código identificador",
+  "gestionAportacionCodIdentificadorHint": "Número de expediente",
   "@gestionAportacionCodIdentificadorHint": {
     "description": "Placeholder del campo código identificador del expediente."
   },
@@ -4914,11 +5019,11 @@
   "@gestionAportacionCodIdentificadorHelper": {
     "description": "Texto de ayuda del campo código identificador."
   },
-  "gestionAportacionInfoHeading": "Aportar documentos a un expediente",
+  "gestionAportacionInfoHeading": "Saber más sobre Aportar documentos a un expediente",
   "@gestionAportacionInfoHeading": {
     "description": "Encabezado del bottom sheet informativo de aportación."
   },
-  "gestionAportacionInfoBody": "Puedes aportar documentos a un expediente mientras el procedimiento esté en curso y antes de que se dicte la resolución final, sólo si eres:",
+  "gestionAportacionInfoBody": "Puedes aportar documentos a un expediente solo si eres una persona autorizada, y siempre que el procedimiento esté en curso y todavía no se haya dictado la resolución final. Para aportar documentos a uno de tus expedientes accede a Mis expedientes.",
   "@gestionAportacionInfoBody": {
     "description": "Cuerpo del bottom sheet informativo de aportación."
   },
@@ -4938,7 +5043,7 @@
   "@gestionAportacionSeleccionarTipo": {
     "description": "Título del bottom sheet para seleccionar tipo de documento."
   },
-  "gestionAportacionDni": "DNI",
+  "gestionAportacionDni": "DNI/NIE",
   "@gestionAportacionDni": {
     "description": "Opción DNI en el selector de tipo de documento."
   },
@@ -4958,7 +5063,7 @@
   "@gestionAportacionCee": {
     "description": "Opción CEE en el selector de tipo de documento."
   },
-  "gestionAportacionFindButton": "Encontrar expediente",
+  "gestionAportacionFindButton": "Buscar Expediente",
   "@gestionAportacionFindButton": {
     "description": "Texto del botón principal del formulario de aportación."
   },
@@ -4974,15 +5079,15 @@
   "@gestionAportacionCamposExpedienteError": {
     "description": "Error de validación cuando no se ha rellenado exactamente uno de los dos campos de expediente."
   },
-  "gestionNotificacionesContextualMessage": "Registra tus datos de contacto para empezar a recibir notificaciones de la Junta de Comunidades de Castilla-La Mancha.",
+  "gestionNotificacionesContextualMessage": "Indica tus datos de contacto para activar los avisos y recibirlos cuando tengas una nueva notificación.",
   "@gestionNotificacionesContextualMessage": {
     "description": "Texto del helper contextual bajo la card desactivada de notificaciones."
   },
-  "gestionNotificacionesContextualAction": "Activar",
+  "gestionNotificacionesContextualAction": "Indicar datos y activar avisos",
   "@gestionNotificacionesContextualAction": {
     "description": "Etiqueta del botón ghost del helper contextual de notificaciones."
   },
-  "gestionNotificacionesAltaTitle": "Activar notificaciones",
+  "gestionNotificacionesAltaTitle": "Mis notificaciones",
   "@gestionNotificacionesAltaTitle": {
     "description": "Título del NavBar de la pantalla de activación de notificaciones."
   },
@@ -4990,7 +5095,7 @@
   "@gestionNotificacionesAltaIntro": {
     "description": "Texto introductorio de la pantalla de activación de notificaciones."
   },
-  "gestionNotificacionesAltaRequiredNote": "*Obligatorio rellenar al menos uno de los medios de contacto",
+  "gestionNotificacionesAltaRequiredNote": "Es obligatorio completar al menos uno de los campos marcados con (*)",
   "@gestionNotificacionesAltaRequiredNote": {
     "description": "Nota de campo obligatorio en la pantalla de activación de notificaciones."
   },
@@ -4998,11 +5103,11 @@
   "@gestionNotificacionesAltaPhoneLabel": {
     "description": "Etiqueta del campo de teléfono en la pantalla de activación."
   },
-  "gestionNotificacionesAltaPhoneHint": "600 000 000",
+  "gestionNotificacionesAltaPhoneHint": "Ejemplo: 000 000 000",
   "@gestionNotificacionesAltaPhoneHint": {
     "description": "Placeholder del campo de teléfono en la pantalla de activación."
   },
-  "gestionNotificacionesAltaPhoneHelper": "Para recibir las notificaciones en mensaje SMS",
+  "gestionNotificacionesAltaPhoneHelper": "Recibe notificaciones por SMS en tu teléfono móvil.",
   "@gestionNotificacionesAltaPhoneHelper": {
     "description": "Texto de ayuda bajo el campo de teléfono en la pantalla de activación."
   },
@@ -5018,7 +5123,7 @@
   "@gestionNotificacionesAltaEmailHelper": {
     "description": "Texto de ayuda bajo el campo de email en la pantalla de activación."
   },
-  "gestionNotificacionesAltaSaveButton": "Dar de alta notificaciones",
+  "gestionNotificacionesAltaSaveButton": "Activar",
   "@gestionNotificacionesAltaSaveButton": {
     "description": "Etiqueta del botón principal sticky de la pantalla de activación."
   },
@@ -5166,7 +5271,7 @@
   "@appPreferenceStatusPending": {
     "description": "Estado pendiente de una tarjeta de preferencias."
   },
-  "appPreferenceStatusEnabled": "Activado",
+  "appPreferenceStatusEnabled": "Activo",
   "@appPreferenceStatusEnabled": {
     "description": "Estado activado de una tarjeta de preferencias."
   },
@@ -5194,9 +5299,13 @@
   "@appQrCodeLabel": {
     "description": "Etiqueta de accesibilidad de la vista previa del código QR en el bottom sheet de descarga."
   },
-  "appQrDownloadFormatTitle": "Formato de descarga",
+  "appQrDownloadFormatTitle": "¿Quieres guardar el carnet?",
   "@appQrDownloadFormatTitle": {
-    "description": "Título de la sección de formatos en el bottom sheet de descarga del carnet."
+    "description": "Pregunta que encabeza la sección de formatos en el bottom sheet de descarga del carnet."
+  },
+  "appQrDownloadFormatDescription": "Elige cómo quieres descargarlo:",
+  "@appQrDownloadFormatDescription": {
+    "description": "Texto introductorio de las opciones de descarga del carnet."
   },
   "appQrDownloadWalletLabelAndroid": "Cartera digital",
   "@appQrDownloadWalletLabelAndroid": {
@@ -5276,11 +5385,23 @@
   "@preferencesInfoSheetBody": {
     "description": "Preferencias — cuerpo del bottom sheet informativo de la pantalla."
   },
-  "preferencesLifeEventsInactiveDescription": "Para seleccionar tus hechos vitales y poder recibir recomendaciones primero debes aceptar el uso de estos datos en Condiciones de uso y autorizaciones.",
+  "consentAuthorizationsInfoTitle": "Saber más sobre Condiciones de uso y autorización",
+  "@consentAuthorizationsInfoTitle": {
+    "description": "Consentimiento — título del panel informativo abierto desde el botón de información."
+  },
+  "consentAuthorizationsInfoBody": "Si no autorizas el uso de tus datos, las Administraciones públicas no podrán mostrarte la información que tienen sobre ti.",
+  "@consentAuthorizationsInfoBody": {
+    "description": "Consentimiento — explicación mostrada en el panel informativo de condiciones y autorizaciones."
+  },
+  "consentAuthorizationsInfoClose": "Cerrar",
+  "@consentAuthorizationsInfoClose": {
+    "description": "Consentimiento — acción para cerrar el panel informativo de condiciones y autorizaciones."
+  },
+  "preferencesLifeEventsInactiveDescription": "Acepta el uso de tus datos sobre los hechos vitales en las Condiciones de uso y autorizaciones para poder seleccionarlos y recibir recomendaciones personalizadas.",
   "@preferencesLifeEventsInactiveDescription": {
     "description": "Preferencias — descripción de la tarjeta de hechos vitales cuando la autorización está inactiva."
   },
-  "preferencesLifeEventsPendingDescription": "Aún no has seleccionado las temáticas de las que quieras recibir actualizaciones dentro de tu sección de recomendaciones",
+  "preferencesLifeEventsPendingDescription": "Selecciona las situaciones, intereses o necesidades que más se ajustan a ti para recibir recomendaciones personalizadas.",
   "@preferencesLifeEventsPendingDescription": {
     "description": "Preferencias — descripción de la tarjeta de hechos vitales cuando no hay selección."
   },
@@ -5292,11 +5413,11 @@
   "@preferencesSelectAction": {
     "description": "Preferencias — acción de seleccionar hechos vitales."
   },
-  "preferencesNotificationContactTitle": "Datos de contacto para notificaciones",
+  "preferencesNotificationContactTitle": "Datos de contacto para recibir avisos de notificaciones",
   "@preferencesNotificationContactTitle": {
     "description": "Preferencias — título de la tarjeta de datos de contacto para notificaciones."
   },
-  "preferencesNotificationContactInactiveDescription": "Para recibir notificaciones electrónicas debes indicar al menos un medio de aviso.",
+  "preferencesNotificationContactInactiveDescription": "Indica un teléfono móvil o un correo electrónico para recibir avisos cuando tengas notificaciones nuevas.",
   "@preferencesNotificationContactInactiveDescription": {
     "description": "Preferencias — descripción de la tarjeta de datos de contacto cuando está inactiva."
   },
@@ -5312,15 +5433,39 @@
   "@preferencesManageAction": {
     "description": "Preferencias — acción de gestionar los datos de contacto."
   },
-  "preferencesRevokeDialogTitle": "Revocación de permisos",
+  "preferencesAddContactAction": "Añadir datos",
+  "@preferencesAddContactAction": {
+    "description": "Preferencias — acción para añadir datos de contacto cuando no hay ninguno configurado."
+  },
+  "preferencesBiometricTitle": "Acceso biométrico",
+  "@preferencesBiometricTitle": {
+    "description": "Preferencias — título de la tarjeta de acceso biométrico."
+  },
+  "preferencesBiometricInactiveDescription": "Activa el acceso con huella dactilar o reconocimiento facial para acceder a la aplicación de forma más rápida.",
+  "@preferencesBiometricInactiveDescription": {
+    "description": "Preferencias — descripción del acceso biométrico desactivado."
+  },
+  "preferencesBiometricActiveDescription": "El acceso biométrico a la aplicación está activado.",
+  "@preferencesBiometricActiveDescription": {
+    "description": "Preferencias — descripción del acceso biométrico activado."
+  },
+  "preferencesBiometricEnableAction": "Activar",
+  "@preferencesBiometricEnableAction": {
+    "description": "Preferencias — acción para activar el acceso biométrico."
+  },
+  "preferencesBiometricDisableAction": "Desactivar",
+  "@preferencesBiometricDisableAction": {
+    "description": "Preferencias — acción para desactivar el acceso biométrico."
+  },
+  "preferencesRevokeDialogTitle": "Vas a borrar tus preferencias",
   "@preferencesRevokeDialogTitle": {
     "description": "Preferencias — título del diálogo de confirmación para borrar preferencias."
   },
-  "preferencesRevokeDialogDescription": "¿Deseas borrar la selección de condiciones de uso, autorizaciones y hechos vitales?\nAl hacerlo, se cerrará tu sesión actual y, si vuelves a acceder tendrás que completar el proceso desde el inicio.",
+  "preferencesRevokeDialogDescription": "Al borrar tus preferencias, se eliminarán las autorizaciones que has concedido a la organización para consultar tus datos personales.\n\nSi vuelves a acceder a la aplicación, tendrás que completar de nuevo el proceso de autentificación y aceptar las Condiciones de uso y las autorizaciones.",
   "@preferencesRevokeDialogDescription": {
     "description": "Preferencias — descripción del diálogo de confirmación para borrar preferencias."
   },
-  "preferencesRevokeDialogConfirm": "Eliminar",
+  "preferencesRevokeDialogConfirm": "Borrar",
   "@preferencesRevokeDialogConfirm": {
     "description": "Preferencias — botón de confirmación del diálogo de revocación de permisos."
   },
@@ -5388,7 +5533,7 @@
   "@myDataHealthFilterDateLabel": {
     "description": "Salud — etiqueta del filtro por rango de fechas de la cita."
   },
-  "recommendationsFilterPageTitle": "Filtrar recomendaciones por hecho",
+  "recommendationsFilterPageTitle": "Filtrar por hechos vitales",
   "@recommendationsFilterPageTitle": {
     "description": "Recomendaciones — título de la pantalla de filtros por hecho vital."
   },
@@ -5396,7 +5541,7 @@
   "@recommendationsFilterInfoMessage": {
     "description": "Recomendaciones — aviso informativo de la pantalla de filtros por hecho vital."
   },
-  "recommendationsFilterIntro": "Puede filtrar las recomendaciones según los hechos vitales que haya configurado en sus preferencias, para recibir información personalizada y ajustada a su situación.",
+  "recommendationsFilterIntro": "Selecciona los hechos vitales que quieras utilizar para filtrar las recomendaciones. Puedes ampliar el listado y añadir nuevos hechos vitales desde tus preferencias.",
   "@recommendationsFilterIntro": {
     "description": "Recomendaciones — texto introductorio de la pantalla de filtros por hecho vital."
   },
@@ -5408,19 +5553,19 @@
   "@recommendationsPreferencesHint": {
     "description": "Recomendaciones — aviso para personalizar los hechos vitales desde Preferencias."
   },
-  "recommendationsEmptyNoMatches": "Actualmente no hay recomendaciones disponibles que se ajusten a tus preferencias. Ajusta tus hechos vitales para explorar más opciones o espera a nuevas actualizaciones.",
+  "recommendationsEmptyNoMatches": "Actualmente no hay recomendaciones para ti. Puedes modificar la selección actual de tus hechos vitales desde las preferencias o esperar a recibir nuevas actualizaciones.",
   "@recommendationsEmptyNoMatches": {
     "description": "Recomendaciones — aviso cuando no hay recomendaciones que coincidan con las preferencias."
   },
-  "recommendationsEditLifeEventsCta": "Editar preferencias - hechos vitales",
+  "recommendationsEditLifeEventsCta": "Ir a Preferencias",
   "@recommendationsEditLifeEventsCta": {
     "description": "Recomendaciones — botón para editar los hechos vitales desde el estado vacío."
   },
-  "recommendationsEmptyFiltered": "No hay recomendaciones para el filtro realizado.",
+  "recommendationsEmptyFiltered": "Actualmente no hay recomendaciones para los filtros seleccionados. Puedes modificar la selección de filtros o esperar a recibir nuevas actualizaciones.",
   "@recommendationsEmptyFiltered": {
     "description": "Recomendaciones — aviso cuando el filtro aplicado no devuelve resultados."
   },
-  "recommendationsResetFilterCta": "Resetear filtro",
+  "recommendationsResetFilterCta": "Reiniciar filtro",
   "@recommendationsResetFilterCta": {
     "description": "Recomendaciones — botón para restablecer el filtro por hechos vitales."
   },
@@ -5750,11 +5895,19 @@
   "@helpContactGuidesTitle": {
     "description": "Ayuda y contacto — encabezado y tarjeta de las guías de ayuda."
   },
-  "helpContactGuidesIntro": "Si necesitas ayuda adicional tienes a tu disposición estas Guías de Ayuda",
+  "helpFaqIntro": "Resuelve las dudas más habituales sobre Espacio ciudadano.",
+  "@helpFaqIntro": {
+    "description": "Ayuda y contacto — introducción al listado de preguntas frecuentes."
+  },
+  "helpContactGuidesIntro": "Consulta las guías disponibles para resolver tus dudas paso a paso.",
   "@helpContactGuidesIntro": {
     "description": "Ayuda y contacto — introducción a las guías de ayuda."
   },
-  "helpContactGoToJccmPortal": "Ir al portal web JCCM",
+  "helpContactShowAllGuides": "Mostrar todas las guías",
+  "@helpContactShowAllGuides": {
+    "description": "Ayuda y contacto — título de la tarjeta que abre todas las guías."
+  },
+  "helpContactGoToJccmPortal": "Ir al portal de Castilla-La Mancha",
   "@helpContactGoToJccmPortal": {
     "description": "Ayuda y contacto — subtítulo de las tarjetas que enlazan al portal web JCCM."
   },
@@ -5762,15 +5915,15 @@
   "@helpContactInfoHeading": {
     "description": "Ayuda y contacto — encabezado de la pestaña de contacto."
   },
-  "helpContactPhonesIntro": "Para consultas generales e información administrativa puedes contactar a través de los teléfonos de atención ciudadana.",
+  "helpContactPhonesIntro": "Para consultas generales o información administrativa, puedes contactar con el servicio de Atención a la ciudadanía.",
   "@helpContactPhonesIntro": {
     "description": "Ayuda y contacto — introducción a los teléfonos de atención ciudadana."
   },
-  "helpContactPhonesIntroBold1": "consultas generales e información administrativa",
+  "helpContactPhonesIntroBold1": "consultas generales o información administrativa",
   "@helpContactPhonesIntroBold1": {
     "description": "Ayuda y contacto — primer fragmento en negrita de la introducción a los teléfonos (debe ser subcadena exacta de helpContactPhonesIntro)."
   },
-  "helpContactPhonesIntroBold2": "teléfonos de atención ciudadana",
+  "helpContactPhonesIntroBold2": "Atención a la ciudadanía",
   "@helpContactPhonesIntroBold2": {
     "description": "Ayuda y contacto — segundo fragmento en negrita de la introducción a los teléfonos (debe ser subcadena exacta de helpContactPhonesIntro)."
   },
@@ -5778,7 +5931,7 @@
   "@helpContactCallCitizenService": {
     "description": "Ayuda y contacto — subtítulo de las tarjetas de teléfono de atención ciudadana."
   },
-  "helpContactExpedienteIntro": "Si necesitas conocer más detalles sobre un expediente ponte en contacto con la oficina tramitadora o consejería competente.",
+  "helpContactExpedienteIntro": "Para conocer más detalles sobre un expediente, debes contactar con la oficina tramitadora o la consejería responsable que corresponda.",
   "@helpContactExpedienteIntro": {
     "description": "Ayuda y contacto — introducción al contacto sobre expedientes."
   },
@@ -5786,11 +5939,11 @@
   "@helpContactExpedienteIntroBold": {
     "description": "Ayuda y contacto — fragmento en negrita de la introducción sobre expedientes (debe ser subcadena exacta de helpContactExpedienteIntro)."
   },
-  "helpContactOfficesListTitle": "Listado de Oficina de Información y registro",
+  "helpContactOfficesListTitle": "Listado de Oficinas de Información y Registro",
   "@helpContactOfficesListTitle": {
     "description": "Ayuda y contacto — tarjeta que enlaza al listado de oficinas de información y registro."
   },
-  "helpContactSupportIntro": "Si necesitas asistencia técnica ponte en contacto con nosotros a través del formulario de Soporte Técnico.",
+  "helpContactSupportIntro": "Si necesitas asistencia técnica, puedes contactar con el equipo de soporte técnico a través de un formulario.",
   "@helpContactSupportIntro": {
     "description": "Ayuda y contacto — introducción al formulario de soporte técnico."
   },
@@ -5798,11 +5951,11 @@
   "@helpContactSupportIntroBold": {
     "description": "Ayuda y contacto — fragmento en negrita de la introducción al soporte (debe ser subcadena exacta de helpContactSupportIntro)."
   },
-  "helpContactSupportFormButton": "Formulario de Soporte",
+  "helpContactSupportFormButton": "Completar formulario de soporte",
   "@helpContactSupportFormButton": {
     "description": "Ayuda y contacto — botón que abre el formulario de soporte."
   },
-  "faqQuestion1": "¿Qué es y qué podré encontrar en el Espacio ciudadano?",
+  "faqQuestion1": "¿Qué es Espacio ciudadano y qué puedo consultar?",
   "@faqQuestion1": {
     "description": "FAQ — pregunta sobre qué es el Espacio Ciudadano."
   },
@@ -5810,7 +5963,7 @@
   "@faqAnswer1": {
     "description": "FAQ — respuesta sobre qué es el Espacio Ciudadano."
   },
-  "faqQuestion2": "¿Qué necesito para acceder?",
+  "faqQuestion2": "¿Qué necesito para acceder a mi Espacio ciudadano?",
   "@faqQuestion2": {
     "description": "FAQ — pregunta sobre los requisitos de acceso."
   },
@@ -5818,7 +5971,7 @@
   "@faqAnswer2": {
     "description": "FAQ — respuesta sobre los requisitos de acceso."
   },
-  "faqQuestion3": "¿Qué datos personales se almacenan en Espacio Ciudadano?",
+  "faqQuestion3": "¿Qué datos personales se almacenan?",
   "@faqQuestion3": {
     "description": "FAQ — pregunta sobre los datos personales almacenados."
   },
@@ -5826,7 +5979,7 @@
   "@faqAnswer3": {
     "description": "FAQ — respuesta sobre los datos personales almacenados."
   },
-  "faqQuestion4": "Los datos mostrados contienen algún error, ¿puedo corregirlo?",
+  "faqQuestion4": "¿Cómo puedo corregir un dato incorrecto?",
   "@faqQuestion4": {
     "description": "FAQ — pregunta sobre la corrección de datos erróneos."
   },
@@ -5834,15 +5987,23 @@
   "@faqAnswer4": {
     "description": "FAQ — respuesta sobre la corrección de datos erróneos."
   },
-  "faqQuestion5": "¿Qué eventos se muestran en Mi Agenda?",
+  "faqQuestion5": "¿Qué expedientes y trámites puedo consultar?",
   "@faqQuestion5": {
     "description": "FAQ — pregunta sobre los eventos de Mi Agenda."
   },
-  "faqAnswer5": "Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.",
+  "faqAnswer5": "Puedes consultar los expedientes y trámites disponibles que estén relacionados con tu identidad y con los servicios integrados en Espacio Ciudadano.",
   "@faqAnswer5": {
-    "description": "FAQ — respuesta sobre los eventos de Mi Agenda."
+    "description": "FAQ — respuesta sobre los expedientes y trámites disponibles."
   },
-  "supportFormPageTitle": "Formulario soporte",
+  "faqQuestion6": "¿Qué eventos aparecerán en mi agenda?",
+  "@faqQuestion6": {
+    "description": "FAQ — pregunta sobre los eventos de la agenda."
+  },
+  "faqAnswer6": "Se muestran citas, avisos y eventos administrativos relacionados con tus servicios.",
+  "@faqAnswer6": {
+    "description": "FAQ — respuesta sobre los eventos de la agenda."
+  },
+  "supportFormPageTitle": "Formulario de soporte",
   "@supportFormPageTitle": {
     "description": "Título del AppBar del formulario de soporte."
   },
@@ -5866,7 +6027,7 @@
   "@supportFieldFullNameHint": {
     "description": "Formulario de soporte — hint del campo de nombre y apellidos."
   },
-  "supportFieldEmailHint": "Ejemplo: maríapérez@correo.es",
+  "supportFieldEmailHint": "Ejemplo: mperez@correo.es",
   "@supportFieldEmailHint": {
     "description": "Formulario de soporte — hint de los campos de correo electrónico."
   },
@@ -5874,7 +6035,7 @@
   "@supportFieldConfirmEmail": {
     "description": "Formulario de soporte — etiqueta del campo de confirmación de correo."
   },
-  "supportFieldSubjectHint": "Ejemplo: Consulta sobre una notificación",
+  "supportFieldSubjectHint": "Escribe el motivo de la consulta",
   "@supportFieldSubjectHint": {
     "description": "Formulario de soporte — hint del campo de asunto."
   },
@@ -5885,6 +6046,10 @@
   "supportFieldMessage": "Mensaje",
   "@supportFieldMessage": {
     "description": "Formulario de soporte — etiqueta del campo de mensaje."
+  },
+  "supportFieldMessageHint": "Describe los detalles de la consulta",
+  "@supportFieldMessageHint": {
+    "description": "Formulario de soporte — hint del campo de mensaje."
   },
   "supportAttachmentSectionLabel": "ADJUNTAR DOCUMENTOS DE EVIDENCIA",
   "@supportAttachmentSectionLabel": {
@@ -6022,7 +6187,7 @@
   "@legalSearchCloseTooltip": {
     "description": "Páginas legales — tooltip del botón para cerrar la búsqueda en la barra superior."
   },
-  "privacyResponsibleTitle": "¿Quién es el responsable del tratamiento?",
+  "privacyResponsibleTitle": "¿Quién es responsable del tratamiento de datos?",
   "@privacyResponsibleTitle": {
     "description": "Protección de datos — título de la sección del responsable del tratamiento."
   },
@@ -6034,23 +6199,23 @@
   "@privacyEmailCopied": {
     "description": "Protección de datos — aviso mostrado cuando no se puede abrir el correo y se copia la dirección."
   },
-  "privacyResponsibleIntro": "1. La Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:",
+  "privacyResponsibleIntro": "La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:",
   "@privacyResponsibleIntro": {
     "description": "Protección de datos — párrafo introductorio del responsable del tratamiento."
   },
-  "privacyResponsibleItemProfile": "Visualización de las notificaciones y registro",
+  "privacyResponsibleItemProfile": "Información del perfil de usuario.",
   "@privacyResponsibleItemProfile": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemVisualizations": "Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado",
+  "privacyResponsibleItemVisualizations": "Visualización de datos seleccionados de la Administración regional y de otros temas de interés.",
   "@privacyResponsibleItemVisualizations": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemRecommendations": "Recomendaciones realizadas en base a los hechos vitales marcados",
+  "privacyResponsibleItemRecommendations": "Recomendaciones personalizadas según los hechos vitales indicados.",
   "@privacyResponsibleItemRecommendations": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemDownloads": "Descargas de los carnés seleccionados",
+  "privacyResponsibleItemDownloads": "Descargas de los carnés seleccionados.",
   "@privacyResponsibleItemDownloads": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
@@ -6058,23 +6223,23 @@
   "@privacyResponsibleItemAgenda": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleOrgParagraph": "Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento o hecho administrativo.",
+  "privacyResponsibleOrgParagraph": "Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.",
   "@privacyResponsibleOrgParagraph": {
     "description": "Protección de datos — párrafo sobre los órganos responsables de cada opción."
   },
-  "privacyResponsibleContactIntro": "Los datos de contacto de este responsable son los siguientes:",
+  "privacyResponsibleContactIntro": "Para contactar con el responsable, puedes hacelo mediante:",
   "@privacyResponsibleContactIntro": {
     "description": "Protección de datos — introducción de los datos de contacto del responsable."
   },
-  "privacyResponsibleContactAddressLabel": "Dirección Postal:\n",
+  "privacyResponsibleContactAddressLabel": "Dirección postal\n",
   "@privacyResponsibleContactAddressLabel": {
     "description": "Protección de datos — etiqueta en negrita de la dirección postal del responsable (termina en salto de línea)."
   },
-  "privacyResponsibleContactAddressValue": "Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071-Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es",
+  "privacyResponsibleContactAddressValue": "Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es",
   "@privacyResponsibleContactAddressValue": {
     "description": "Protección de datos — bloque con la dirección postal y el correo del responsable."
   },
-  "privacyPurposeTitle": "¿Cuál es la denominación y finalidad de tratamiento?",
+  "privacyPurposeTitle": "¿Cuál es la denominación y finalidad del tratamiento?",
   "@privacyPurposeTitle": {
     "description": "Protección de datos — título de la sección de finalidad del tratamiento."
   },
@@ -6082,15 +6247,15 @@
   "@privacyPopulationControllerText": {
     "description": "Protección de datos — responsable y contacto del Registro de Población."
   },
-  "privacyPurposeIntro": "Las finalidades del tratamiento de los datos personales que se llevan a cabo directamente en el tratamiento de Espacio Ciudadano son las siguientes:",
+  "privacyPurposeIntro": "Las finalidades de los tratamientos de datos personales que se realizan directamente en Espacio Ciudadano son:",
   "@privacyPurposeIntro": {
     "description": "Protección de datos — párrafo introductorio de las finalidades del tratamiento."
   },
-  "privacyPurposeItemIdentity": "Gestión del Espacio Ciudadano como herramienta de la ciudadanía para relacionarse con la Administración regional y sus organismos autónomos:\n\n• Gestionar los datos de contacto del ciudadano: su dirección de correo y teléfono para el aviso de notificaciones electrónicas.\n• Gestión de la información de los expedientes en curso ante la administración y su estado de tramitación, así como de las notificaciones.\n• Visualizar los datos seleccionados en la áreas de educación, sanidad, bienestar social, empleo y vivienda y vehículos.\n• Gestionar las autorizaciones y consentimientos marcados por un ciudadano.\n• Gestionar las recomendaciones solicitadas por una persona en base exclusivamente a los hechos vitales marcados.\n• Para ofrecer estas recomendaciones se elaborará un perfil teniendo en cuenta lo anterior.\n• Visualización de los eventos en la agenda.",
+  "privacyPurposeItemIdentity": "Gestionar los datos identificativos de la ciudadanía.",
   "@privacyPurposeItemIdentity": {
     "description": "Protección de datos — elemento de la lista de finalidades."
   },
-  "privacyPurposeItemVisualizations": "Las finalidades del tratamiento correspondiente al Registro de Población son las siguientes:\n\n• Elaboración de estadísticas oficiales.\n• Comunicación de los diferentes órganos de la JCCM con los ciudadanos.\n• Evaluación de la calidad de los servicios prestados.",
+  "privacyPurposeItemVisualizations": "Mostrar los datos seleccionados de la Administración regional y de otros temas de interés.",
   "@privacyPurposeItemVisualizations": {
     "description": "Protección de datos — elemento de la lista de finalidades."
   },
@@ -6114,47 +6279,49 @@
   "@privacyAepdTitle": {
     "description": "Protección de datos — título de la sección sobre reclamaciones ante la AEPD."
   },
-  "privacyAepdTextBeforeLink": "Si dispone de pruebas o indicios que acrediten la vulneración de su derecho a la protección de datos en Espacio Ciudadano o en el Registro de Población, puede presentar una reclamación ante la Agencia Española de Protección de Datos, ",
+  "privacyAepdTextBeforeLink": "Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la ",
   "@privacyAepdTextBeforeLink": {
     "description": "Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio)."
   },
-  "privacyAepdTextAfterLink": ". También puede reclamar ante la delegada de protección de datos, cuyos datos de contacto están en esta información.",
+  "privacyAepdLinkLabel": "Agencia Española de Protección de Datos (AEPD)",
+  "@privacyAepdLinkLabel": {"description": "Protección de datos — texto del enlace a la AEPD."},
+  "privacyAepdTextAfterLink": ".\n\nTambién puedes reclamar ante la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM), cuya información de contacto está indicada más adelante.",
   "@privacyAepdTextAfterLink": {
     "description": "Protección de datos — texto de la sección AEPD después del enlace a su web (empieza con punto)."
   },
-  "privacySecurityTitle": "¿Qué medidas de seguridad se encuentran implantadas?",
+  "privacySecurityTitle": "¿Qué medidas de seguridad están implantadas?",
   "@privacySecurityTitle": {
     "description": "Protección de datos — título de la sección de medidas de seguridad."
   },
-  "privacySecurityText": "Las medidas de seguridad implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II (Medidas de seguridad) del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.",
+  "privacySecurityText": "Las medidas implantadas para garantizar la seguridad de los datos de carácter personal se corresponden con las previstas en el Anexo II del Real Decreto 311/2022, de 3 de mayo, por el que se regula el Esquema Nacional de Seguridad.",
   "@privacySecurityText": {
     "description": "Protección de datos — párrafo sobre las medidas de seguridad implantadas."
   },
-  "privacyProfilingTitle": "Decisiones automatizadas, incluida la elaboración de perfiles",
+  "privacyProfilingTitle": "Decisiones automatizadas y elaboración de perfiles",
   "@privacyProfilingTitle": {
     "description": "Protección de datos — título de la sección de decisiones automatizadas."
   },
-  "privacyProfilingText": "En el caso de las recomendaciones de trámites en base a los hechos vitales marcados por la persona interesada, existe elaboración de perfiles.",
+  "privacyProfilingText": "Las recomendaciones de trámites que se muestran en función de los hechos vitales indicados por la persona interesada implican la elaboración de perfiles.",
   "@privacyProfilingText": {
     "description": "Protección de datos — párrafo sobre la elaboración de perfiles."
   },
-  "privacyDpoTitle": "Datos de contacto de la delegada de protección de datos",
+  "privacyDpoTitle": "Información de contacto de la Delegada de Protección de Datos",
   "@privacyDpoTitle": {
     "description": "Protección de datos — título de la sección de contacto con la delegada de protección de datos."
   },
-  "privacyDpoIntro": "Para cualquier cuestión relacionada con la protección de datos se puede dirigir a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha, cuyos datos de contacto son los siguientes:",
+  "privacyDpoIntro": "Para cualquier cuestión relacionada con la protección de datos puedes dirigirte a la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM).\n\nPuedes contactar mediante:",
   "@privacyDpoIntro": {
     "description": "Protección de datos — párrafo introductorio del contacto con la delegada de protección de datos."
   },
-  "privacyDpoContactAddressLabel": "Dirección postal:\n",
+  "privacyDpoContactAddressLabel": "Dirección postal\n",
   "@privacyDpoContactAddressLabel": {
     "description": "Protección de datos — etiqueta en negrita de la dirección postal de la delegada (termina en salto de línea)."
   },
-  "privacyDpoContactAddressValue": "Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12 – Edificio CIE III\n45071-Toledo\n\n",
+  "privacyDpoContactAddressValue": "Delegada de Protección de Datos\nOficina del Dato\nVicepresidencia Primera\nC/ Río Cabriel, 12, edificio CIE III\n45071 Toledo\n\n",
   "@privacyDpoContactAddressValue": {
     "description": "Protección de datos — bloque con la dirección postal de la delegada de protección de datos (termina en línea en blanco)."
   },
-  "privacyDpoContactEmailLabel": "Dirección de correo electrónico:\n",
+  "privacyDpoContactEmailLabel": "Correo electrónico\n",
   "@privacyDpoContactEmailLabel": {
     "description": "Protección de datos — etiqueta en negrita del correo electrónico de la delegada (termina en salto de línea)."
   },
@@ -6282,9 +6449,9 @@
   "@accessibilityOptionalItemDecreaseText": {
     "description": "Accesibilidad — elemento de la lista de atajos de teclado."
   },
-  "legalNoticeHeading": "Aviso legal (...)",
+  "legalNoticeHeading": "Aviso legal",
   "@legalNoticeHeading": {
-    "description": "Aviso legal — encabezado H1 de la página (el texto original incluye \"(...)\")."
+    "description": "Aviso legal — encabezado H1 de la página."
   },
   "supportErrorSubmitUnauthorized": "No tienes permisos para enviar el formulario de soporte.",
   "@supportErrorSubmitUnauthorized": {
@@ -6351,11 +6518,10 @@
   "@sessionContinueBiometricReason": {
     "description": "Motivo del diálogo biométrico al renovar la sesión en pleno uso. Explica el porqué: a diferencia de la reanudación, aquí el ciudadano no ha pedido nada, solo ha navegado."
   },
-  "biometricAccessDialogTitle": "¿Quieres activar el acceso rápido con huella o reconocimiento facial?",
-  "biometricAccessDialogDescription": "Esto te permitirá entrar en la aplicación sin necesidad de identificarte de nuevo. Periódicamente se solicitará autenticación para mantener tus datos protegidos.",
-  "biometricAccessDialogCancel": "Ahora no",
-  "biometricAccessDialogConfirm": "Activar acceso rápido"
-,
+  "biometricAccessDialogTitle": "¿Quieres activar el acceso rápido con huella dactilar o reconocimiento facial?",
+  "biometricAccessDialogDescription": "Podrás acceder a la aplicación de forma más rápida sin tener que autentificarte cada vez. Para proteger tus datos te pediremos que vuelvas a autentificarte cada cierto tiempo.",
+  "biometricAccessDialogCancel": "Completar más tarde",
+  "biometricAccessDialogConfirm": "Activar",
   "appUpdateRequiredTitle": "Actualización necesaria",
   "@appUpdateRequiredTitle": {
     "description": "Título del aviso a pantalla completa cuando la versión instalada ya no tiene soporte y es obligatorio actualizar."

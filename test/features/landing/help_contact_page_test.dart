@@ -15,13 +15,53 @@ import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/help_cont
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
+  testWidgets('muestra todo el contenido de ayuda definido en el diseño', (final tester) async {
+    await _pumpContactTab(
+      tester,
+      launcher: _RecordingLauncher(),
+      selectContact: false,
+    );
+
+    expect(
+      find.text('Resuelve las dudas más habituales sobre Espacio ciudadano.'),
+      findsOneWidget,
+    );
+    expect(find.text('¿Qué es Espacio ciudadano y qué puedo consultar?'), findsOneWidget);
+    expect(find.text('¿Qué necesito para acceder a mi Espacio ciudadano?'), findsOneWidget);
+    expect(find.text('¿Qué datos personales se almacenan?'), findsOneWidget);
+    expect(find.text('¿Cómo puedo corregir un dato incorrecto?'), findsOneWidget);
+    expect(find.text('¿Qué expedientes y trámites puedo consultar?'), findsOneWidget);
+    expect(find.text('¿Qué eventos aparecerán en mi agenda?'), findsOneWidget);
+    expect(find.text('Consulta las guías disponibles para resolver tus dudas paso a paso.'), findsOneWidget);
+    expect(find.text('Mostrar todas las guías'), findsOneWidget);
+  });
+
+  testWidgets('muestra los textos de contacto definidos en el diseño', (final tester) async {
+    await _pumpContactTab(tester, launcher: _RecordingLauncher());
+
+    expect(
+      find.text('Para consultas generales o información administrativa, puedes contactar con el servicio de Atención a la ciudadanía.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Para conocer más detalles sobre un expediente, debes contactar con la oficina tramitadora o la consejería responsable que corresponda.'),
+      findsOneWidget,
+    );
+    expect(find.text('Listado de Oficinas de Información y Registro'), findsOneWidget);
+    expect(
+      find.text('Si necesitas asistencia técnica, puedes contactar con el equipo de soporte técnico a través de un formulario.'),
+      findsOneWidget,
+    );
+    expect(find.text('Llamar a Atención a la Ciudadanía'), findsNothing);
+  });
+
   // Sin sesión el gateway no atiende el formulario de la app, así que el botón
   // manda al formulario de la web avisando de que se sale (JCCMEC-212).
   testWidgets('sin sesión, el formulario de soporte abre la web tras avisar', (final tester) async {
     final launcher = _RecordingLauncher();
     await _pumpContactTab(tester, launcher: launcher);
 
-    final button = find.widgetWithText(AppButton, 'Formulario de Soporte');
+    final button = find.widgetWithText(AppButton, 'Completar formulario de soporte');
     expect(tester.widget<AppButton>(button).trailingIcon, AppIcons.openInNew);
 
     await tester.tap(button);
@@ -43,7 +83,7 @@ void main() {
       claims: const JwtClaims(exp: 0, iat: 0, iss: '', aud: [], sub: 'sub'),
     );
 
-    final button = find.widgetWithText(AppButton, 'Formulario de Soporte');
+    final button = find.widgetWithText(AppButton, 'Completar formulario de soporte');
     expect(tester.widget<AppButton>(button).trailingIcon, AppIcons.arrowForward);
 
     await tester.tap(button);
@@ -54,7 +94,12 @@ void main() {
   });
 }
 
-Future<void> _pumpContactTab(final WidgetTester tester, {required final ExternalLinkLauncher launcher, final JwtClaims? claims}) async {
+Future<void> _pumpContactTab(
+  final WidgetTester tester, {
+  required final ExternalLinkLauncher launcher,
+  final JwtClaims? claims,
+  final bool selectContact = true,
+}) async {
   final router = GoRouter(
     routes: [
       GoRoute(path: '/', builder: (final context, final state) => const HelpContactPage()),
@@ -83,8 +128,10 @@ Future<void> _pumpContactTab(final WidgetTester tester, {required final External
     ),
   );
   await tester.pumpAndSettle();
-  await tester.tap(find.text('Contacto'));
-  await tester.pumpAndSettle();
+  if (selectContact) {
+    await tester.tap(find.text('Contacto'));
+    await tester.pumpAndSettle();
+  }
 }
 
 final class _RecordingLauncher implements ExternalLinkLauncher {
