@@ -1,0 +1,295 @@
+openapi: 3.0.1
+info:
+  title: API de versiones de la app Carpeta Ciudadana
+  version: 1.0.0
+  contact:
+    email: ae.modernizacion@jccm.es
+  description: |
+    Servicio que decide, para la versión de la app Carpeta Ciudadana CLM instalada en un
+    dispositivo, si hay que **forzar** la actualización, **recomendarla** o **no hacer nada**.
+
+    La app lo consulta al arrancar y cada vez que vuelve de segundo plano, **antes de que el
+    ciudadano inicie sesión con Cl@ve**. Toda la lógica de decisión vive en el servidor: la app
+    envía qué tiene instalado y se limita a pintar lo que se le responde. Así se puede bloquear
+    o recomendar una versión concreta sin publicar una app nueva.
+
+    ## Comportamiento de la app ante la respuesta
+
+    | `accion` | Qué ve el ciudadano |
+    |---|---|
+    | `FORZADA` | Aviso a pantalla completa que no se puede cerrar; solo permite ir a la tienda. |
+    | `RECOMENDADA` | Aviso que se puede descartar («Ahora no»). Una vez descartada, **esa** `versionPublicada` no vuelve a avisar en ese dispositivo; una posterior sí. |
+    | `NINGUNA` | Nada. |
+
+    La URL de la tienda **no** forma parte del contrato: la app la construye localmente
+    (Google Play a partir del identificador del paquete; App Store a partir del id de la app).
+
+    **Fail-open:** cualquier respuesta que no sea un `200` con un cuerpo válido (error HTTP,
+    tiempo de espera de 5 s agotado, JSON mal formado, `accion` desconocida, `versionPublicada`
+    ausente o no mayor que la instalada) hace que la app **no bloquee a nadie** y lo registre
+    en logs. Nunca se debe usar un código de error para expresar «forzar».
+
+    ## Requisito sobre las versiones publicadas
+
+    La versión se identifica solo por la versión de marketing `MAYOR.MENOR.PARCHE`. Cada
+    publicación en tienda debe subir esa versión: no se publican dos builds distintas con la
+    misma `x.y.z`. Las versiones se comparan numéricamente componente a componente
+    (`0.10.0` > `0.9.3`).
+
+    ## Puntos abiertos para back
+
+    1. **Host y entornos** (des / pre / pro): sustituyen al servidor genérico de abajo.
+    2. **Autenticación:** el endpoint se consulta sin sesión de usuario, así que no puede exigir
+       el Bearer de Cl@ve. Si se protege, debe ser con algo de lo que la app disponga sin
+       sesión (por ejemplo, una cabecera de API key por entorno); en ese caso se añadirá aquí el
+       `securityScheme` correspondiente.
+    3. **Gestión de reglas:** cómo se dan de alta las reglas por plataforma / app / versión lo
+       define back; este contrato solo cubre la consulta que hace la app. La precedencia
+       recomendada está descrita en la operación.
+servers:
+  - url: https://{host}
+    description: Servidor por definir (punto abierto 1).
+    variables:
+      host:
+        default: por-definir.jccm.es
+        description: Host del servicio en cada entorno.
+security: []
+tags:
+  - name: app-movil
+    description: Operaciones de control de versiones de la app móvil
+paths:
+  /api/v1/app-movil/actualizacion:
+    get:
+      tags:
+        - app-movil
+      operationId: comprobarActualizacion
+      summary: Decide si la versión instalada debe actualizarse
+      description: |
+        Devuelve la acción que la app debe tomar para la versión instalada en el dispositivo.
+
+        **Reglas que debe cumplir la respuesta:**
+
+        - Siempre `200` cuando la petición es válida, también si no hay ninguna regla configurada
+          para esa plataforma, aplicación o versión: en ese caso `accion = NINGUNA`. Nunca `404`.
+        - Si `accion` es `RECOMENDADA` o `FORZADA`, `versionPublicada` es obligatoria y debe ser
+          **estrictamente mayor** que `version`: es la versión a la que se invita a actualizar
+          (normalmente la última publicada en la tienda de esa plataforma). Una versión nunca se
+          recomienda a sí misma.
+        - Si `accion` es `NINGUNA`, `versionPublicada` y `mensaje` van a `null`.
+
+        **Precedencia recomendada al resolver** (para una plataforma e `idAplicacion`):
+
+        1. La versión instalada está bloqueada explícitamente, o es menor que la versión mínima
+           soportada → `FORZADA`.
+        2. La versión instalada es menor que la última publicada → la política configurada para
+           ese tramo (`RECOMENDADA` o `NINGUNA`).
+        3. En otro caso → `NINGUNA`.
+
+        **Rendimiento y caché:** la app espera como máximo 5 segundos. La respuesta no debe
+        cachearse en intermediarios más allá de unos minutos (`Cache-Control: no-store` o un
+        `max-age` corto), para que un forzado surta efecto enseguida.
+      parameters:
+        - name: plataforma
+          in: query
+          required: true
+          description: Sistema operativo del dispositivo.
+          schema:
+            $ref: '#/components/schemas/Plataforma'
+          example: ANDROID
+        - name: idAplicacion
+          in: query
+          required: true
+          description: |
+            Identificador de la app en la plataforma: `applicationId` (paquete) en Android,
+            `CFBundleIdentifier` en iOS. Permite distinguir las builds de cada entorno si conviven
+            identificadores distintos.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 255
+          example: es.jccm.espaciociudadano
+        - name: version
+          in: query
+          required: true
+          description: |
+            Versión de marketing instalada, `MAYOR.MENOR.PARCHE` (`versionName` en Android,
+            `CFBundleShortVersionString` en iOS). Sin número de build.
+          schema:
+            $ref: '#/components/schemas/Version'
+          example: 0.1.9
+      responses:
+        '200':
+          description: Acción a tomar para la versión instalada.
+          headers:
+            Cache-Control:
+              description: '`no-store` o un `max-age` corto (unos minutos como máximo).'
+              schema:
+                type: string
+              example: no-store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespuestaComprobacionActualizacion'
+              examples:
+                ninguna:
+                  summary: Al día o sin reglas aplicables
+                  value:
+                    body:
+                      accion: NINGUNA
+                      versionPublicada: null
+                      mensaje: null
+                    codigo-respuesta: '200'
+                    mensaje-respuesta: OK
+                    timestamp: '2026-10-14T09:30:00.000+02:00'
+                recomendada:
+                  summary: Hay una versión más nueva y se recomienda
+                  value:
+                    body:
+                      accion: RECOMENDADA
+                      versionPublicada: 0.2.0
+                      mensaje: null
+                    codigo-respuesta: '200'
+                    mensaje-respuesta: OK
+                    timestamp: '2026-10-14T09:30:00.000+02:00'
+                forzada:
+                  summary: Versión instalada bloqueada, con mensaje propio
+                  value:
+                    body:
+                      accion: FORZADA
+                      versionPublicada: 0.2.0
+                      mensaje: Esta versión de la app ya no está disponible. Actualízala para seguir accediendo a tus trámites.
+                    codigo-respuesta: '200'
+                    mensaje-respuesta: OK
+                    timestamp: '2026-10-14T09:30:00.000+02:00'
+        '400':
+          description: Petición incorrecta (parámetro ausente o mal formado). La app no bloquea.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+              examples:
+                versionMalFormada:
+                  summary: Versión con formato incorrecto
+                  value:
+                    codigo-respuesta: '400'
+                    mensaje-respuesta: Petición incorrecta
+                    info-error:
+                      id-error: 7f3c2a10-5b1e-4c3a-9a51-2d8e6f0b4c11
+                      errores:
+                        - codigo-error: VERSION_INVALIDA
+                          mensaje-error: 'El parámetro version debe tener el formato MAYOR.MENOR.PARCHE'
+                    timestamp: '2026-10-14T09:30:00.000+02:00'
+        '500':
+          description: Error interno. La app no bloquea.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+        '503':
+          description: Servicio no disponible. La app no bloquea.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Respuesta'
+components:
+  schemas:
+    Plataforma:
+      type: string
+      description: Sistema operativo del dispositivo.
+      enum:
+        - ANDROID
+        - IOS
+    Version:
+      type: string
+      description: Versión de marketing `MAYOR.MENOR.PARCHE`, cada componente un entero sin ceros a la izquierda.
+      pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$'
+      example: 0.1.9
+    AccionActualizacion:
+      type: string
+      description: |
+        Acción que debe tomar la app:
+        - `NINGUNA`: no se muestra nada.
+        - `RECOMENDADA`: aviso descartable; descartado, no se repite para esa `versionPublicada`.
+        - `FORZADA`: aviso bloqueante; la app no se puede usar sin actualizar.
+      enum:
+        - NINGUNA
+        - RECOMENDADA
+        - FORZADA
+    ComprobacionActualizacion:
+      type: object
+      description: Decisión del servidor para la versión instalada.
+      required:
+        - accion
+      properties:
+        accion:
+          $ref: '#/components/schemas/AccionActualizacion'
+        versionPublicada:
+          type: string
+          nullable: true
+          pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$'
+          description: |
+            Versión a la que se invita a actualizar. **Obligatoria y estrictamente mayor que la
+            instalada** cuando `accion` es `RECOMENDADA` o `FORZADA`; `null` con `NINGUNA`. Se
+            muestra al ciudadano («la versión 0.2.0») y es la clave con la que la app recuerda
+            una recomendación descartada.
+          example: 0.2.0
+        mensaje:
+          type: string
+          nullable: true
+          maxLength: 300
+          description: |
+            Texto opcional, en castellano y redactado para el ciudadano, que sustituye la
+            explicación por defecto del aviso (p. ej. el motivo de un forzado). Nunca debe
+            contener detalle técnico. `null` → la app usa su texto propio.
+          example: Esta versión de la app ya no está disponible. Actualízala para seguir accediendo a tus trámites.
+    RespuestaComprobacionActualizacion:
+      description: Sobre estándar `Respuesta` con la decisión en `body`.
+      allOf:
+        - $ref: '#/components/schemas/Respuesta'
+        - type: object
+          required:
+            - body
+          properties:
+            body:
+              $ref: '#/components/schemas/ComprobacionActualizacion'
+    Respuesta:
+      type: object
+      description: Respuesta de la operación (sobre estándar de las APIs de JCCM, como en Fachada Sede).
+      properties:
+        body:
+          type: object
+          description: Objeto devuelto en el payload
+        codigo-respuesta:
+          type: string
+          description: Código asociado a la respuesta obtenida
+        mensaje-respuesta:
+          type: string
+          description: Mensaje informativo de la respuesta obtenida
+        info-error:
+          $ref: '#/components/schemas/InfoError'
+        timestamp:
+          type: string
+          format: date-time
+          description: Momento en que se registró la respuesta
+    InfoError:
+      type: object
+      description: Información de error asociada a la respuesta
+      properties:
+        errores:
+          type: array
+          description: Listado de errores reportados por la operación
+          items:
+            $ref: '#/components/schemas/ApiError'
+        id-error:
+          type: string
+          description: Identificador único del error ocurrido
+    ApiError:
+      type: object
+      description: Información del error
+      properties:
+        codigo-error:
+          type: string
+          description: Código del error
+        mensaje-error:
+          type: string
+          description: Mensaje descriptivo del error
