@@ -284,7 +284,7 @@ final class AuthSessionController {
 
   /// El `idAgente` de la sesión guardada, leído del access token del almacén.
   ///
-  /// No toca el estado en memoria ni el almacén protegido: hace falta saber
+  /// No toca el estado en memoria ni el token de larga vida: hace falta saber
   /// *de quién* es la sesión guardada para consultar su preferencia, y eso
   /// tiene que poder hacerse sin cargarla ni levantar el prompt biométrico.
   Future<String?> persistedIdAgente() async {

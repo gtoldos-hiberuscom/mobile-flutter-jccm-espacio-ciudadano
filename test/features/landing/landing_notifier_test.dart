@@ -427,34 +427,24 @@ final class _FakeBiometricAuthenticator implements BiometricAuthenticator {
 final class _FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
 
-  /// Claves leídas, en orden. Sirve para comprobar que la reanudación no toca
-  /// el almacén protegido cuando no hace falta — en un dispositivo real, esa
-  /// lectura es el diálogo biométrico.
+  /// Claves leídas, en orden.
   final List<String> readKeys = [];
 
-  /// Claves cuya lectura falla: simula una biometría cancelada o fallida.
-  final Set<String> unreadableKeys = {};
-
   @override
-  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
+  Future<String?> read(final String key) async {
     readKeys.add(key);
-    if (unreadableKeys.contains(key)) {
-      throw StateError('biometría rechazada para $key');
-    }
     return store[key];
   }
 
   @override
-  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => store[key] = value;
+  Future<void> write(final String key, final String value) async => store[key] = value;
 
   @override
-  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async => store.remove(key);
+  Future<void> delete(final String key) async => store.remove(key);
+
 
   @override
-  Future<void> clearBiometric() async => store.remove(StorageKeys.refreshToken);
-
-  @override
-  Future<void> clear({final bool includeBiometric = true}) async => store.clear();
+  Future<void> clear() async => store.clear();
 }
 
 /// Repositorio cuyo refresco siempre falla con la excepción dada.

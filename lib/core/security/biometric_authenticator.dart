@@ -3,6 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 
+/// Copy for the Android biometric prompt.
+///
+/// Android renders its own dialog and takes the strings from the caller; iOS
+/// uses the system prompt plus `NSFaceIDUsageDescription` from `Info.plist`
+/// and ignores this. Passed in from the presentation layer because
+/// `lib/core` has no access to `AppLocalizations`.
+final class BiometricPromptCopy {
+  const BiometricPromptCopy({
+    required this.title,
+    required this.subtitle,
+    required this.cancelLabel,
+  });
+
+  final String title;
+  final String subtitle;
+  final String cancelLabel;
+}
+
 /// Abstraction over local biometric authentication.
 abstract interface class BiometricAuthenticator {
   /// Returns `true` when the device has an enrolled biometric authenticator.

@@ -145,26 +145,19 @@ final class _FakeSecureStorage implements SecureStorage {
   final List<String> deleted = [];
 
   @override
-  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => values[key];
+  Future<String?> read(final String key) async => values[key];
 
   @override
-  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
+  Future<void> write(final String key, final String value) async {
     values[key] = value;
   }
 
   @override
-  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async {
+  Future<void> delete(final String key) async {
     deleted.add(key);
     final _ = values.remove(key);
   }
 
-  @override
-  Future<void> clearBiometric() async {
-    // El almacén protegido se vacía entero, no clave a clave, para no pedir
-    // huella al cerrar sesión; el token de larga vida cae con él.
-    deleted.add(StorageKeys.refreshToken);
-    final _ = values.remove(StorageKeys.refreshToken);
-  }
 
 
   @override

@@ -69,75 +69,41 @@ final class FakeBiometricAuthenticator implements BiometricAuthenticator {
 
 /// In-memory [SecureStorage] fake.
 ///
-/// Records the protection each key was written with, and which keys were read,
-/// so the tests can assert that the long-lived token is only read after the
-/// biometric check.
+/// Records which keys were read, so the tests can assert that the long-lived
+/// token is only read after the biometric check.
 final class FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
-  final Map<String, SecureStorageProtection> writtenWith = {};
   final List<String> readKeys = [];
 
   /// Operaciones en orden, como `'delete:clave'` / `'write:clave'`.
   final List<String> operations = [];
 
-  /// Keys whose read fails, simulating a cancelled or failed biometric check.
-  final Set<String> unreadableKeys = {};
-
-  /// Keys whose write fails, simulating a device with no biometrics enrolled
-  /// (the store refuses rather than degrading to an unauthenticated key).
+  /// Keys whose write fails, simulating a storage error.
   final Set<String> unwritableKeys = {};
 
-  /// Copia del diálogo con la que se pidió la última lectura protegida.
-  BiometricPromptCopy? lastReadPrompt;
-
   @override
-  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
+  Future<String?> read(final String key) async {
     readKeys.add(key);
-    if (protection == SecureStorageProtection.biometric) {
-      lastReadPrompt = prompt;
-    }
-    if (unreadableKeys.contains(key)) {
-      throw StateError('biometric check rejected for $key');
-    }
     return store[key];
   }
 
   @override
-  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
+  Future<void> write(final String key, final String value) async {
     if (unwritableKeys.contains(key)) {
-      throw StateError('no biometric hardware available for $key');
+      throw StateError('storage unavailable for $key');
     }
     operations.add('write:$key');
-    writtenWith[key] = protection;
     store[key] = value;
   }
 
   @override
-  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async {
+  Future<void> delete(final String key) async {
     operations.add('delete:$key');
     store.remove(key);
   }
 
-  /// Si el último [clear] alcanzó al almacén protegido.
-  bool clearedBiometric = false;
-
   @override
-  Future<void> clearBiometric() async {
-    clearedBiometric = true;
-    store.remove(StorageKeys.refreshToken);
-  }
-
-  @override
-  Future<void> clear({final bool includeBiometric = true}) async {
-    clearedBiometric = includeBiometric;
-    store.remove(StorageKeys.accessToken);
-    store.remove(StorageKeys.idToken);
-    store.remove(StorageKeys.sessionExpiresAt);
-    if (includeBiometric) {
-      store.remove(StorageKeys.refreshToken);
-    }
-    writtenWith.clear();
-  }
+  Future<void> clear() async => store.clear();
 }
 
 /// [AuthRepository] fake that counts refreshes, can be gated to force
@@ -313,9 +279,6 @@ void main() {
       );
 
       expect(storage.store[StorageKeys.refreshToken], 'refresh');
-      expect(storage.writtenWith[StorageKeys.refreshToken], SecureStorageProtection.standard);
-      expect(storage.writtenWith[StorageKeys.accessToken], SecureStorageProtection.standard);
-      expect(storage.writtenWith[StorageKeys.idToken], SecureStorageProtection.standard);
       expect(biometrics.prompts, 0);
     });
 
@@ -353,20 +316,6 @@ void main() {
 
       expect(storage.store[StorageKeys.accessToken], 'access');
       expect(storage.store[StorageKeys.refreshToken], isNull);
-    });
-
-    test('REGRESSION: el borrado de instalación limpia puede dejar fuera el almacén biométrico', () async {
-      // En Android tocar ese almacén lo CREA, y crearlo dispara una migración
-      // que exige autenticar: el ciudadano veía un diálogo de huella nada más
-      // instalar, antes de hacer nada. La rutina de arranque existe por iOS,
-      // donde el Keychain sobrevive a la desinstalación.
-      storage.store[StorageKeys.accessToken] = 'viejo';
-      storage.store[StorageKeys.refreshToken] = 'viejo-offline';
-
-      await storage.clear(includeBiometric: false);
-
-      expect(storage.store[StorageKeys.accessToken], isNull);
-      expect(storage.clearedBiometric, isFalse, reason: 'no debe tocarse el almacén protegido');
     });
 
     test('sin el opt-in activado no se guarda ninguna credencial, sólo la pista para cerrar sesión', () async {
