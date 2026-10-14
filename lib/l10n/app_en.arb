@@ -5841,6 +5841,26 @@
   "@helpFaqIntro": {
     "description": "Help and contact — introduction to the frequently asked questions list."
   },
+  "faqCategoryAccess": "Access",
+  "@faqCategoryAccess": {
+    "description": "FAQ — access questions category."
+  },
+  "faqCategoryMyData": "My data",
+  "@faqCategoryMyData": {
+    "description": "FAQ — personal data questions category."
+  },
+  "faqCategoryManagements": "My requests and notifications",
+  "@faqCategoryManagements": {
+    "description": "FAQ — requests and notifications questions category."
+  },
+  "faqCategoryAgenda": "Calendar",
+  "@faqCategoryAgenda": {
+    "description": "FAQ — calendar questions category."
+  },
+  "faqCategoryPopulation": "Population register",
+  "@faqCategoryPopulation": {
+    "description": "FAQ — population register questions category."
+  },
   "helpContactGuidesIntro": "Browse the available guides to resolve your questions step by step.",
   "@helpContactGuidesIntro": {
     "description": "Help and contact — introduction to the help guides."

@@ -15,23 +15,29 @@ import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/help_cont
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 void main() {
-  testWidgets('muestra todo el contenido de ayuda definido en el diseño', (final tester) async {
+  testWidgets('agrupa las preguntas frecuentes por categorías expandibles', (final tester) async {
     await _pumpContactTab(
       tester,
       launcher: _RecordingLauncher(),
       selectContact: false,
     );
 
-    expect(
-      find.text('Resuelve las dudas más habituales sobre Espacio ciudadano.'),
-      findsOneWidget,
-    );
+    expect(find.text('Acceso (3)'), findsOneWidget);
+    expect(find.text('Mis datos (1)'), findsOneWidget);
+    expect(find.text('Mis gestiones y notificaciones (1)'), findsOneWidget);
+    expect(find.text('Agenda (1)'), findsOneWidget);
+    expect(find.text('Registro de población (0)'), findsOneWidget);
+
+    await tester.tap(find.text('Acceso (3)'));
+    await tester.pumpAndSettle();
     expect(find.text('¿Qué es Espacio ciudadano y qué puedo consultar?'), findsOneWidget);
     expect(find.text('¿Qué necesito para acceder a mi Espacio ciudadano?'), findsOneWidget);
     expect(find.text('¿Qué datos personales se almacenan?'), findsOneWidget);
+
+    await tester.tap(find.text('Mis datos (1)'));
+    await tester.pumpAndSettle();
     expect(find.text('¿Cómo puedo corregir un dato incorrecto?'), findsOneWidget);
-    expect(find.text('¿Qué expedientes y trámites puedo consultar?'), findsOneWidget);
-    expect(find.text('¿Qué eventos aparecerán en mi agenda?'), findsOneWidget);
+
     expect(find.text('Consulta las guías disponibles para resolver tus dudas paso a paso.'), findsOneWidget);
     expect(find.text('Mostrar todas las guías'), findsOneWidget);
   });

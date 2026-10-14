@@ -411,6 +411,7 @@ class AppListExpandableItem extends StatefulWidget {
     this.leading,
     this.initiallyExpanded = false,
     this.isDisabled = false,
+    this.headerPadding,
     this.semanticsLabel,
     this.onExpansionChanged,
   });
@@ -421,6 +422,7 @@ class AppListExpandableItem extends StatefulWidget {
   final List<Widget> children;
   final bool initiallyExpanded;
   final bool isDisabled;
+  final EdgeInsetsGeometry? headerPadding;
   final String? semanticsLabel;
   final ValueChanged<bool>? onExpansionChanged;
 
@@ -485,7 +487,7 @@ class _AppListExpandableItemState extends State<AppListExpandableItem> with Sing
             InkWell(
               onTap: _toggle,
               child: Padding(
-                padding: const EdgeInsets.all(AppDimensions.space8),
+                padding: widget.headerPadding ?? const EdgeInsets.all(AppDimensions.space8),
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(minHeight: AppDimensions.minTouchTarget),
                   child: Row(

@@ -8594,6 +8594,36 @@ abstract class AppLocalizations {
   /// **'Resuelve las dudas más habituales sobre Espacio ciudadano.'**
   String get helpFaqIntro;
 
+  /// FAQ — categoría de preguntas sobre acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso'**
+  String get faqCategoryAccess;
+
+  /// FAQ — categoría de preguntas sobre datos personales.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis datos'**
+  String get faqCategoryMyData;
+
+  /// FAQ — categoría de preguntas sobre gestiones y notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis gestiones y notificaciones'**
+  String get faqCategoryManagements;
+
+  /// FAQ — categoría de preguntas sobre agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get faqCategoryAgenda;
+
+  /// FAQ — categoría de preguntas sobre registro de población.
+  ///
+  /// In es, this message translates to:
+  /// **'Registro de población'**
+  String get faqCategoryPopulation;
+
   /// Ayuda y contacto — introducción a las guías de ayuda.
   ///
   /// In es, this message translates to:

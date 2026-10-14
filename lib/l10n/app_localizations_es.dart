@@ -4519,6 +4519,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get helpFaqIntro => 'Resuelve las dudas más habituales sobre Espacio ciudadano.';
 
   @override
+  String get faqCategoryAccess => 'Acceso';
+
+  @override
+  String get faqCategoryMyData => 'Mis datos';
+
+  @override
+  String get faqCategoryManagements => 'Mis gestiones y notificaciones';
+
+  @override
+  String get faqCategoryAgenda => 'Agenda';
+
+  @override
+  String get faqCategoryPopulation => 'Registro de población';
+
+  @override
   String get helpContactGuidesIntro => 'Consulta las guías disponibles para resolver tus dudas paso a paso.';
 
   @override

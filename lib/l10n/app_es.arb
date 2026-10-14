@@ -5899,6 +5899,26 @@
   "@helpFaqIntro": {
     "description": "Ayuda y contacto — introducción al listado de preguntas frecuentes."
   },
+  "faqCategoryAccess": "Acceso",
+  "@faqCategoryAccess": {
+    "description": "FAQ — categoría de preguntas sobre acceso."
+  },
+  "faqCategoryMyData": "Mis datos",
+  "@faqCategoryMyData": {
+    "description": "FAQ — categoría de preguntas sobre datos personales."
+  },
+  "faqCategoryManagements": "Mis gestiones y notificaciones",
+  "@faqCategoryManagements": {
+    "description": "FAQ — categoría de preguntas sobre gestiones y notificaciones."
+  },
+  "faqCategoryAgenda": "Agenda",
+  "@faqCategoryAgenda": {
+    "description": "FAQ — categoría de preguntas sobre agenda."
+  },
+  "faqCategoryPopulation": "Registro de población",
+  "@faqCategoryPopulation": {
+    "description": "FAQ — categoría de preguntas sobre registro de población."
+  },
   "helpContactGuidesIntro": "Consulta las guías disponibles para resolver tus dudas paso a paso.",
   "@helpContactGuidesIntro": {
     "description": "Ayuda y contacto — introducción a las guías de ayuda."
