@@ -3516,6 +3516,92 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthHospitalAppointmentsTitle => 'Hospital appointments';
 
   @override
+  String get myDataHealthPrimaryCareNavTitle => 'Primary care appointments';
+
+  @override
+  String get myDataHealthHospitalNavTitle => 'Hospital care appointments';
+
+  @override
+  String get myDataHealthHospitalNavVerificationRequired => 'Verify your identity to continue';
+
+  @override
+  String get myDataHealthHospitalLinkTitle => 'My hospital appointments';
+
+  @override
+  String get myDataHealthHospitalLinkDescription => 'Check the information about your SESCAM hospital appointments.';
+
+  @override
+  String get myDataHealthHospitalContactHint => 'If any of the data is out of date, you must contact SESCAM.';
+
+  @override
+  String get myDataHealthHospitalPendingTab => 'Upcoming appointments';
+
+  @override
+  String get myDataHealthHospitalPastTab => 'Past appointments';
+
+  @override
+  String get myDataHealthHospitalPendingEmpty => 'You have no upcoming hospital appointments.';
+
+  @override
+  String get myDataHealthHospitalPastEmpty => 'You have no past hospital appointments.';
+
+  @override
+  String get myDataHealthHospitalFieldService => 'Service';
+
+  @override
+  String get myDataHealthHospitalFieldProvision => 'Provision';
+
+  @override
+  String get myDataHealthHospitalFieldRoom => 'Room';
+
+  @override
+  String get myDataHealthHospitalFieldCenter => 'Centre';
+
+  @override
+  String get myDataHealthHospitalFieldAgenda => 'Agenda';
+
+  @override
+  String get myDataHealthHospitalFieldDateTime => 'Date and time';
+
+  @override
+  String myDataHealthHospitalDateTimeValue(String date, String time) {
+    return '$date, $time';
+  }
+
+  @override
+  String get myDataHealthCipUnavailable => 'CIP unavailable';
+
+  @override
+  String get identityVerificationDialogTitle => 'Identity verification';
+
+  @override
+  String get identityVerificationDialogBody => 'This query requires a higher security level and you need to identify yourself again.';
+
+  @override
+  String get identityVerificationDialogDoNotShowAgain => 'Do not show again';
+
+  @override
+  String get identityVerificationDialogBack => 'Back';
+
+  @override
+  String get identityVerificationDialogContinue => 'Go to Cl@ve';
+
+  @override
+  String get myDataHealthLevelRequiredMessage => 'Your current access level does not meet the application security policy. Press \"Continue\" to restart the session with the required higher access level.';
+
+  @override
+  String get myDataHealthLevelUnverifiedMessage => 'Your access level could not be verified, so your hospital appointments cannot be shown. Press \"Continue\" to restart the session.';
+
+  @override
+  String get myDataHealthLevelElevateAction => 'Continue';
+
+  @override
+  String get myDataHealthLevelStillInsufficientMessage => 'The identification method used does not reach the required access level. Press \"Continue\" and identify yourself with a digital certificate or your electronic ID card.';
+
+  @override
+  String get myDataHealthLevelElevationFailedMessage => 'Your access level could not be raised. Please try again.';
+
+  @override
   String get myDataHealthLoadMoreAppointments => 'Load more appointments';
 
   @override

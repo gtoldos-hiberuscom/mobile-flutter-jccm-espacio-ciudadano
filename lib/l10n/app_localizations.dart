@@ -6728,7 +6728,7 @@ abstract class AppLocalizations {
   /// **'Citas de Atención Primaria'**
   String get myDataHealthAppointmentsTitle;
 
-  /// Código de identificación personal mostrado encima de las citas de Atención Primaria.
+  /// Código de identificación personal mostrado encima de las citas de Atención Primaria y de las hospitalarias.
   ///
   /// In es, this message translates to:
   /// **'Código de Identificación Personal (CIP): {cip}'**
@@ -6775,6 +6775,174 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Citas hospitalarias'**
   String get myDataHealthHospitalAppointmentsTitle;
+
+  /// Salud — tarjeta del menú que lleva a las citas de atención primaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas de atención primaria'**
+  String get myDataHealthPrimaryCareNavTitle;
+
+  /// Salud — tarjeta del menú que lleva a las citas hospitalarias.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas de atención hospitalaria'**
+  String get myDataHealthHospitalNavTitle;
+
+  /// Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas.
+  ///
+  /// In es, this message translates to:
+  /// **'Verifica tu identidad para continuar'**
+  String get myDataHealthHospitalNavVerificationRequired;
+
+  /// Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis citas hospitalarias'**
+  String get myDataHealthHospitalLinkTitle;
+
+  /// Salud — descripción del enlace a citas hospitalarias.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta la información sobre tus citas hospitalarias del SESCAM.'**
+  String get myDataHealthHospitalLinkDescription;
+
+  /// Salud — aviso de que los datos hospitalarios los mantiene el SESCAM.
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de los datos no está actualizado deberás ponerte en contacto con el SESCAM.'**
+  String get myDataHealthHospitalContactHint;
+
+  /// Salud — pestaña de citas hospitalarias pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas pendientes'**
+  String get myDataHealthHospitalPendingTab;
+
+  /// Salud — pestaña de citas hospitalarias pasadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas pasadas'**
+  String get myDataHealthHospitalPastTab;
+
+  /// Salud — mensaje cuando no hay citas hospitalarias pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes citas hospitalarias pendientes.'**
+  String get myDataHealthHospitalPendingEmpty;
+
+  /// Salud — mensaje cuando no hay citas hospitalarias pasadas.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes citas hospitalarias pasadas.'**
+  String get myDataHealthHospitalPastEmpty;
+
+  /// Salud — etiqueta del servicio médico de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicio'**
+  String get myDataHealthHospitalFieldService;
+
+  /// Salud — etiqueta de la prestación de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Prestación'**
+  String get myDataHealthHospitalFieldProvision;
+
+  /// Salud — etiqueta de la sala de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Sala'**
+  String get myDataHealthHospitalFieldRoom;
+
+  /// Salud — etiqueta del hospital de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Centro'**
+  String get myDataHealthHospitalFieldCenter;
+
+  /// Salud — etiqueta de la agenda de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get myDataHealthHospitalFieldAgenda;
+
+  /// Salud — etiqueta de la fecha y hora de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha y hora'**
+  String get myDataHealthHospitalFieldDateTime;
+
+  /// Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».
+  ///
+  /// In es, this message translates to:
+  /// **'{date}, {time}'**
+  String myDataHealthHospitalDateTimeValue(String date, String time);
+
+  /// Salud — texto cuando el CIP no se ha podido obtener.
+  ///
+  /// In es, this message translates to:
+  /// **'CIP no disponible'**
+  String get myDataHealthCipUnavailable;
+
+  /// Salud — título del aviso de que la consulta exige más nivel de seguridad.
+  ///
+  /// In es, this message translates to:
+  /// **'Verificación de identidad'**
+  String get identityVerificationDialogTitle;
+
+  /// Salud — motivo del aviso de verificación de identidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.'**
+  String get identityVerificationDialogBody;
+
+  /// Salud — casilla para omitir el aviso y pasar directo a Cl@ve la próxima vez.
+  ///
+  /// In es, this message translates to:
+  /// **'No volver a mostrar'**
+  String get identityVerificationDialogDoNotShowAgain;
+
+  /// Salud — acción de salir de la consulta sin elevar el nivel.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get identityVerificationDialogBack;
+
+  /// Salud — acción de ir a Cl@ve a identificarse de nuevo.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceder a cl@ve'**
+  String get identityVerificationDialogContinue;
+
+  /// Salud — bloqueo por nivel de autenticación insuficiente para datos de salud.
+  ///
+  /// In es, this message translates to:
+  /// **'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.'**
+  String get myDataHealthLevelRequiredMessage;
+
+  /// Salud — el nivel de autenticación no se ha podido leer del token.
+  ///
+  /// In es, this message translates to:
+  /// **'No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.'**
+  String get myDataHealthLevelUnverifiedMessage;
+
+  /// Salud — acción para volver a identificarse con un método más seguro.
+  ///
+  /// In es, this message translates to:
+  /// **'Continuar'**
+  String get myDataHealthLevelElevateAction;
+
+  /// Salud — la elevación se completó pero el nivel sigue siendo insuficiente.
+  ///
+  /// In es, this message translates to:
+  /// **'El método de identificación utilizado no alcanza el nivel de acceso requerido. Pulse «Continuar» e identifíquese con certificado digital o DNI electrónico.'**
+  String get myDataHealthLevelStillInsufficientMessage;
+
+  /// Salud — la elevación de nivel falló por un error.
+  ///
+  /// In es, this message translates to:
+  /// **'No ha sido posible elevar su nivel de acceso. Inténtelo de nuevo.'**
+  String get myDataHealthLevelElevationFailedMessage;
 
   /// Botón para cargar la siguiente página de citas pasadas de primaria.
   ///

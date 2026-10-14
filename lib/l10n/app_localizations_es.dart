@@ -3517,6 +3517,92 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthHospitalAppointmentsTitle => 'Citas hospitalarias';
 
   @override
+  String get myDataHealthPrimaryCareNavTitle => 'Citas de atención primaria';
+
+  @override
+  String get myDataHealthHospitalNavTitle => 'Citas de atención hospitalaria';
+
+  @override
+  String get myDataHealthHospitalNavVerificationRequired => 'Verifica tu identidad para continuar';
+
+  @override
+  String get myDataHealthHospitalLinkTitle => 'Mis citas hospitalarias';
+
+  @override
+  String get myDataHealthHospitalLinkDescription => 'Consulta la información sobre tus citas hospitalarias del SESCAM.';
+
+  @override
+  String get myDataHealthHospitalContactHint => 'Si alguno de los datos no está actualizado deberás ponerte en contacto con el SESCAM.';
+
+  @override
+  String get myDataHealthHospitalPendingTab => 'Citas pendientes';
+
+  @override
+  String get myDataHealthHospitalPastTab => 'Citas pasadas';
+
+  @override
+  String get myDataHealthHospitalPendingEmpty => 'No tienes citas hospitalarias pendientes.';
+
+  @override
+  String get myDataHealthHospitalPastEmpty => 'No tienes citas hospitalarias pasadas.';
+
+  @override
+  String get myDataHealthHospitalFieldService => 'Servicio';
+
+  @override
+  String get myDataHealthHospitalFieldProvision => 'Prestación';
+
+  @override
+  String get myDataHealthHospitalFieldRoom => 'Sala';
+
+  @override
+  String get myDataHealthHospitalFieldCenter => 'Centro';
+
+  @override
+  String get myDataHealthHospitalFieldAgenda => 'Agenda';
+
+  @override
+  String get myDataHealthHospitalFieldDateTime => 'Fecha y hora';
+
+  @override
+  String myDataHealthHospitalDateTimeValue(String date, String time) {
+    return '$date, $time';
+  }
+
+  @override
+  String get myDataHealthCipUnavailable => 'CIP no disponible';
+
+  @override
+  String get identityVerificationDialogTitle => 'Verificación de identidad';
+
+  @override
+  String get identityVerificationDialogBody => 'Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.';
+
+  @override
+  String get identityVerificationDialogDoNotShowAgain => 'No volver a mostrar';
+
+  @override
+  String get identityVerificationDialogBack => 'Volver';
+
+  @override
+  String get identityVerificationDialogContinue => 'Acceder a cl@ve';
+
+  @override
+  String get myDataHealthLevelRequiredMessage => 'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.';
+
+  @override
+  String get myDataHealthLevelUnverifiedMessage => 'No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.';
+
+  @override
+  String get myDataHealthLevelElevateAction => 'Continuar';
+
+  @override
+  String get myDataHealthLevelStillInsufficientMessage => 'El método de identificación utilizado no alcanza el nivel de acceso requerido. Pulse «Continuar» e identifíquese con certificado digital o DNI electrónico.';
+
+  @override
+  String get myDataHealthLevelElevationFailedMessage => 'No ha sido posible elevar su nivel de acceso. Inténtelo de nuevo.';
+
+  @override
   String get myDataHealthLoadMoreAppointments => 'Cargar más citas';
 
   @override

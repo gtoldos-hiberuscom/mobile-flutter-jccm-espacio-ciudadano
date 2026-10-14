@@ -395,7 +395,11 @@ final class _FailingAuthRepository implements AuthRepository {
   final AuthException error;
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => throw UnimplementedError();
+  Future<TokenResponse> login({
+    final List<String> scopes = authDefaultScopes,
+    final String? loginHint,
+    final Map<String, String> extraParameters = const <String, String>{},
+  }) => throw UnimplementedError();
 
   @override
   Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw error;
@@ -414,7 +418,11 @@ final class _UnusedAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => throw UnimplementedError();
+  Future<TokenResponse> login({
+    final List<String> scopes = authDefaultScopes,
+    final String? loginHint,
+    final Map<String, String> extraParameters = const <String, String>{},
+  }) => throw UnimplementedError();
 
   @override
   Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw UnimplementedError();

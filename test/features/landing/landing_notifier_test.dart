@@ -326,7 +326,11 @@ final class _HangingAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => Completer<TokenResponse>().future;
+  Future<TokenResponse> login({
+    final List<String> scopes = authDefaultScopes,
+    final String? loginHint,
+    final Map<String, String> extraParameters = const <String, String>{},
+  }) => Completer<TokenResponse>().future;
 
   /// Veces que se pidió renovar contra el servidor. Distingue «entró con lo que
   /// ya tenía» de «tuvo que salir a la red».
@@ -360,7 +364,11 @@ final class _ImmediateAuthRepository implements AuthRepository {
   String? idTokenToReturn;
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) async {
+  Future<TokenResponse> login({
+    final List<String> scopes = authDefaultScopes,
+    final String? loginHint,
+    final Map<String, String> extraParameters = const <String, String>{},
+  }) async {
     calls.add('login');
     return TokenResponse(
       'not-a-real-jwt',
@@ -457,7 +465,11 @@ final class _FailingAuthRepository implements AuthRepository {
   Future<void> revokeOfflineSession({required final String refreshToken}) async {}
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => throw UnimplementedError();
+  Future<TokenResponse> login({
+    final List<String> scopes = authDefaultScopes,
+    final String? loginHint,
+    final Map<String, String> extraParameters = const <String, String>{},
+  }) => throw UnimplementedError();
 
   @override
   Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw error;

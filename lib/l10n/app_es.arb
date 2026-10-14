@@ -4620,7 +4620,7 @@
   },
   "myDataHealthCipLabel": "Código de Identificación Personal (CIP): {cip}",
   "@myDataHealthCipLabel": {
-    "description": "Código de identificación personal mostrado encima de las citas de Atención Primaria.",
+    "description": "Código de identificación personal mostrado encima de las citas de Atención Primaria y de las hospitalarias.",
     "placeholders": {
       "cip": {
         "type": "String"
@@ -4654,6 +4654,126 @@
   "myDataHealthHospitalAppointmentsTitle": "Citas hospitalarias",
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Título del bloque de citas hospitalarias."
+  },
+  "myDataHealthPrimaryCareNavTitle": "Citas de atención primaria",
+  "@myDataHealthPrimaryCareNavTitle": {
+    "description": "Salud — tarjeta del menú que lleva a las citas de atención primaria."
+  },
+  "myDataHealthHospitalNavTitle": "Citas de atención hospitalaria",
+  "@myDataHealthHospitalNavTitle": {
+    "description": "Salud — tarjeta del menú que lleva a las citas hospitalarias."
+  },
+  "myDataHealthHospitalNavVerificationRequired": "Verifica tu identidad para continuar",
+  "@myDataHealthHospitalNavVerificationRequired": {
+    "description": "Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas."
+  },
+  "myDataHealthHospitalLinkTitle": "Mis citas hospitalarias",
+  "@myDataHealthHospitalLinkTitle": {
+    "description": "Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM."
+  },
+  "myDataHealthHospitalLinkDescription": "Consulta la información sobre tus citas hospitalarias del SESCAM.",
+  "@myDataHealthHospitalLinkDescription": {
+    "description": "Salud — descripción del enlace a citas hospitalarias."
+  },
+  "myDataHealthHospitalContactHint": "Si alguno de los datos no está actualizado deberás ponerte en contacto con el SESCAM.",
+  "@myDataHealthHospitalContactHint": {
+    "description": "Salud — aviso de que los datos hospitalarios los mantiene el SESCAM."
+  },
+  "myDataHealthHospitalPendingTab": "Citas pendientes",
+  "@myDataHealthHospitalPendingTab": {
+    "description": "Salud — pestaña de citas hospitalarias pendientes."
+  },
+  "myDataHealthHospitalPastTab": "Citas pasadas",
+  "@myDataHealthHospitalPastTab": {
+    "description": "Salud — pestaña de citas hospitalarias pasadas."
+  },
+  "myDataHealthHospitalPendingEmpty": "No tienes citas hospitalarias pendientes.",
+  "@myDataHealthHospitalPendingEmpty": {
+    "description": "Salud — mensaje cuando no hay citas hospitalarias pendientes."
+  },
+  "myDataHealthHospitalPastEmpty": "No tienes citas hospitalarias pasadas.",
+  "@myDataHealthHospitalPastEmpty": {
+    "description": "Salud — mensaje cuando no hay citas hospitalarias pasadas."
+  },
+  "myDataHealthHospitalFieldService": "Servicio",
+  "@myDataHealthHospitalFieldService": {
+    "description": "Salud — etiqueta del servicio médico de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldProvision": "Prestación",
+  "@myDataHealthHospitalFieldProvision": {
+    "description": "Salud — etiqueta de la prestación de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldRoom": "Sala",
+  "@myDataHealthHospitalFieldRoom": {
+    "description": "Salud — etiqueta de la sala de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldCenter": "Centro",
+  "@myDataHealthHospitalFieldCenter": {
+    "description": "Salud — etiqueta del hospital de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldAgenda": "Agenda",
+  "@myDataHealthHospitalFieldAgenda": {
+    "description": "Salud — etiqueta de la agenda de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldDateTime": "Fecha y hora",
+  "@myDataHealthHospitalFieldDateTime": {
+    "description": "Salud — etiqueta de la fecha y hora de una cita hospitalaria."
+  },
+  "myDataHealthHospitalDateTimeValue": "{date}, {time}",
+  "@myDataHealthHospitalDateTimeValue": {
+    "description": "Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataHealthCipUnavailable": "CIP no disponible",
+  "@myDataHealthCipUnavailable": {
+    "description": "Salud — texto cuando el CIP no se ha podido obtener."
+  },
+  "identityVerificationDialogTitle": "Verificación de identidad",
+  "@identityVerificationDialogTitle": {
+    "description": "Salud — título del aviso de que la consulta exige más nivel de seguridad."
+  },
+  "identityVerificationDialogBody": "Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.",
+  "@identityVerificationDialogBody": {
+    "description": "Salud — motivo del aviso de verificación de identidad."
+  },
+  "identityVerificationDialogDoNotShowAgain": "No volver a mostrar",
+  "@identityVerificationDialogDoNotShowAgain": {
+    "description": "Salud — casilla para omitir el aviso y pasar directo a Cl@ve la próxima vez."
+  },
+  "identityVerificationDialogBack": "Volver",
+  "@identityVerificationDialogBack": {
+    "description": "Salud — acción de salir de la consulta sin elevar el nivel."
+  },
+  "identityVerificationDialogContinue": "Acceder a cl@ve",
+  "@identityVerificationDialogContinue": {
+    "description": "Salud — acción de ir a Cl@ve a identificarse de nuevo."
+  },
+  "myDataHealthLevelRequiredMessage": "El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.",
+  "@myDataHealthLevelRequiredMessage": {
+    "description": "Salud — bloqueo por nivel de autenticación insuficiente para datos de salud."
+  },
+  "myDataHealthLevelUnverifiedMessage": "No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.",
+  "@myDataHealthLevelUnverifiedMessage": {
+    "description": "Salud — el nivel de autenticación no se ha podido leer del token."
+  },
+  "myDataHealthLevelElevateAction": "Continuar",
+  "@myDataHealthLevelElevateAction": {
+    "description": "Salud — acción para volver a identificarse con un método más seguro."
+  },
+  "myDataHealthLevelStillInsufficientMessage": "El método de identificación utilizado no alcanza el nivel de acceso requerido. Pulse «Continuar» e identifíquese con certificado digital o DNI electrónico.",
+  "@myDataHealthLevelStillInsufficientMessage": {
+    "description": "Salud — la elevación se completó pero el nivel sigue siendo insuficiente."
+  },
+  "myDataHealthLevelElevationFailedMessage": "No ha sido posible elevar su nivel de acceso. Inténtelo de nuevo.",
+  "@myDataHealthLevelElevationFailedMessage": {
+    "description": "Salud — la elevación de nivel falló por un error."
   },
   "myDataHealthLoadMoreAppointments": "Cargar más citas",
   "@myDataHealthLoadMoreAppointments": {

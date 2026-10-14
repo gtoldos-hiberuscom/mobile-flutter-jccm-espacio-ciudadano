@@ -10,12 +10,16 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring
 ///
 /// Set [isDisabled] to true to render the card in the disabled visual state
 /// (grey background, no shadow, muted text) without interaction.
+///
+/// [descriptionIcon] precedes the description at 16 dp (e.g. the lock of a
+/// destination that asks to verify identity first).
 class AppNavigationCard extends StatelessWidget {
   const AppNavigationCard({
     required this.title,
     required this.onTap,
     super.key,
     this.description,
+    this.descriptionIcon,
     this.semanticLabel,
     this.isDisabled = false,
   }) : assert(title != '', 'title must not be empty'),
@@ -24,6 +28,7 @@ class AppNavigationCard extends StatelessWidget {
 
   final String title;
   final String? description;
+  final IconData? descriptionIcon;
   final VoidCallback onTap;
   final String? semanticLabel;
   final bool isDisabled;
@@ -79,10 +84,24 @@ class AppNavigationCard extends StatelessWidget {
                                 ),
                                 if (description != null) ...[
                                   const SizedBox(height: AppDimensions.space4),
-                                  Text(
-                                    description!,
-                                    style: AppTypography.smallRegular.copyWith(color: textColor),
-                                  ),
+                                  if (descriptionIcon case final icon?)
+                                    Row(
+                                      children: [
+                                        AppIcon(icon, color: textColor, size: AppDimensions.iconSmall),
+                                        const SizedBox(width: AppDimensions.space4),
+                                        Expanded(
+                                          child: Text(
+                                            description!,
+                                            style: AppTypography.smallRegular.copyWith(color: textColor),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    Text(
+                                      description!,
+                                      style: AppTypography.smallRegular.copyWith(color: textColor),
+                                    ),
                                 ],
                               ],
                             ),

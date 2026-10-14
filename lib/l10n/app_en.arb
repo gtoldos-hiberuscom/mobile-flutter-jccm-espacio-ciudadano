@@ -4607,6 +4607,126 @@
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Title of the hospital appointments block."
   },
+  "myDataHealthPrimaryCareNavTitle": "Primary care appointments",
+  "@myDataHealthPrimaryCareNavTitle": {
+    "description": "Health — menu card leading to primary care appointments."
+  },
+  "myDataHealthHospitalNavTitle": "Hospital care appointments",
+  "@myDataHealthHospitalNavTitle": {
+    "description": "Health — menu card leading to hospital appointments."
+  },
+  "myDataHealthHospitalNavVerificationRequired": "Verify your identity to continue",
+  "@myDataHealthHospitalNavVerificationRequired": {
+    "description": "Health — note under the hospital appointments card, with a lock, when the current identification level is not enough to view them."
+  },
+  "myDataHealthHospitalLinkTitle": "My hospital appointments",
+  "@myDataHealthHospitalLinkTitle": {
+    "description": "Health — link from My data to the SESCAM hospital appointments screen."
+  },
+  "myDataHealthHospitalLinkDescription": "Check the information about your SESCAM hospital appointments.",
+  "@myDataHealthHospitalLinkDescription": {
+    "description": "Health — description of the hospital appointments link."
+  },
+  "myDataHealthHospitalContactHint": "If any of the data is out of date, you must contact SESCAM.",
+  "@myDataHealthHospitalContactHint": {
+    "description": "Health — notice that hospital data is maintained by SESCAM."
+  },
+  "myDataHealthHospitalPendingTab": "Upcoming appointments",
+  "@myDataHealthHospitalPendingTab": {
+    "description": "Health — upcoming hospital appointments tab."
+  },
+  "myDataHealthHospitalPastTab": "Past appointments",
+  "@myDataHealthHospitalPastTab": {
+    "description": "Health — past hospital appointments tab."
+  },
+  "myDataHealthHospitalPendingEmpty": "You have no upcoming hospital appointments.",
+  "@myDataHealthHospitalPendingEmpty": {
+    "description": "Health — message when there are no upcoming hospital appointments."
+  },
+  "myDataHealthHospitalPastEmpty": "You have no past hospital appointments.",
+  "@myDataHealthHospitalPastEmpty": {
+    "description": "Health — message when there are no past hospital appointments."
+  },
+  "myDataHealthHospitalFieldService": "Service",
+  "@myDataHealthHospitalFieldService": {
+    "description": "Health — label for the medical service of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldProvision": "Provision",
+  "@myDataHealthHospitalFieldProvision": {
+    "description": "Health — label for the provision of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldRoom": "Room",
+  "@myDataHealthHospitalFieldRoom": {
+    "description": "Health — label for the room of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldCenter": "Centre",
+  "@myDataHealthHospitalFieldCenter": {
+    "description": "Health — label for the hospital of an appointment."
+  },
+  "myDataHealthHospitalFieldAgenda": "Agenda",
+  "@myDataHealthHospitalFieldAgenda": {
+    "description": "Health — label for the agenda of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldDateTime": "Date and time",
+  "@myDataHealthHospitalFieldDateTime": {
+    "description": "Health — label for the date and time of a hospital appointment."
+  },
+  "myDataHealthHospitalDateTimeValue": "{date}, {time}",
+  "@myDataHealthHospitalDateTimeValue": {
+    "description": "Health — date and time of a hospital appointment, e.g. \"03/02/2026, 11:40\".",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataHealthCipUnavailable": "CIP unavailable",
+  "@myDataHealthCipUnavailable": {
+    "description": "Health — text shown when the CIP could not be retrieved."
+  },
+  "identityVerificationDialogTitle": "Identity verification",
+  "@identityVerificationDialogTitle": {
+    "description": "Health — title of the notice that the query requires a higher security level."
+  },
+  "identityVerificationDialogBody": "This query requires a higher security level and you need to identify yourself again.",
+  "@identityVerificationDialogBody": {
+    "description": "Health — reason shown in the identity verification notice."
+  },
+  "identityVerificationDialogDoNotShowAgain": "Do not show again",
+  "@identityVerificationDialogDoNotShowAgain": {
+    "description": "Health — checkbox to skip the notice and go straight to Cl@ve next time."
+  },
+  "identityVerificationDialogBack": "Back",
+  "@identityVerificationDialogBack": {
+    "description": "Health — action to leave the query without raising the level."
+  },
+  "identityVerificationDialogContinue": "Go to Cl@ve",
+  "@identityVerificationDialogContinue": {
+    "description": "Health — action to go to Cl@ve and identify again."
+  },
+  "myDataHealthLevelRequiredMessage": "Your current access level does not meet the application security policy. Press \"Continue\" to restart the session with the required higher access level.",
+  "@myDataHealthLevelRequiredMessage": {
+    "description": "Health — blocked because the authentication level is too low for health data."
+  },
+  "myDataHealthLevelUnverifiedMessage": "Your access level could not be verified, so your hospital appointments cannot be shown. Press \"Continue\" to restart the session.",
+  "@myDataHealthLevelUnverifiedMessage": {
+    "description": "Health — the authentication level could not be read from the token."
+  },
+  "myDataHealthLevelElevateAction": "Continue",
+  "@myDataHealthLevelElevateAction": {
+    "description": "Health — action to sign in again with a stronger method."
+  },
+  "myDataHealthLevelStillInsufficientMessage": "The identification method used does not reach the required access level. Press \"Continue\" and identify yourself with a digital certificate or your electronic ID card.",
+  "@myDataHealthLevelStillInsufficientMessage": {
+    "description": "Health — elevation completed but the level is still insufficient."
+  },
+  "myDataHealthLevelElevationFailedMessage": "Your access level could not be raised. Please try again.",
+  "@myDataHealthLevelElevationFailedMessage": {
+    "description": "Health — the level elevation failed with an error."
+  },
   "myDataHealthLoadMoreAppointments": "Load more appointments",
   "@myDataHealthLoadMoreAppointments": {
     "description": "Button that loads the next page of past primary care appointments."
