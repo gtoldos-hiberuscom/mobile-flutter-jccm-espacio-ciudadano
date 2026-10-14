@@ -2,7 +2,7 @@ import 'dart:async' show TimeoutException;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
@@ -61,14 +61,11 @@ class LandingNotifier extends Notifier<LandingState> {
   ///
   /// Reproduce el flujo pedido por el cliente:
   ///
-  /// * con el access token todavía vivo se entra directamente, sin pedir nada
-  ///   y **sin mirar la preferencia**: ese token se guarda sin protección, así
-  ///   que exigir huella para usarlo no protegería nada y sólo costaría un
-  ///   login de Cl@ve — además de contradecir lo pedido por el cliente («si
-  ///   hay Access token se puede entrar»);
-  /// * si ha caducado, hace falta el token de larga vida, y ése sí vive tras
-  ///   la biometría: [AuthSessionController.refreshIfNeeded] lo lee del
-  ///   almacén, y esa lectura **es** la comprobación biométrica;
+  /// * sólo hay sesión guardada si el ciudadano activó el acceso rápido, y
+  ///   para usarla se le pide la huella aquí, al arrancar
+  ///   ([AuthSessionController.unlockPersistedSession]);
+  /// * superada la huella, si el access token guardado sigue vivo se entra
+  ///   sin salir a la red, y si no se renueva con el token de larga vida;
   /// * si el refresco no sale adelante —biometría cancelada, token revocado,
   ///   red caída— no se navega: el ciudadano se queda en la landing y entra
   ///   con Cl@ve como siempre. Nunca se le muestra un error por esto, porque
@@ -85,7 +82,7 @@ class LandingNotifier extends Notifier<LandingState> {
 
     final sessionController = ref.read(authSessionControllerProvider);
     // Primero *de quién* es la sesión guardada, leyéndolo del access token sin
-    // cargar nada ni tocar el almacén protegido. Hace falta antes que la
+    // cargar nada ni pedir la huella. Hace falta antes que la
     // preferencia porque ésta va por ciudadano: en un dispositivo compartido,
     // el «sí» de uno no puede valer por el siguiente.
     final idAgente = await sessionController.persistedIdAgente();
@@ -95,8 +92,8 @@ class LandingNotifier extends Notifier<LandingState> {
 
     // Carga en memoria lo que no está protegido —access token, id token,
     // caducidad— para que el refresco de más abajo sepa si hace falta pedirle
-    // nada al servidor. No toca el almacén protegido, así que no levanta
-    // ningún diálogo por sí solo.
+    // nada al servidor. El token de larga vida no se carga, así que no
+    // levanta ningún diálogo por sí solo.
     await sessionController.hydrateFromStorage();
     if (!ref.mounted) {
       return;

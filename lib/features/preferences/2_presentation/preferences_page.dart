@@ -1,5 +1,4 @@
 import 'dart:async' show unawaited;
-import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -339,15 +338,15 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           return;
         }
 
-        // Igual que en la home: en Android la escritura en el KeyStore ya
-        // autentica, así que pedirlo también aquí encadenaba dos huellas.
-        if (!Platform.isAndroid) {
-          final authenticated = await authenticator.authenticateForSessionUnlock(
-            localizedReason: l10n.sessionUnlockBiometricReason,
-          );
-          if (!authenticated) {
-            return;
-          }
+        // Igual que en la home: guardar no pide huella, así que la
+        // comprobación al activar se hace aquí.
+        final authenticated = await authenticator.authenticateForSessionUnlock(
+          localizedReason: l10n.sessionUnlockBiometricReason,
+          title: l10n.sessionUnlockBiometricTitle,
+          cancelLabel: l10n.sessionUnlockBiometricCancel,
+        );
+        if (!authenticated) {
+          return;
         }
         await appStorage.write('${StorageKeys.biometricQuickAccessEnabledPrefix}${preferencesArgs.idAgente}', true);
       }

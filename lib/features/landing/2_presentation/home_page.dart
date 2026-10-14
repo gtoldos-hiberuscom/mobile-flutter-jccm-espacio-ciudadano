@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -122,20 +121,19 @@ class _HomePageState extends ConsumerState<HomePage> {
       return;
     }
 
-    // En iOS se autentica aquí, al activar: guardar en el Keychain con control
-    // de acceso no pide nada, así que sin esto el permiso de Face ID del
-    // sistema le aparecería al ciudadano días después, al abrir la app y sin
-    // contexto. En Android sobra —escribir en el KeyStore ya exige autenticar,
-    // justo debajo—, y hacerlo igualmente encadenaba dos huellas seguidas.
-    if (!Platform.isAndroid) {
-      final authenticated = await ref
-          .read(biometricAuthenticatorProvider)
-          .authenticateForSessionUnlock(
-            localizedReason: AppLocalizations.of(context).sessionUnlockBiometricReason,
-          );
-      if (!mounted || !authenticated) {
-        return;
-      }
+    // Se autentica aquí, al activar: guardar no pide huella, así que sin esto
+    // se activaría sin comprobar a nadie, y en iOS el permiso de Face ID le
+    // aparecería al ciudadano días después, al abrir la app y sin contexto.
+    final l10n = AppLocalizations.of(context);
+    final authenticated = await ref
+        .read(biometricAuthenticatorProvider)
+        .authenticateForSessionUnlock(
+          localizedReason: l10n.sessionUnlockBiometricReason,
+          title: l10n.sessionUnlockBiometricTitle,
+          cancelLabel: l10n.sessionUnlockBiometricCancel,
+        );
+    if (!mounted || !authenticated) {
+      return;
     }
 
     await appStorage.write(enabledKey, true);
