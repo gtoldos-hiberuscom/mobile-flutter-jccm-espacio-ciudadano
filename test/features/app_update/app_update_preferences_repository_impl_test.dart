@@ -6,9 +6,9 @@ import 'package:jccm_espacio_ciudadano/features/app_update/3_data/repositories/a
 
 import 'support/app_update_fakes.dart';
 
-const _storeKey = '${StorageKeys.appUpdateIgnoredVersionPrefix}store';
+const _storeKey = '${StorageKeys.appUpdateIgnoredVersionPrefix}api';
 
-AppUpdatePreferencesRepositoryImpl _repo(final MemoryAppStorage storage, {final String namespace = 'store'}) => AppUpdatePreferencesRepositoryImpl(storage, namespace: namespace);
+AppUpdatePreferencesRepositoryImpl _repo(final MemoryAppStorage storage, {final String namespace = 'api'}) => AppUpdatePreferencesRepositoryImpl(storage, namespace: namespace);
 
 void main() {
   group('AppUpdatePreferencesRepositoryImpl', () {

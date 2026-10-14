@@ -1,5 +1,5 @@
+export '../0_entity/app_update_decision.dart';
 export '../0_entity/app_update_info.dart';
-export '../0_entity/app_update_manifest.dart';
 export '../0_entity/app_version.dart';
 export '../0_entity/store_platform.dart';
 export '../0_entity/update_policy.dart';

@@ -3,36 +3,38 @@ import 'dart:async';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/1_domain/domain.dart';
 
-final Uri playStoreUrl = Uri.parse('https://play.google.com/store/apps/details?id=es.jccm.espaciociudadano');
-
-/// Manifiesto de prueba. Por defecto enseña la versión (como App Store y el
-/// mock); [hideVersion] imita a Google Play, que solo da el versionCode.
-AppUpdateManifest buildManifest({
-  final String latest = '2.0.0',
-  final String min = '1.0.0',
+/// Decisión de prueba del servidor de versiones. Por defecto recomienda la
+/// `2.0.0`.
+AppUpdateDecision buildDecision({
   final UpdatePolicy policy = UpdatePolicy.recommended,
-  final bool hideVersion = false,
-}) => AppUpdateManifest(
-  latestVersion: AppVersion.parse(latest),
-  minVersion: AppVersion.parse(min),
+  final String? published = '2.0.0',
+  final String? message,
+}) => AppUpdateDecision(
   policy: policy,
-  storeUrl: playStoreUrl,
-  displayVersion: hideVersion ? null : latest,
+  publishedVersion: AppVersion.tryParse(published),
+  message: message,
 );
 
 final class FakeAppUpdateRepository implements AppUpdateRepository {
-  FakeAppUpdateRepository({this.manifest, this.error});
+  FakeAppUpdateRepository({this.decision, this.error});
 
-  AppUpdateManifest? manifest;
+  AppUpdateDecision? decision;
   Exception? error;
   int calls = 0;
+  String? lastApplicationId;
+  AppVersion? lastInstalledVersion;
 
   /// Si se fija, cada petición espera a que se complete (para probar solapes).
   Completer<void>? gate;
 
   @override
-  Future<AppUpdateManifest> fetchManifest() async {
+  Future<AppUpdateDecision> fetchDecision({
+    required final String applicationId,
+    required final AppVersion installedVersion,
+  }) async {
     calls++;
+    lastApplicationId = applicationId;
+    lastInstalledVersion = installedVersion;
     final pending = gate;
     if (pending != null) {
       await pending.future;
@@ -41,9 +43,9 @@ final class FakeAppUpdateRepository implements AppUpdateRepository {
     if (failure != null) {
       throw failure;
     }
-    final result = manifest;
+    final result = decision;
     if (result == null) {
-      throw StateError('FakeAppUpdateRepository without manifest');
+      throw StateError('FakeAppUpdateRepository without decision');
     }
     return result;
   }
@@ -101,11 +103,11 @@ final class FakeAppStoreLauncher implements AppStoreLauncher {
   FakeAppStoreLauncher({this.result = true});
 
   bool result;
-  final List<Uri> opened = [];
+  int opened = 0;
 
   @override
-  Future<bool> openStore(final Uri storeUrl) async {
-    opened.add(storeUrl);
+  Future<bool> openStore() async {
+    opened++;
     return result;
   }
 }

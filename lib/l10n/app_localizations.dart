@@ -9379,18 +9379,6 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Aviso de actualización de la aplicación'**
   String get appUpdateA11yDialog;
-
-  /// Cuerpo del aviso de actualización obligatoria cuando la tienda no da un número de versión legible (Android solo expone el versionCode).
-  ///
-  /// In es, this message translates to:
-  /// **'Para seguir usando la aplicación necesitas instalar la última versión disponible. Las versiones anteriores ya no reciben soporte.'**
-  String get appUpdateRequiredBodyNoVersion;
-
-  /// Cuerpo del aviso de actualización recomendada cuando la tienda no da un número de versión legible (Android solo expone el versionCode).
-  ///
-  /// In es, this message translates to:
-  /// **'Hay una versión más reciente con mejoras y correcciones. Puedes actualizar ahora o hacerlo más tarde.'**
-  String get appUpdateRecommendedBodyNoVersion;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -35,13 +35,9 @@ class AppUpdateDialog extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final title = info.isForced ? l10n.appUpdateRequiredTitle : l10n.appUpdateRecommendedTitle;
-    // Sin número cuando la tienda solo da un versionCode (Android).
-    final body = switch ((info.isForced, info.displayVersion)) {
-      (true, final String version) => l10n.appUpdateRequiredBody(version),
-      (true, null) => l10n.appUpdateRequiredBodyNoVersion,
-      (false, final String version) => l10n.appUpdateRecommendedBody(version),
-      (false, null) => l10n.appUpdateRecommendedBodyNoVersion,
-    };
+    // El texto del servidor, si lo hay, sustituye la explicación por defecto.
+    final version = info.latestVersion.toString();
+    final body = info.message ?? (info.isForced ? l10n.appUpdateRequiredBody(version) : l10n.appUpdateRecommendedBody(version));
     final useVerticalActions = MediaQuery.textScalerOf(context).scale(1) > 1.5;
     final onLater = this.onLater;
 

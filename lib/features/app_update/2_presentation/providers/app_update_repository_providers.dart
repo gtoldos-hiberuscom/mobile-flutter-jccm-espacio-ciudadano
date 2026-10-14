@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform, visibleForTesting;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/store_platform.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/1_domain/app_store_launcher.dart';
@@ -9,14 +10,14 @@ import 'package:jccm_espacio_ciudadano/features/app_update/1_domain/repositories
 import 'package:jccm_espacio_ciudadano/features/app_update/2_presentation/providers/app_update_source.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/3_data/data.dart';
 
-/// `store` por defecto: una build sin la clave consulta la tienda, nunca un
+/// `api` por defecto: una build sin la clave pregunta al servidor, nunca a un
 /// mock. Precedente de clave leída fuera de `AppConfig`: `LOG_REDACTION_OFF`.
-const String _sourceName = String.fromEnvironment('APP_UPDATE_SOURCE', defaultValue: 'store');
+const String _sourceName = String.fromEnvironment('APP_UPDATE_SOURCE', defaultValue: 'api');
 
 final appUpdateSourceProvider = Provider<AppUpdateSource>((final ref) => AppUpdateSource.fromName(_sourceName));
 
-/// Tienda de la plataforma en la que corre la app; `null` donde no hay
-/// tienda (tests en escritorio).
+/// Plataforma con tienda en la que corre la app; `null` donde no hay tienda
+/// (tests en escritorio).
 StorePlatform? storePlatformOf(final TargetPlatform platform) => switch (platform) {
   TargetPlatform.android => StorePlatform.android,
   TargetPlatform.iOS => StorePlatform.ios,
@@ -31,11 +32,10 @@ final appUpdateStorePlatformProvider = Provider<StorePlatform?>((final ref) => s
 AppUpdateRepository buildAppUpdateRepository({
   required final AppUpdateSource source,
   required final StorePlatform? platform,
-  required final InstalledVersionRepository installed,
+  required final AppVersionApi Function() api,
 }) => switch ((source.mockScenario, platform)) {
-  (final AppUpdateMockScenario mock, _) => StaticAppUpdateRepositoryImpl(manifestJson: mock.manifestJson, platformKey: (platform ?? StorePlatform.ios).name),
-  (null, StorePlatform.ios) => ItunesAppUpdateRepositoryImpl(api: ItunesLookupApi.standalone(), installed: installed),
-  (null, StorePlatform.android) => PlayAppUpdateRepositoryImpl(installed: installed),
+  (final AppUpdateMockScenario mock, _) => MockAppUpdateRepositoryImpl(mock),
+  (null, final StorePlatform platform) => ApiAppUpdateRepositoryImpl(api: api(), platform: platform),
   (null, null) => const UnsupportedPlatformAppUpdateRepository(),
 };
 
@@ -43,12 +43,13 @@ final appUpdateRepositoryProvider = Provider<AppUpdateRepository>(
   (final ref) => buildAppUpdateRepository(
     source: ref.watch(appUpdateSourceProvider),
     platform: ref.watch(appUpdateStorePlatformProvider),
-    installed: ref.watch(installedVersionRepositoryProvider),
+    // El servidor de versiones cuelga del mismo host que el resto de APIs.
+    api: () => AppVersionApi.standalone(baseUrl: ref.read(appConfigProvider).baseUrl),
   ),
 );
 
 final installedVersionRepositoryProvider = Provider<InstalledVersionRepository>(
-  (final ref) => PackageInfoInstalledVersionRepository(platform: ref.watch(appUpdateStorePlatformProvider)),
+  (final ref) => PackageInfoInstalledVersionRepository(),
 );
 
 final appUpdatePreferencesRepositoryProvider = Provider<AppUpdatePreferencesRepository>(
@@ -59,5 +60,9 @@ final appUpdatePreferencesRepositoryProvider = Provider<AppUpdatePreferencesRepo
 );
 
 final appStoreLauncherProvider = Provider<AppStoreLauncher>(
-  (final ref) => const UrlLauncherAppStoreLauncher(),
+  (final ref) => UrlLauncherAppStoreLauncher(
+    platform: ref.watch(appUpdateStorePlatformProvider),
+    installed: ref.watch(installedVersionRepositoryProvider),
+    appStoreId: ref.watch(appConfigProvider).appStoreId,
+  ),
 );

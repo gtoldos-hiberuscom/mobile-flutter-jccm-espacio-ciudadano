@@ -6,7 +6,7 @@ import 'package:jccm_espacio_ciudadano/features/app_update/2_presentation/provid
 /// DI composition for [CheckAppUpdateUsecase].
 final checkAppUpdateUsecaseProvider = Provider<CheckAppUpdateUsecase>(
   (final ref) => CheckAppUpdateUsecase(
-    manifests: ref.watch(appUpdateRepositoryProvider),
+    decisions: ref.watch(appUpdateRepositoryProvider),
     installedVersions: ref.watch(installedVersionRepositoryProvider),
     preferences: ref.watch(appUpdatePreferencesRepositoryProvider),
   ),

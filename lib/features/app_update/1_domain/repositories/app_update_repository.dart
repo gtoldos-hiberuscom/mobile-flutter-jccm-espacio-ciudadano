@@ -1,14 +1,15 @@
-import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/app_update_manifest.dart';
+import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/app_update_decision.dart';
+import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/app_version.dart';
 
-/// Fuente de verdad sobre qué versión de la app está publicada.
+/// Servidor de versiones: decide si la versión instalada se fuerza, se
+/// recomienda o no se toca.
 ///
-/// La implementación devuelve el manifiesto **ya resuelto para la plataforma
-/// en la que corre** y lanza ante cualquier manifiesto inválido; el use case
-/// convierte ese fallo en «no bloquear» (fail-open).
-///
-/// El transporte (URL, string remoto, Firebase Remote Config…) está por
-/// decidir: hoy lo cubre `StaticAppUpdateRepositoryImpl` en `3_data/` y la
-/// implementación definitiva sustituirá solo esa clase.
+/// La implementación conoce la plataforma en la que corre y lanza ante
+/// cualquier fallo de transporte o respuesta inválida; el use case convierte
+/// ese fallo en «no bloquear» (fail-open).
 abstract interface class AppUpdateRepository {
-  Future<AppUpdateManifest> fetchManifest();
+  Future<AppUpdateDecision> fetchDecision({
+    required final String applicationId,
+    required final AppVersion installedVersion,
+  });
 }

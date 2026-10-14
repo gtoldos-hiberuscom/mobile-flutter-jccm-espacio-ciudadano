@@ -18,6 +18,7 @@ class AppConfig {
         'SSO_REALM': String.fromEnvironment('SSO_REALM'),
         'SSO_BASE_URL': String.fromEnvironment('SSO_BASE_URL'),
         'SSO_OFFLINE_ACCESS': String.fromEnvironment('SSO_OFFLINE_ACCESS'),
+        'APP_STORE_ID': String.fromEnvironment('APP_STORE_ID'),
       };
 
   final Map<String, Object?> _json;
@@ -160,6 +161,11 @@ class AppConfig {
   /// not exist yet in production. Requesting it where it is not assigned
   /// breaks login, so it must never default to true.
   bool get ssoOfflineAccess => _getConfigValue('SSO_OFFLINE_ACCESS', _parseBool);
+
+  /// Numeric App Store Connect id of the app (Apple ID). The App Store page
+  /// is built from it (`apps.apple.com/app/id<appStoreId>`); unlike Google
+  /// Play, it cannot be derived from the bundle id.
+  String get appStoreId => _getConfigValue('APP_STORE_ID', (final v) => v as String);
 
   T _getConfigValue<T>(final String key, final T Function(Object) parser) {
     final value = _json[key];

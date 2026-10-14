@@ -4911,10 +4911,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appUpdateA11yDialog => 'App update notice';
-
-  @override
-  String get appUpdateRequiredBodyNoVersion => 'To keep using the app you need to install the latest version available. Earlier versions are no longer supported.';
-
-  @override
-  String get appUpdateRecommendedBodyNoVersion => 'A newer version with improvements and fixes is available. You can update now or later.';
 }

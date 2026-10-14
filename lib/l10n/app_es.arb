@@ -6397,13 +6397,5 @@
   "appUpdateA11yDialog": "Aviso de actualización de la aplicación",
   "@appUpdateA11yDialog": {
     "description": "Etiqueta accesible del aviso de actualización, anunciada por el lector de pantalla al aparecer."
-  },
-  "appUpdateRequiredBodyNoVersion": "Para seguir usando la aplicación necesitas instalar la última versión disponible. Las versiones anteriores ya no reciben soporte.",
-  "@appUpdateRequiredBodyNoVersion": {
-    "description": "Cuerpo del aviso de actualización obligatoria cuando la tienda no da un número de versión legible (Android solo expone el versionCode)."
-  },
-  "appUpdateRecommendedBodyNoVersion": "Hay una versión más reciente con mejoras y correcciones. Puedes actualizar ahora o hacerlo más tarde.",
-  "@appUpdateRecommendedBodyNoVersion": {
-    "description": "Cuerpo del aviso de actualización recomendada cuando la tienda no da un número de versión legible (Android solo expone el versionCode)."
   }
 }

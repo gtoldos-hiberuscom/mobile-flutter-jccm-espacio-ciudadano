@@ -118,12 +118,12 @@ class AppUpdateNotifier extends Notifier<AppUpdateState> {
     if (current is! AppUpdateVisible) {
       return;
     }
-    final opened = await ref.read(appStoreLauncherProvider).openStore(current.info.storeUrl);
+    final opened = await ref.read(appStoreLauncherProvider).openStore();
     if (!ref.mounted) {
       return;
     }
     if (opened) {
-      logger.i('[app_update] tienda abierta (host: ${current.info.storeUrl.host})');
+      logger.i('[app_update] tienda abierta');
     }
     final latest = state;
     if (latest is AppUpdateVisible && latest.storeOpenFailed != !opened) {

@@ -1,4 +1,5 @@
-import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/app_update_manifest.dart';
+import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/app_update_decision.dart';
+import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/app_version.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/1_domain/repositories/app_update_repository.dart';
 
 /// Donde no hay tienda (tests en escritorio, web): la comprobación falla y el
@@ -7,5 +8,8 @@ final class UnsupportedPlatformAppUpdateRepository implements AppUpdateRepositor
   const UnsupportedPlatformAppUpdateRepository();
 
   @override
-  Future<AppUpdateManifest> fetchManifest() async => throw UnsupportedError('app_update: no store for this platform');
+  Future<AppUpdateDecision> fetchDecision({
+    required final String applicationId,
+    required final AppVersion installedVersion,
+  }) async => throw UnsupportedError('app_update: no store for this platform');
 }

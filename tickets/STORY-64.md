@@ -81,12 +81,15 @@ Definir la base de analítica, trazas y monitoring sin exponer datos sensibles d
 
 - 2026-10-06T17:30:00+02:00 | by G.T. | **Transporte real del aviso de actualización** (decisión del 06/10: directamente de las tiendas, sin manifiesto propio ni etiquetas en la ficha). iOS: búsqueda de iTunes (`ItunesAppUpdateRepositoryImpl`), solo recomienda. Android: API oficial de actualizaciones in-app (`in_app_update` 5.0.0, `PlayAppUpdateRepositoryImpl`), en espacio de versionCode y sin número en el aviso; forzada solo con `updatePriority >= 4` (Google Play Developer API). Selector `APP_UPDATE_SOURCE` (`store` por defecto; `mock-*` para desarrollo) sustituye a `APP_UPDATE_MOCK`; versión ignorada por fuente. Evidencia de que rascar Play es inviable en `documentation/app_update_check.md`. La app no está publicada en ninguna tienda: el transporte real no se puede validar hasta publicar (iOS: release en App Store; Android: pista interna con firma de Play).
 
+- 2026-10-14T13:00:00+02:00 | by G.T. | **Cambio de enfoque: servidor de versiones propio en vez de tiendas** (decisión del 14/10). Back implementará `GET /api/v1/app-movil/actualizacion` (contrato en `documentation/api/app-version-api.yaml`): la app envía plataforma, id de aplicación y versión de marketing, y el servidor decide `NINGUNA` / `RECOMENDADA` / `FORZADA` con `versionPublicada` y `mensaje` opcional. Eliminados iTunes Lookup, `in_app_update` y la lista blanca de hosts; la URL de la tienda se construye en local (Play por package, App Store con la clave nueva `APP_STORE_ID` = 6795089236). Android pasa a comparar la versión de marketing. `APP_UPDATE_SOURCE` = `api` | `mock-*`. Pendiente de back: host y autenticación (hoy se usa `BASE_URL`, sin token).
+
 ### Change Log
 - 2026-04-21T22:41:38+02:00 | by Copilot | Initial file creation.
 - 2026-04-22T01:35:57+02:00 | by plan-manager | Ticket moved to In Progress — Sprint 1 execution started.
 - 2026-05-04T12:00:00+02:00 | by ticket-manager | Status transitioned from `In Progress` → `Done` after reconciling against merged implementation on `develop`.
 - 2026-10-05T18:30:00+02:00 | by G.T. | Alcance ampliado con el aviso de actualización de la app (transporte mock). Rama `feat/JCCMEC-63-aviso-actualizacion-app`. Estado sin cambios.
 - 2026-10-06T17:30:00+02:00 | by G.T. | Transporte real de tienda (iTunes Lookup / in_app_update) y selector `APP_UPDATE_SOURCE`. Misma rama. Estado sin cambios.
+- 2026-10-14T13:00:00+02:00 | by G.T. | Transporte de tiendas sustituido por el servidor de versiones (contrato OpenAPI para back). Misma rama. Estado sin cambios.
 
 ### Sprint 8 closure
 - 2026-08-25T12:00:00+02:00 | by plan-manager | Sprint 8 (SP-EC-APP-SQ3-08) closure: Telemetry verification with PII-redaction spot-check.

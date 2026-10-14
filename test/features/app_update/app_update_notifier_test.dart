@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/app/app_lifecycle_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/app_update_decision.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/app_version.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/store_platform.dart';
 import 'package:jccm_espacio_ciudadano/features/app_update/0_entity/update_policy.dart';
@@ -12,14 +13,14 @@ import 'package:jccm_espacio_ciudadano/features/app_update/2_presentation/provid
 import 'support/app_update_fakes.dart';
 
 void main() {
-  late FakeAppUpdateRepository manifests;
+  late FakeAppUpdateRepository decisions;
   late FakeInstalledVersionRepository installed;
   late FakeAppUpdatePreferencesRepository preferences;
   late FakeAppStoreLauncher launcher;
   late StreamController<void> resumed;
 
   setUp(() {
-    manifests = FakeAppUpdateRepository(manifest: buildManifest());
+    decisions = FakeAppUpdateRepository(decision: buildDecision());
     installed = FakeInstalledVersionRepository(const AppVersion(1, 0, 0));
     preferences = FakeAppUpdatePreferencesRepository();
     launcher = FakeAppStoreLauncher();
@@ -31,7 +32,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         appUpdateStorePlatformProvider.overrideWithValue(StorePlatform.ios),
-        appUpdateRepositoryProvider.overrideWithValue(manifests),
+        appUpdateRepositoryProvider.overrideWithValue(decisions),
         installedVersionRepositoryProvider.overrideWithValue(installed),
         appUpdatePreferencesRepositoryProvider.overrideWithValue(preferences),
         appStoreLauncherProvider.overrideWithValue(launcher),
@@ -59,11 +60,11 @@ void main() {
       final state = container.read(appUpdateProvider);
       expect(state, isA<AppUpdateVisible>());
       expect((state as AppUpdateVisible).info.policy, UpdatePolicy.recommended);
-      expect(manifests.calls, 1);
+      expect(decisions.calls, 1);
     });
 
     test('sin nada que avisar se queda oculto', () async {
-      installed.version = const AppVersion(2, 0, 0);
+      decisions.decision = const AppUpdateDecision.none();
       final container = buildContainer();
       await pumpEventQueue();
       expect(container.read(appUpdateProvider), isA<AppUpdateHidden>());
@@ -72,46 +73,46 @@ void main() {
     test('volver de segundo plano vuelve a comprobar', () async {
       final container = buildContainer();
       await pumpEventQueue();
-      expect(manifests.calls, 1);
+      expect(decisions.calls, 1);
 
       await resume();
 
-      expect(manifests.calls, 2);
+      expect(decisions.calls, 2);
       expect(container.read(appUpdateProvider), isA<AppUpdateVisible>());
     });
 
     test('las comprobaciones solapadas se descartan', () async {
-      manifests.gate = Completer<void>();
+      decisions.gate = Completer<void>();
       final container = buildContainer();
       await pumpEventQueue();
-      expect(manifests.calls, 1);
+      expect(decisions.calls, 1);
 
       resumed
         ..add(null)
         ..add(null);
       await pumpEventQueue();
-      expect(manifests.calls, 1);
+      expect(decisions.calls, 1);
 
-      manifests.gate!.complete();
+      decisions.gate!.complete();
       await pumpEventQueue();
       expect(container.read(appUpdateProvider), isA<AppUpdateVisible>());
-      expect(manifests.calls, 1);
+      expect(decisions.calls, 1);
     });
 
     test('un fallo no cambia el estado: oculto sigue oculto (fail-open)', () async {
-      manifests.error = const FormatException('manifiesto roto');
+      decisions.error = const FormatException('respuesta rota');
       final container = buildContainer();
       await pumpEventQueue();
       expect(container.read(appUpdateProvider), isA<AppUpdateHidden>());
     });
 
     test('un fallo no cambia el estado: una forzada visible sigue visible', () async {
-      installed.version = const AppVersion(0, 5, 0);
+      decisions.decision = buildDecision(policy: UpdatePolicy.forced);
       final container = buildContainer();
       await pumpEventQueue();
       expect((container.read(appUpdateProvider) as AppUpdateVisible).info.isForced, isTrue);
 
-      manifests.error = const FormatException('transporte caído');
+      decisions.error = const FormatException('transporte caído');
       await resume();
 
       expect((container.read(appUpdateProvider) as AppUpdateVisible).info.isForced, isTrue);
@@ -154,7 +155,7 @@ void main() {
       await pumpEventQueue();
       await container.read(appUpdateProvider.notifier).dismiss();
 
-      manifests.manifest = buildManifest(latest: '2.1.0');
+      decisions.decision = buildDecision(published: '2.1.0');
       await resume();
 
       final state = container.read(appUpdateProvider);
@@ -163,7 +164,7 @@ void main() {
     });
 
     test('una forzada ignora «Ahora no»', () async {
-      installed.version = const AppVersion(0, 5, 0);
+      decisions.decision = buildDecision(policy: UpdatePolicy.forced);
       final container = buildContainer();
       await pumpEventQueue();
 
@@ -179,7 +180,7 @@ void main() {
 
       await container.read(appUpdateProvider.notifier).openStore();
 
-      expect(launcher.opened, [playStoreUrl]);
+      expect(launcher.opened, 1);
       final state = container.read(appUpdateProvider) as AppUpdateVisible;
       expect(state.storeOpenFailed, isFalse);
     });
@@ -202,7 +203,7 @@ void main() {
       await pumpEventQueue();
       expect(container.read(appUpdateProvider), isA<AppUpdateVisible>());
 
-      manifests.manifest = buildManifest(latest: '1.0.0', min: '0.1.0');
+      decisions.decision = const AppUpdateDecision.none();
       await resume();
 
       expect(container.read(appUpdateProvider), isA<AppUpdateHidden>());
