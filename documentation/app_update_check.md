@@ -61,7 +61,7 @@ No viene del servidor: la construye `appStorePageUrl` (`3_data/url_launcher_app_
 
 ## Fuente de datos y cómo probar
 
-La clave `APP_UPDATE_SOURCE` (en los tres `config_*.json`, valor `api`) elige la fuente; una errata cae en `api`:
+La clave `APP_UPDATE_SOURCE` de los `config_*.json` elige la fuente; una errata cae en `api`. Producción lleva siempre `api` (lo exige un test); **preproducción lleva `mock-recommended` (15/10/2026) para que el aviso se vea mientras back no publique el endpoint: hay que volverla a `api` cuando exista**. Desarrollo lleva `api`.
 
 | Valor | Qué hace |
 |---|---|
