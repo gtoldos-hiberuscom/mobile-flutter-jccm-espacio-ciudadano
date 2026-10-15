@@ -106,7 +106,6 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
 
   Future<void> _showHealthInfoSheet(final BuildContext context) async {
     final l10n = AppLocalizations.of(context);
-    final config = ref.read(appConfigProvider);
     await AppInfoSheet.show(
       context: context,
       title: l10n.myDataHealthInfoSheetTitle,
@@ -115,7 +114,7 @@ class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
       actionLabel: l10n.myDataHealthInfoSheetMoreInformation,
       actionIcon: AppIcons.openInNew,
       actionIsExternalLink: true,
-      onActionPressed: () => _launchExternalUrl(context, config.sescamUrl),
+      onActionPressed: () => _launchExternalUrl(context, Uri.parse(_healthCentersUrl)),
     );
   }
 
@@ -520,7 +519,7 @@ class _AppointmentsContent extends StatelessWidget {
       return MyDataNoData(
         message: emptyMessage,
         actionLabel: l10n.myDataNoDataContact,
-        contactUrl: 'https://sanidad.castillalamancha.es/ciudadanos/listado-de-centros',
+        contactUrl: _healthCentersUrl,
         scrollable: false,
       );
     }
@@ -593,6 +592,8 @@ class _AppointmentsContent extends StatelessWidget {
         .toList(growable: false);
   }
 }
+
+const String _healthCentersUrl = 'https://sanidad.castillalamancha.es/ciudadanos/listado-de-centros';
 
 class _HealthErrorState extends StatelessWidget {
   const _HealthErrorState({required this.onRetry});

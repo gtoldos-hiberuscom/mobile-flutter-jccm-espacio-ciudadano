@@ -1450,13 +1450,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsPageTitle => 'Mis carnets digitales';
 
   @override
-  String get digitalCardsTypeFamiliaNumerosa => 'Familia Numerosa';
+  String get digitalCardsTypeFamiliaNumerosa => 'Carnet de familia numerosa';
 
   @override
   String get digitalCardsTypeJoven => 'Carnet Joven';
 
   @override
-  String get digitalCardsTypeDiscapacidad => 'Discapacidad';
+  String get digitalCardsTypeDiscapacidad => 'Carnet de discapacidad';
 
   @override
   String get digitalCardsIssueDate => 'Fecha de emisión';
@@ -2582,7 +2582,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHousingRealEstateServiceUnavailableMessage => 'El servicio de consulta de tus bienes inmuebles no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
 
   @override
-  String get myDataHealthAppointmentsServiceUnavailableMessage => 'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get myDataHealthAppointmentsServiceUnavailableMessage => 'El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.';
 
   @override
   String get familiaNumerosaRetry => 'Reintentar';
@@ -2668,7 +2668,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get discapacidadActionPkpass => 'Añadir a Wallet';
 
   @override
-  String get recommendationsTitle => 'Mis Recomendaciones';
+  String get recommendationsTitle => 'Para mí';
 
   @override
   String get recommendationsTabAll => 'Todo';
@@ -2695,7 +2695,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsLifeEventPrefix => 'Hecho vital:';
 
   @override
-  String get recommendationsAssociatedLifeEventsLabel => 'Hechos vitales asociados';
+  String get recommendationsAssociatedLifeEventsLabel => 'Hechos vitales relacionados';
 
   @override
   String get recommendationsStatusLabel => 'Estado';
@@ -3637,7 +3637,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportarDocumentacionSeleccionarButton => 'Seleccionar documentos';
 
   @override
-  String get gestionAportarDocumentacionRegistrarButton => 'Enviar documentos';
+  String get gestionAportarDocumentacionRegistrarButton => 'Enviar documentos aportados';
 
   @override
   String get gestionAportarDocumentacionMaxFilesError => 'No puedes aportar más de 5 ficheros.';
@@ -3712,10 +3712,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionRegistrosCardDateLabel => 'FECHA DE REGISTRO';
 
   @override
-  String get gestionRegistrosConsejeriaOrigenLabel => 'CONSERJERÍA DE ORIGEN';
+  String get gestionRegistrosConsejeriaOrigenLabel => 'CONSEJERÍA DE ORIGEN';
 
   @override
-  String get gestionRegistrosConsejeriaDestinoLabel => 'CONSERJERÍA DE DESTINO';
+  String get gestionRegistrosConsejeriaDestinoLabel => 'CONSEJERÍA DE DESTINO';
 
   @override
   String get gestionRegistrosDatosRegistroTitle => 'Datos del Registro';
@@ -3949,7 +3949,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mainTabAgenda => 'Agenda';
 
   @override
-  String get mainTabRecommendations => 'Recomendados';
+  String get mainTabRecommendations => 'Para mí';
 
   @override
   String get notFoundPageTitle => 'Página no encontrada';
@@ -4442,7 +4442,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeNewsSectionTitle => 'Mis novedades';
 
   @override
-  String get homeMyDataAccessesTitle => 'Accesos “Mis datos”';
+  String get homeMyDataAccessesTitle => 'Accesos Mis datos';
 
   @override
   String get homeNewsNotificationsTitle => 'Notificaciones';
@@ -4473,13 +4473,13 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get homeRecommendedProceduresTitle => 'Trámites recomendados';
+  String get homeRecommendedProceduresTitle => 'Para mí';
 
   @override
-  String get homeGoToRecommendationsButton => 'Ir a recomendaciones';
+  String get homeGoToRecommendationsButton => 'Mostrar todas mis recomendaciones';
 
   @override
-  String get homeCardsFabLabel => 'Carnets';
+  String get homeCardsFabLabel => 'Mis carnets';
 
   @override
   String get homeCardsFabShowAll => 'Mostrar todos';

@@ -2879,7 +2879,7 @@ abstract class AppLocalizations {
   /// Carnets — etiqueta del tipo familia numerosa.
   ///
   /// In es, this message translates to:
-  /// **'Familia Numerosa'**
+  /// **'Carnet de familia numerosa'**
   String get digitalCardsTypeFamiliaNumerosa;
 
   /// Carnets — etiqueta del tipo carnet joven.
@@ -2891,7 +2891,7 @@ abstract class AppLocalizations {
   /// Carnets — etiqueta del tipo discapacidad.
   ///
   /// In es, this message translates to:
-  /// **'Discapacidad'**
+  /// **'Carnet de discapacidad'**
   String get digitalCardsTypeDiscapacidad;
 
   /// No description provided for @digitalCardsIssueDate.
@@ -5033,7 +5033,7 @@ abstract class AppLocalizations {
   /// No description provided for @myDataHealthAppointmentsServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.'**
   String get myDataHealthAppointmentsServiceUnavailableMessage;
 
   /// Familia numerosa detail — retry button label.
@@ -5189,7 +5189,7 @@ abstract class AppLocalizations {
   /// Recommendations — app bar title for the citizen recommendations list.
   ///
   /// In es, this message translates to:
-  /// **'Mis Recomendaciones'**
+  /// **'Para mí'**
   String get recommendationsTitle;
 
   /// Recommendations — tab label for the unfiltered bucket.
@@ -5243,7 +5243,7 @@ abstract class AppLocalizations {
   /// Recommendations — label shown above the life events associated with a recommendation card.
   ///
   /// In es, this message translates to:
-  /// **'Hechos vitales asociados'**
+  /// **'Hechos vitales relacionados'**
   String get recommendationsAssociatedLifeEventsLabel;
 
   /// Recommendations — default label shown above the status of a recommendation card.
@@ -7019,7 +7019,7 @@ abstract class AppLocalizations {
   /// Botón para registrar los documentos aportados.
   ///
   /// In es, this message translates to:
-  /// **'Enviar documentos'**
+  /// **'Enviar documentos aportados'**
   String get gestionAportarDocumentacionRegistrarButton;
 
   /// Error al superar el número máximo de ficheros permitidos.
@@ -7169,13 +7169,13 @@ abstract class AppLocalizations {
   /// Etiqueta del campo consejería de origen (salidas).
   ///
   /// In es, this message translates to:
-  /// **'CONSERJERÍA DE ORIGEN'**
+  /// **'CONSEJERÍA DE ORIGEN'**
   String get gestionRegistrosConsejeriaOrigenLabel;
 
   /// Etiqueta del campo consejería de destino (entradas).
   ///
   /// In es, this message translates to:
-  /// **'CONSERJERÍA DE DESTINO'**
+  /// **'CONSEJERÍA DE DESTINO'**
   String get gestionRegistrosConsejeriaDestinoLabel;
 
   /// Título de la sección de datos del registro en el detalle.
@@ -7643,7 +7643,7 @@ abstract class AppLocalizations {
   /// Etiqueta de la pestaña Recomendados en la barra de navegación inferior.
   ///
   /// In es, this message translates to:
-  /// **'Recomendados'**
+  /// **'Para mí'**
   String get mainTabRecommendations;
 
   /// Título del AppBar de la pantalla 404.
@@ -8459,7 +8459,7 @@ abstract class AppLocalizations {
   /// Home — título de la sección de accesos rápidos a Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Accesos “Mis datos”'**
+  /// **'Accesos Mis datos'**
   String get homeMyDataAccessesTitle;
 
   /// Home — etiqueta de la tarjeta de notificaciones en Mis novedades.
@@ -8513,19 +8513,19 @@ abstract class AppLocalizations {
   /// Home — título de la sección de trámites recomendados.
   ///
   /// In es, this message translates to:
-  /// **'Trámites recomendados'**
+  /// **'Para mí'**
   String get homeRecommendedProceduresTitle;
 
   /// Home — botón que navega a la pantalla de recomendaciones.
   ///
   /// In es, this message translates to:
-  /// **'Ir a recomendaciones'**
+  /// **'Mostrar todas mis recomendaciones'**
   String get homeGoToRecommendationsButton;
 
   /// Home — etiqueta del botón flotante de carnets digitales.
   ///
   /// In es, this message translates to:
-  /// **'Carnets'**
+  /// **'Mis carnets'**
   String get homeCardsFabLabel;
 
   /// Home — acción del FAB de carnets que abre el catálogo completo.

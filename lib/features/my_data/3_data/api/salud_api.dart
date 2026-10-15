@@ -40,7 +40,10 @@ final class SaludApi {
   }
 
   Future<Map<String, dynamic>?> getPrimaryCarePendingAppointments({required final String citizenId}) {
-    return _get(_path(citizenId, 'primaria-citas-pendientes'));
+    return _get(
+      _path(citizenId, 'primaria-citas-pendientes'),
+      mapCipMissingError: true,
+    );
   }
 
   Future<Map<String, dynamic>?> getPrimaryCarePastAppointments({
@@ -68,6 +71,7 @@ final class SaludApi {
   Future<Map<String, dynamic>?> _get(
     final String path, {
     final Map<String, Object?>? queryParameters,
+    final bool mapCipMissingError = false,
   }) async {
     // Lo que no acepta `isHandledIntermediacionStatus` sale como `DioException`,
     // ya mapeada a `AppError` por `ErrorInterceptor`: el 401 tras un refresco
@@ -81,7 +85,11 @@ final class SaludApi {
         options: Options(validateStatus: isHandledIntermediacionStatus),
       );
     } on DioException catch (error) {
-      if (_containsErrorCode(error.response?.data, '3031')) {
+      // El mismo 3031 que en las citas pendientes significa «sin CIP» puede
+      // venir de `primaria-citas-pasadas` cuando la operación no existe o
+      // está caída en SESCAM. Solo las pendientes pueden clasificarlo como
+      // falta de CIP; las pasadas deben llegar como fallo de servicio.
+      if (mapCipMissingError && _containsErrorCode(error.response?.data, '3031')) {
         throw const MyDataHealthCipMissing();
       }
       rethrow;

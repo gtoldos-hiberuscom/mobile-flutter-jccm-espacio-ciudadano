@@ -31,6 +31,13 @@ void main() {
   testWidgets('resume los datos como información y no como botón', (final tester) async {
     await tester.pumpWidget(buildApp(card(onDownload: () {})));
 
+    expect(find.text('Número de carnet'), findsOneWidget);
+    expect(find.text('FN-123456789'), findsOneWidget);
+    expect(find.text('Fecha de emisión'), findsOneWidget);
+    expect(find.text('1 ene 2026'), findsOneWidget);
+    expect(find.text('Fecha de caducidad'), findsOneWidget);
+    expect(find.text('31 dic 2026'), findsOneWidget);
+
     final data = find.semantics
         .byLabel(
           'Familia numerosa. Número de carnet: FN-123456789. Fecha de emisión: 1 ene 2026. Fecha de caducidad: 31 dic 2026. Definitivo',
@@ -96,6 +103,23 @@ void main() {
 
     expect(find.text('Youth card'), findsOneWidget);
     expect(find.semantics.byLabel('Youth card. Card number: Y-15'), findsOneWidget);
+  });
+
+  testWidgets('reduce un número de carnet largo antes de dividirlo en dos líneas', (final tester) async {
+    const number = '2445447E-R955-X239-U642-X865';
+    await tester.pumpWidget(
+      buildApp(
+        const AppDigitalCard(
+          title: 'Carnet Joven',
+          number: number,
+          downloadLabel: 'Descargar',
+        ),
+      ),
+    );
+
+    final value = tester.widget<Text>(find.text(number));
+    expect(value.maxLines, 1);
+    expect(value.softWrap, isFalse);
   });
 
   testWidgets('crece sin errores con texto al 200 por ciento', (final tester) async {

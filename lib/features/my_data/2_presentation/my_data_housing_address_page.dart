@@ -123,8 +123,6 @@ class _AddressEmpty extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     return MyDataNoData(
       message: l10n.myDataHousingAddressNoDataMessage,
-      actionLabel: l10n.myDataNoDataOfficeContacts,
-      contactUrl: 'https://www.ine.es/',
     );
   }
 }
