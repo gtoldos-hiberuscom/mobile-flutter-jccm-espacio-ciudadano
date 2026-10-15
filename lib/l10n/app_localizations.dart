@@ -9745,6 +9745,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Activar'**
   String get biometricAccessDialogConfirm;
+
+  /// Título del aviso a pantalla completa cuando la versión instalada ya no tiene soporte y es obligatorio actualizar.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualización necesaria'**
+  String get appUpdateRequiredTitle;
+
+  /// Cuerpo del aviso de actualización obligatoria.
+  ///
+  /// In es, this message translates to:
+  /// **'Para seguir usando la aplicación necesitas instalar la versión {version}. Las versiones anteriores ya no reciben soporte.'**
+  String appUpdateRequiredBody(String version);
+
+  /// Título del aviso cuando existe una versión más nueva pero actualizar es opcional.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay una nueva versión disponible'**
+  String get appUpdateRecommendedTitle;
+
+  /// Cuerpo del aviso de actualización recomendada.
+  ///
+  /// In es, this message translates to:
+  /// **'La versión {version} incluye mejoras y correcciones. Puedes actualizar ahora o hacerlo más tarde.'**
+  String appUpdateRecommendedBody(String version);
+
+  /// Botón principal del aviso de actualización: abre la ficha de la app en la tienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get appUpdateAction;
+
+  /// Botón secundario del aviso de actualización recomendada: lo cierra y no vuelve a avisar de esa versión.
+  ///
+  /// In es, this message translates to:
+  /// **'Ahora no'**
+  String get appUpdateLater;
+
+  /// Error mostrado dentro del aviso cuando el sistema no consigue abrir la tienda.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido abrir la tienda de aplicaciones. Inténtalo de nuevo más tarde.'**
+  String get appUpdateStoreUnavailable;
+
+  /// Etiqueta accesible del aviso de actualización, anunciada por el lector de pantalla al aparecer.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso de actualización de la aplicación'**
+  String get appUpdateA11yDialog;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

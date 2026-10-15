@@ -26,20 +26,47 @@ void main() {
       expect(dio.interceptors.whereType<EmojiDioLogger>().single.verboseBodies, isTrue);
     });
   });
+
+  group('buildPublicDioClient — sin sesión', () {
+    Dio build({required final bool debugMode}) => buildPublicDioClient(
+      config: _config(debugMode: debugMode),
+      timeout: const Duration(seconds: 5),
+    );
+
+    test('mismas trazas que el cliente principal', () {
+      expect(build(debugMode: false).interceptors.whereType<CurlLoggerDioInterceptor>(), isEmpty);
+      expect(build(debugMode: false).interceptors.whereType<EmojiDioLogger>().single.verboseBodies, isFalse);
+      expect(build(debugMode: true).interceptors.whereType<BodySafeCurlLoggerDioInterceptor>(), hasLength(1));
+      expect(build(debugMode: true).interceptors.whereType<EmojiDioLogger>().single.verboseBodies, isTrue);
+    });
+
+    test('sin autenticación ni traducción de errores, con el host, cabeceras y plazo pedidos', () {
+      final dio = build(debugMode: true);
+      expect(dio.interceptors.whereType<AuthInterceptor>(), isEmpty);
+      expect(dio.interceptors.whereType<AuthRefreshInterceptor>(), isEmpty);
+      expect(dio.interceptors.whereType<ErrorInterceptor>(), isEmpty);
+      expect(dio.options.baseUrl, 'https://example.test');
+      expect(dio.options.headers['Accept'], 'application/json');
+      expect(dio.options.connectTimeout, const Duration(seconds: 5));
+      expect(dio.options.receiveTimeout, const Duration(seconds: 5));
+    });
+  });
 }
 
 Dio _buildDio({required final bool debugMode}) => buildDioClient(
-  config: AppConfig.fromMap({
-    'APP_FLAVOR': debugMode ? 'development' : 'production',
-    'APP_NAME': 'Espacio Ciudadano',
-    'BASE_URL': 'https://example.test',
-    'TIMEOUT': '20',
-    'DEBUG_MODE': debugMode.toString(),
-    'SSO_CLIENT_ID': 'client',
-    'SSO_REDIRECT_URI': 'app://callback',
-    'SSO_REALM': 'realm',
-    'SSO_BASE_URL': 'https://sso.example.test',
-  }),
+  config: _config(debugMode: debugMode),
   tokenGetter: () => null,
   refreshSession: ({final bool force = false}) async => false,
 );
+
+AppConfig _config({required final bool debugMode}) => AppConfig.fromMap({
+  'APP_FLAVOR': debugMode ? 'development' : 'production',
+  'APP_NAME': 'Espacio Ciudadano',
+  'BASE_URL': 'https://example.test',
+  'TIMEOUT': '20',
+  'DEBUG_MODE': debugMode.toString(),
+  'SSO_CLIENT_ID': 'client',
+  'SSO_REDIRECT_URI': 'app://callback',
+  'SSO_REALM': 'realm',
+  'SSO_BASE_URL': 'https://sso.example.test',
+});

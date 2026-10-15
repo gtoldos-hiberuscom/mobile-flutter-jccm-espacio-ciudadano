@@ -32,6 +32,7 @@ dependencies:
   intl: any
   logger: ^2.7.0
   meta: ^1.16.0
+  package_info_plus: ^9.0.1
   shared_preferences: ^2.5.5
   url_launcher: ^6.3.2
 dev_dependencies:

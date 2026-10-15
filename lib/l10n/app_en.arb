@@ -6569,5 +6569,47 @@
   "biometricAccessDialogTitle": "Would you like to enable quick access with fingerprint or facial recognition?",
   "biometricAccessDialogDescription": "You will be able to access the application more quickly without having to authenticate every time. To protect your data, we will ask you to authenticate again periodically.",
   "biometricAccessDialogCancel": "Complete later",
-  "biometricAccessDialogConfirm": "Enable"
+  "biometricAccessDialogConfirm": "Enable",
+  "appUpdateRequiredTitle": "Update required",
+  "@appUpdateRequiredTitle": {
+    "description": "Título del aviso a pantalla completa cuando la versión instalada ya no tiene soporte y es obligatorio actualizar."
+  },
+  "appUpdateRequiredBody": "To keep using the app you need to install version {version}. Earlier versions are no longer supported.",
+  "@appUpdateRequiredBody": {
+    "description": "Cuerpo del aviso de actualización obligatoria.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateRecommendedTitle": "A new version is available",
+  "@appUpdateRecommendedTitle": {
+    "description": "Título del aviso cuando existe una versión más nueva pero actualizar es opcional."
+  },
+  "appUpdateRecommendedBody": "Version {version} includes improvements and fixes. You can update now or later.",
+  "@appUpdateRecommendedBody": {
+    "description": "Cuerpo del aviso de actualización recomendada.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateAction": "Update",
+  "@appUpdateAction": {
+    "description": "Botón principal del aviso de actualización: abre la ficha de la app en la tienda."
+  },
+  "appUpdateLater": "Not now",
+  "@appUpdateLater": {
+    "description": "Botón secundario del aviso de actualización recomendada: lo cierra y no vuelve a avisar de esa versión."
+  },
+  "appUpdateStoreUnavailable": "The app store could not be opened. Please try again later.",
+  "@appUpdateStoreUnavailable": {
+    "description": "Error mostrado dentro del aviso cuando el sistema no consigue abrir la tienda."
+  },
+  "appUpdateA11yDialog": "App update notice",
+  "@appUpdateA11yDialog": {
+    "description": "Etiqueta accesible del aviso de actualización, anunciada por el lector de pantalla al aparecer."
+  }
 }

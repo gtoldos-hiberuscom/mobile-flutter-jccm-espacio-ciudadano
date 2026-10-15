@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/app/app_lifecycle_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/connectivity/connectivity_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
@@ -63,7 +64,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         connectivityRawStreamProvider.overrideWith((final ref) => Stream.value([ConnectivityResult.wifi])),
-        appVueltaDeSegundoPlanoProvider.overrideWithValue(const Stream<void>.empty()),
+        appResumedFromBackgroundProvider.overrideWithValue(const Stream<void>.empty()),
         citizenEndpointIdsProvider.overrideWithValue((numDocumento: '12345678Z', idAgente: 'agente-1')),
         jwtClaimsProvider.overrideWith(
           () => _StubJwtClaimsNotifier(

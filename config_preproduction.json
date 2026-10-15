@@ -5,6 +5,8 @@
   "TIMEOUT": "20",
   "DEBUG_MODE": "true",
   "LOG_REDACTION_OFF": "true",
+  "APP_UPDATE_SOURCE": "mock-recommended",
+  "APP_STORE_ID": "6795089236",
   "SSO_BASE_URL": "https://sso-cerbero-pre.cm-pre.jccm.es/auth",
   "SSO_OFFLINE_ACCESS": "true",
   "SSO_REALM": "usuarios",

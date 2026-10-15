@@ -19,6 +19,7 @@ class AppConfig {
         'SSO_BASE_URL': String.fromEnvironment('SSO_BASE_URL'),
         'SSO_OFFLINE_ACCESS': String.fromEnvironment('SSO_OFFLINE_ACCESS'),
         'SSO_STEP_UP_PARAMS': String.fromEnvironment('SSO_STEP_UP_PARAMS'),
+        'APP_STORE_ID': String.fromEnvironment('APP_STORE_ID'),
       };
 
   final Map<String, Object?> _json;
@@ -196,6 +197,11 @@ class AppConfig {
     return Map.unmodifiable(parsed);
   }
 
+  /// Numeric App Store Connect id of the app (Apple ID). The App Store page
+  /// is built from it (`apps.apple.com/app/id<appStoreId>`); unlike Google
+  /// Play, it cannot be derived from the bundle id.
+  String get appStoreId => _getConfigValue('APP_STORE_ID', _parseAppStoreId);
+
   T _getConfigValue<T>(final String key, final T Function(Object) parser) {
     final value = _json[key];
     if (value == null) {
@@ -212,6 +218,12 @@ class AppConfig {
     final int intValue => intValue,
     final String stringValue => int.parse(stringValue),
     _ => throw FormatException('Expected int-compatible value: $value'),
+  };
+
+  /// Only digits: an empty or mistyped id would open a broken store page.
+  String _parseAppStoreId(final Object value) => switch (value) {
+    final String id when RegExp(r'^[0-9]+$').hasMatch(id) => id,
+    _ => throw FormatException('Expected a numeric App Store id: $value'),
   };
 
   bool _parseBool(final Object value) => switch (value) {

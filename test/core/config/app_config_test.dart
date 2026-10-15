@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
 
@@ -89,6 +92,36 @@ void main() {
     expect(_config('development').webSupportFormUrl, Uri.parse('https://espaciociudadano-uat.jccm.es/soporte'));
     expect(_config('preproduction').webSupportFormUrl, Uri.parse('https://espaciociudadano-pre.jccm.es/soporte'));
     expect(_config('production').webSupportFormUrl, Uri.parse('https://espaciociudadano.jccm.es/soporte'));
+  });
+
+  group('APP_STORE_ID', () {
+    test('accepts the numeric App Store Connect id', () {
+      expect(const AppConfig.fromMap({'APP_STORE_ID': '6795089236'}).appStoreId, '6795089236');
+    });
+
+    test('rejects a missing, empty or non-numeric id', () {
+      expect(() => const AppConfig.fromMap({}).appStoreId, throwsException);
+      expect(() => const AppConfig.fromMap({'APP_STORE_ID': ''}).appStoreId, throwsException);
+      expect(() => const AppConfig.fromMap({'APP_STORE_ID': 'id6795089236'}).appStoreId, throwsException);
+    });
+  });
+
+  group('config_*.json', () {
+    Map<String, Object?> read(final String file) => (jsonDecode(File(file).readAsStringSync()) as Map<Object?, Object?>).cast<String, Object?>();
+
+    for (final file in ['config_development.json', 'config_preproduction.json', 'config_production.json']) {
+      test('$file has a known update source and a valid App Store id', () {
+        final json = read(file);
+        // An unknown value silently falls back to "api" at runtime: catch typos here.
+        expect(json['APP_UPDATE_SOURCE'], isIn(['api', 'mock-forced', 'mock-recommended', 'mock-none']));
+        expect(AppConfig.fromMap(json).appStoreId, '6795089236');
+      });
+    }
+
+    test('production asks the real version server', () {
+      // A mock source in production would force or hide updates for every citizen.
+      expect(read('config_production.json')['APP_UPDATE_SOURCE'], 'api');
+    });
   });
 }
 
