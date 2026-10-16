@@ -62,4 +62,37 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('al pasar a tipo frase respeta siglas y códigos', (final tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        locale: Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: AppAgendaInfoCard(
+            type: AppAgendaInfoCardType.health,
+            day: '19',
+            weekday: 'lunes',
+            time: '14:06',
+            title: 'VACUNA GRIPE',
+            primaryText: 'CAMPO CRIPTANA MOLINO',
+            secondaryText: 'DR. JOSÉ MANUEL FERNÁNDEZ',
+            details: [
+              (label: 'Centro', value: 'C.S. PALOMAREJOS_PREN'),
+              (label: 'Sala', value: 'CONSULTAS B-203'),
+              (label: 'Organismo emisor', value: 'DELEGACIÓN DE HACIENDA, AAPP Y TD'),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Vacuna gripe'), findsOneWidget);
+    expect(find.text('Campo criptana molino'), findsOneWidget);
+    expect(find.text('Dr. josé manuel fernández'), findsOneWidget);
+    expect(find.text('Centro: C.S. palomarejos_pren'), findsOneWidget);
+    expect(find.text('Sala: Consultas B-203'), findsOneWidget);
+    expect(find.text('Organismo emisor: Delegación de hacienda, aapp y TD'), findsOneWidget);
+  });
 }
