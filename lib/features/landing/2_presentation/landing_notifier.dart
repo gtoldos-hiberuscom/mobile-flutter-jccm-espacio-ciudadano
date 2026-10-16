@@ -1,8 +1,10 @@
 import 'dart:async' show TimeoutException;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/demo/demo_session.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
@@ -18,6 +20,7 @@ final class LandingState {
     this.error,
     this.loginSuccess = false,
     this.sessionExpired = false,
+    this.demoBlockedByPersistedSession = false,
   });
 
   final bool isLoggingIn;
@@ -32,6 +35,11 @@ final class LandingState {
   /// cerrado. Sin esto el guard devolvía al ciudadano a la landing sin decirle
   /// por qué, y desde su punto de vista la app simplemente le echaba.
   final bool sessionExpired;
+
+  /// Señal de un solo uso: se pidió entrar en la demostración con una sesión
+  /// real guardada en el dispositivo, y no se ha entrado. La landing lo
+  /// convierte en un aviso (ver [LandingNotifier.enterDemoMode]).
+  final bool demoBlockedByPersistedSession;
 }
 
 /// Owns the login flow state for the public landing screen.
@@ -215,6 +223,82 @@ class LandingNotifier extends Notifier<LandingState> {
             error: AuthException.unexpected(cause: cause),
           );
         }
+    }
+  }
+
+  /// Entra en el **modo demostración** (revisores de las tiendas) sin pasar
+  /// por Cl@ve: arranca en memoria una sesión con la identidad ficticia de
+  /// [DemoSession]. A partir de ahí la app no distingue: los claims demo hacen
+  /// que `authRepositoryProvider` y `dioProvider` cambien de implementación
+  /// solos, y el `SessionGuard` aplica el gate de consentimiento como a
+  /// cualquier ciudadano.
+  ///
+  /// No pasa por [login] a propósito: en este instante los claims todavía no
+  /// son demo y el repositorio sería el real (abriría Cl@ve).
+  ///
+  /// Con una sesión real guardada en el dispositivo (acceso rápido) la demo
+  /// y la sesión no pueden convivir: el gate de consentimiento, al ver «sesión
+  /// guardada + consentimiento no aceptado» para la identidad demo, borraría
+  /// del almacén la sesión del ciudadano sin avisar. Por eso, salvo que quien
+  /// entra haya pedido expresamente cerrarla ([closePersistedSession], tras
+  /// ver el aviso de la hoja de confirmación), **no se entra** y se señala.
+  /// En el dispositivo de un revisor nunca hay una sesión guardada.
+  Future<void> enterDemoMode({final bool closePersistedSession = false}) async {
+    if (state.isLoggingIn) {
+      return;
+    }
+    final sessionController = ref.read(authSessionControllerProvider);
+    if (await sessionController.hasPersistedSession()) {
+      if (!ref.mounted) {
+        return;
+      }
+      if (!closePersistedSession) {
+        state = const LandingState(demoBlockedByPersistedSession: true);
+        return;
+      }
+      await _closePersistedSession(sessionController);
+    }
+    if (!ref.mounted) {
+      return;
+    }
+
+    // Cada demostración empieza como un ciudadano nuevo: lo que una anterior
+    // dejara en el dispositivo (consentimiento, onboarding, oferta de acceso
+    // rápido) cambiaría lo que ve el revisor.
+    await DemoSession.forgetLocalTraces(ref.read(appStorageProvider));
+    if (!ref.mounted) {
+      return;
+    }
+
+    ref.read(authSessionControllerProvider).startInMemory(DemoSession.tokenResponse(), claims: DemoSession.claims());
+    ref.invalidate(consentProvider(DemoSession.idAgente));
+    state = const LandingState(loginSuccess: true);
+  }
+
+  /// Si hay una sesión real guardada en el dispositivo. La landing lo consulta
+  /// antes de abrir la hoja de la demostración, para avisar de que entrar la
+  /// cerrará.
+  Future<bool> hasPersistedSession() => ref.read(authSessionControllerProvider).hasPersistedSession();
+
+  /// Cierra la sesión guardada igual que lo haría «Cerrar sesión»: se carga en
+  /// memoria sin pedir la huella (access e id token; la credencial de larga
+  /// vida se queda fuera), se termina en Cerbero con el `id_token` si lo hay
+  /// —si no, el siguiente login de Cl@ve se encontraría la sesión anterior en
+  /// el navegador (JCCMEC-224/228)— y se limpia el almacén. La sesión offline
+  /// no se revoca: su credencial está detrás de la huella, como en cualquier
+  /// cierre de una sesión restaurada que nunca llegó a refrescar.
+  Future<void> _closePersistedSession(final AuthSessionController sessionController) async {
+    final persisted = await sessionController.hydrateFromStorage();
+    if (!ref.mounted) {
+      return;
+    }
+    try {
+      final idToken = persisted?.idToken ?? '';
+      if (idToken.isNotEmpty) {
+        await ref.read(logoutUseCaseProvider).call(idToken: idToken);
+      }
+    } finally {
+      await sessionController.clear();
     }
   }
 

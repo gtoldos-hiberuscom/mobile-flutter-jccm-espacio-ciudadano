@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_alert.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_bullet_list.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_navigation.dart';
@@ -11,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/clave_login_veil.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/demo_mode_confirmation_sheet.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// "Saber más sobre Espacio Ciudadano" screen — Figma `44469:24782`.
@@ -28,6 +30,17 @@ class LandingAboutPage extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final landingState = ref.watch(landingProvider);
+
+    // La demostración se abre desde aquí: si no pudo entrar por una sesión
+    // guardada (ver `LandingNotifier.enterDemoMode`), el aviso se da en esta
+    // pantalla, que es la que el ciudadano tiene delante.
+    ref.listen<LandingState>(landingProvider, (final previous, final next) {
+      if (!next.demoBlockedByPersistedSession) {
+        return;
+      }
+      AppAlertSnackbar.show(context, message: l10n.demoPersistedSessionNotice, severity: AppAlertSeverity.warning);
+      ref.read(landingProvider.notifier).clearError();
+    });
 
     // Mismo velo que en la home pública: desde aquí también se accede con
     // Cl@ve, y sin él se pulsaba "Acceder" y no ocurría nada visible.
@@ -168,6 +181,15 @@ class LandingAboutPage extends ConsumerWidget {
                   isLoading: landingState.isLoggingIn,
                   onPressed: landingState.isLoggingIn ? null : () => ref.read(landingProvider.notifier).login(),
                 ),
+                // Ghost — «Acceder a demostración» (revisores de las tiendas).
+                // Aquí y no en la home pública: visible y localizable con las
+                // notas de revisión, sin competir con el acceso con Cl@ve.
+                AppButton(
+                  label: l10n.landingDemoButton,
+                  hierarchy: AppButtonHierarchy.ghost,
+                  icon: const Icon(Icons.visibility_outlined, size: AppDimensions.iconMedium),
+                  onPressed: landingState.isLoggingIn ? null : () => _openDemoConfirmation(context, ref),
+                ),
               ],
             ),
           ],
@@ -175,4 +197,20 @@ class LandingAboutPage extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Abre la hoja de la demostración y, si el ciudadano confirma con el código,
+/// entra. Se consulta antes si hay una sesión guardada: entrar la cierra, y
+/// eso hay que decirlo antes, no después.
+Future<void> _openDemoConfirmation(final BuildContext context, final WidgetRef ref) async {
+  final notifier = ref.read(landingProvider.notifier);
+  final hasPersistedSession = await notifier.hasPersistedSession();
+  if (!context.mounted) {
+    return;
+  }
+  final confirmed = await DemoModeConfirmationSheet.show(context, hasPersistedSession: hasPersistedSession);
+  if (!context.mounted || !confirmed) {
+    return;
+  }
+  await notifier.enterDemoMode(closePersistedSession: hasPersistedSession);
 }

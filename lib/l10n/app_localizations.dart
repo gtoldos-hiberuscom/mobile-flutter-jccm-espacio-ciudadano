@@ -146,6 +146,72 @@ abstract class AppLocalizations {
   /// **'Ayuda y contacto'**
   String get landingHelpLink;
 
+  /// Enlace discreto de la pantalla inicial que abre la hoja de confirmación del modo demostración (para revisores de las tiendas y curiosos): la app con datos ficticios, sin Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceder a demostración'**
+  String get landingDemoButton;
+
+  /// Título de la hoja de confirmación previa a entrar en el modo demostración.
+  ///
+  /// In es, this message translates to:
+  /// **'Modo demostración'**
+  String get demoConfirmTitle;
+
+  /// Cuerpo de la hoja de confirmación del modo demostración: explica que los datos son ficticios y que nada se envía.
+  ///
+  /// In es, this message translates to:
+  /// **'Verás la aplicación con los datos ficticios de una persona inventada, sin identificarte con Cl@ve. Nada de lo que hagas se envía ni se guarda en ningún servicio real. Para salir, cierra sesión.'**
+  String get demoConfirmBody;
+
+  /// Botón principal de la hoja de confirmación del modo demostración.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrar en la demostración'**
+  String get demoConfirmEnter;
+
+  /// Botón secundario de la hoja de confirmación del modo demostración; cierra la hoja sin entrar.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get demoConfirmBack;
+
+  /// Párrafo adicional de la hoja de confirmación del modo demostración cuando hay una sesión real guardada en el dispositivo (acceso rápido): avisa de que entrar la cerrará.
+  ///
+  /// In es, this message translates to:
+  /// **'En este dispositivo hay una sesión guardada con acceso rápido. Para entrar en la demostración se cerrará primero: cuando quieras volver a tu espacio tendrás que identificarte de nuevo con Cl@ve.'**
+  String get demoConfirmPersistedSessionBody;
+
+  /// Botón principal de la hoja de confirmación del modo demostración cuando hay una sesión guardada: la cierra y entra en la demostración.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar la sesión guardada y entrar'**
+  String get demoConfirmCloseSessionAndEnter;
+
+  /// Etiqueta del campo de código de la hoja de confirmación del modo demostración. El código se facilita en las notas de revisión de las tiendas.
+  ///
+  /// In es, this message translates to:
+  /// **'Código de acceso'**
+  String get demoConfirmCodeLabel;
+
+  /// Error inline del campo de código de la hoja del modo demostración cuando el código no coincide.
+  ///
+  /// In es, this message translates to:
+  /// **'Código incorrecto. Comprueba el código de acceso a la demostración.'**
+  String get demoConfirmCodeError;
+
+  /// Texto de la cinta diagonal que se pinta sobre toda la app mientras la sesión es la de demostración. Muy corto: va en una cinta.
+  ///
+  /// In es, this message translates to:
+  /// **'DEMO'**
+  String get demoBannerLabel;
+
+  /// Aviso al intentar entrar en la demostración con una sesión real guardada en el dispositivo (acceso rápido): hay que cerrarla antes.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay una sesión guardada en este dispositivo. Entra con tu acceso rápido y cierra sesión antes de usar la demostración.'**
+  String get demoPersistedSessionNotice;
+
   /// Título del AppBar de la pantalla de ayuda con el acceso.
   ///
   /// In es, this message translates to:

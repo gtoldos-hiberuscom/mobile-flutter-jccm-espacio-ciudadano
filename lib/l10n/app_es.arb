@@ -41,6 +41,50 @@
   "@landingHelpLink": {
     "description": "Enlace de texto que navega a la pantalla de ayuda con el acceso."
   },
+  "landingDemoButton": "Acceder a demostración",
+  "@landingDemoButton": {
+    "description": "Enlace discreto de la pantalla inicial que abre la hoja de confirmación del modo demostración (para revisores de las tiendas y curiosos): la app con datos ficticios, sin Cl@ve."
+  },
+  "demoConfirmTitle": "Modo demostración",
+  "@demoConfirmTitle": {
+    "description": "Título de la hoja de confirmación previa a entrar en el modo demostración."
+  },
+  "demoConfirmBody": "Verás la aplicación con los datos ficticios de una persona inventada, sin identificarte con Cl@ve. Nada de lo que hagas se envía ni se guarda en ningún servicio real. Para salir, cierra sesión.",
+  "@demoConfirmBody": {
+    "description": "Cuerpo de la hoja de confirmación del modo demostración: explica que los datos son ficticios y que nada se envía."
+  },
+  "demoConfirmEnter": "Entrar en la demostración",
+  "@demoConfirmEnter": {
+    "description": "Botón principal de la hoja de confirmación del modo demostración."
+  },
+  "demoConfirmBack": "Volver",
+  "@demoConfirmBack": {
+    "description": "Botón secundario de la hoja de confirmación del modo demostración; cierra la hoja sin entrar."
+  },
+  "demoConfirmPersistedSessionBody": "En este dispositivo hay una sesión guardada con acceso rápido. Para entrar en la demostración se cerrará primero: cuando quieras volver a tu espacio tendrás que identificarte de nuevo con Cl@ve.",
+  "@demoConfirmPersistedSessionBody": {
+    "description": "Párrafo adicional de la hoja de confirmación del modo demostración cuando hay una sesión real guardada en el dispositivo (acceso rápido): avisa de que entrar la cerrará."
+  },
+  "demoConfirmCloseSessionAndEnter": "Cerrar la sesión guardada y entrar",
+  "@demoConfirmCloseSessionAndEnter": {
+    "description": "Botón principal de la hoja de confirmación del modo demostración cuando hay una sesión guardada: la cierra y entra en la demostración."
+  },
+  "demoConfirmCodeLabel": "Código de acceso",
+  "@demoConfirmCodeLabel": {
+    "description": "Etiqueta del campo de código de la hoja de confirmación del modo demostración. El código se facilita en las notas de revisión de las tiendas."
+  },
+  "demoConfirmCodeError": "Código incorrecto. Comprueba el código de acceso a la demostración.",
+  "@demoConfirmCodeError": {
+    "description": "Error inline del campo de código de la hoja del modo demostración cuando el código no coincide."
+  },
+  "demoBannerLabel": "DEMO",
+  "@demoBannerLabel": {
+    "description": "Texto de la cinta diagonal que se pinta sobre toda la app mientras la sesión es la de demostración. Muy corto: va en una cinta."
+  },
+  "demoPersistedSessionNotice": "Hay una sesión guardada en este dispositivo. Entra con tu acceso rápido y cierra sesión antes de usar la demostración.",
+  "@demoPersistedSessionNotice": {
+    "description": "Aviso al intentar entrar en la demostración con una sesión real guardada en el dispositivo (acceso rápido): hay que cerrarla antes."
+  },
   "landingHelpPageTitle": "Cómo acceder",
   "@landingHelpPageTitle": {
     "description": "Título del AppBar de la pantalla de ayuda con el acceso."

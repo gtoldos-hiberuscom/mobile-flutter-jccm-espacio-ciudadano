@@ -38,6 +38,39 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingHelpLink => 'Ayuda y contacto';
 
   @override
+  String get landingDemoButton => 'Acceder a demostración';
+
+  @override
+  String get demoConfirmTitle => 'Modo demostración';
+
+  @override
+  String get demoConfirmBody => 'Verás la aplicación con los datos ficticios de una persona inventada, sin identificarte con Cl@ve. Nada de lo que hagas se envía ni se guarda en ningún servicio real. Para salir, cierra sesión.';
+
+  @override
+  String get demoConfirmEnter => 'Entrar en la demostración';
+
+  @override
+  String get demoConfirmBack => 'Volver';
+
+  @override
+  String get demoConfirmPersistedSessionBody => 'En este dispositivo hay una sesión guardada con acceso rápido. Para entrar en la demostración se cerrará primero: cuando quieras volver a tu espacio tendrás que identificarte de nuevo con Cl@ve.';
+
+  @override
+  String get demoConfirmCloseSessionAndEnter => 'Cerrar la sesión guardada y entrar';
+
+  @override
+  String get demoConfirmCodeLabel => 'Código de acceso';
+
+  @override
+  String get demoConfirmCodeError => 'Código incorrecto. Comprueba el código de acceso a la demostración.';
+
+  @override
+  String get demoBannerLabel => 'DEMO';
+
+  @override
+  String get demoPersistedSessionNotice => 'Hay una sesión guardada en este dispositivo. Entra con tu acceso rápido y cierra sesión antes de usar la demostración.';
+
+  @override
   String get landingHelpPageTitle => 'Cómo acceder';
 
   @override
