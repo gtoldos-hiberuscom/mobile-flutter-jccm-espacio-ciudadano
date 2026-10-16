@@ -19,7 +19,7 @@ const _pasadas = 'Pasadas';
 const _sinCitas = 'No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.';
 const _sinCitasContacto = 'Si la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.';
 const _servicioCaido =
-    'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+    'El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.';
 const _sinCip = 'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.';
 
 /// Atención primaria sale de la pantalla de Salud, que pasa a ser un menú.

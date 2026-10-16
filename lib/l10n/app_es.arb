@@ -1987,7 +1987,7 @@
   "@digitalCardsPageTitle": {
     "description": "Título de la pantalla de catálogo de carnets digitales (STORY-48)."
   },
-  "digitalCardsTypeFamiliaNumerosa": "Familia Numerosa",
+  "digitalCardsTypeFamiliaNumerosa": "Carnet de familia numerosa",
   "@digitalCardsTypeFamiliaNumerosa": {
     "description": "Carnets — etiqueta del tipo familia numerosa."
   },
@@ -1995,7 +1995,7 @@
   "@digitalCardsTypeJoven": {
     "description": "Carnets — etiqueta del tipo carnet joven."
   },
-  "digitalCardsTypeDiscapacidad": "Discapacidad",
+  "digitalCardsTypeDiscapacidad": "Carnet de discapacidad",
   "digitalCardsIssueDate": "Fecha de emisión",
   "digitalCardsEffectiveDate": "Fecha de entrada en vigor",
   "digitalCardsExpiryDate": "Fecha de caducidad",
@@ -3443,7 +3443,11 @@
   "myDataVehiclesServiceUnavailableMessage": "El servicio de consulta de tus vehículos no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
   "myDataHousingAddressServiceUnavailableMessage": "El servicio de consulta de tus datos de domicilio no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
   "myDataHousingRealEstateServiceUnavailableMessage": "El servicio de consulta de tus bienes inmuebles no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "myDataHealthAppointmentsServiceUnavailableMessage": "El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "myDataHealthAppointmentsServiceUnavailableMessage": "El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.",
+  "myDataHealthHospitalAppointmentsServiceUnavailableMessage": "El servicio de consulta de datos de citas de atención hospitalaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.",
+  "@myDataHealthHospitalAppointmentsServiceUnavailableMessage": {
+    "description": "Citas hospitalarias — el servicio del SESCAM no responde."
+  },
   "familiaNumerosaRetry": "Reintentar",
   "@familiaNumerosaRetry": {
     "description": "Familia numerosa detail — retry button label."
@@ -3568,7 +3572,7 @@
   "@discapacidadActionPkpass": {
     "description": "Carnet Discapacidad detail — PKPass action section label."
   },
-  "recommendationsTitle": "Mis Recomendaciones",
+  "recommendationsTitle": "Para mí",
   "@recommendationsTitle": {
     "description": "Recommendations — app bar title for the citizen recommendations list."
   },
@@ -3604,7 +3608,7 @@
   "@recommendationsLifeEventPrefix": {
     "description": "Recommendations — prefix shown before the life event label inside a card chip."
   },
-  "recommendationsAssociatedLifeEventsLabel": "Hechos vitales asociados",
+  "recommendationsAssociatedLifeEventsLabel": "Hechos vitales relacionados",
   "@recommendationsAssociatedLifeEventsLabel": {
     "description": "Recommendations — label shown above the life events associated with a recommendation card."
   },
@@ -4979,7 +4983,7 @@
   "@gestionAportarDocumentacionSeleccionarButton": {
     "description": "Botón para abrir el selector de ficheros."
   },
-  "gestionAportarDocumentacionRegistrarButton": "Enviar documentos",
+  "gestionAportarDocumentacionRegistrarButton": "Enviar documentos aportados",
   "@gestionAportarDocumentacionRegistrarButton": {
     "description": "Botón para registrar los documentos aportados."
   },
@@ -5079,11 +5083,11 @@
   "@gestionRegistrosCardDateLabel": {
     "description": "Etiqueta de fecha en las tarjetas de entradas y salidas de registro."
   },
-  "gestionRegistrosConsejeriaOrigenLabel": "CONSERJERÍA DE ORIGEN",
+  "gestionRegistrosConsejeriaOrigenLabel": "CONSEJERÍA DE ORIGEN",
   "@gestionRegistrosConsejeriaOrigenLabel": {
     "description": "Etiqueta del campo consejería de origen (salidas)."
   },
-  "gestionRegistrosConsejeriaDestinoLabel": "CONSERJERÍA DE DESTINO",
+  "gestionRegistrosConsejeriaDestinoLabel": "CONSEJERÍA DE DESTINO",
   "@gestionRegistrosConsejeriaDestinoLabel": {
     "description": "Etiqueta del campo consejería de destino (entradas)."
   },
@@ -5395,7 +5399,7 @@
   "@mainTabAgenda": {
     "description": "Etiqueta de la pestaña Agenda en la barra de navegación inferior."
   },
-  "mainTabRecommendations": "Recomendados",
+  "mainTabRecommendations": "Para mí",
   "@mainTabRecommendations": {
     "description": "Etiqueta de la pestaña Recomendados en la barra de navegación inferior."
   },
@@ -5949,7 +5953,7 @@
   "@homeNewsSectionTitle": {
     "description": "Home — título de la sección Mis novedades."
   },
-  "homeMyDataAccessesTitle": "Accesos “Mis datos”",
+  "homeMyDataAccessesTitle": "Accesos Mis datos",
   "@homeMyDataAccessesTitle": {
     "description": "Home — título de la sección de accesos rápidos a Mis datos."
   },
@@ -5997,15 +6001,15 @@
       "count": { "type": "int" }
     }
   },
-  "homeRecommendedProceduresTitle": "Trámites recomendados",
+  "homeRecommendedProceduresTitle": "Para mí",
   "@homeRecommendedProceduresTitle": {
     "description": "Home — título de la sección de trámites recomendados."
   },
-  "homeGoToRecommendationsButton": "Ir a recomendaciones",
+  "homeGoToRecommendationsButton": "Mostrar todas mis recomendaciones",
   "@homeGoToRecommendationsButton": {
     "description": "Home — botón que navega a la pantalla de recomendaciones."
   },
-  "homeCardsFabLabel": "Carnets",
+  "homeCardsFabLabel": "Mis carnets",
   "@homeCardsFabLabel": {
     "description": "Home — etiqueta del botón flotante de carnets digitales."
   },
@@ -6062,6 +6066,26 @@
   "helpFaqIntro": "Resuelve las dudas más habituales sobre Espacio ciudadano.",
   "@helpFaqIntro": {
     "description": "Ayuda y contacto — introducción al listado de preguntas frecuentes."
+  },
+  "faqCategoryAccess": "Acceso",
+  "@faqCategoryAccess": {
+    "description": "FAQ — categoría de preguntas sobre acceso."
+  },
+  "faqCategoryMyData": "Mis datos",
+  "@faqCategoryMyData": {
+    "description": "FAQ — categoría de preguntas sobre datos personales."
+  },
+  "faqCategoryManagements": "Mis gestiones y notificaciones",
+  "@faqCategoryManagements": {
+    "description": "FAQ — categoría de preguntas sobre gestiones y notificaciones."
+  },
+  "faqCategoryAgenda": "Agenda",
+  "@faqCategoryAgenda": {
+    "description": "FAQ — categoría de preguntas sobre agenda."
+  },
+  "faqCategoryPopulation": "Registro de población",
+  "@faqCategoryPopulation": {
+    "description": "FAQ — categoría de preguntas sobre registro de población."
   },
   "helpContactGuidesIntro": "Consulta las guías disponibles para resolver tus dudas paso a paso.",
   "@helpContactGuidesIntro": {

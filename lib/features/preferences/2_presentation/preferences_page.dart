@@ -251,7 +251,9 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
             title: l10n.preferencesNotificationContactTitle,
             icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
             status: preferences.notificationContact == null ? AppPreferenceStatus.disabled : AppPreferenceStatus.enabled,
-            inactiveDescription: l10n.preferencesNotificationContactInactiveDescription,
+            // Un 404 de `/contacto` equivale a que no existe alta en
+            // Notifica; no es solo que falte rellenar un canal.
+            inactiveDescription: l10n.notificationContactNotRegistered,
             pendingDescription: l10n.preferencesNotificationContactPendingDescription,
             activeDescription: l10n.preferencesNotificationContactActiveDescription,
             actionLabel: preferences.notificationContact == null ? l10n.preferencesAddContactAction : l10n.preferencesManageAction,

@@ -3,7 +3,6 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
@@ -71,7 +70,7 @@ class _MyDataPrimaryCareAppointmentsPageState extends ConsumerState<MyDataPrimar
       actionLabel: l10n.myDataHealthInfoSheetMoreInformation,
       actionIcon: AppIcons.openInNew,
       actionIsExternalLink: true,
-      onActionPressed: () => launchExternalUrlWithConfirmation(context, ref.read(appConfigProvider).sescamUrl),
+      onActionPressed: () => launchExternalUrlWithConfirmation(context, Uri.parse(MyDataAppointmentSections.sescamHealthCentersUrl)),
     );
   }
 

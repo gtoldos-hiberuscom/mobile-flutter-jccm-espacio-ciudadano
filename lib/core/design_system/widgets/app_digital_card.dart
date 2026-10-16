@@ -6,8 +6,10 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.d
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_focus_ring.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-/// Compact credential card matching the current Carnets Digitales component.
-/// Its detail fields stay available to screen readers, but are no longer shown.
+/// Credential card used by Carnets Digitales.
+///
+/// The service-provided detail fields are shown on the card as well as exposed
+/// to screen readers. A missing field is simply omitted.
 class AppDigitalCard extends StatelessWidget {
   const AppDigitalCard({
     required this.title,
@@ -61,10 +63,12 @@ class AppDigitalCard extends StatelessWidget {
       label: summary,
       child: LayoutBuilder(
         builder: (final context, final constraints) {
-          final scale = constraints.maxWidth / 274;
+          // The card can fill a wide layout, but its contents keep a
+          // legible credential scale instead of growing indefinitely.
+          final scale = (constraints.maxWidth / 274).clamp(1.0, 1.5);
           final textScale = MediaQuery.textScalerOf(context).scale(1);
-          return AspectRatio(
-            aspectRatio: 274 / (180 * textScale),
+          return ConstrainedBox(
+            constraints: BoxConstraints(minHeight: 210 * scale * textScale),
             child: DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppDimensions.radiusMedium * scale),
@@ -139,17 +143,56 @@ class AppDigitalCard extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: AppDimensions.space32 * scale),
+                              SizedBox(height: AppDimensions.space16 * scale),
                               ExcludeSemantics(
                                 child: Padding(
                                   padding: EdgeInsets.only(left: AppDimensions.space4 * scale),
                                   child: Text(
                                     title,
-                                    style: AppTypography.bodyBold.copyWith(color: AppColors.textWhite, fontSize: 16 * scale),
+                                    style: AppTypography.leadingBold.copyWith(
+                                      color: AppColors.textWhite,
+                                      fontSize: 18 * scale,
+                                    ),
                                   ),
                                 ),
                               ),
-                              const Spacer(),
+                              if (number != null) ...[
+                                SizedBox(height: AppDimensions.space8 * scale),
+                                _CardDetail(
+                                  label: l10n.digitalCardNumberLabel,
+                                  value: number!,
+                                  scale: scale,
+                                  expandToAvailableWidth: true,
+                                ),
+                              ],
+                              if (primaryDate != null || secondaryDate != null || statusLabel != null) ...[
+                                SizedBox(height: AppDimensions.space8 * scale),
+                                Wrap(
+                                  spacing: AppDimensions.space24 * scale,
+                                  runSpacing: AppDimensions.space4 * scale,
+                                  children: [
+                                    if (primaryDate != null)
+                                      _CardDetail(
+                                        label: primaryDateLabel!,
+                                        value: primaryDate!,
+                                        scale: scale,
+                                      ),
+                                    if (secondaryDate != null)
+                                      _CardDetail(
+                                        label: secondaryDateLabel!,
+                                        value: secondaryDate!,
+                                        scale: scale,
+                                      ),
+                                    if (statusLabel != null)
+                                      _CardDetail(
+                                        label: '',
+                                        value: statusLabel!,
+                                        scale: scale,
+                                      ),
+                                  ],
+                                ),
+                              ],
+                              SizedBox(height: AppDimensions.space8 * scale),
                               Semantics(
                                 button: true,
                                 enabled: enabled,
@@ -201,6 +244,64 @@ class AppDigitalCard extends StatelessWidget {
   }
 }
 
+class _CardDetail extends StatelessWidget {
+  const _CardDetail({
+    required this.label,
+    required this.value,
+    required this.scale,
+    this.expandToAvailableWidth = false,
+  });
+
+  final String label;
+  final String value;
+  final double scale;
+  final bool expandToAvailableWidth;
+
+  @override
+  Widget build(final BuildContext context) {
+    return ExcludeSemantics(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (label.isNotEmpty)
+            Text(
+              label,
+              style: AppTypography.captionRegular.copyWith(
+                color: AppColors.secondaryLight100,
+                fontSize: 11 * scale,
+              ),
+            ),
+          Container(
+            width: expandToAvailableWidth ? double.infinity : null,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusSmall)),
+              gradient: LinearGradient(
+                colors: [AppColors.primaryLight, Color(0x66031B35)],
+                stops: [0.23677, 0.75795],
+              ),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: AppDimensions.space8 * scale),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                value,
+                maxLines: 1,
+                softWrap: false,
+                style: AppTypography.smallRegular.copyWith(
+                  color: AppColors.textWhite,
+                  fontSize: 14 * scale,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 abstract final class AppDigitalCardAssets {
   // Estos dos artes contienen una imagen raster embebida en el SVG original,
   // una construcción que `flutter_svg` no renderiza. Se usan sus PNG
@@ -211,7 +312,7 @@ abstract final class AppDigitalCardAssets {
 }
 
 @visibleForTesting
-const Color downloadColor = AppColors.secondaryLight300;
+const Color downloadColor = AppColors.secondaryLight200;
 
 class _CardArt extends StatelessWidget {
   const _CardArt({required this.asset, required this.scale});

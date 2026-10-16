@@ -202,7 +202,12 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
       type: DigitalCardType.youth,
       title: 'Carné Internacional de Estudiante (ISIC)',
       number: number,
-      validFrom: null,
+      validFrom: _parseDate(
+        _firstString(
+          dataMap,
+          const ['fechaInicioValidez', 'FechaInicioValidez', 'fecha_inicio_validez', 'fechaEmision', 'FechaEmision', 'fecha_emision'],
+        ),
+      ),
       expiresAt: _parseDate(_firstString(dataMap, const ['fechaFinValidez', 'FechaFinValidez', 'fecha_fin_validez', 'fechaCaducidad', 'FechaCaducidad', 'fecha_caducidad'])),
     );
   }
@@ -234,7 +239,12 @@ final class DigitalCardsRepositoryImpl implements DigitalCardsRepository {
       title: 'Carnet de discapacidad',
       number: null,
       validFrom: effectiveDate,
-      expiresAt: null,
+      expiresAt: _parseDate(
+        _firstString(
+          dataMap,
+          const ['fechaValidezHasta', 'FechaValidezHasta', 'fecha_validez_hasta', 'fechaCaducidad', 'FechaCaducidad', 'fecha_caducidad'],
+        ),
+      ),
       isDefinitive: definitive,
     );
   }

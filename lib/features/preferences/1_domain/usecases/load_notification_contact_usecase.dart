@@ -28,8 +28,23 @@ final class LoadNotificationContactUsecase {
       final contact = await _repository.loadContact(citizenId: citizenId);
       return LoadNotificationContactSuccess(contact);
     } on Object catch (error) {
+      // En PRE el cliente generado puede propagar el 404 del recurso
+      // `/contacto` después de que lo haya clasificado el interceptor global.
+      // Para este recurso no es un fallo: significa que el ciudadano aún no
+      // está dado de alta en Notifica y debe mostrarse el formulario de alta.
+      if (_isNotRegistered(error)) {
+        return const LoadNotificationContactSuccess(null);
+      }
       return LoadNotificationContactFailed(_messageFor(error), cause: error);
     }
+  }
+
+  bool _isNotRegistered(final Object error) {
+    if (error is DioException && error.response?.statusCode == 404) {
+      return true;
+    }
+    final appError = error is DioException ? error.error : error;
+    return appError is NotFoundError || (appError is NetworkError && appError.statusCode == 404);
   }
 
   String _messageFor(final Object error) {
@@ -38,7 +53,6 @@ final class LoadNotificationContactUsecase {
       UnauthorizedError() => 'No tienes permisos para consultar tus datos de contacto.',
       NetworkError(:final statusCode) when statusCode == 403 => 'No tienes permisos para consultar tus datos de contacto.',
       NetworkError() => 'No hemos podido cargar tus datos de contacto. Inténtalo de nuevo más tarde.',
-      NotFoundError() => 'No hay datos de contacto guardados.',
       _ => 'No hemos podido cargar tus datos de contacto. Inténtalo de nuevo más tarde.',
     };
   }
