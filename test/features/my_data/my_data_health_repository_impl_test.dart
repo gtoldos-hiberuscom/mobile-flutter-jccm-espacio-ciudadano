@@ -177,6 +177,22 @@ void main() {
       );
     });
 
+    test('trata el 500/3031 de citas pasadas como servicio no disponible, no como CIP ausente', () async {
+      final adapter = _MyDataHealthAdapter(
+        errorStatus: 500,
+        errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"El servicio de citas pasadas no está disponible"}]}}',
+      );
+      final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+      await expectLater(
+        repository.loadPrimaryCareAppointments(
+          citizenId: _citizenId,
+          filter: HealthAppointmentFilter.past,
+        ),
+        throwsA(isA<DioException>()),
+      );
+    });
+
     test('lets a 429 rate limit fail instead of reporting an empty list', () async {
       final adapter = _MyDataHealthAdapter(errorStatus: 429);
       final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));

@@ -208,7 +208,7 @@ class _HospitalAppointmentsList extends ConsumerWidget {
         // Reintenta **solo el filtro activo**: un fallo en pasadas no debe
         // obligar a recargar las pendientes que ya están en pantalla.
         _ => MyDataServiceUnavailable(
-          message: l10n.myDataHealthAppointmentsServiceUnavailableMessage,
+          message: l10n.myDataHealthHospitalAppointmentsServiceUnavailableMessage,
           actionLabel: l10n.myDataServiceUnavailableUpdate,
           onRetry: () => ref.invalidate(myDataHospitalAppointmentsProvider(filter)),
           scrollable: false,

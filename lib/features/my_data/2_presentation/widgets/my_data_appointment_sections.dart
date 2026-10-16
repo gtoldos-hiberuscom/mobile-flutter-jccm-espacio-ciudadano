@@ -24,10 +24,12 @@ class MyDataAppointmentSections extends StatelessWidget {
     required this.entries,
     required this.emptyMessage,
     super.key,
-    this.contactUrl = _sescamCitizenUrl,
+    this.contactUrl = sescamHealthCentersUrl,
   });
 
-  static const String _sescamCitizenUrl = 'https://sanidad.castillalamancha.es/ciudadanos/listado-de-centros';
+  /// Listado de centros del SESCAM: a dónde se manda al ciudadano tanto desde
+  /// el vacío de citas como desde la hoja informativa.
+  static const String sescamHealthCentersUrl = 'https://sanidad.castillalamancha.es/ciudadanos/listado-de-centros';
 
   final List<MyDataAppointmentEntry> entries;
 

@@ -3369,7 +3369,8 @@
   "myDataVehiclesServiceUnavailableMessage": "The service for consulting your vehicles is unavailable. You can reload the information or try again later.",
   "myDataHousingAddressServiceUnavailableMessage": "The service for consulting your address details is unavailable. You can reload the information or try again later.",
   "myDataHousingRealEstateServiceUnavailableMessage": "The service for consulting your real-estate assets is unavailable. You can reload the information or try again later.",
-  "myDataHealthAppointmentsServiceUnavailableMessage": "The service for consulting your health appointments is unavailable. You can reload the information or try again later.",
+  "myDataHealthAppointmentsServiceUnavailableMessage": "The primary care appointments service is currently unavailable. Please try again later.",
+  "myDataHealthHospitalAppointmentsServiceUnavailableMessage": "The hospital appointments service is currently unavailable. Please try again later.",
   "familiaNumerosaRetry": "Retry",
   "@familiaNumerosaRetry": {
     "description": "Familia numerosa detail — retry button label."
@@ -5960,6 +5961,26 @@
   "helpFaqIntro": "Find answers to the most common questions about Citizen Space.",
   "@helpFaqIntro": {
     "description": "Help and contact — introduction to the frequently asked questions list."
+  },
+  "faqCategoryAccess": "Access",
+  "@faqCategoryAccess": {
+    "description": "FAQ — access questions category."
+  },
+  "faqCategoryMyData": "My data",
+  "@faqCategoryMyData": {
+    "description": "FAQ — personal data questions category."
+  },
+  "faqCategoryManagements": "My requests and notifications",
+  "@faqCategoryManagements": {
+    "description": "FAQ — requests and notifications questions category."
+  },
+  "faqCategoryAgenda": "Calendar",
+  "@faqCategoryAgenda": {
+    "description": "FAQ — calendar questions category."
+  },
+  "faqCategoryPopulation": "Population register",
+  "@faqCategoryPopulation": {
+    "description": "FAQ — population register questions category."
   },
   "helpContactGuidesIntro": "Browse the available guides to resolve your questions step by step.",
   "@helpContactGuidesIntro": {

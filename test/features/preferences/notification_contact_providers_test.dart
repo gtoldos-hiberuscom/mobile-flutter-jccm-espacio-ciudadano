@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/errors/app_error.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/0_entity/notification_contact.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/1_domain/repositories/notification_contact_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/preferences/2_presentation/providers/notification_contact_providers.dart';
@@ -29,7 +31,9 @@ void main() {
 
   test('a loaded contact is exposed as data', () async {
     final container = buildContainer(
-      _FakeNotificationContactRepository(contact: const NotificationContact(phone: '600000000', email: 'a@b.es')),
+      _FakeNotificationContactRepository(
+        contact: const NotificationContact(phone: '600000000', email: 'a@b.es'),
+      ),
     );
 
     final contact = await container.read(notificationContactProvider('PER1').future);
@@ -43,13 +47,27 @@ void main() {
 
     expect(await container.read(notificationContactProvider('PER1').future), isNull);
   });
+
+  test('a 404 from the contact service is exposed as an unregistered citizen', () async {
+    final container = buildContainer(
+      _FakeNotificationContactRepository(
+        error: DioException(
+          requestOptions: RequestOptions(path: '/api/v1/ciudadanos/PER1/contacto'),
+          type: DioExceptionType.badResponse,
+          error: const NotFoundError(message: 'Not registered in Notifica'),
+        ),
+      ),
+    );
+
+    expect(await container.read(notificationContactProvider('PER1').future), isNull);
+  });
 }
 
 final class _FakeNotificationContactRepository implements NotificationContactRepository {
   _FakeNotificationContactRepository({this.contact, this.error});
 
   final NotificationContact? contact;
-  final Exception? error;
+  final Object? error;
 
   @override
   Future<NotificationContact?> loadContact({required final String citizenId}) async {
