@@ -26,7 +26,7 @@ void main() {
   ProviderContainer buildContainer() {
     final container = ProviderContainer(
       overrides: [
-        appConfigProvider.overrideWithValue(const AppConfig.fromMap({'BASE_URL': 'https://gateway.invalid', 'TIMEOUT': '30', 'DEBUG_MODE': 'false'})),
+        appConfigProvider.overrideWithValue(const AppConfig.fromMap({'BASE_URL': 'https://gateway.invalid', 'TIMEOUT': '30', 'DEBUG_MODE': 'false', 'DEMO_MODE_ENABLED': 'true'})),
         appStorageProvider.overrideWithValue(appStorage),
         secureStorageProvider.overrideWithValue(storage),
       ],

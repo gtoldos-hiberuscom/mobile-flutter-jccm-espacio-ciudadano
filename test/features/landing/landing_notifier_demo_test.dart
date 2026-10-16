@@ -1,6 +1,8 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/demo/demo_mode_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/demo/demo_session.dart';
 import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
@@ -19,9 +21,10 @@ void main() {
   late _FakeAppStorage appStorage;
   late _UntouchableAuthRepository repository;
 
-  ProviderContainer buildContainer() {
+  ProviderContainer buildContainer({final bool demoEnabled = true}) {
     final container = ProviderContainer(
       overrides: [
+        appConfigProvider.overrideWithValue(AppConfig.fromMap({'DEMO_MODE_ENABLED': '$demoEnabled'})),
         authRepositoryProvider.overrideWithValue(repository),
         secureStorageProvider.overrideWithValue(storage),
         appStorageProvider.overrideWithValue(appStorage),
@@ -129,6 +132,17 @@ void main() {
       expect(await container.read(landingProvider.notifier).hasPersistedSession(), isTrue);
     });
 
+    test('con DEMO_MODE_ENABLED apagado no hace nada', () async {
+      final container = buildContainer(demoEnabled: false);
+
+      await container.read(landingProvider.notifier).enterDemoMode();
+
+      expect(container.read(landingProvider).loginSuccess, isFalse);
+      expect(container.read(jwtClaimsProvider), isNull);
+      expect(container.read(demoModeProvider), isFalse);
+      expect(repository.calls, isEmpty);
+    });
+
     test('cerrar sesión apaga la demo sin más', () async {
       final container = buildContainer();
       await container.read(landingProvider.notifier).enterDemoMode();
@@ -147,6 +161,23 @@ void main() {
       container.read(landingProvider.notifier).clearError();
 
       expect(container.read(landingProvider).demoBlockedByPersistedSession, isFalse);
+    });
+  });
+
+  group('LandingNotifier.tryRestoreSession con una sesión demo guardada', () {
+    test('con el flag apagado la descarta en vez de reanudarla', () async {
+      // Una build anterior con el flag encendido pudo dejarla (acceso rápido).
+      // Sin transporte ficticio su token iría al gateway real: se borra.
+      storage.store[StorageKeys.accessToken] = DemoSession.buildAccessToken();
+      storage.store[StorageKeys.refreshToken] = DemoSession.refreshToken;
+      appStorage.values['${StorageKeys.biometricQuickAccessEnabledPrefix}${DemoSession.idAgente}'] = true;
+      final container = buildContainer(demoEnabled: false);
+
+      await container.read(landingProvider.notifier).tryRestoreSession(localizedTitle: 't', localizedReason: 'r', localizedCancel: 'c');
+
+      expect(storage.store, isEmpty);
+      expect(container.read(landingProvider).loginSuccess, isFalse);
+      expect(container.read(demoModeProvider), isFalse);
     });
   });
 }

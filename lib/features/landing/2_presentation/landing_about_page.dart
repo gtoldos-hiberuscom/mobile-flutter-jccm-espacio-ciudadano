@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
@@ -30,6 +31,7 @@ class LandingAboutPage extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final landingState = ref.watch(landingProvider);
+    final demoModeEnabled = ref.watch(appConfigProvider).demoModeEnabled;
 
     // La demostración se abre desde aquí: si no pudo entrar por una sesión
     // guardada (ver `LandingNotifier.enterDemoMode`), el aviso se da en esta
@@ -184,12 +186,14 @@ class LandingAboutPage extends ConsumerWidget {
                 // Ghost — «Acceder a demostración» (revisores de las tiendas).
                 // Aquí y no en la home pública: visible y localizable con las
                 // notas de revisión, sin competir con el acceso con Cl@ve.
-                AppButton(
-                  label: l10n.landingDemoButton,
-                  hierarchy: AppButtonHierarchy.ghost,
-                  icon: const Icon(Icons.visibility_outlined, size: AppDimensions.iconMedium),
-                  onPressed: landingState.isLoggingIn ? null : () => _openDemoConfirmation(context, ref),
-                ),
+                // Sólo en los entornos con `DEMO_MODE_ENABLED`.
+                if (demoModeEnabled)
+                  AppButton(
+                    label: l10n.landingDemoButton,
+                    hierarchy: AppButtonHierarchy.ghost,
+                    icon: const Icon(Icons.visibility_outlined, size: AppDimensions.iconMedium),
+                    onPressed: landingState.isLoggingIn ? null : () => _openDemoConfirmation(context, ref),
+                  ),
               ],
             ),
           ],

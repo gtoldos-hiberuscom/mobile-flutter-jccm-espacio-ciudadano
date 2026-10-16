@@ -4,9 +4,15 @@
 
 Los revisores de Apple y Google no pueden identificarse con Cl@ve, y sin sesión la app no muestra más que la landing. Apple (guideline 2.1) y Google exigen una cuenta o un modo de demostración para revisar lo que hay tras el login. No hay usuario de pruebas posible sin Cl@ve (el cliente de Cerbero es público, sin `client_credentials`), así que la app incorpora un **modo demostración** en la misma compilación de producción: funciona sola, con datos ficticios locales, sin tocar ni Cl@ve, ni Cerbero, ni la fachada.
 
+## Flag de entorno
+
+La demo está detrás de **`DEMO_MODE_ENABLED`** en los `config_*.json` (`AppConfig.demoModeEnabled`, sin valor por defecto: si falta, la app no arranca, como con el resto de claves). Hoy: `development` y `preproduction` → `"true"`; **`production` → `"false"`**. Con el flag apagado no aparece el botón, `LandingNotifier.enterDemoMode` lo rechaza, `demoModeProvider` es siempre `false` y una sesión demo guardada por otra build se descarta al arrancar.
+
+⚠️ Consecuencia: **la build de producción no tiene demo**. Los revisores de las tiendas instalan esa build, así que la que se mande a revisión tiene que generarse con `DEMO_MODE_ENABLED` a `"true"` (o decidir encenderlo en `config_production.json` mientras dure la revisión); si no, las notas de revisión describen un botón que no existe.
+
 ## Cómo se entra
 
-Landing → **«Saber más sobre Espacio ciudadano»** → en la barra inferior, enlace **«Acceder a demostración»** → hoja de confirmación → código de acceso **`1234`** (`DemoSession.accessCode`; no es un secreto, sólo evita entradas por error) → «Entrar en la demostración». Mientras dura, una cinta **DEMO** se pinta sobre todas las pantallas. Se sale con **«Cerrar sesión»** (menú de perfil o Preferencias).
+Con el flag encendido: landing → **«Saber más sobre Espacio ciudadano»** → en la barra inferior, enlace **«Acceder a demostración»** → hoja de confirmación → código de acceso **`1234`** (`DemoSession.accessCode`; no es un secreto, sólo evita entradas por error) → «Entrar en la demostración». Mientras dura, una cinta **DEMO** se pinta sobre todas las pantallas. Se sale con **«Cerrar sesión»** (menú de perfil o Preferencias).
 
 Texto para las notas de revisión (App Store Connect «Notas» / Play Console «Instrucciones de acceso»):
 

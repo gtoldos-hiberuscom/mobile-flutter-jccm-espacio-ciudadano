@@ -4,6 +4,7 @@
   "BASE_URL": "https://fachada-sede-api.jccm.es",
   "TIMEOUT": "10",
   "DEBUG_MODE": "false",
+  "DEMO_MODE_ENABLED": "false",
   "LOG_REDACTION_OFF": "false",
   "APP_UPDATE_SOURCE": "api",
   "APP_STORE_ID": "6795089236",

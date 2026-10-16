@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
@@ -12,7 +14,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// La entrada a la demostración vive en «Saber más»: el botón está en la barra
 /// inferior y abre la hoja de confirmación.
 void main() {
-  Future<void> pumpPage(final WidgetTester tester) async {
+  Future<void> pumpPage(final WidgetTester tester, {final bool demoEnabled = true}) async {
     // En vertical, como en el móvil: `AppStickybar` sólo pone los botones en
     // fila en apaisado, y el viewport por defecto de los tests (800×600) lo es.
     tester.view.physicalSize = const Size(1179, 2556);
@@ -22,6 +24,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          appConfigProvider.overrideWithValue(AppConfig.fromMap({'DEMO_MODE_ENABLED': '$demoEnabled'})),
           authRepositoryProvider.overrideWithValue(_UnusedAuthRepository()),
           secureStorageProvider.overrideWithValue(_EmptySecureStorage()),
           appStorageProvider.overrideWithValue(_EmptyAppStorage()),
@@ -45,6 +48,13 @@ void main() {
     expect(access, findsOneWidget);
     expect(demo, findsOneWidget);
     expect(tester.getTopLeft(demo).dy, greaterThan(tester.getTopLeft(access).dy), reason: 'la demo va debajo del CTA principal');
+  });
+
+  testWidgets('con DEMO_MODE_ENABLED apagado (producción) el botón no existe', (final tester) async {
+    await pumpPage(tester, demoEnabled: false);
+
+    expect(find.text('Acceder a mi Espacio ciudadano'), findsOneWidget);
+    expect(find.text('Acceder a demostración'), findsNothing);
   });
 
   testWidgets('pulsarlo abre la hoja de confirmación con el campo de código', (final tester) async {

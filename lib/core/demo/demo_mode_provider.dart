@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/demo/demo_session.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 
@@ -8,4 +9,9 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jw
 /// observa —`authRepositoryProvider`, `dioProvider`— cambia de implementación
 /// en las dos transiciones (entrar y cerrar sesión) y en ninguna otra: en los
 /// logins reales el valor sigue siendo `false` y `Provider` no notifica.
-final demoModeProvider = Provider<bool>((final ref) => DemoSession.isDemo(ref.watch(jwtClaimsProvider)));
+///
+/// Exige además el flag del entorno (`DEMO_MODE_ENABLED`): con él apagado no
+/// hay sesión demo posible aunque los claims lo fueran — la entrada se oculta
+/// y se rechaza, y una sesión demo guardada por otra build se descarta al
+/// arrancar (`LandingNotifier.tryRestoreSession`).
+final demoModeProvider = Provider<bool>((final ref) => ref.watch(appConfigProvider).demoModeEnabled && DemoSession.isDemo(ref.watch(jwtClaimsProvider)));

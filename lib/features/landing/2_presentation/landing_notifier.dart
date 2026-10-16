@@ -1,6 +1,7 @@
 import 'dart:async' show TimeoutException;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/demo/demo_session.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
@@ -95,6 +96,13 @@ class LandingNotifier extends Notifier<LandingState> {
     // el «sí» de uno no puede valer por el siguiente.
     final idAgente = await sessionController.persistedIdAgente();
     if (idAgente == null || !ref.mounted) {
+      return;
+    }
+    if (idAgente == DemoSession.idAgente && !ref.read(appConfigProvider).demoModeEnabled) {
+      // Una sesión demo guardada por una build con el flag encendido no debe
+      // reanudarse en una que lo apaga: sin el transporte ficticio, su token
+      // iría al gateway real. Se descarta y se entra por Cl@ve como siempre.
+      await sessionController.clear();
       return;
     }
 
@@ -245,6 +253,11 @@ class LandingNotifier extends Notifier<LandingState> {
   /// En el dispositivo de un revisor nunca hay una sesión guardada.
   Future<void> enterDemoMode({final bool closePersistedSession = false}) async {
     if (state.isLoggingIn) {
+      return;
+    }
+    if (!ref.read(appConfigProvider).demoModeEnabled) {
+      // Sin el flag el botón ni se muestra; esto es la red de seguridad.
+      logger.w('Demo mode requested with DEMO_MODE_ENABLED off; ignored');
       return;
     }
     final sessionController = ref.read(authSessionControllerProvider);

@@ -23,7 +23,7 @@ void main() {
   ProviderContainer buildContainer() {
     final container = ProviderContainer(
       overrides: [
-        appConfigProvider.overrideWithValue(const AppConfig.fromMap({'BASE_URL': 'https://gateway.invalid', 'TIMEOUT': '30', 'DEBUG_MODE': 'false'})),
+        appConfigProvider.overrideWithValue(const AppConfig.fromMap({'BASE_URL': 'https://gateway.invalid', 'TIMEOUT': '30', 'DEBUG_MODE': 'false', 'DEMO_MODE_ENABLED': 'true'})),
         appStorageProvider.overrideWithValue(_FakeAppStorage()),
         secureStorageProvider.overrideWithValue(_FakeSecureStorage()),
       ],
@@ -72,13 +72,32 @@ void main() {
     expect(container.read(authRepositoryProvider), isA<AuthRepositoryImpl>());
   });
 
+  test('con DEMO_MODE_ENABLED apagado, unos claims demo no cambian nada', () {
+    // Es el caso de una build de producción: aunque alguien lograra meter
+    // una sesión demo, el transporte y el repositorio siguen siendo los reales.
+    final container = ProviderContainer(
+      overrides: [
+        appConfigProvider.overrideWithValue(const AppConfig.fromMap({'BASE_URL': 'https://gateway.invalid', 'TIMEOUT': '30', 'DEBUG_MODE': 'false', 'DEMO_MODE_ENABLED': 'false'})),
+        appStorageProvider.overrideWithValue(_FakeAppStorage()),
+        secureStorageProvider.overrideWithValue(_FakeSecureStorage()),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    container.read(authSessionControllerProvider).startInMemory(DemoSession.tokenResponse(), claims: DemoSession.claims());
+
+    expect(container.read(demoModeProvider), isFalse);
+    expect(container.read(dioProvider).httpClientAdapter, isNot(isA<DemoHttpClientAdapter>()));
+    expect(container.read(authRepositoryProvider), isA<AuthRepositoryImpl>());
+  });
+
   test('una sesión demo reanudada del almacén (sin claims explícitos) también activa la demo', () async {
     // Tras un reinicio con acceso rápido, `hydrateFromStorage` decodifica el
     // access token guardado: el `iss` del JWT demo basta para derivar el modo.
     final storage = _FakeSecureStorage()..store['access_token'] = DemoSession.buildAccessToken();
     final container = ProviderContainer(
       overrides: [
-        appConfigProvider.overrideWithValue(const AppConfig.fromMap({'BASE_URL': 'https://gateway.invalid', 'TIMEOUT': '30', 'DEBUG_MODE': 'false'})),
+        appConfigProvider.overrideWithValue(const AppConfig.fromMap({'BASE_URL': 'https://gateway.invalid', 'TIMEOUT': '30', 'DEBUG_MODE': 'false', 'DEMO_MODE_ENABLED': 'true'})),
         appStorageProvider.overrideWithValue(_FakeAppStorage()),
         secureStorageProvider.overrideWithValue(storage),
       ],
