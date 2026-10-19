@@ -4,10 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/0_entity/digital_card.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/digital_card_download_sheet.dart';
 import 'package:jccm_espacio_ciudadano/features/digital_cards/2_presentation/providers/digital_cards_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 class DigitalCardsPage extends ConsumerWidget {
@@ -16,7 +18,7 @@ class DigitalCardsPage extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final authorizationAsync = ref.watch(digitalCardsAuthorizationProvider);
+    final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
     final isDownloading = ref.watch(digitalCardsDownloadingProvider) != null;
 
     return Scaffold(
@@ -37,146 +39,150 @@ class DigitalCardsPage extends ConsumerWidget {
           ),
         ],
       ),
-      body: authorizationAsync.when(
-        loading: () => const AppLoadingIndicator(),
-        error: (final error, final stackTrace) => _DigitalCardsMessage(
-          message: l10n.digitalCardsAuthorizationCheckErrorMessage,
-          actionLabel: l10n.errorStateRetry,
-          onAction: () => ref.invalidate(digitalCardsAuthorizationProvider),
-        ),
-        data: (final isAuthorized) {
-          if (!isAuthorized) {
-            return _UnauthorizedCardsContent(
-              onOpenAuthorizations: () => _openAuthorizations(context, ref),
-            );
-          }
-          final cardsAsync = ref.watch(digitalCardsProvider);
-          return cardsAsync.when(
-            loading: () => const AppLoadingIndicator(),
-            // El rechazo por autorización ya está resuelto: si falta la
-            // cláusula de la JCCM se ofrece concederla, y si se ha retirado la
-            // obligatoria la sesión se está cerrando. Antes ambos casos caían
-            // en la lista vacía —"no tienes carnets digitales"— porque el sobre
-            // `412.00` entraba por la rama de error de negocio del repositorio.
-            error: (final error, final stackTrace) => switch (error) {
-              ClauseMissing() => _UnauthorizedCardsContent(
-                onOpenAuthorizations: () => _openAuthorizations(context, ref),
-              ),
-              ConsentRevoked() => _DigitalCardsMessage(message: l10n.authorizationRevokedMessage),
-              _ => _DigitalCardsMessage(
-                message: l10n.digitalCardsErrorMessage,
-                actionLabel: l10n.errorStateRetry,
-                onAction: () => ref.invalidate(digitalCardsProvider),
-              ),
-            },
-            data: (final snapshot) {
-              final cards = snapshot.cards;
-              if (cards.isEmpty) {
-                return _DigitalCardsMessage(message: l10n.digitalCardsEmptyMessage);
-              }
-
-              final isTablet = isTabletLayout(context);
-              final orderedCards = [...cards];
-              if (isTablet) {
-                const order = {
-                  DigitalCardType.largeFamily: 0,
-                  DigitalCardType.disability: 1,
-                  DigitalCardType.youth: 2,
-                };
-                orderedCards.sort((final a, final b) => order[a.type]!.compareTo(order[b.type]!));
-              }
-
-              Widget buildCard(final DigitalCard card) {
-                return AppDigitalCard(
-                  title: _title(card, l10n),
-                  cardArtAsset: switch (card.type) {
-                    DigitalCardType.largeFamily => AppDigitalCardAssets.largeFamily,
-                    DigitalCardType.disability => AppDigitalCardAssets.disability,
-                    DigitalCardType.youth => AppDigitalCardAssets.youth,
-                  },
-                  number: card.number,
-                  primaryDateLabel: l10n.digitalCardsIssueDate,
-                  primaryDate: _formatDate(context, card.validFrom),
-                  secondaryDateLabel: l10n.digitalCardsExpiryDate,
-                  secondaryDate: _formatDate(context, card.expiresAt),
-                  statusLabel: card.isDefinitive ? l10n.digitalCardsDefinitive : null,
-                  downloadLabel: l10n.digitalCardDownload,
-                  isDownloading: isDownloading,
-                  onDownload: () => showDigitalCardDownloadSheet(context, ref, card),
-                );
-              }
-
-              final list = SafeArea(
-                top: false,
-                child: LayoutBuilder(
-                  builder: (final context, final constraints) {
-                    final horizontalPadding = appPageHorizontalPadding(context);
-                    final cardWidth = (constraints.maxWidth - horizontalPadding * 2 - AppDimensions.space16) / 2;
-                    return RefreshIndicator(
-                      onRefresh: () async => ref.refresh(digitalCardsProvider.future),
-                      child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        padding: EdgeInsets.fromLTRB(
-                          horizontalPadding,
-                          isTablet ? AppDimensions.space16 : AppDimensions.space24,
-                          horizontalPadding,
-                          AppDimensions.space64,
+      body: isRepresentative
+          ? const MyDataRepresentativeUnavailable()
+          : ref
+                .watch(digitalCardsAuthorizationProvider)
+                .when(
+                  loading: () => const AppLoadingIndicator(),
+                  error: (final error, final stackTrace) => _DigitalCardsMessage(
+                    message: l10n.digitalCardsAuthorizationCheckErrorMessage,
+                    actionLabel: l10n.errorStateRetry,
+                    onAction: () => ref.invalidate(digitalCardsAuthorizationProvider),
+                  ),
+                  data: (final isAuthorized) {
+                    if (!isAuthorized) {
+                      return _UnauthorizedCardsContent(
+                        onOpenAuthorizations: () => _openAuthorizations(context, ref),
+                      );
+                    }
+                    final cardsAsync = ref.watch(digitalCardsProvider);
+                    return cardsAsync.when(
+                      loading: () => const AppLoadingIndicator(),
+                      // El rechazo por autorización ya está resuelto: si falta la
+                      // cláusula de la JCCM se ofrece concederla, y si se ha retirado la
+                      // obligatoria la sesión se está cerrando. Antes ambos casos caían
+                      // en la lista vacía —"no tienes carnets digitales"— porque el sobre
+                      // `412.00` entraba por la rama de error de negocio del repositorio.
+                      error: (final error, final stackTrace) => switch (error) {
+                        ClauseMissing() => _UnauthorizedCardsContent(
+                          onOpenAuthorizations: () => _openAuthorizations(context, ref),
                         ),
-                        child: isTablet
-                            ? Wrap(
-                                spacing: AppDimensions.space16,
-                                runSpacing: AppDimensions.space16,
-                                children: [
-                                  for (final card in orderedCards) SizedBox(width: cardWidth, child: buildCard(card)),
-                                ],
-                              )
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  for (var index = 0; index < orderedCards.length; index++) ...[
-                                    if (index > 0) const SizedBox(height: AppDimensions.space16),
-                                    buildCard(orderedCards[index]),
-                                  ],
-                                ],
+                        ConsentRevoked() => _DigitalCardsMessage(message: l10n.authorizationRevokedMessage),
+                        _ => _DigitalCardsMessage(
+                          message: l10n.digitalCardsErrorMessage,
+                          actionLabel: l10n.errorStateRetry,
+                          onAction: () => ref.invalidate(digitalCardsProvider),
+                        ),
+                      },
+                      data: (final snapshot) {
+                        final cards = snapshot.cards;
+                        if (cards.isEmpty) {
+                          return _DigitalCardsMessage(message: l10n.digitalCardsEmptyMessage);
+                        }
+
+                        final isTablet = isTabletLayout(context);
+                        final orderedCards = [...cards];
+                        if (isTablet) {
+                          const order = {
+                            DigitalCardType.largeFamily: 0,
+                            DigitalCardType.disability: 1,
+                            DigitalCardType.youth: 2,
+                          };
+                          orderedCards.sort((final a, final b) => order[a.type]!.compareTo(order[b.type]!));
+                        }
+
+                        Widget buildCard(final DigitalCard card) {
+                          return AppDigitalCard(
+                            title: _title(card, l10n),
+                            cardArtAsset: switch (card.type) {
+                              DigitalCardType.largeFamily => AppDigitalCardAssets.largeFamily,
+                              DigitalCardType.disability => AppDigitalCardAssets.disability,
+                              DigitalCardType.youth => AppDigitalCardAssets.youth,
+                            },
+                            number: card.number,
+                            primaryDateLabel: l10n.digitalCardsIssueDate,
+                            primaryDate: _formatDate(context, card.validFrom),
+                            secondaryDateLabel: l10n.digitalCardsExpiryDate,
+                            secondaryDate: _formatDate(context, card.expiresAt),
+                            statusLabel: card.isDefinitive ? l10n.digitalCardsDefinitive : null,
+                            downloadLabel: l10n.digitalCardDownload,
+                            isDownloading: isDownloading,
+                            onDownload: () => showDigitalCardDownloadSheet(context, ref, card),
+                          );
+                        }
+
+                        final list = SafeArea(
+                          top: false,
+                          child: LayoutBuilder(
+                            builder: (final context, final constraints) {
+                              final horizontalPadding = appPageHorizontalPadding(context);
+                              final cardWidth = (constraints.maxWidth - horizontalPadding * 2 - AppDimensions.space16) / 2;
+                              return RefreshIndicator(
+                                onRefresh: () async => ref.refresh(digitalCardsProvider.future),
+                                child: SingleChildScrollView(
+                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  padding: EdgeInsets.fromLTRB(
+                                    horizontalPadding,
+                                    isTablet ? AppDimensions.space16 : AppDimensions.space24,
+                                    horizontalPadding,
+                                    AppDimensions.space64,
+                                  ),
+                                  child: isTablet
+                                      ? Wrap(
+                                          spacing: AppDimensions.space16,
+                                          runSpacing: AppDimensions.space16,
+                                          children: [
+                                            for (final card in orderedCards) SizedBox(width: cardWidth, child: buildCard(card)),
+                                          ],
+                                        )
+                                      : Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            for (var index = 0; index < orderedCards.length; index++) ...[
+                                              if (index > 0) const SizedBox(height: AppDimensions.space16),
+                                              buildCard(orderedCards[index]),
+                                            ],
+                                          ],
+                                        ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+
+                        if (!snapshot.hasPartialFailures) {
+                          return list;
+                        }
+
+                        // Fallo parcial visible: sin este aviso, un listado incompleto
+                        // se presentaba como el catálogo completo de carnés.
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                AppDimensions.space16,
+                                AppDimensions.space16,
+                                AppDimensions.space16,
+                                0,
                               ),
-                      ),
+                              child: AppAlertContextual(
+                                message: l10n.digitalCardsPartialErrorMessage,
+                                size: AppAlertContextualSize.small,
+                                action: AppButton(
+                                  label: l10n.errorStateRetry,
+                                  hierarchy: AppButtonHierarchy.ghost,
+                                  onPressed: () => ref.invalidate(digitalCardsProvider),
+                                ),
+                              ),
+                            ),
+                            Expanded(child: list),
+                          ],
+                        );
+                      },
                     );
                   },
                 ),
-              );
-
-              if (!snapshot.hasPartialFailures) {
-                return list;
-              }
-
-              // Fallo parcial visible: sin este aviso, un listado incompleto
-              // se presentaba como el catálogo completo de carnés.
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppDimensions.space16,
-                      AppDimensions.space16,
-                      AppDimensions.space16,
-                      0,
-                    ),
-                    child: AppAlertContextual(
-                      message: l10n.digitalCardsPartialErrorMessage,
-                      size: AppAlertContextualSize.small,
-                      action: AppButton(
-                        label: l10n.errorStateRetry,
-                        hierarchy: AppButtonHierarchy.ghost,
-                        onPressed: () => ref.invalidate(digitalCardsProvider),
-                      ),
-                    ),
-                  ),
-                  Expanded(child: list),
-                ],
-              );
-            },
-          );
-        },
-      ),
     );
   }
 

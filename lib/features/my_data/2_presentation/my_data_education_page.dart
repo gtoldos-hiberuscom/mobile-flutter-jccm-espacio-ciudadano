@@ -116,18 +116,20 @@ class _EducationDataContent extends StatelessWidget {
               title: l10n.myDataEducationUniversityTitles,
               description: l10n.myDataEducationTitlesDescription,
             ),
-          const SizedBox(height: AppDimensions.space16),
-          if (hasAgeAuthorization)
-            AppNavigationCard(
-              title: l10n.myDataEducationNonUniversityTitles,
-              description: l10n.myDataEducationNonUniversityTitlesDescription,
-              onTap: () => context.go(Routes.myDataEducationNonUniversityTitles),
-            )
-          else
-            MyDataDisabledNavigationCard(
-              title: l10n.myDataEducationNonUniversityTitles,
-              description: l10n.myDataEducationNonUniversityTitlesDescription,
-            ),
+          if (!isRepresentative) ...[
+            const SizedBox(height: AppDimensions.space16),
+            if (hasAgeAuthorization)
+              AppNavigationCard(
+                title: l10n.myDataEducationNonUniversityTitles,
+                description: l10n.myDataEducationNonUniversityTitlesDescription,
+                onTap: () => context.go(Routes.myDataEducationNonUniversityTitles),
+              )
+            else
+              MyDataDisabledNavigationCard(
+                title: l10n.myDataEducationNonUniversityTitles,
+                description: l10n.myDataEducationNonUniversityTitlesDescription,
+              ),
+          ],
         ],
       ),
     );

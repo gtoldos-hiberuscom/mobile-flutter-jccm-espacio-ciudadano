@@ -17,29 +17,31 @@ final class AgendaRepositoryImpl implements AgendaRepository {
   Future<AgendaAppointmentsSnapshot> loadAppointments({
     required final String documentNumber,
     final String? agentId,
+    final bool includeHealth = true,
   }) async {
     final trimmedAgentId = agentId?.trim();
     // Cada fuente se resuelve por separado: si una cae, la agenda se pinta con
     // lo que sí llegó y la pantalla avisa de lo que falta. El error solo se
     // propaga cuando fallan todas las fuentes que se han llegado a intentar.
     final results = await Future.wait([
-      _captureAppointments(
-        AgendaAppointmentSource.health,
-        () => _loadAppointmentsFrom(
-          // La variante `1` apunta al path gateway
-          // /api/v1/ciudadanos/{numDocumento}/salud/primaria-citas-pendientes
-          // (el legacy /api/v1/sescam/citas/... no existe en el gateway y
-          // responde 404, igual que pasaba con /api/v1/agenda/...). Es el mismo
-          // endpoint que usa Mis Datos → Salud, que sí devuelve las citas.
-          () => _sescamApi.citasFuturas1(
-            numDocumento: documentNumber,
-            extra: _generatedExtra,
+      if (includeHealth)
+        _captureAppointments(
+          AgendaAppointmentSource.health,
+          () => _loadAppointmentsFrom(
+            // La variante `1` apunta al path gateway
+            // /api/v1/ciudadanos/{numDocumento}/salud/primaria-citas-pendientes
+            // (el legacy /api/v1/sescam/citas/... no existe en el gateway y
+            // responde 404, igual que pasaba con /api/v1/agenda/...). Es el mismo
+            // endpoint que usa Mis Datos → Salud, que sí devuelve las citas.
+            () => _sescamApi.citasFuturas1(
+              numDocumento: documentNumber,
+              extra: _generatedExtra,
+            ),
+            source: AgendaAppointmentSource.health,
+            ignoreUnauthorized: true,
+            emptyResultErrorCodes: const {'3031'},
           ),
-          source: AgendaAppointmentSource.health,
-          ignoreUnauthorized: true,
-          emptyResultErrorCodes: const {'3031'},
         ),
-      ),
       // Sin `idAgente` la agenda general ni se pide: eso no es un fallo y no
       // entra en `failedSources`.
       if (trimmedAgentId != null && trimmedAgentId.isNotEmpty)
@@ -63,7 +65,10 @@ final class AgendaRepositoryImpl implements AgendaRepository {
 
     final healthCipMissing = results.any((final result) => result.error is _HealthCipMissing);
     final failures = results.where((final result) => result.error != null && result.error is! _HealthCipMissing).toList(growable: false);
-    // `results` nunca está vacío: la fuente de salud siempre se intenta.
+    // Cuando hay representación se consulta solo la agenda de notificaciones.
+    if (results.isEmpty) {
+      return const AgendaAppointmentsSnapshot(appointments: []);
+    }
     if (failures.length == results.length) {
       final failure = failures.first;
       Error.throwWithStackTrace(failure.error!, failure.stackTrace!);

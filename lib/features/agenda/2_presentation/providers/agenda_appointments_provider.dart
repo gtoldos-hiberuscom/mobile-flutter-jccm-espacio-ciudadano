@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointme
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/usecases/load_agenda_appointments_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_usecase_providers.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 
 final class AgendaAppointmentsState {
@@ -45,6 +46,7 @@ final agendaAppointmentsProvider = FutureProvider.autoDispose<AgendaAppointments
   // del token: contra el gateway toda la app debe mandar el mismo identificador
   // (`sub_alt`); leer `idAgente` del claim mandaba `PER…` y daba 403/404.
   final ids = ref.watch(citizenEndpointIdsProvider);
+  final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
   final documentNumber = ids.numDocumento;
   if (documentNumber == null || documentNumber.isEmpty) {
     throw StateError('No se ha encontrado el documento del usuario.');
@@ -55,6 +57,7 @@ final agendaAppointmentsProvider = FutureProvider.autoDispose<AgendaAppointments
       .execute(
         documentNumber: documentNumber,
         agentId: ids.idAgente,
+        includeHealth: !isRepresentative,
       );
 
   return switch (result) {

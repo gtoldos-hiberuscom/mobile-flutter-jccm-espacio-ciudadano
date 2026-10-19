@@ -74,18 +74,28 @@ void main() {
   });
 
   group('SessionGuard representative restrictions', () {
-    test('redirects restricted sections without calling their backend', () async {
+    test('allows restricted sections so their own page can show its help links', () async {
       final container = buildContainer();
       startSession(container, representedAgentId: 'PJU0349051');
 
       for (final path in [
+        Routes.myDataHealth,
+        Routes.myDataEducation,
         Routes.myDataEducationUniversityTitles,
+        Routes.myDataEducationNonUniversityTitles,
+        Routes.myDataSocialWelfare,
+        Routes.myDataSocialWelfareFamily,
+        Routes.myDataSocialWelfareDisability,
+        Routes.myDataSocialWelfareThermalSpa,
+        Routes.myDataSocialWelfareDependency,
+        Routes.myDataSocialWelfareParking,
+        Routes.myDataEmployment,
+        Routes.myDataEmploymentOffers,
+        Routes.myDataVehicles,
+        Routes.myDataHousingAddress,
+        Routes.digitalCards,
       ]) {
-        expect(
-          await container.read(_guardProvider).redirectPath(path),
-          Routes.representativeUnavailable,
-          reason: path,
-        );
+        expect(await container.read(_guardProvider).redirectPath(path), isNull, reason: path);
       }
     });
 
@@ -96,14 +106,6 @@ void main() {
       for (final path in [
         Routes.home,
         Routes.myData,
-        Routes.myDataHealth,
-        Routes.myDataEducation,
-        Routes.myDataSocialWelfare,
-        Routes.myDataEmployment,
-        Routes.myDataVehicles,
-        Routes.myDataEducationNonUniversityTitles,
-        Routes.myDataSocialWelfareFamily,
-        Routes.myDataEmploymentOffers,
         Routes.myDataHousing,
         Routes.myDataHousingRealEstate,
         Routes.myDataHousingAddress,

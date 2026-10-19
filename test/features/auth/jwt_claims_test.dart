@@ -129,6 +129,14 @@ void main() {
       expect(claims.effectivePersonIdentifier, '99999999R');
       expect(claims.effectiveDisplayName, isNull);
     });
+
+    test('recognizes the Cl@ve representative scope without an agent claim', () {
+      final claims = JwtClaims.fromMap(const {
+        'scope': 'openid profile clave_representado offline_access',
+      });
+
+      expect(claims.isRepresentative, isTrue);
+    });
   });
 
   group('JwtClaims authentication level', () {
