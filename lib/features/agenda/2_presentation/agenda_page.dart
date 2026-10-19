@@ -412,7 +412,22 @@ class _AgendaAppointmentCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final date = appointment.dateTime;
-    final detail = appointment.detail ?? appointment.center ?? '';
+    // Un evento cuyo mensaje llega por párrafos etiquetados se pinta como en
+    // la web: título del evento, intro y una fila por etiqueta (JCCMEC-256).
+    // Las citas de SESCAM conservan la jerarquía de Figma; su centro pasa a
+    // una fila con etiqueta para que se sepa qué es ese dato.
+    final hasStructuredDetails = appointment.details.isNotEmpty;
+    final isHealthLayout = appointment.kind == AgendaAppointmentKind.health && !hasStructuredDetails;
+    final center = appointment.center?.trim();
+    final legacyDetail = appointment.detail ?? center ?? '';
+    final String? secondaryText;
+    if (hasStructuredDetails || appointment.kind == AgendaAppointmentKind.credential) {
+      secondaryText = null;
+    } else if (isHealthLayout) {
+      secondaryText = appointment.detail;
+    } else {
+      secondaryText = legacyDetail;
+    }
 
     return AppAgendaInfoCard(
       type: switch (appointment.kind) {
@@ -423,10 +438,15 @@ class _AgendaAppointmentCard extends StatelessWidget {
       day: date.day.toString(),
       weekday: l10n.commonWeekdayName(_weekdayKey(date.weekday)),
       time: appointment.kind == AgendaAppointmentKind.credential ? null : _formatAppointmentTime(date),
-      title: appointment.kind == AgendaAppointmentKind.health ? appointment.description : appointment.title,
-      channel: appointment.kind == AgendaAppointmentKind.health ? _appointmentChannel(l10n, appointment.channel, detail) : null,
-      primaryText: appointment.kind == AgendaAppointmentKind.health ? appointment.title : appointment.description,
-      secondaryText: appointment.kind == AgendaAppointmentKind.credential ? null : detail,
+      title: isHealthLayout ? appointment.description : appointment.title,
+      channel: isHealthLayout ? _appointmentChannel(l10n, appointment.channel, legacyDetail) : null,
+      primaryText: isHealthLayout ? appointment.title : appointment.description,
+      secondaryText: secondaryText,
+      details: hasStructuredDetails
+          ? appointment.details
+          : [
+              if (isHealthLayout && center != null && center.isNotEmpty) (label: l10n.agendaDetailCentro, value: center),
+            ],
     );
   }
 }

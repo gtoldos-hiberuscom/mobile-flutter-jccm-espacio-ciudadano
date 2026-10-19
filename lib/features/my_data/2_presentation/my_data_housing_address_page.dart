@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/housing_address.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_housing_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -19,22 +21,26 @@ class MyDataHousingAddressPage extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final addressAsync = ref.watch(housingAddressProvider);
+    final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
 
     return AppDetailScaffold(
       title: l10n.myDataHousingAddressTitle,
       onBack: () => context.go(Routes.myDataHousing),
       onInfo: () => _showInfoSheet(context),
       appBarBackgroundColor: AppColors.backgroundBlueLighter,
-      body: addressAsync.when(
-        data: (final address) => address == null ? const _AddressEmpty() : _AddressContent(address: address),
-        loading: () => const Center(child: AppLoadingIndicator()),
-        error: (final error, final stackTrace) => error is MyDataAuthorizationRequired
-            ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataHousingAddress, onAuthorized: () => ref.invalidate(housingAddressProvider))
-            : _AddressError(
-                onRetry: () => ref.invalidate(housingAddressProvider),
-              ),
-      ),
+      body: isRepresentative
+          ? const MyDataRepresentativeUnavailable()
+          : ref
+                .watch(housingAddressProvider)
+                .when(
+                  data: (final address) => address == null ? const _AddressEmpty() : _AddressContent(address: address),
+                  loading: () => const Center(child: AppLoadingIndicator()),
+                  error: (final error, final stackTrace) => error is MyDataAuthorizationRequired
+                      ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataHousingAddress, onAuthorized: () => ref.invalidate(housingAddressProvider))
+                      : _AddressError(
+                          onRetry: () => ref.invalidate(housingAddressProvider),
+                        ),
+                ),
     );
   }
 

@@ -50,6 +50,9 @@ final housingRealEstatePropertiesProvider = FutureProvider.autoDispose<List<Real
 
 String? _documentNumber(final JwtClaims? claims) {
   final candidates = [
+    // Catastro sí admite representación: el cuerpo debe identificar a la
+    // persona o entidad representada, no al titular del certificado.
+    claims?.effectivePersonIdentifier,
     claims?.personIdentifier,
     claims?.preferredUsername,
     claims?.sub,

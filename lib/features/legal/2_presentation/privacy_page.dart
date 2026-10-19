@@ -286,6 +286,10 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       l10n.privacyPurposeItemIdentity,
       l10n.privacyPurposeItemVisualizations,
     ];
+    final rightsTitle = l10n.privacyRightsTitle;
+    // No mostramos el punto final pegado a una URL: con determinados saltos
+    // de línea podía acabar visualmente debajo del enlace.
+    final rightsText = l10n.privacyRightsText.replaceFirst('$_privacySedeUrl.', _privacySedeUrl);
     final aepdTitle = l10n.privacyAepdTitle;
     final aepdText = '${l10n.privacyAepdTextBeforeLink}https://www.aepd.es/${l10n.privacyAepdTextAfterLink}';
     final securityTitle = l10n.privacySecurityTitle;
@@ -351,6 +355,22 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
         child: _BulletList(style: bodyStyle, color: textColor, items: purposeItems, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
+        id: 'rights-title',
+        searchText: rightsTitle,
+        child: _SectionTitle(rightsTitle, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'rights-text',
+        searchText: rightsText,
+        child: _LinkedBodyBlock(
+          text: rightsText,
+          style: bodyStyle,
+          color: textColor,
+          highlightQuery: _searchQuery,
+          links: {_privacySedeUrl: () => _openSede(context)},
+        ),
+      ),
+      _SearchableEntry(
         id: 'aepd-title',
         searchText: aepdTitle,
         child: _SectionTitle(aepdTitle, highlightQuery: _searchQuery),
@@ -358,11 +378,14 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       _SearchableEntry(
         id: 'aepd-text',
         searchText: aepdText,
-        child: _AepdBlock(
+        child: _LinkedBodyBlock(
+          text: aepdText,
+          links: {
+            l10n.privacyAepdLinkLabel: () => _openAepd(context),
+          },
           style: bodyStyle,
           color: textColor,
           highlightQuery: _searchQuery,
-          onTap: () => _openAepd(context),
         ),
       ),
       _SearchableEntry(
@@ -434,6 +457,10 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     );
   }
 
+  Future<void> _openSede(final BuildContext context) async {
+    await launchExternalUrlWithConfirmation(context, Uri.parse(_privacySedeUrl));
+  }
+
   Future<void> _openEmail(final BuildContext context, final String address) async {
     final opened = await launchUrl(
       Uri(scheme: 'mailto', path: address),
@@ -452,6 +479,8 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
     );
   }
 }
+
+const String _privacySedeUrl = 'https://www.jccm.es/tramites/1001969';
 
 class _ContentColumn extends StatelessWidget {
   const _ContentColumn({
@@ -640,7 +669,10 @@ class _LinkedBodyBlock extends StatelessWidget {
               onTap: links[nextLabel],
               child: Text(
                 nextLabel,
-                style: baseStyle,
+                style: baseStyle.copyWith(
+                  decoration: TextDecoration.underline,
+                  decorationColor: color,
+                ),
               ),
             ),
           ),
@@ -701,61 +733,6 @@ class _BulletList extends StatelessWidget {
             ),
           ),
       ],
-    ),
-  );
-}
-
-class _AepdBlock extends StatelessWidget {
-  const _AepdBlock({
-    required this.onTap,
-    this.color = AppColors.textBase,
-    this.style = AppTypography.bodyRegular,
-    this.highlightQuery = '',
-  });
-
-  final VoidCallback onTap;
-  final Color color;
-  final TextStyle style;
-  final String highlightQuery;
-
-  @override
-  Widget build(final BuildContext context) => Padding(
-    padding: const EdgeInsets.all(AppDimensions.space4),
-    child: Text.rich(
-      TextSpan(
-        style: style.copyWith(color: color),
-        children: [
-          ..._highlightTextSpans(
-            AppLocalizations.of(context).privacyAepdTextBeforeLink,
-            style.copyWith(color: color),
-            highlightQuery,
-          ),
-          WidgetSpan(
-            alignment: PlaceholderAlignment.baseline,
-            baseline: TextBaseline.alphabetic,
-            child: Semantics(
-              link: true,
-              button: true,
-              label: AppLocalizations.of(context).privacyAepdLinkLabel,
-              child: InkWell(
-                onTap: onTap,
-                child: Text(
-                  AppLocalizations.of(context).privacyAepdLinkLabel,
-                  style: style.copyWith(
-                    decoration: TextDecoration.underline,
-                    color: color,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          ..._highlightTextSpans(
-            AppLocalizations.of(context).privacyAepdTextAfterLink,
-            style.copyWith(color: color),
-            highlightQuery,
-          ),
-        ],
-      ),
     ),
   );
 }

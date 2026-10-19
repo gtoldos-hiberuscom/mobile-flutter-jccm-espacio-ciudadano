@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/vehicle.dart';
@@ -15,6 +16,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -39,6 +41,7 @@ class _MyDataVehiclesPageState extends ConsumerState<MyDataVehiclesPage> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
     final selectedTab = _selectedTab ?? _VehiclesTab.data;
 
     return AppTabbedDetailScaffold(
@@ -48,9 +51,9 @@ class _MyDataVehiclesPageState extends ConsumerState<MyDataVehiclesPage> {
       tabs: [l10n.myDataVehiclesDataTab, l10n.myDataVehiclesServicesTab],
       selectedIndex: selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _VehiclesTab.values[index]),
-      tabViews: const [
-        _VehiclesDataTab(),
-        _VehiclesServicesTab(),
+      tabViews: [
+        if (isRepresentative) const MyDataRepresentativeUnavailable() else const _VehiclesDataTab(),
+        const _VehiclesServicesTab(),
       ],
     );
   }

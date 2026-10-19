@@ -342,8 +342,25 @@ String _displayCase(final String value) {
     return trimmed;
   }
 
-  final lowerCase = trimmed.toLowerCase();
-  return '${lowerCase[0].toUpperCase()}${lowerCase.substring(1)}';
+  // Texto todo en mayúsculas: se pasa a tipo frase, pero las siglas y los
+  // códigos se respetan («C.S. PALOMAREJOS» → «C.S. palomarejos», no
+  // «C.s. palomarejos»; «CONSULTAS B-203» → «Consultas B-203»).
+  final words = trimmed.split(' ').map((final word) => _keepsUpperCase(word) ? word : word.toLowerCase()).join(' ');
+  return '${words[0].toUpperCase()}${words.substring(1)}';
+}
+
+/// Sigla o código: letras separadas por puntos («C.S.», «U.C.I.»), una palabra
+/// corta sin vocales ni puntos («TD», «CLM», «JCCM») o algo con dígitos
+/// («B-203»). «DE», «LA», «Y» o «DR.» no lo son y pasan a minúsculas.
+bool _keepsUpperCase(final String word) {
+  if (RegExp('[0-9]').hasMatch(word) || RegExp(r'[A-ZÁÉÍÓÚÜÑ]\.[A-ZÁÉÍÓÚÜÑ]').hasMatch(word)) {
+    return true;
+  }
+  if (word.contains('.')) {
+    return false;
+  }
+  final letters = word.replaceAll(RegExp('[^A-ZÁÉÍÓÚÜÑ]'), '');
+  return letters.length >= 2 && letters.length <= 4 && !RegExp('[AEIOUÁÉÍÓÚÜ]').hasMatch(letters);
 }
 
 class _TypeIcon extends StatelessWidget {
