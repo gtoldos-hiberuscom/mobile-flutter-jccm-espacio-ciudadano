@@ -10,7 +10,12 @@ abstract final class StorageKeys {
   static const String accessToken = 'access_token';
 
   /// JWT refresh token for silent re-authentication.
-  static const String refreshToken = 'refresh_token';
+  ///
+  /// Va en el almacén seguro normal y la app sólo lo usa tras la huella. El
+  /// valor no es `refresh_token` a propósito: con ese nombre quedaba la entrada
+  /// del almacén biométrico de antes, y en iOS leerla por el mismo nombre
+  /// levantaría Face ID.
+  static const String refreshToken = 'quick_access_refresh_token';
 
   /// OIDC ID token, kept so logout can send `id_token_hint` to `end_session`
   /// even after an app restart (otherwise the Keycloak/Cl@ve SSO session and
@@ -30,9 +35,12 @@ abstract final class StorageKeys {
   /// sesión se guardara sin habérselo preguntado.
   static const String biometricQuickAccessEnabledPrefix = 'biometric_quick_access_enabled_';
 
-  /// Prefix for the per-user "quick-access offer already shown" flag.
-  /// Full key = biometricQuickAccessPromptSeenPrefix + idAgente
-  static const String biometricQuickAccessPromptSeenPrefix = 'biometric_quick_access_prompt_seen_';
+  /// Prefix for the per-user "declined the quick-access offer" flag.
+  /// Full key = biometricQuickAccessDeclinedPrefix + idAgente
+  ///
+  /// Quien dice que no —en la oferta de la home o desactivándolo en
+  /// Preferencias— no vuelve a ver la oferta; lo puede activar él mismo.
+  static const String biometricQuickAccessDeclinedPrefix = 'biometric_quick_access_declined_';
 
   /// The locale code last selected by the user (e.g. `'es'`).
   static const String selectedLocale = 'selected_locale';
@@ -48,6 +56,13 @@ abstract final class StorageKeys {
   /// Full key = lifeEventsLastUpdatedAtPrefix + idAgente
   static const String lifeEventsLastUpdatedAtPrefix = 'life_events_last_updated_at_';
 
+  /// Prefijo del «no volver a mostrar» del aviso de verificación de identidad.
+  ///
+  /// Clave completa = identityVerificationNoticeSuppressedPrefix + idAgente.
+  /// Marcarlo **no** salta el control de nivel: solo omite la explicación y
+  /// lleva directo a Cl@ve la próxima vez que haga falta elevar.
+  static const String identityVerificationNoticeSuppressedPrefix = 'identity_verification_notice_suppressed_';
+
   /// Prefix for per-user legal-consent accepted flag.
   /// Full key = consentAcceptedPrefix + idAgente
   static const String consentAcceptedPrefix = 'consent_accepted_';
@@ -55,4 +70,12 @@ abstract final class StorageKeys {
   /// Prefix for per-user accepted legal-clause ids.
   /// Full key = consentAcceptedClausesPrefix + idAgente
   static const String consentAcceptedClausesPrefix = 'consent_accepted_clauses_';
+
+  /// Prefix for the last app-update version the user dismissed with «Ahora no».
+  /// Full key = appUpdateIgnoredVersionPrefix + fuente (`store` | `mock`).
+  ///
+  /// Va por dispositivo, no por ciudadano (el aviso aparece antes de
+  /// identificarse) y por fuente: la `99.0.0` descartada del mock en un móvil
+  /// de pruebas no debe silenciar la versión real de la tienda.
+  static const String appUpdateIgnoredVersionPrefix = 'app_update_ignored_version_';
 }

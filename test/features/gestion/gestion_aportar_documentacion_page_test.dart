@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/app/app_lifecycle_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/connectivity/connectivity_status.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
@@ -22,7 +23,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-const _registrarLabel = 'Enviar documentos';
+const _registrarLabel = 'Enviar documentos aportados';
 const _avisoParcial = 'Algunos ficheros no se han podido enviar. Puedes reintentarlo.';
 const _tercero = TerceroIdentificacion(tipodoc: 'NIF', documentNumber: '99999999R');
 
@@ -96,7 +97,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         connectivityRawStreamProvider.overrideWith((final ref) => conectividad.stream),
-        appVueltaDeSegundoPlanoProvider.overrideWithValue(vueltaDeSegundoPlano.stream),
+        appResumedFromBackgroundProvider.overrideWithValue(vueltaDeSegundoPlano.stream),
         if (plazoSinProgreso != null) plazoSinProgresoSubidaProvider.overrideWithValue(plazoSinProgreso),
         citizenEndpointIdsProvider.overrideWithValue((numDocumento: 'PER9998003', idAgente: 'PER9998003')),
         gestionDocumentoRepositoryProvider.overrideWithValue(repository),

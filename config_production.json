@@ -4,10 +4,14 @@
   "BASE_URL": "https://fachada-sede-api.jccm.es",
   "TIMEOUT": "10",
   "DEBUG_MODE": "false",
+  "DEMO_MODE_ENABLED": "false",
   "LOG_REDACTION_OFF": "false",
+  "APP_UPDATE_SOURCE": "api",
+  "APP_STORE_ID": "6795089236",
   "SSO_BASE_URL": "https://cerbero.jccm.es/auth",
   "SSO_OFFLINE_ACCESS": "false",
   "SSO_REALM": "usuarios",
   "SSO_CLIENT_ID": "add-espacio_ciudadano_mobile-fo",
-  "SSO_REDIRECT_URI": "es.jccm.espaciociudadano://auth/callback"
+  "SSO_REDIRECT_URI": "es.jccm.espaciociudadano://auth/callback",
+  "SSO_STEP_UP_PARAMS": ""
 }

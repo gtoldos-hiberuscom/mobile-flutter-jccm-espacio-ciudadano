@@ -15,6 +15,7 @@ class AppDetailScaffold extends StatelessWidget {
     required this.body,
     super.key,
     this.onInfo,
+    this.actions = const [],
     this.backgroundColor = AppColors.backgroundWhite,
     this.appBarBackgroundColor = AppColors.backgroundWhite,
     this.leadingIcon = AppIcons.arrowBack,
@@ -27,6 +28,11 @@ class AppDetailScaffold extends StatelessWidget {
   final String title;
   final VoidCallback onBack;
   final VoidCallback? onInfo;
+
+  /// Acciones a la derecha de la barra, como ya las admite el scaffold con
+  /// pestañas. Vacío por defecto: las pantallas que no pasan ninguna se pintan
+  /// igual que antes.
+  final List<Widget> actions;
   final Widget body;
   final Color backgroundColor;
   final Color appBarBackgroundColor;
@@ -50,6 +56,7 @@ class AppDetailScaffold extends StatelessWidget {
           title: title,
           onBack: onBack,
           onInfo: onInfo,
+          actions: actions,
           backgroundColor: appBarBackgroundColor,
           leadingIcon: leadingIcon,
           leadingTooltip: leadingTooltip ?? l10n.a11yBack,

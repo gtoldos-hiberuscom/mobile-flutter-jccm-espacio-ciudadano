@@ -98,7 +98,7 @@ void main() {
 
   testWidgets('keeps every download action visible on a short viewport', (final tester) async {
     tester.view.devicePixelRatio = 1;
-    tester.view.physicalSize = const Size(390, 600);
+    tester.view.physicalSize = const Size(390, 500);
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
@@ -118,7 +118,11 @@ void main() {
       ),
     );
 
-    expect(find.bySemanticsLabel('Descargar PDF').hitTestable(), findsOneWidget);
+    for (final label in ['Descargar Código QR', 'Descargar Cartera digital', 'Descargar PDF']) {
+      final button = find.bySemanticsLabel(label);
+      expect(button.hitTestable(), findsOneWidget);
+      expect(tester.getRect(button).bottom, lessThanOrEqualTo(500));
+    }
     expect(tester.takeException(), isNull);
   });
 }

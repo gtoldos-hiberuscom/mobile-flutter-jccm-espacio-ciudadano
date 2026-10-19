@@ -9,6 +9,7 @@ abstract interface class AgendaRepository {
   Future<AgendaAppointmentsSnapshot> loadAppointments({
     required final String documentNumber,
     final String? agentId,
+    final bool includeHealth = true,
   });
 
   /// Lanza en el backend la consulta a los sistemas origen para actualizar los

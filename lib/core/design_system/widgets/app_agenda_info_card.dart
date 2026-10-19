@@ -11,6 +11,13 @@ enum AppAgendaInfoCardType {
   credential,
 }
 
+/// Par etiqueta/valor de las filas opcionales de [AppAgendaInfoCard.details].
+///
+/// Existe para las citas hospitalarias, que muestran más campos que los cuatro
+/// huecos del cuerpo y los necesita **etiquetados**: `Sala`, `Centro`,
+/// `Agenda`… El resto de usos de la tarjeta no pasan ninguna y no cambian.
+typedef AppAgendaInfoCardDetail = ({String label, String value});
+
 /// Compact agenda card used for notifications, health appointments and
 /// credential expiry events.
 class AppAgendaInfoCard extends StatelessWidget {
@@ -24,6 +31,7 @@ class AppAgendaInfoCard extends StatelessWidget {
     this.channel,
     this.primaryText,
     this.secondaryText,
+    this.details = const <AppAgendaInfoCardDetail>[],
     this.showTypeIcon = true,
     this.channelBeforeTitle = false,
     this.titleIsRegular = false,
@@ -41,6 +49,11 @@ class AppAgendaInfoCard extends StatelessWidget {
   final String? channel;
   final String? primaryText;
   final String? secondaryText;
+
+  /// Filas etiquetadas adicionales, bajo los huecos anteriores. Vacío por
+  /// defecto: las tarjetas que no las pasan se pintan exactamente igual que
+  /// antes.
+  final List<AppAgendaInfoCardDetail> details;
 
   /// Whether to render the trailing icon that identifies the agenda item type.
   final bool showTypeIcon;
@@ -70,6 +83,10 @@ class AppAgendaInfoCard extends StatelessWidget {
       if (channel case final value? when value.isNotEmpty) _displayCase(value),
       if (primaryText case final value? when value.isNotEmpty) _displayCase(value),
       if (secondaryText case final value? when value.isNotEmpty) _displayCase(value),
+      // Las filas se leen «etiqueta: valor» para que el lector de pantalla
+      // diga de qué campo se trata, igual que se ve en pantalla.
+      for (final detail in details)
+        if (detail.value.trim().isNotEmpty) '${detail.label}: ${_displayCase(detail.value)}',
     ].where((final part) => part.isNotEmpty);
     final effectiveLabel = semanticsLabel ?? l10n.a11yAgendaCard(typeLabel, semanticParts.join(', '));
     final useVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
@@ -84,6 +101,7 @@ class AppAgendaInfoCard extends StatelessWidget {
       channel: channel,
       primaryText: primaryText,
       secondaryText: secondaryText,
+      details: details,
       channelBeforeTitle: channelBeforeTitle,
       titleIsRegular: titleIsRegular,
     );
@@ -226,6 +244,7 @@ class _ContentBlock extends StatelessWidget {
     required this.channel,
     required this.primaryText,
     required this.secondaryText,
+    required this.details,
     required this.channelBeforeTitle,
     required this.titleIsRegular,
   });
@@ -234,6 +253,7 @@ class _ContentBlock extends StatelessWidget {
   final String? channel;
   final String? primaryText;
   final String? secondaryText;
+  final List<AppAgendaInfoCardDetail> details;
   final bool channelBeforeTitle;
   final bool titleIsRegular;
 
@@ -285,6 +305,31 @@ class _ContentBlock extends StatelessWidget {
               ),
             ),
           ),
+        for (final detail in details)
+          if (detail.value.trim().isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: AppDimensions.space4),
+              // Sin `maxLines` ni `ellipsis`: el requisito pide que los textos
+              // largos y el escalado de fuente permitan leer el dato completo,
+              // así que la fila crece en vez de recortar.
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${detail.label}: ',
+                      style: AppTypography.captionRegular.copyWith(
+                        color: AppColors.blueMuted900,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    TextSpan(
+                      text: _displayCase(detail.value),
+                      style: AppTypography.captionRegular.copyWith(color: AppColors.textPrimary),
+                    ),
+                  ],
+                ),
+              ),
+            ),
       ],
     );
   }
@@ -297,8 +342,25 @@ String _displayCase(final String value) {
     return trimmed;
   }
 
-  final lowerCase = trimmed.toLowerCase();
-  return '${lowerCase[0].toUpperCase()}${lowerCase.substring(1)}';
+  // Texto todo en mayúsculas: se pasa a tipo frase, pero las siglas y los
+  // códigos se respetan («C.S. PALOMAREJOS» → «C.S. palomarejos», no
+  // «C.s. palomarejos»; «CONSULTAS B-203» → «Consultas B-203»).
+  final words = trimmed.split(' ').map((final word) => _keepsUpperCase(word) ? word : word.toLowerCase()).join(' ');
+  return '${words[0].toUpperCase()}${words.substring(1)}';
+}
+
+/// Sigla o código: letras separadas por puntos («C.S.», «U.C.I.»), una palabra
+/// corta sin vocales ni puntos («TD», «CLM», «JCCM») o algo con dígitos
+/// («B-203»). «DE», «LA», «Y» o «DR.» no lo son y pasan a minúsculas.
+bool _keepsUpperCase(final String word) {
+  if (RegExp('[0-9]').hasMatch(word) || RegExp(r'[A-ZÁÉÍÓÚÜÑ]\.[A-ZÁÉÍÓÚÜÑ]').hasMatch(word)) {
+    return true;
+  }
+  if (word.contains('.')) {
+    return false;
+  }
+  final letters = word.replaceAll(RegExp('[^A-ZÁÉÍÓÚÜÑ]'), '');
+  return letters.length >= 2 && letters.length <= 4 && !RegExp('[AEIOUÁÉÍÓÚÜ]').hasMatch(letters);
 }
 
 class _TypeIcon extends StatelessWidget {

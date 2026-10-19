@@ -1,8 +1,11 @@
 import 'dart:async' show TimeoutException;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
+import 'package:jccm_espacio_ciudadano/core/demo/demo_session.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/secure_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/security/biometric_authenticator.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/session_refresh_status.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
@@ -18,6 +21,7 @@ final class LandingState {
     this.error,
     this.loginSuccess = false,
     this.sessionExpired = false,
+    this.demoBlockedByPersistedSession = false,
   });
 
   final bool isLoggingIn;
@@ -32,6 +36,11 @@ final class LandingState {
   /// cerrado. Sin esto el guard devolvía al ciudadano a la landing sin decirle
   /// por qué, y desde su punto de vista la app simplemente le echaba.
   final bool sessionExpired;
+
+  /// Señal de un solo uso: se pidió entrar en la demostración con una sesión
+  /// real guardada en el dispositivo, y no se ha entrado. La landing lo
+  /// convierte en un aviso (ver [LandingNotifier.enterDemoMode]).
+  final bool demoBlockedByPersistedSession;
 }
 
 /// Owns the login flow state for the public landing screen.
@@ -61,14 +70,11 @@ class LandingNotifier extends Notifier<LandingState> {
   ///
   /// Reproduce el flujo pedido por el cliente:
   ///
-  /// * con el access token todavía vivo se entra directamente, sin pedir nada
-  ///   y **sin mirar la preferencia**: ese token se guarda sin protección, así
-  ///   que exigir huella para usarlo no protegería nada y sólo costaría un
-  ///   login de Cl@ve — además de contradecir lo pedido por el cliente («si
-  ///   hay Access token se puede entrar»);
-  /// * si ha caducado, hace falta el token de larga vida, y ése sí vive tras
-  ///   la biometría: [AuthSessionController.refreshIfNeeded] lo lee del
-  ///   almacén, y esa lectura **es** la comprobación biométrica;
+  /// * sólo hay sesión guardada si el ciudadano activó el acceso rápido, y
+  ///   para usarla se le pide la huella aquí, al arrancar
+  ///   ([AuthSessionController.unlockPersistedSession]);
+  /// * superada la huella, si el access token guardado sigue vivo se entra
+  ///   sin salir a la red, y si no se renueva con el token de larga vida;
   /// * si el refresco no sale adelante —biometría cancelada, token revocado,
   ///   red caída— no se navega: el ciudadano se queda en la landing y entra
   ///   con Cl@ve como siempre. Nunca se le muestra un error por esto, porque
@@ -85,18 +91,25 @@ class LandingNotifier extends Notifier<LandingState> {
 
     final sessionController = ref.read(authSessionControllerProvider);
     // Primero *de quién* es la sesión guardada, leyéndolo del access token sin
-    // cargar nada ni tocar el almacén protegido. Hace falta antes que la
+    // cargar nada ni pedir la huella. Hace falta antes que la
     // preferencia porque ésta va por ciudadano: en un dispositivo compartido,
     // el «sí» de uno no puede valer por el siguiente.
     final idAgente = await sessionController.persistedIdAgente();
     if (idAgente == null || !ref.mounted) {
       return;
     }
+    if (idAgente == DemoSession.idAgente && !ref.read(appConfigProvider).demoModeEnabled) {
+      // Una sesión demo guardada por una build con el flag encendido no debe
+      // reanudarse en una que lo apaga: sin el transporte ficticio, su token
+      // iría al gateway real. Se descarta y se entra por Cl@ve como siempre.
+      await sessionController.clear();
+      return;
+    }
 
     // Carga en memoria lo que no está protegido —access token, id token,
     // caducidad— para que el refresco de más abajo sepa si hace falta pedirle
-    // nada al servidor. No toca el almacén protegido, así que no levanta
-    // ningún diálogo por sí solo.
+    // nada al servidor. El token de larga vida no se carga, así que no
+    // levanta ningún diálogo por sí solo.
     await sessionController.hydrateFromStorage();
     if (!ref.mounted) {
       return;
@@ -218,6 +231,87 @@ class LandingNotifier extends Notifier<LandingState> {
             error: AuthException.unexpected(cause: cause),
           );
         }
+    }
+  }
+
+  /// Entra en el **modo demostración** (revisores de las tiendas) sin pasar
+  /// por Cl@ve: arranca en memoria una sesión con la identidad ficticia de
+  /// [DemoSession]. A partir de ahí la app no distingue: los claims demo hacen
+  /// que `authRepositoryProvider` y `dioProvider` cambien de implementación
+  /// solos, y el `SessionGuard` aplica el gate de consentimiento como a
+  /// cualquier ciudadano.
+  ///
+  /// No pasa por [login] a propósito: en este instante los claims todavía no
+  /// son demo y el repositorio sería el real (abriría Cl@ve).
+  ///
+  /// Con una sesión real guardada en el dispositivo (acceso rápido) la demo
+  /// y la sesión no pueden convivir: el gate de consentimiento, al ver «sesión
+  /// guardada + consentimiento no aceptado» para la identidad demo, borraría
+  /// del almacén la sesión del ciudadano sin avisar. Por eso, salvo que quien
+  /// entra haya pedido expresamente cerrarla ([closePersistedSession], tras
+  /// ver el aviso de la hoja de confirmación), **no se entra** y se señala.
+  /// En el dispositivo de un revisor nunca hay una sesión guardada.
+  Future<void> enterDemoMode({final bool closePersistedSession = false}) async {
+    if (state.isLoggingIn) {
+      return;
+    }
+    if (!ref.read(appConfigProvider).demoModeEnabled) {
+      // Sin el flag el botón ni se muestra; esto es la red de seguridad.
+      logger.w('Demo mode requested with DEMO_MODE_ENABLED off; ignored');
+      return;
+    }
+    final sessionController = ref.read(authSessionControllerProvider);
+    if (await sessionController.hasPersistedSession()) {
+      if (!ref.mounted) {
+        return;
+      }
+      if (!closePersistedSession) {
+        state = const LandingState(demoBlockedByPersistedSession: true);
+        return;
+      }
+      await _closePersistedSession(sessionController);
+    }
+    if (!ref.mounted) {
+      return;
+    }
+
+    // Cada demostración empieza como un ciudadano nuevo: lo que una anterior
+    // dejara en el dispositivo (consentimiento, onboarding, oferta de acceso
+    // rápido) cambiaría lo que ve el revisor.
+    await DemoSession.forgetLocalTraces(ref.read(appStorageProvider));
+    if (!ref.mounted) {
+      return;
+    }
+
+    ref.read(authSessionControllerProvider).startInMemory(DemoSession.tokenResponse(), claims: DemoSession.claims());
+    ref.invalidate(consentProvider(DemoSession.idAgente));
+    state = const LandingState(loginSuccess: true);
+  }
+
+  /// Si hay una sesión real guardada en el dispositivo. La landing lo consulta
+  /// antes de abrir la hoja de la demostración, para avisar de que entrar la
+  /// cerrará.
+  Future<bool> hasPersistedSession() => ref.read(authSessionControllerProvider).hasPersistedSession();
+
+  /// Cierra la sesión guardada igual que lo haría «Cerrar sesión»: se carga en
+  /// memoria sin pedir la huella (access e id token; la credencial de larga
+  /// vida se queda fuera), se termina en Cerbero con el `id_token` si lo hay
+  /// —si no, el siguiente login de Cl@ve se encontraría la sesión anterior en
+  /// el navegador (JCCMEC-224/228)— y se limpia el almacén. La sesión offline
+  /// no se revoca: su credencial está detrás de la huella, como en cualquier
+  /// cierre de una sesión restaurada que nunca llegó a refrescar.
+  Future<void> _closePersistedSession(final AuthSessionController sessionController) async {
+    final persisted = await sessionController.hydrateFromStorage();
+    if (!ref.mounted) {
+      return;
+    }
+    try {
+      final idToken = persisted?.idToken ?? '';
+      if (idToken.isNotEmpty) {
+        await ref.read(logoutUseCaseProvider).call(idToken: idToken);
+      }
+    } finally {
+      await sessionController.clear();
     }
   }
 

@@ -9,6 +9,24 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Hoja «Vivienda > Domicilio en Castilla-La Mancha»: WCAG 2.4.7 / 1.4.11.
 void main() {
+  testWidgets('sin domicilio muestra la ayuda al Ayuntamiento sin botón de enlace', (final tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [housingAddressProvider.overrideWith((final ref) async => null)],
+        child: const MaterialApp(
+          locale: Locale('es'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: MyDataHousingAddressPage(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('contacta con tu Ayuntamiento'), findsOneWidget);
+    expect(find.byType(AppButton), findsNothing);
+  });
+
   testWidgets('«Volver» e «Información» muestran el anillo de foco', (final tester) async {
     await tester.pumpWidget(
       ProviderScope(

@@ -145,34 +145,59 @@ class _FaqTab extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    AppListExpandableItem categoryItem(final FaqCategory category, {final bool initiallyExpanded = false}) => AppListExpandableItem(
+      title: '${category.title(l10n)} (${category.entries.length})',
+      initiallyExpanded: initiallyExpanded,
+      headerPadding: const EdgeInsets.only(
+        left: AppDimensions.space16,
+        top: AppDimensions.space8,
+        right: AppDimensions.space8,
+        bottom: AppDimensions.space8,
+      ),
+      semanticsLabel: '${category.title(l10n)}. ${category.entries.length} preguntas',
+      children: category.entries
+          .map(
+            (final entry) => AppListItem(
+              title: entry.question(l10n),
+              trailing: const Icon(
+                Icons.arrow_forward,
+                color: AppColors.primaryDark,
+                size: AppDimensions.iconMedium,
+              ),
+              onTap: () => context.push(Routes.faqDetailPath(entry.id)),
+            ),
+          )
+          .toList(),
+    );
+
     return ListView(
+      // The FAQ composition uses the 16dp page gutters, with the heading in
+      // the card and 32dp before the guides block.
       padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space48),
       children: [
-        AppSectionHeading(l10n.helpFaqSectionTitle),
-        const SizedBox(height: AppDimensions.space16),
-        AppIconTextBlock(
-          iconAsset: AppIconAssets.question,
-          iconSize: 36,
-          text: l10n.helpFaqIntro,
-        ),
-        const SizedBox(height: AppDimensions.space24),
         AppList(
-          padding: const EdgeInsets.all(AppDimensions.space8),
-          children: faqEntries
-              .map(
-                (final entry) => AppListItem(
-                  title: entry.question(l10n),
-                  trailing: const Icon(
-                    Icons.arrow_forward,
-                    color: AppColors.primaryDark,
-                    size: AppDimensions.iconMedium,
+          variant: AppListVariant.expandable,
+          padding: const EdgeInsets.symmetric(vertical: AppDimensions.space8),
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppDimensions.space16,
+                    AppDimensions.space8,
+                    AppDimensions.space16,
+                    AppDimensions.space24,
                   ),
-                  onTap: () => context.push(Routes.faqDetailPath(entry.id)),
+                  child: AppSectionHeading(l10n.helpFaqSectionTitle),
                 ),
-              )
-              .toList(),
+                categoryItem(faqCategories.first),
+              ],
+            ),
+            ...faqCategories.skip(1).map(categoryItem),
+          ],
         ),
-        const SizedBox(height: AppDimensions.space24),
+        const SizedBox(height: AppDimensions.space32),
         AppSectionHeading(l10n.helpContactGuidesTitle),
         const SizedBox(height: AppDimensions.space16),
         AppIconTextBlock(

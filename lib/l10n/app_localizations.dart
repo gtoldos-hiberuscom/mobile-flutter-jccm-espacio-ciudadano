@@ -146,6 +146,72 @@ abstract class AppLocalizations {
   /// **'Ayuda y contacto'**
   String get landingHelpLink;
 
+  /// Enlace discreto de la pantalla inicial que abre la hoja de confirmación del modo demostración (para revisores de las tiendas y curiosos): la app con datos ficticios, sin Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceder a demostración'**
+  String get landingDemoButton;
+
+  /// Título de la hoja de confirmación previa a entrar en el modo demostración.
+  ///
+  /// In es, this message translates to:
+  /// **'Modo demostración'**
+  String get demoConfirmTitle;
+
+  /// Cuerpo de la hoja de confirmación del modo demostración: explica que los datos son ficticios y que nada se envía.
+  ///
+  /// In es, this message translates to:
+  /// **'Verás la aplicación con los datos ficticios de una persona inventada, sin identificarte con Cl@ve. Nada de lo que hagas se envía ni se guarda en ningún servicio real. Para salir, cierra sesión.'**
+  String get demoConfirmBody;
+
+  /// Botón principal de la hoja de confirmación del modo demostración.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrar en la demostración'**
+  String get demoConfirmEnter;
+
+  /// Botón secundario de la hoja de confirmación del modo demostración; cierra la hoja sin entrar.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get demoConfirmBack;
+
+  /// Párrafo adicional de la hoja de confirmación del modo demostración cuando hay una sesión real guardada en el dispositivo (acceso rápido): avisa de que entrar la cerrará.
+  ///
+  /// In es, this message translates to:
+  /// **'En este dispositivo hay una sesión guardada con acceso rápido. Para entrar en la demostración se cerrará primero: cuando quieras volver a tu espacio tendrás que identificarte de nuevo con Cl@ve.'**
+  String get demoConfirmPersistedSessionBody;
+
+  /// Botón principal de la hoja de confirmación del modo demostración cuando hay una sesión guardada: la cierra y entra en la demostración.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar la sesión guardada y entrar'**
+  String get demoConfirmCloseSessionAndEnter;
+
+  /// Etiqueta del campo de código de la hoja de confirmación del modo demostración. El código se facilita en las notas de revisión de las tiendas.
+  ///
+  /// In es, this message translates to:
+  /// **'Código de acceso'**
+  String get demoConfirmCodeLabel;
+
+  /// Error inline del campo de código de la hoja del modo demostración cuando el código no coincide.
+  ///
+  /// In es, this message translates to:
+  /// **'Código incorrecto. Comprueba el código de acceso a la demostración.'**
+  String get demoConfirmCodeError;
+
+  /// Texto de la cinta diagonal que se pinta sobre toda la app mientras la sesión es la de demostración. Muy corto: va en una cinta.
+  ///
+  /// In es, this message translates to:
+  /// **'DEMO'**
+  String get demoBannerLabel;
+
+  /// Aviso al intentar entrar en la demostración con una sesión real guardada en el dispositivo (acceso rápido): hay que cerrarla antes.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay una sesión guardada en este dispositivo. Entra con tu acceso rápido y cierra sesión antes de usar la demostración.'**
+  String get demoPersistedSessionNotice;
+
   /// Título del AppBar de la pantalla de ayuda con el acceso.
   ///
   /// In es, this message translates to:
@@ -2879,7 +2945,7 @@ abstract class AppLocalizations {
   /// Carnets — etiqueta del tipo familia numerosa.
   ///
   /// In es, this message translates to:
-  /// **'Familia Numerosa'**
+  /// **'Carnet de familia numerosa'**
   String get digitalCardsTypeFamiliaNumerosa;
 
   /// Carnets — etiqueta del tipo carnet joven.
@@ -2891,7 +2957,7 @@ abstract class AppLocalizations {
   /// Carnets — etiqueta del tipo discapacidad.
   ///
   /// In es, this message translates to:
-  /// **'Discapacidad'**
+  /// **'Carnet de discapacidad'**
   String get digitalCardsTypeDiscapacidad;
 
   /// No description provided for @digitalCardsIssueDate.
@@ -5033,8 +5099,14 @@ abstract class AppLocalizations {
   /// No description provided for @myDataHealthAppointmentsServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.'**
   String get myDataHealthAppointmentsServiceUnavailableMessage;
+
+  /// Citas hospitalarias — el servicio del SESCAM no responde.
+  ///
+  /// In es, this message translates to:
+  /// **'El servicio de consulta de datos de citas de atención hospitalaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.'**
+  String get myDataHealthHospitalAppointmentsServiceUnavailableMessage;
 
   /// Familia numerosa detail — retry button label.
   ///
@@ -5189,7 +5261,7 @@ abstract class AppLocalizations {
   /// Recommendations — app bar title for the citizen recommendations list.
   ///
   /// In es, this message translates to:
-  /// **'Mis Recomendaciones'**
+  /// **'Para mí'**
   String get recommendationsTitle;
 
   /// Recommendations — tab label for the unfiltered bucket.
@@ -5243,7 +5315,7 @@ abstract class AppLocalizations {
   /// Recommendations — label shown above the life events associated with a recommendation card.
   ///
   /// In es, this message translates to:
-  /// **'Hechos vitales asociados'**
+  /// **'Hechos vitales relacionados'**
   String get recommendationsAssociatedLifeEventsLabel;
 
   /// Recommendations — default label shown above the status of a recommendation card.
@@ -6728,7 +6800,7 @@ abstract class AppLocalizations {
   /// **'Citas de Atención Primaria'**
   String get myDataHealthAppointmentsTitle;
 
-  /// Código de identificación personal mostrado encima de las citas de Atención Primaria.
+  /// Código de identificación personal mostrado encima de las citas de Atención Primaria y de las hospitalarias.
   ///
   /// In es, this message translates to:
   /// **'Código de Identificación Personal (CIP): {cip}'**
@@ -6775,6 +6847,174 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Citas hospitalarias'**
   String get myDataHealthHospitalAppointmentsTitle;
+
+  /// Salud — tarjeta del menú que lleva a las citas de atención primaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas de atención primaria'**
+  String get myDataHealthPrimaryCareNavTitle;
+
+  /// Salud — tarjeta del menú que lleva a las citas hospitalarias.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas de atención hospitalaria'**
+  String get myDataHealthHospitalNavTitle;
+
+  /// Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas.
+  ///
+  /// In es, this message translates to:
+  /// **'Verifica tu identidad para continuar'**
+  String get myDataHealthHospitalNavVerificationRequired;
+
+  /// Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis citas hospitalarias'**
+  String get myDataHealthHospitalLinkTitle;
+
+  /// Salud — descripción del enlace a citas hospitalarias.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta la información sobre tus citas hospitalarias del SESCAM.'**
+  String get myDataHealthHospitalLinkDescription;
+
+  /// Salud — aviso de que los datos hospitalarios los mantiene el SESCAM.
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de los datos no está actualizado deberás ponerte en contacto con el SESCAM.'**
+  String get myDataHealthHospitalContactHint;
+
+  /// Salud — pestaña de citas hospitalarias pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas pendientes'**
+  String get myDataHealthHospitalPendingTab;
+
+  /// Salud — pestaña de citas hospitalarias pasadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Citas pasadas'**
+  String get myDataHealthHospitalPastTab;
+
+  /// Salud — mensaje cuando no hay citas hospitalarias pendientes.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes citas hospitalarias pendientes.'**
+  String get myDataHealthHospitalPendingEmpty;
+
+  /// Salud — mensaje cuando no hay citas hospitalarias pasadas.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes citas hospitalarias pasadas.'**
+  String get myDataHealthHospitalPastEmpty;
+
+  /// Salud — etiqueta del servicio médico de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicio'**
+  String get myDataHealthHospitalFieldService;
+
+  /// Salud — etiqueta de la prestación de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Prestación'**
+  String get myDataHealthHospitalFieldProvision;
+
+  /// Salud — etiqueta de la sala de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Sala'**
+  String get myDataHealthHospitalFieldRoom;
+
+  /// Salud — etiqueta del hospital de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Centro'**
+  String get myDataHealthHospitalFieldCenter;
+
+  /// Salud — etiqueta de la agenda de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get myDataHealthHospitalFieldAgenda;
+
+  /// Salud — etiqueta de la fecha y hora de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha y hora'**
+  String get myDataHealthHospitalFieldDateTime;
+
+  /// Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».
+  ///
+  /// In es, this message translates to:
+  /// **'{date}, {time}'**
+  String myDataHealthHospitalDateTimeValue(String date, String time);
+
+  /// Salud — texto cuando el CIP no se ha podido obtener.
+  ///
+  /// In es, this message translates to:
+  /// **'CIP no disponible'**
+  String get myDataHealthCipUnavailable;
+
+  /// Salud — título del aviso de que la consulta exige más nivel de seguridad.
+  ///
+  /// In es, this message translates to:
+  /// **'Verificación de identidad'**
+  String get identityVerificationDialogTitle;
+
+  /// Salud — motivo del aviso de verificación de identidad.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.'**
+  String get identityVerificationDialogBody;
+
+  /// Salud — casilla para omitir el aviso y pasar directo a Cl@ve la próxima vez.
+  ///
+  /// In es, this message translates to:
+  /// **'No volver a mostrar'**
+  String get identityVerificationDialogDoNotShowAgain;
+
+  /// Salud — acción de salir de la consulta sin elevar el nivel.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get identityVerificationDialogBack;
+
+  /// Salud — acción de ir a Cl@ve a identificarse de nuevo.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceder a cl@ve'**
+  String get identityVerificationDialogContinue;
+
+  /// Salud — bloqueo por nivel de autenticación insuficiente para datos de salud.
+  ///
+  /// In es, this message translates to:
+  /// **'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.'**
+  String get myDataHealthLevelRequiredMessage;
+
+  /// Salud — el nivel de autenticación no se ha podido leer del token.
+  ///
+  /// In es, this message translates to:
+  /// **'No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.'**
+  String get myDataHealthLevelUnverifiedMessage;
+
+  /// Salud — acción para volver a identificarse con un método más seguro.
+  ///
+  /// In es, this message translates to:
+  /// **'Continuar'**
+  String get myDataHealthLevelElevateAction;
+
+  /// Salud — la elevación se completó pero el nivel sigue siendo insuficiente.
+  ///
+  /// In es, this message translates to:
+  /// **'El método de identificación utilizado no alcanza el nivel de acceso requerido. Pulse «Continuar» e identifíquese con certificado digital o DNI electrónico.'**
+  String get myDataHealthLevelStillInsufficientMessage;
+
+  /// Salud — la elevación de nivel falló por un error.
+  ///
+  /// In es, this message translates to:
+  /// **'No ha sido posible elevar su nivel de acceso. Inténtelo de nuevo.'**
+  String get myDataHealthLevelElevationFailedMessage;
 
   /// Botón para cargar la siguiente página de citas pasadas de primaria.
   ///
@@ -7019,7 +7259,7 @@ abstract class AppLocalizations {
   /// Botón para registrar los documentos aportados.
   ///
   /// In es, this message translates to:
-  /// **'Enviar documentos'**
+  /// **'Enviar documentos aportados'**
   String get gestionAportarDocumentacionRegistrarButton;
 
   /// Error al superar el número máximo de ficheros permitidos.
@@ -7169,13 +7409,13 @@ abstract class AppLocalizations {
   /// Etiqueta del campo consejería de origen (salidas).
   ///
   /// In es, this message translates to:
-  /// **'CONSERJERÍA DE ORIGEN'**
+  /// **'CONSEJERÍA DE ORIGEN'**
   String get gestionRegistrosConsejeriaOrigenLabel;
 
   /// Etiqueta del campo consejería de destino (entradas).
   ///
   /// In es, this message translates to:
-  /// **'CONSERJERÍA DE DESTINO'**
+  /// **'CONSEJERÍA DE DESTINO'**
   String get gestionRegistrosConsejeriaDestinoLabel;
 
   /// Título de la sección de datos del registro en el detalle.
@@ -7643,7 +7883,7 @@ abstract class AppLocalizations {
   /// Etiqueta de la pestaña Recomendados en la barra de navegación inferior.
   ///
   /// In es, this message translates to:
-  /// **'Recomendados'**
+  /// **'Para mí'**
   String get mainTabRecommendations;
 
   /// Título del AppBar de la pantalla 404.
@@ -8459,7 +8699,7 @@ abstract class AppLocalizations {
   /// Home — título de la sección de accesos rápidos a Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Accesos “Mis datos”'**
+  /// **'Accesos Mis datos'**
   String get homeMyDataAccessesTitle;
 
   /// Home — etiqueta de la tarjeta de notificaciones en Mis novedades.
@@ -8513,19 +8753,19 @@ abstract class AppLocalizations {
   /// Home — título de la sección de trámites recomendados.
   ///
   /// In es, this message translates to:
-  /// **'Trámites recomendados'**
+  /// **'Para mí'**
   String get homeRecommendedProceduresTitle;
 
   /// Home — botón que navega a la pantalla de recomendaciones.
   ///
   /// In es, this message translates to:
-  /// **'Ir a recomendaciones'**
+  /// **'Mostrar todas mis recomendaciones'**
   String get homeGoToRecommendationsButton;
 
   /// Home — etiqueta del botón flotante de carnets digitales.
   ///
   /// In es, this message translates to:
-  /// **'Carnets'**
+  /// **'Mis carnets'**
   String get homeCardsFabLabel;
 
   /// Home — acción del FAB de carnets que abre el catálogo completo.
@@ -8593,6 +8833,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Resuelve las dudas más habituales sobre Espacio ciudadano.'**
   String get helpFaqIntro;
+
+  /// FAQ — categoría de preguntas sobre acceso.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceso'**
+  String get faqCategoryAccess;
+
+  /// FAQ — categoría de preguntas sobre datos personales.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis datos'**
+  String get faqCategoryMyData;
+
+  /// FAQ — categoría de preguntas sobre gestiones y notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Mis gestiones y notificaciones'**
+  String get faqCategoryManagements;
+
+  /// FAQ — categoría de preguntas sobre agenda.
+  ///
+  /// In es, this message translates to:
+  /// **'Agenda'**
+  String get faqCategoryAgenda;
+
+  /// FAQ — categoría de preguntas sobre registro de población.
+  ///
+  /// In es, this message translates to:
+  /// **'Registro de población'**
+  String get faqCategoryPopulation;
 
   /// Ayuda y contacto — introducción a las guías de ayuda.
   ///
@@ -9577,6 +9847,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Activar'**
   String get biometricAccessDialogConfirm;
+
+  /// Título del aviso a pantalla completa cuando la versión instalada ya no tiene soporte y es obligatorio actualizar.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualización necesaria'**
+  String get appUpdateRequiredTitle;
+
+  /// Cuerpo del aviso de actualización obligatoria.
+  ///
+  /// In es, this message translates to:
+  /// **'Para seguir usando la aplicación necesitas instalar la versión {version}. Las versiones anteriores ya no reciben soporte.'**
+  String appUpdateRequiredBody(String version);
+
+  /// Título del aviso cuando existe una versión más nueva pero actualizar es opcional.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay una nueva versión disponible'**
+  String get appUpdateRecommendedTitle;
+
+  /// Cuerpo del aviso de actualización recomendada.
+  ///
+  /// In es, this message translates to:
+  /// **'La versión {version} incluye mejoras y correcciones. Puedes actualizar ahora o hacerlo más tarde.'**
+  String appUpdateRecommendedBody(String version);
+
+  /// Botón principal del aviso de actualización: abre la ficha de la app en la tienda.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get appUpdateAction;
+
+  /// Botón secundario del aviso de actualización recomendada: lo cierra y no vuelve a avisar de esa versión.
+  ///
+  /// In es, this message translates to:
+  /// **'Ahora no'**
+  String get appUpdateLater;
+
+  /// Error mostrado dentro del aviso cuando el sistema no consigue abrir la tienda.
+  ///
+  /// In es, this message translates to:
+  /// **'No se ha podido abrir la tienda de aplicaciones. Inténtalo de nuevo más tarde.'**
+  String get appUpdateStoreUnavailable;
+
+  /// Etiqueta accesible del aviso de actualización, anunciada por el lector de pantalla al aparecer.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso de actualización de la aplicación'**
+  String get appUpdateA11yDialog;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

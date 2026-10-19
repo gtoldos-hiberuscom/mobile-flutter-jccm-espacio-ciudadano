@@ -65,6 +65,8 @@ abstract final class Routes {
   static const String gestionRegistrosDetail = '/gestion/registros/detail';
   static const String myData = '/my-data';
   static const String myDataHealth = '/my-data/health';
+  static const String myDataHealthPrimaryCareAppointments = '/my-data/health/primary-care';
+  static const String myDataHealthHospitalAppointments = '/my-data/health/hospital-appointments';
   static const String myDataEmployment = '/my-data/employment';
   static const String myDataEmploymentOffers = '/my-data/employment/offers';
   static const String myDataSocialWelfare = '/my-data/social-welfare';
@@ -106,6 +108,13 @@ abstract final class Routes {
     gestionRegistros,
     gestionRegistrosDetail,
     myData,
+    // `requiresAuth` ya las cubría por `startsWith(myData)`, pero este conjunto
+    // alimenta además `isKnownRoute`, que exige coincidencia exacta y es quien
+    // valida el `returnTo` al volver de Preferencias. Sin estar aquí, aceptar
+    // el clausulado desde Salud devolvía a `/home` en vez de a la consulta.
+    myDataHealth,
+    myDataHealthPrimaryCareAppointments,
+    myDataHealthHospitalAppointments,
     myDataEmployment,
     myDataEmploymentOffers,
     myDataEducation,
@@ -137,10 +146,11 @@ abstract final class Routes {
   /// Returns true when [path] requires authentication.
   static bool requiresAuth(final String path) => _authenticated.any(path.startsWith);
 
-  /// Personal information that cannot be queried with a representative
-  /// certificate. Primary-care appointments are gated inside the Health tab.
+  /// Las páginas con datos no disponibles para representación se encargan de
+  /// mostrar su aviso dentro de la propia vista, para conservar sus enlaces e
+  /// información de ayuda.
   static bool isUnavailableForRepresentative(final String path) {
-    return path.startsWith(myDataEducationUniversityTitles);
+    return false;
   }
 
   static bool isKnownRoute(final String? path) {
