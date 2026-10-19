@@ -130,12 +130,12 @@ void main() {
       expect(claims.effectiveDisplayName, isNull);
     });
 
-    test('recognizes the Cl@ve representative scope without an agent claim', () {
+    test('does not treat the Cl@ve representative scope as an active representation', () {
       final claims = JwtClaims.fromMap(const {
         'scope': 'openid profile clave_representado offline_access',
       });
 
-      expect(claims.isRepresentative, isTrue);
+      expect(claims.isRepresentative, isFalse);
     });
   });
 

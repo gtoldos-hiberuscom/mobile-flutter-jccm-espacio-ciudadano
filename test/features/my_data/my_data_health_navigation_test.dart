@@ -86,6 +86,14 @@ void main() {
     expect(find.byIcon(AppIcons.lock), findsNothing);
   });
 
+  testWidgets('un usuario normal con el scope técnico de representación ve sus datos de Salud', (final tester) async {
+    await _pumpHealth(tester, scope: 'openid profile clave_representado');
+
+    expect(find.text(_cip), findsOneWidget);
+    expect(find.text(_primaria), findsOneWidget);
+    expect(find.text('Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'), findsNothing);
+  });
+
   testWidgets('sin autorización las dos salen deshabilitadas, sin CIP, y no navegan', (final tester) async {
     await _pumpHealth(tester, hasAuthorization: false);
 
@@ -106,6 +114,7 @@ Future<GoRouter> _pumpHealth(
   final WidgetTester tester, {
   final bool hasAuthorization = true,
   final String authNLevel = 'substantial',
+  final String? scope,
 }) async {
   final router = GoRouter(
     initialLocation: Routes.myDataHealth,
@@ -131,7 +140,7 @@ Future<GoRouter> _pumpHealth(
         myDataHealthCipProvider.overrideWith((final ref) async => 'CIP-1'),
         myDataHealthRepositoryProvider.overrideWithValue(_EmptyHealthRepository()),
         // Hospitalaria gatea por nivel; sin claims no llegaría a pintarse.
-        jwtClaimsProvider.overrideWith(() => _StubClaims(authNLevel)),
+        jwtClaimsProvider.overrideWith(() => _StubClaims(authNLevel, scope: scope)),
       ],
       child: MaterialApp.router(
         locale: const Locale('es'),
@@ -146,9 +155,10 @@ Future<GoRouter> _pumpHealth(
 }
 
 final class _StubClaims extends JwtClaimsNotifier {
-  _StubClaims(this.authNLevel);
+  _StubClaims(this.authNLevel, {this.scope});
 
   final String authNLevel;
+  final String? scope;
 
   @override
   JwtClaims? build() => JwtClaims(
@@ -160,6 +170,7 @@ final class _StubClaims extends JwtClaimsNotifier {
     subAlt: 'PER1',
     idAgente: 'PER1',
     authNLevelRaw: authNLevel,
+    scope: scope,
   );
 }
 
