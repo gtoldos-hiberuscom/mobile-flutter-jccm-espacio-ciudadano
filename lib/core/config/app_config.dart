@@ -13,6 +13,7 @@ class AppConfig {
         'BASE_URL': String.fromEnvironment('BASE_URL'),
         'TIMEOUT': String.fromEnvironment('TIMEOUT'),
         'DEBUG_MODE': String.fromEnvironment('DEBUG_MODE'),
+        'DEMO_MODE_ENABLED': String.fromEnvironment('DEMO_MODE_ENABLED'),
         'SSO_CLIENT_ID': String.fromEnvironment('SSO_CLIENT_ID'),
         'SSO_REDIRECT_URI': String.fromEnvironment('SSO_REDIRECT_URI'),
         'SSO_REALM': String.fromEnvironment('SSO_REALM'),
@@ -144,6 +145,12 @@ class AppConfig {
 
   /// Whether verbose/debug logging is enabled.
   bool get debugMode => _getConfigValue('DEBUG_MODE', _parseBool);
+
+  /// Si este entorno ofrece el **modo demostración** (revisores de las
+  /// tiendas): la entrada en «Saber más» y la propia sesión demo. Apagado en
+  /// producción por decisión del proyecto; la build que se mande a revisión
+  /// tiene que llevarlo encendido o los revisores no tendrán cómo entrar.
+  bool get demoModeEnabled => _getConfigValue('DEMO_MODE_ENABLED', _parseBool);
 
   String get ssoClientId => _getConfigValue('SSO_CLIENT_ID', (final v) => v as String);
 

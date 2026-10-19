@@ -38,6 +38,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingHelpLink => 'How to access?';
 
   @override
+  String get landingDemoButton => 'Try the demo';
+
+  @override
+  String get demoConfirmTitle => 'Demo mode';
+
+  @override
+  String get demoConfirmBody => 'You will see the app with the fictitious data of an invented person, without signing in with Cl@ve. Nothing you do is sent to or stored in any real service. Sign out to leave.';
+
+  @override
+  String get demoConfirmEnter => 'Enter the demo';
+
+  @override
+  String get demoConfirmBack => 'Back';
+
+  @override
+  String get demoConfirmPersistedSessionBody => 'There is a session saved on this device with quick access. Entering the demo will close it first: to go back to your space you will need to sign in with Cl@ve again.';
+
+  @override
+  String get demoConfirmCloseSessionAndEnter => 'Close the saved session and enter';
+
+  @override
+  String get demoConfirmCodeLabel => 'Access code';
+
+  @override
+  String get demoConfirmCodeError => 'Incorrect code. Check the demo access code.';
+
+  @override
+  String get demoBannerLabel => 'DEMO';
+
+  @override
+  String get demoPersistedSessionNotice => 'There is a session saved on this device. Sign in with quick access and sign out before using the demo.';
+
+  @override
   String get landingHelpPageTitle => 'How to access';
 
   @override

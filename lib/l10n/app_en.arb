@@ -41,6 +41,50 @@
   "@landingHelpLink": {
     "description": "Text link that navigates to the access help screen."
   },
+  "landingDemoButton": "Try the demo",
+  "@landingDemoButton": {
+    "description": "Discreet link on the landing screen that opens the demo-mode confirmation sheet (for store reviewers): the app with fictitious data, no Cl@ve."
+  },
+  "demoConfirmTitle": "Demo mode",
+  "@demoConfirmTitle": {
+    "description": "Title of the confirmation sheet shown before entering demo mode."
+  },
+  "demoConfirmBody": "You will see the app with the fictitious data of an invented person, without signing in with Cl@ve. Nothing you do is sent to or stored in any real service. Sign out to leave.",
+  "@demoConfirmBody": {
+    "description": "Body of the demo-mode confirmation sheet: explains that the data is fictitious and nothing is sent."
+  },
+  "demoConfirmEnter": "Enter the demo",
+  "@demoConfirmEnter": {
+    "description": "Primary button of the demo-mode confirmation sheet."
+  },
+  "demoConfirmBack": "Back",
+  "@demoConfirmBack": {
+    "description": "Secondary button of the demo-mode confirmation sheet; closes it without entering."
+  },
+  "demoConfirmPersistedSessionBody": "There is a session saved on this device with quick access. Entering the demo will close it first: to go back to your space you will need to sign in with Cl@ve again.",
+  "@demoConfirmPersistedSessionBody": {
+    "description": "Extra paragraph of the demo-mode confirmation sheet when a real session is saved on the device (quick access): warns that entering will close it."
+  },
+  "demoConfirmCloseSessionAndEnter": "Close the saved session and enter",
+  "@demoConfirmCloseSessionAndEnter": {
+    "description": "Primary button of the demo-mode confirmation sheet when a session is saved: closes it and enters the demo."
+  },
+  "demoConfirmCodeLabel": "Access code",
+  "@demoConfirmCodeLabel": {
+    "description": "Label of the code field in the demo-mode confirmation sheet. The code is given in the store review notes."
+  },
+  "demoConfirmCodeError": "Incorrect code. Check the demo access code.",
+  "@demoConfirmCodeError": {
+    "description": "Inline error of the code field in the demo-mode sheet when the code does not match."
+  },
+  "demoBannerLabel": "DEMO",
+  "@demoBannerLabel": {
+    "description": "Text of the diagonal ribbon painted over the whole app while the session is the demo one. Very short: it goes on a ribbon."
+  },
+  "demoPersistedSessionNotice": "There is a session saved on this device. Sign in with quick access and sign out before using the demo.",
+  "@demoPersistedSessionNotice": {
+    "description": "Notice when trying to enter the demo while a real session is saved on the device (quick access): it must be closed first."
+  },
   "landingHelpPageTitle": "How to access",
   "@landingHelpPageTitle": {
     "description": "AppBar title of the access help screen."
