@@ -167,6 +167,7 @@ final class _FakeAgendaRepository implements AgendaRepository {
   Future<AgendaAppointmentsSnapshot> loadAppointments({
     required final String documentNumber,
     final String? agentId,
+    final bool includeHealth = true,
   }) async => AgendaAppointmentsSnapshot(appointments: appointments, failedSources: failedSources);
 
   @override

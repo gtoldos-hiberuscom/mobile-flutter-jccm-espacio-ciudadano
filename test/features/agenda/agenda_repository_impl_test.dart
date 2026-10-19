@@ -53,6 +53,21 @@ void main() {
       expect(appointments[4].kind, AgendaAppointmentKind.credential);
     });
 
+    test('with representation loads only notification events', () async {
+      final adapter = _AgendaAdapter();
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final snapshot = await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+        includeHealth: false,
+      );
+
+      expect(adapter.paths, ['/api/v1/ciudadanos/agent-1/eventos/TODOS']);
+      expect(snapshot.appointments, isNotEmpty);
+    });
+
     test('a primary care appointment published by both sources is listed once', () async {
       final adapter = _AgendaAdapter(
         primaryCareAppointments: [

@@ -137,10 +137,11 @@ abstract final class Routes {
   /// Returns true when [path] requires authentication.
   static bool requiresAuth(final String path) => _authenticated.any(path.startsWith);
 
-  /// Personal information that cannot be queried with a representative
-  /// certificate. Primary-care appointments are gated inside the Health tab.
+  /// Las páginas con datos no disponibles para representación se encargan de
+  /// mostrar su aviso dentro de la propia vista, para conservar sus enlaces e
+  /// información de ayuda.
   static bool isUnavailableForRepresentative(final String path) {
-    return path.startsWith(myDataEducationUniversityTitles);
+    return false;
   }
 
   static bool isKnownRoute(final String? path) {

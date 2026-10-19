@@ -78,6 +78,14 @@ final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
       return const [];
     }
 
+    final catastroError = _catastroServiceError(payload);
+    if (catastroError != null) {
+      // La fachada devuelve 200 aunque Catastro no haya podido procesar la
+      // consulta. No es una ausencia de inmuebles: la pantalla debe ofrecer
+      // reintentar en lugar de afirmar que no existen datos.
+      throw StateError(catastroError);
+    }
+
     final decoded = _decodePayload(payload);
     final root = _asStringMap(decoded);
     final body = root == null ? null : _decodePayload(root['body']);
@@ -89,6 +97,18 @@ final class MyDataHousingRepositoryImpl implements MyDataHousingRepository {
   /// Tres estados: 404 → `null`, rechazo de autorización → excepción tipada,
   /// resto de errores → se propagan. Ver [intermediacionRawResponse].
   Future<Object?> _rawResponse(final Future<Object?> Function() fetch) => intermediacionRawResponse(fetch);
+
+  String? _catastroServiceError(final Object? payload) {
+    final root = _asStringMap(payload);
+    final body = _asStringMap(root?['body']);
+    final attributes = _asStringMap(body?['atributos']);
+    final state = _asStringMap(attributes?['estado']);
+    final message = _firstString(state ?? const {}, const ['literalError']);
+    if (message != null && message.trim().toLowerCase().startsWith('error')) {
+      return message;
+    }
+    return null;
+  }
 
   String? _composeAddress(final Map<String, Object?> data) {
     final parts = [

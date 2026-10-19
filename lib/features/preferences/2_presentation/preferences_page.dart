@@ -260,10 +260,10 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
             actionLabel: preferences.notificationContact == null ? l10n.preferencesAddContactAction : l10n.preferencesManageAction,
             actionIcon: AppIcons.edit,
             showActiveStatus: true,
-            summaryItems: [
-              ?preferences.notificationContact?.phone,
-              ?preferences.notificationContact?.email,
-            ],
+            activeSummary: AppNotificationContactSummary(
+              phone: preferences.notificationContact?.phone,
+              email: preferences.notificationContact?.email,
+            ),
             onAction: () => context.go(
               Uri(
                 path: Routes.notificationContact,
