@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/disability_title.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_contact_actions.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_social_welfare_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_required_state.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -19,7 +21,7 @@ class MyDataSocialWelfareDisabilityPage extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final disabilityAsync = ref.watch(disabilityTitleProvider);
+    final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
 
     return AppDetailScaffold(
       title: l10n.socialWelfareDisabilityTitle,
@@ -34,11 +36,15 @@ class MyDataSocialWelfareDisabilityPage extends ConsumerWidget {
         actionIcon: AppIcons.openInNew,
       ),
       appBarBackgroundColor: AppColors.backgroundBlueLighter,
-      body: disabilityAsync.when(
-        data: (final title) => title == null ? _DisabilityEmpty(ref: ref) : _DisabilityContent(title: title),
-        loading: () => const Center(child: AppLoadingIndicator()),
-        error: (final error, final stackTrace) => error is MyDataAuthorizationRequired ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataSocialWelfareDisability, onAuthorized: () => ref.invalidate(disabilityTitleProvider)) : _DisabilityError(ref: ref),
-      ),
+      body: isRepresentative
+          ? const MyDataRepresentativeUnavailable()
+          : ref
+                .watch(disabilityTitleProvider)
+                .when(
+                  data: (final title) => title == null ? _DisabilityEmpty(ref: ref) : _DisabilityContent(title: title),
+                  loading: () => const Center(child: AppLoadingIndicator()),
+                  error: (final error, final stackTrace) => error is MyDataAuthorizationRequired ? MyDataAuthorizationRequiredState(returnTo: Routes.myDataSocialWelfareDisability, onAuthorized: () => ref.invalidate(disabilityTitleProvider)) : _DisabilityError(ref: ref),
+                ),
     );
   }
 }

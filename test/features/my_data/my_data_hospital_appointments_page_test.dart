@@ -18,8 +18,7 @@ const _pendientes = 'Citas pendientes';
 const _pasadas = 'Citas pasadas';
 const _sinPendientes = 'No tienes citas hospitalarias pendientes.';
 const _sinPasadas = 'No tienes citas hospitalarias pasadas.';
-const _servicioCaido =
-    'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+const _servicioCaido = 'El servicio de consulta de datos de citas de atención hospitalaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.';
 const _avisoTitulo = 'Verificación de identidad';
 const _avisoCuerpo = 'Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.';
 

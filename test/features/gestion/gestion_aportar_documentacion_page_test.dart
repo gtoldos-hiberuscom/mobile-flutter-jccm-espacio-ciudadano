@@ -23,7 +23,7 @@ import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/tercero_identificacion.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
-const _registrarLabel = 'Enviar documentos';
+const _registrarLabel = 'Enviar documentos aportados';
 const _avisoParcial = 'Algunos ficheros no se han podido enviar. Puedes reintentarlo.';
 const _tercero = TerceroIdentificacion(tipodoc: 'NIF', documentNumber: '99999999R');
 

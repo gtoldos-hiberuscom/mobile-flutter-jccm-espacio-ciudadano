@@ -3,7 +3,6 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
@@ -42,6 +41,10 @@ class MyDataPrimaryCareAppointmentsPage extends ConsumerStatefulWidget {
 /// siguiente de citas pasadas.
 const double _loadMoreScrollThreshold = 240;
 
+/// Listado de centros del SESCAM: es el enlace de «más información» de la hoja
+/// informativa y también el de contacto cuando no hay citas.
+const String _healthCentersUrl = 'https://sanidad.castillalamancha.es/ciudadanos/listado-de-centros';
+
 class _MyDataPrimaryCareAppointmentsPageState extends ConsumerState<MyDataPrimaryCareAppointmentsPage> {
   HealthAppointmentFilter _filter = HealthAppointmentFilter.pending;
   AppListFilters _filters = const AppListFilters();
@@ -71,7 +74,7 @@ class _MyDataPrimaryCareAppointmentsPageState extends ConsumerState<MyDataPrimar
       actionLabel: l10n.myDataHealthInfoSheetMoreInformation,
       actionIcon: AppIcons.openInNew,
       actionIsExternalLink: true,
-      onActionPressed: () => launchExternalUrlWithConfirmation(context, ref.read(appConfigProvider).sescamUrl),
+      onActionPressed: () => launchExternalUrlWithConfirmation(context, Uri.parse(_healthCentersUrl)),
     );
   }
 

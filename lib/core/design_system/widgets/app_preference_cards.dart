@@ -100,9 +100,7 @@ class AppConsentPreferenceCard extends StatelessWidget {
                       style: AppTypography.leadingBold.copyWith(color: AppColors.textPrimary),
                     ),
                   ),
-                  const ExcludeSemantics(
-                    child: AppIcon(AppIcons.arrowForward, color: AppColors.textPrimary),
-                  ),
+                  AppPreferenceHeaderAction(onPressed: onEdit),
                 ],
               ),
             ),
@@ -135,6 +133,7 @@ class AppPreferenceCard extends StatelessWidget {
     this.showInactiveIcon = false,
     this.filledAction = false,
     this.summaryItems = const [],
+    this.activeSummary,
     this.activeFooterText,
     this.showActiveStatus = false,
   }) : assert(title != '', 'title must not be empty'),
@@ -156,6 +155,10 @@ class AppPreferenceCard extends StatelessWidget {
   final bool showInactiveIcon;
   final bool filledAction;
   final List<String> summaryItems;
+
+  /// Contenido estructurado que se muestra cuando la preferencia está activa.
+  /// Útil cuando el resumen necesita etiquetas, como los canales de contacto.
+  final Widget? activeSummary;
   final String? activeFooterText;
   final bool showActiveStatus;
 
@@ -167,7 +170,7 @@ class AppPreferenceCard extends StatelessWidget {
     );
     final l10n = AppLocalizations.of(context);
     final contentColor = status == AppPreferenceStatus.enabled ? AppColors.textPrimary : AppColors.borderBlueMutedBase;
-    final hasActiveSummary = status == AppPreferenceStatus.enabled && summaryItems.isNotEmpty;
+    final hasActiveSummary = status == AppPreferenceStatus.enabled && (summaryItems.isNotEmpty || activeSummary != null);
     final isActive = status == AppPreferenceStatus.enabled;
     final showsStatusTag = !hasActiveSummary || (isActive && showActiveStatus);
     final description = switch (status) {
@@ -239,9 +242,9 @@ class AppPreferenceCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (isActive)
-                    const ExcludeSemantics(
-                      child: AppIcon(AppIcons.arrowForward, color: AppColors.textPrimary),
+                  if (isActive && onAction != null)
+                    AppPreferenceHeaderAction(
+                      onPressed: onAction!,
                     ),
                 ],
               ),
@@ -250,7 +253,7 @@ class AppPreferenceCard extends StatelessWidget {
             Semantics(
               sortKey: const OrdinalSortKey(2),
               child: hasActiveSummary
-                  ? AppPreferenceSummaryList(items: summaryItems)
+                  ? activeSummary ?? AppPreferenceSummaryList(items: summaryItems)
                   : Container(
                       width: double.infinity,
                       color: status == AppPreferenceStatus.enabled ? AppColors.backgroundBlueLighter : AppColors.backgroundBlueMutedLight,
@@ -281,6 +284,77 @@ class AppPreferenceCard extends StatelessWidget {
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Botón de acceso rápido mostrado por las tarjetas de preferencias.
+///
+/// La flecha no es decorativa: lleva a la misma acción que el botón situado
+/// al final de la tarjeta. Mantener ambos accesos evita que el indicador de
+/// navegación parezca interactivo sin serlo.
+class AppPreferenceHeaderAction extends StatelessWidget {
+  const AppPreferenceHeaderAction({
+    required this.onPressed,
+    super.key,
+  });
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(final BuildContext context) {
+    return GestureDetector(
+      excludeFromSemantics: true,
+      behavior: HitTestBehavior.opaque,
+      onTap: onPressed,
+      child: const AppIcon(AppIcons.arrowForward, color: AppColors.textPrimary),
+    );
+  }
+}
+
+/// Resumen de los canales registrados para las notificaciones electrónicas.
+class AppNotificationContactSummary extends StatelessWidget {
+  const AppNotificationContactSummary({
+    required this.phone,
+    required this.email,
+    super.key,
+  });
+
+  final String? phone;
+  final String? email;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final phoneValue = phone?.trim();
+    final emailValue = email?.trim();
+
+    return Container(
+      width: double.infinity,
+      color: AppColors.backgroundBlueLighter,
+      padding: const EdgeInsets.all(AppDimensions.space8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (phoneValue != null && phoneValue.isNotEmpty)
+            AppPreferenceDataRow(
+              label: l10n.gestionNotificacionesAltaPhoneLabel.toUpperCase(),
+              value: phoneValue,
+            ),
+          if (phoneValue != null && phoneValue.isNotEmpty && emailValue != null && emailValue.isNotEmpty) const SizedBox(height: AppDimensions.space12),
+          if (emailValue != null && emailValue.isNotEmpty) ...[
+            Text(
+              l10n.gestionNotificacionesAltaEmailLabel.toUpperCase(),
+              style: AppTypography.captionUppercase.copyWith(color: AppColors.primary),
+            ),
+            const SizedBox(height: AppDimensions.space4),
+            Text(
+              emailValue,
+              style: AppTypography.bodyRegular.copyWith(color: AppColors.primary),
+            ),
+          ],
+        ],
       ),
     );
   }

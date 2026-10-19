@@ -2584,6 +2584,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthAppointmentsServiceUnavailableMessage => 'The service for consulting your health appointments is unavailable. You can reload the information or try again later.';
 
   @override
+  String get myDataHealthHospitalAppointmentsServiceUnavailableMessage => 'The service for consulting your hospital appointments is currently unavailable. Try again later.';
+
+  @override
   String get familiaNumerosaRetry => 'Retry';
 
   @override
@@ -4602,6 +4605,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpFaqIntro => 'Find answers to the most common questions about Citizen Space.';
+
+  @override
+  String get faqCategoryAccess => 'Access';
+
+  @override
+  String get faqCategoryMyData => 'My data';
+
+  @override
+  String get faqCategoryManagements => 'My requests and notifications';
+
+  @override
+  String get faqCategoryAgenda => 'Calendar';
+
+  @override
+  String get faqCategoryPopulation => 'Population register';
 
   @override
   String get helpContactGuidesIntro => 'Browse the available guides to resolve your questions step by step.';

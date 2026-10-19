@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_data_tab.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_employment_services_tab.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Employment detail page — Figma nodes 43973:1993 and 43973:2077.
@@ -27,6 +29,7 @@ class _MyDataEmploymentPageState extends ConsumerState<MyDataEmploymentPage> {
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
     final selectedTab = _selectedTab ?? _EmploymentTab.data;
 
     return AppTabbedDetailScaffold(
@@ -36,9 +39,9 @@ class _MyDataEmploymentPageState extends ConsumerState<MyDataEmploymentPage> {
       tabs: [l10n.myDataEmploymentDataTab, l10n.myDataEmploymentServicesTab],
       selectedIndex: selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _EmploymentTab.values[index]),
-      tabViews: const [
-        MyDataEmploymentDataTab(),
-        MyDataEmploymentServicesTab(),
+      tabViews: [
+        if (isRepresentative) const MyDataRepresentativeUnavailable() else const MyDataEmploymentDataTab(),
+        const MyDataEmploymentServicesTab(),
       ],
     );
   }
