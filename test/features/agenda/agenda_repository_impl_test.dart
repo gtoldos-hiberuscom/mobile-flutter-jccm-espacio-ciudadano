@@ -34,15 +34,21 @@ void main() {
       expect(appointments, hasLength(5));
       expect(appointments[0].description, 'Trámite administrativo');
       expect(appointments[0].kind, AgendaAppointmentKind.notification);
-      expect(appointments[1].title, 'LAGUNA RUIDERA MONTESINOS');
-      expect(appointments[1].description, 'Cita de Atención Primaria');
+      // Las citas de primaria que publica la agenda general traen el cuerpo
+      // por párrafos: se conservan como filas, con el título del evento.
+      expect(appointments[1].title, 'Cita de Atención Primaria');
+      expect(appointments[1].description, 'Tiene una cita de atención primaria el próximo 15/06/2026');
       expect(appointments[1].kind, AgendaAppointmentKind.health);
       expect(appointments[1].channel, 'Presencial');
-      expect(appointments[1].detail, 'Consulta a demanda');
-      expect(appointments[2].title, 'CAMPO CRIPTANA MOLINO');
+      expect(appointments[1].details, [
+        (label: 'Profesional', value: 'LAGUNA RUIDERA MONTESINOS'),
+        (label: 'Tipo de cita', value: 'DEMANDA'),
+        (label: 'Modo de cita', value: 'Presencial'),
+      ]);
+      expect(appointments[2].title, 'Cita de atención primaria');
       expect(appointments[2].kind, AgendaAppointmentKind.health);
       expect(appointments[2].channel, 'Telefónica');
-      expect(appointments[2].detail, 'Teleconsulta a demanda');
+      expect(appointments[2].details.map((final detail) => detail.label), ['Profesional', 'Tipo de cita', 'Modo de cita']);
       expect(appointments[3].description, 'Consulta Medicina de Familia');
       expect(appointments[3].kind, AgendaAppointmentKind.health);
       expect(appointments[4].title, 'Caducidad de carnet joven');
@@ -51,6 +57,7 @@ void main() {
         'El carnet joven caduca el próximo 30/01/2030',
       );
       expect(appointments[4].kind, AgendaAppointmentKind.credential);
+      expect(appointments[4].details, isEmpty);
     });
 
     test('a primary care appointment published by both sources is listed once', () async {
@@ -148,7 +155,7 @@ void main() {
       expect(appointments.single.dateTime.isUtc, isFalse);
     });
 
-    test('una notificación conserva título, asunto y unidad emisora', () async {
+    test('una notificación conserva título, intro y las filas etiquetadas del mensaje', () async {
       final adapter = _AgendaAdapter(
         primaryCareAppointments: const [],
         eventos: const [
@@ -171,9 +178,48 @@ void main() {
 
       expect(appointments, hasLength(1));
       expect(appointments.single.title, 'Caducidad de notificación');
-      expect(appointments.single.description, 'Asunto: Prueba 2');
-      expect(appointments.single.detail, 'UnidadOrganica 2');
+      expect(appointments.single.description, 'Tiene una notificación próxima a caducar:');
+      expect(appointments.single.details, [
+        (label: 'Organismo emisor', value: 'UnidadOrganica 2'),
+        (label: 'Asunto', value: 'Prueba 2'),
+      ]);
+      expect(appointments.single.detail, isNull);
       expect(appointments.single.kind, AgendaAppointmentKind.notification);
+    });
+
+    test('una cita hospitalaria conserva los párrafos del mensaje como filas y descarta la hora (JCCMEC-256)', () async {
+      // Ejemplo literal de la revisión del cliente del 13/10: en la app el
+      // mensaje salía en una sola línea, con «Medicina interna» repetido debajo.
+      final adapter = _AgendaAdapter(
+        primaryCareAppointments: const [],
+        eventos: const [
+          {
+            'fechaVencimiento': '2026-11-02T13:00:00',
+            'titulo': 'Cita de atención hospitalaria',
+            'tipoEvento': 'CITA',
+            'servicio': 'MEDICINA INTERNA',
+            'mensaje': '<p>Tiene una cita de atención hospitalaria para el próximo 02/11/2026</p> <p>Hora: 13:00</p> <p>Servicio: MEDICINA INTERNA</p> <p>Centro: HOSPITAL UNIVERSITARIO DE TOLEDO</p> <p>Sala: CONSULTAS B-203</p>',
+          },
+        ],
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final appointments = (await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      )).appointments;
+
+      final appointment = appointments.single;
+      expect(appointment.title, 'Cita de atención hospitalaria');
+      expect(appointment.description, 'Tiene una cita de atención hospitalaria para el próximo 02/11/2026');
+      expect(appointment.kind, AgendaAppointmentKind.notification);
+      expect(appointment.details, [
+        (label: 'Servicio', value: 'MEDICINA INTERNA'),
+        (label: 'Centro', value: 'HOSPITAL UNIVERSITARIO DE TOLEDO'),
+        (label: 'Sala', value: 'CONSULTAS B-203'),
+      ]);
+      expect(appointment.detail, isNull, reason: 'el servicio ya va en su fila: no se repite como texto secundario');
     });
 
     test('refreshes events through the gateway refrescar endpoint', () async {

@@ -105,7 +105,65 @@ void main() {
     expect(find.text('PRESENCIAL'), findsOneWidget);
     expect(find.text('Alvaro nombre largo garcia bulero'), findsOneWidget);
     expect(find.text('Consulta a demanda'), findsOneWidget);
+    // El centro de SESCAM se muestra con etiqueta y respetando las siglas:
+    // sin ella el cliente no sabía qué era ese dato (JCCMEC-256).
+    expect(find.text('Centro: C.S. palomarejos_pren'), findsOneWidget);
     expect(find.text('C.S. PALOMAREJOS_PREN'), findsNothing);
+  });
+
+  testWidgets('un evento con párrafos etiquetados se pinta con título, intro y una fila por etiqueta (JCCMEC-256)', (final tester) async {
+    await _pumpAgenda(
+      tester,
+      appointments: [
+        AgendaAppointment(
+          dateTime: DateTime(2026, 11, 2, 13),
+          title: 'Cita de atención hospitalaria',
+          description: 'Tiene una cita de atención hospitalaria para el próximo 02/11/2026',
+          details: const [
+            (label: 'Servicio', value: 'MEDICINA INTERNA'),
+            (label: 'Centro', value: 'HOSPITAL UNIVERSITARIO DE TOLEDO'),
+            (label: 'Sala', value: 'CONSULTAS B-203'),
+          ],
+        ),
+      ],
+    );
+
+    expect(find.text('Cita de atención hospitalaria'), findsOneWidget);
+    expect(find.text('Tiene una cita de atención hospitalaria para el próximo 02/11/2026'), findsOneWidget);
+    expect(find.text('Servicio: Medicina interna'), findsOneWidget);
+    expect(find.text('Centro: Hospital universitario de toledo'), findsOneWidget);
+    expect(find.text('Sala: Consultas B-203'), findsOneWidget);
+    expect(find.textContaining('Hora'), findsNothing);
+  });
+
+  testWidgets('la cita de primaria publicada por la agenda general usa el mismo diseño por filas que el resto de eventos', (final tester) async {
+    await _pumpAgenda(
+      tester,
+      appointments: [
+        AgendaAppointment(
+          dateTime: DateTime(2026, 10, 19, 14, 6),
+          title: 'Cita de atención primaria',
+          description: 'Tiene una cita de atención primaria el próximo 19/10/2026',
+          kind: AgendaAppointmentKind.health,
+          channel: 'Presencial',
+          details: const [
+            (label: 'Profesional', value: 'CAMPO CRIPTANA MOLINO'),
+            (label: 'Tipo de cita', value: 'VACUNA GRIPE'),
+            (label: 'Modo de cita', value: 'Presencial'),
+          ],
+        ),
+      ],
+    );
+
+    expect(find.text('Cita de atención primaria'), findsOneWidget);
+    expect(find.text('Tiene una cita de atención primaria el próximo 19/10/2026'), findsOneWidget);
+    expect(find.text('Profesional: Campo criptana molino'), findsOneWidget);
+    expect(find.text('Tipo de cita: Vacuna gripe'), findsOneWidget);
+    expect(find.text('Modo de cita: Presencial'), findsOneWidget);
+    // La jerarquía sanitaria (canal en mayúsculas sobre el profesional) queda
+    // para las citas estructuradas de SESCAM.
+    expect(find.text('PRESENCIAL'), findsNothing);
+    expect(find.text('Campo criptana molino'), findsNothing);
   });
 
   testWidgets('el usuario sin CIP ve el aviso informativo específico', (final tester) async {

@@ -374,6 +374,33 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final primaryCareDetails = _parsePrimaryCareMessage(message);
     final isPrimaryCare = source == AgendaAppointmentSource.general && (_isPrimaryCareEvent(title, specialty, message, detail, center) || primaryCareDetails != null);
     final isOnDemandHealthAppointment = source == AgendaAppointmentSource.health && _isOnDemandAppointment(specialty);
+    final kind = switch (source) {
+      AgendaAppointmentSource.health => AgendaAppointmentKind.health,
+      AgendaAppointmentSource.general when _isCredentialEvent(title, specialty, message) => AgendaAppointmentKind.credential,
+      AgendaAppointmentSource.general when isPrimaryCare => AgendaAppointmentKind.health,
+      AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
+    };
+
+    // La agenda general publica el cuerpo del evento como párrafos HTML
+    // («<p>Profesional: …</p> <p>Sala: …</p>»). Cuando traen filas etiquetadas
+    // se conservan una a una, para pintarlas como hace la web, en vez de
+    // aplanarlas en una sola frase (JCCMEC-256). El título es el del evento y
+    // la intro, los párrafos sin etiqueta. «Hora» se descarta: ya va en la
+    // fecha de la cita.
+    if (source == AgendaAppointmentSource.general) {
+      final structured = _structuredMessage(rawMessage);
+      if (structured.details.isNotEmpty) {
+        return AgendaAppointment(
+          dateTime: dateTime,
+          title: title ?? (isPrimaryCare ? 'Cita de Atención Primaria' : specialty ?? 'Cita'),
+          description: structured.intro ?? message ?? title ?? 'Cita',
+          kind: kind,
+          channel: primaryCareDetails?.channel ?? channel,
+          center: center,
+          details: structured.details,
+        );
+      }
+    }
 
     final description = switch (source) {
       AgendaAppointmentSource.health when isOnDemandHealthAppointment => 'Cita de Atención Primaria',
@@ -390,12 +417,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
           ? primaryCareDetails?.professional ?? professional ?? title ?? 'Cita de Atención Primaria'
           : title ?? specialty ?? 'Cita',
       description: description,
-      kind: switch (source) {
-        AgendaAppointmentSource.health => AgendaAppointmentKind.health,
-        AgendaAppointmentSource.general when _isCredentialEvent(title, specialty, message) => AgendaAppointmentKind.credential,
-        AgendaAppointmentSource.general when isPrimaryCare => AgendaAppointmentKind.health,
-        AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
-      },
+      kind: kind,
       channel: primaryCareDetails?.channel ?? channel,
       detail: isOnDemandHealthAppointment ? _primaryCareAppointmentDetail(specialty, channel) : primaryCareDetails?.appointmentDetail ?? notificationDetails.issuer ?? detail ?? center,
       center: center,
@@ -431,6 +453,43 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       subject: subject == null ? null : _withLabel('Asunto', subject),
       issuer: issuer == null ? null : _withoutLabel(issuer, issuerLabels),
     );
+  }
+
+  /// Etiquetas que no se convierten en fila: la hora ya se muestra junto a la
+  /// fecha de la tarjeta.
+  static const _omittedDetailLabels = {'hora'};
+
+  /// Separa el mensaje HTML del evento en la intro (párrafos sin etiqueta,
+  /// unidos) y las filas «Etiqueta: valor» (un párrafo cada una), en el orden
+  /// original.
+  ({String? intro, List<AgendaAppointmentDetail> details}) _structuredMessage(final String? rawMessage) {
+    final intro = <String>[];
+    final details = <AgendaAppointmentDetail>[];
+    for (final line in _cleanHtmlLines(rawMessage)) {
+      final row = _labeledRow(line);
+      if (row == null) {
+        intro.add(line);
+      } else if (!_omittedDetailLabels.contains(row.label.toLowerCase())) {
+        details.add(row);
+      }
+    }
+    return (intro: intro.isEmpty ? null : intro.join(' '), details: details);
+  }
+
+  /// «Profesional:CAMPO CRIPTANA» → (Profesional, CAMPO CRIPTANA). Una línea
+  /// que termina en dos puntos («Tiene una notificación próxima a caducar:»)
+  /// no es una fila, es intro.
+  AgendaAppointmentDetail? _labeledRow(final String line) {
+    final match = RegExp(r'^([^:]{1,40}?)\s*:\s*(.+)$').firstMatch(line);
+    if (match == null) {
+      return null;
+    }
+    final label = match.group(1)!.trim();
+    final value = match.group(2)!.trim();
+    if (label.isEmpty || value.isEmpty) {
+      return null;
+    }
+    return (label: '${label[0].toUpperCase()}${label.substring(1)}', value: value);
   }
 
   List<String> _cleanHtmlLines(final String? value) {
