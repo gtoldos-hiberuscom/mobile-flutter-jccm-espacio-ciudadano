@@ -92,16 +92,12 @@ final class JwtClaims {
 
   /// Whether the authenticated natural person is acting on behalf of another
   /// person or legal entity.
-  bool get isRepresentative {
-    if (representedAgentId?.trim().isNotEmpty ?? false) {
-      return true;
-    }
-    // Algunos certificados de representación no incluyen el identificador de
-    // la persona representada en el access token, pero sí el scope de Cl@ve.
-    // Sin reconocerlo las vistas de datos llegan a consultar servicios que
-    // rechazan la representación (por ejemplo, citas sanitarias).
-    return scope?.split(RegExp(r'\s+')).any((final item) => item.trim().toLowerCase() == 'clave_representado') ?? false;
-  }
+  ///
+  /// `clave_representado` is an OAuth scope granted to ordinary citizen
+  /// sessions too; it is not evidence that this particular session is acting
+  /// on behalf of someone. The represented agent claim is the session-level
+  /// marker and prevents regular users from seeing representative-only states.
+  bool get isRepresentative => representedAgentId?.trim().isNotEmpty ?? false;
 
   /// Agent identifier expected in request bodies for the active identity.
   /// The URL continues to use [subAlt], which the gateway resolves itself.
