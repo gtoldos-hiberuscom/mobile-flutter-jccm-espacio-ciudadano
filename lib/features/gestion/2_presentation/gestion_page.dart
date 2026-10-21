@@ -73,7 +73,6 @@ class GestionPage extends ConsumerWidget {
               children: [
                 for (final section in sections) ...[
                   if (section.hasDividerAbove) ...[
-                    const SizedBox(height: AppDimensions.space16),
                     const AppDivider(),
                     const SizedBox(height: AppDimensions.space16),
                   ],

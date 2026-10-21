@@ -5051,6 +5051,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get legalNoticeHeading => 'Legal notice';
 
   @override
+  String get legalNoticeOfficialDescription => 'Consulta el Aviso Legal completo y actualizado en el portal oficial de Espacio Ciudadano.';
+
+  @override
+  String get legalNoticeOfficialAction => 'Abrir Aviso Legal oficial';
+
+  @override
   String get supportErrorSubmitUnauthorized => 'You do not have permission to submit the support form.';
 
   @override

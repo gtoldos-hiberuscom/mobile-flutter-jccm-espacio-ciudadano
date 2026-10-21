@@ -2671,7 +2671,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get discapacidadActionPkpass => 'Añadir a Wallet';
 
   @override
-  String get recommendationsTitle => 'Para mí';
+  String get recommendationsTitle => 'Recomendaciones para mí';
 
   @override
   String get recommendationsTabAll => 'Todo';
@@ -4531,7 +4531,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeNewsSectionTitle => 'Mis novedades';
 
   @override
-  String get homeMyDataAccessesTitle => 'Accesos Mis datos';
+  String get homeMyDataAccessesTitle => 'Acceso a mis datos';
 
   @override
   String get homeNewsNotificationsTitle => 'Notificaciones';
@@ -4839,7 +4839,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get legalSearchCloseTooltip => 'Cerrar búsqueda';
 
   @override
-  String get privacyResponsibleTitle => '¿Quién es responsable del tratamiento de datos?';
+  String get privacyResponsibleTitle => '¿Quién es el responsable del tratamiento?';
 
   @override
   String get privacyDocumentTitle => 'Información de protección de datos sobre el tratamiento de datos personales en Espacio Ciudadano';
@@ -4848,34 +4848,34 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyEmailCopied => 'No hay una aplicación de correo disponible. La dirección se ha copiado al portapapeles.';
 
   @override
-  String get privacyResponsibleIntro => 'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:';
+  String get privacyResponsibleIntro => '1. La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:';
 
   @override
-  String get privacyResponsibleItemProfile => 'Información del perfil de usuario.';
+  String get privacyResponsibleItemProfile => 'Visualización de las notificaciones y registro';
 
   @override
-  String get privacyResponsibleItemVisualizations => 'Visualización de datos seleccionados de la Administración regional y de otros temas de interés.';
+  String get privacyResponsibleItemVisualizations => 'Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado';
 
   @override
-  String get privacyResponsibleItemRecommendations => 'Recomendaciones personalizadas según los hechos vitales indicados.';
+  String get privacyResponsibleItemRecommendations => 'Recomendaciones realizadas en base a los hechos vitales marcados.';
 
   @override
-  String get privacyResponsibleItemDownloads => 'Descargas de los carnés seleccionados.';
+  String get privacyResponsibleItemDownloads => 'Descargas de los carnés seleccionados';
 
   @override
   String get privacyResponsibleItemAgenda => 'Visualización de la agenda';
 
   @override
-  String get privacyResponsibleOrgParagraph => 'Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.';
+  String get privacyResponsibleOrgParagraph => 'Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.';
 
   @override
-  String get privacyResponsibleContactIntro => 'Para contactar con el responsable, puedes hacelo mediante:';
+  String get privacyResponsibleContactIntro => 'Los datos de contacto de este responsable son los siguientes:';
 
   @override
-  String get privacyResponsibleContactAddressLabel => 'Dirección postal\n';
+  String get privacyResponsibleContactAddressLabel => 'Dirección Postal:\n';
 
   @override
-  String get privacyResponsibleContactAddressValue => 'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es';
+  String get privacyResponsibleContactAddressValue => 'Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071 Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es';
 
   @override
   String get privacyPurposeTitle => '¿Cuál es la denominación y finalidad del tratamiento?';
@@ -5051,6 +5051,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get legalNoticeHeading => 'Aviso legal';
+
+  @override
+  String get legalNoticeOfficialDescription => 'Consulta el Aviso Legal completo y actualizado en el portal oficial de Espacio Ciudadano.';
+
+  @override
+  String get legalNoticeOfficialAction => 'Abrir Aviso Legal oficial';
 
   @override
   String get supportErrorSubmitUnauthorized => 'No tienes permisos para enviar el formulario de soporte.';

@@ -5195,7 +5195,7 @@ abstract class AppLocalizations {
   /// Recommendations — app bar title for the citizen recommendations list.
   ///
   /// In es, this message translates to:
-  /// **'Para mí'**
+  /// **'Recomendaciones para mí'**
   String get recommendationsTitle;
 
   /// Recommendations — tab label for the unfiltered bucket.
@@ -8633,7 +8633,7 @@ abstract class AppLocalizations {
   /// Home — título de la sección de accesos rápidos a Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Accesos Mis datos'**
+  /// **'Acceso a mis datos'**
   String get homeMyDataAccessesTitle;
 
   /// Home — etiqueta de la tarjeta de notificaciones en Mis novedades.
@@ -9233,7 +9233,7 @@ abstract class AppLocalizations {
   /// Protección de datos — título de la sección del responsable del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'¿Quién es responsable del tratamiento de datos?'**
+  /// **'¿Quién es el responsable del tratamiento?'**
   String get privacyResponsibleTitle;
 
   /// Protección de datos — título del documento.
@@ -9251,31 +9251,31 @@ abstract class AppLocalizations {
   /// Protección de datos — párrafo introductorio del responsable del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:'**
+  /// **'1. La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:'**
   String get privacyResponsibleIntro;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Información del perfil de usuario.'**
+  /// **'Visualización de las notificaciones y registro'**
   String get privacyResponsibleItemProfile;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Visualización de datos seleccionados de la Administración regional y de otros temas de interés.'**
+  /// **'Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado'**
   String get privacyResponsibleItemVisualizations;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Recomendaciones personalizadas según los hechos vitales indicados.'**
+  /// **'Recomendaciones realizadas en base a los hechos vitales marcados.'**
   String get privacyResponsibleItemRecommendations;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Descargas de los carnés seleccionados.'**
+  /// **'Descargas de los carnés seleccionados'**
   String get privacyResponsibleItemDownloads;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
@@ -9287,25 +9287,25 @@ abstract class AppLocalizations {
   /// Protección de datos — párrafo sobre los órganos responsables de cada opción.
   ///
   /// In es, this message translates to:
-  /// **'Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.'**
+  /// **'Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.'**
   String get privacyResponsibleOrgParagraph;
 
   /// Protección de datos — introducción de los datos de contacto del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Para contactar con el responsable, puedes hacelo mediante:'**
+  /// **'Los datos de contacto de este responsable son los siguientes:'**
   String get privacyResponsibleContactIntro;
 
   /// Protección de datos — etiqueta en negrita de la dirección postal del responsable (termina en salto de línea).
   ///
   /// In es, this message translates to:
-  /// **'Dirección postal\n'**
+  /// **'Dirección Postal:\n'**
   String get privacyResponsibleContactAddressLabel;
 
   /// Protección de datos — bloque con la dirección postal y el correo del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es'**
+  /// **'Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071 Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es'**
   String get privacyResponsibleContactAddressValue;
 
   /// Protección de datos — título de la sección de finalidad del tratamiento.
@@ -9655,6 +9655,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Aviso legal'**
   String get legalNoticeHeading;
+
+  /// Aviso legal — descripción que dirige al documento oficial.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta el Aviso Legal completo y actualizado en el portal oficial de Espacio Ciudadano.'**
+  String get legalNoticeOfficialDescription;
+
+  /// Aviso legal — acción para abrir el documento oficial.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir Aviso Legal oficial'**
+  String get legalNoticeOfficialAction;
 
   /// Error al enviar el formulario de soporte sin permisos (401/403).
   ///

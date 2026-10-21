@@ -283,6 +283,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           onAction: _updatingBiometrics ? null : () => unawaited(_toggleBiometrics(preferencesArgs, preferences.biometricEnabled)),
           showInactiveIcon: true,
           showActiveStatus: true,
+          showActiveHeaderAction: false,
         ),
         const SizedBox(height: AppDimensions.space24),
         AppButton(
