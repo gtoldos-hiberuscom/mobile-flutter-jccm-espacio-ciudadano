@@ -80,7 +80,7 @@ flutter:
 #   - packages/clean_linter
 
 flutter_launcher_icons:
-  android: true
+  android: launcher_icon
   ios: true
   image_path: assets/icons/app/app_icon.png
   min_sdk_android: 21
