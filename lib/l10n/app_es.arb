@@ -821,6 +821,38 @@
   "@agendaEventsUnavailable": {
     "description": "Agenda — aviso de carga parcial cuando la fuente de eventos de la agenda no responde y el resto de la agenda sí se ha cargado."
   },
+  "agendaInfoTooltip": "Saber más sobre Agenda",
+  "@agendaInfoTooltip": {
+    "description": "Agenda — tooltip y etiqueta accesible del botón (i) de la barra superior."
+  },
+  "agendaInfoSheetTitle": "Saber más sobre Agenda",
+  "@agendaInfoSheetTitle": {
+    "description": "Agenda — título de la hoja informativa que abre la (i) (Figma 45536:38108)."
+  },
+  "agendaInfoSheetBody": "Consulta tus citas de atención primaria y hospitalaria, los avisos de tus notificaciones y de la caducidad de tus carnets.\n\nPara mostrarte las citas hospitalarias, necesitamos que verifiques tu identidad con un método de seguridad alta que garantice la protección de estos datos.\n\nEs posible que algunas citas o avisos no aparezcan, porque todavía no están disponibles.",
+  "@agendaInfoSheetBody": {
+    "description": "Agenda — cuerpo de la hoja informativa de la (i), tres párrafos."
+  },
+  "agendaInfoSheetFooter": "Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Junta de Comunidades de Castilla-La Mancha (JCCM).",
+  "@agendaInfoSheetFooter": {
+    "description": "Agenda — pie de la hoja informativa de la (i)."
+  },
+  "agendaInfoSheetMoreInformation": "Consultar más información",
+  "@agendaInfoSheetMoreInformation": {
+    "description": "Agenda — enlace al final de la hoja informativa de la (i); lleva a Ayuda y contacto."
+  },
+  "agendaHospitalLockedTitle": "Citas hospitalarias ocultas",
+  "@agendaHospitalLockedTitle": {
+    "description": "Agenda — título del aviso cuando el nivel de autenticación no permite ver las citas hospitalarias (Figma 45049:59928)."
+  },
+  "agendaHospitalLockedBody": "Tus datos hospitalarios están protegidos. Verifica tu identidad para consultar estas citas.",
+  "@agendaHospitalLockedBody": {
+    "description": "Agenda — texto del aviso de citas hospitalarias ocultas."
+  },
+  "agendaHospitalLockedAction": "Verificar",
+  "@agendaHospitalLockedAction": {
+    "description": "Agenda — botón del aviso de citas hospitalarias ocultas: abre la verificación de identidad con Cl@ve."
+  },
   "agendaLastUpdated": "Última actualización: {timestamp}",
   "@agendaLastUpdated": {
     "description": "Agenda — etiqueta del timestamp de última actualización.",
@@ -3572,7 +3604,7 @@
   "@discapacidadActionPkpass": {
     "description": "Carnet Discapacidad detail — PKPass action section label."
   },
-  "recommendationsTitle": "Para mí",
+  "recommendationsTitle": "Recomendaciones para mí",
   "@recommendationsTitle": {
     "description": "Recommendations — app bar title for the citizen recommendations list."
   },
@@ -4699,7 +4731,7 @@
   "@myDataHealthScopeHospital": {
     "description": "Selector de ámbito asistencial en Salud: atención hospitalaria."
   },
-  "myDataHealthHospitalAppointmentsTitle": "Citas hospitalarias",
+  "myDataHealthHospitalAppointmentsTitle": "Citas de atención hospitalaria",
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Título del bloque de citas hospitalarias."
   },
@@ -4711,7 +4743,7 @@
   "@myDataHealthHospitalNavTitle": {
     "description": "Salud — tarjeta del menú que lleva a las citas hospitalarias."
   },
-  "myDataHealthHospitalNavVerificationRequired": "Verifica tu identidad para continuar",
+  "myDataHealthHospitalNavVerificationRequired": "Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.",
   "@myDataHealthHospitalNavVerificationRequired": {
     "description": "Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas."
   },
@@ -4763,22 +4795,6 @@
   "@myDataHealthHospitalFieldAgenda": {
     "description": "Salud — etiqueta de la agenda de una cita hospitalaria."
   },
-  "myDataHealthHospitalFieldDateTime": "Fecha y hora",
-  "@myDataHealthHospitalFieldDateTime": {
-    "description": "Salud — etiqueta de la fecha y hora de una cita hospitalaria."
-  },
-  "myDataHealthHospitalDateTimeValue": "{date}, {time}",
-  "@myDataHealthHospitalDateTimeValue": {
-    "description": "Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».",
-    "placeholders": {
-      "date": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
   "myDataHealthCipUnavailable": "CIP no disponible",
   "@myDataHealthCipUnavailable": {
     "description": "Salud — texto cuando el CIP no se ha podido obtener."
@@ -4802,6 +4818,10 @@
   "identityVerificationDialogContinue": "Acceder a cl@ve",
   "@identityVerificationDialogContinue": {
     "description": "Salud — acción de ir a Cl@ve a identificarse de nuevo."
+  },
+  "identityVerificationCompletedMessage": "Verificación completada",
+  "@identityVerificationCompletedMessage": {
+    "description": "Snackbar de éxito al terminar la elevación del nivel de seguridad con Cl@ve (Figma 45536:38213)."
   },
   "myDataHealthLevelRequiredMessage": "El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.",
   "@myDataHealthLevelRequiredMessage": {
@@ -5953,7 +5973,7 @@
   "@homeNewsSectionTitle": {
     "description": "Home — título de la sección Mis novedades."
   },
-  "homeMyDataAccessesTitle": "Accesos Mis datos",
+  "homeMyDataAccessesTitle": "Acceso a mis datos",
   "@homeMyDataAccessesTitle": {
     "description": "Home — título de la sección de accesos rápidos a Mis datos."
   },
@@ -6375,7 +6395,7 @@
   "@legalSearchCloseTooltip": {
     "description": "Páginas legales — tooltip del botón para cerrar la búsqueda en la barra superior."
   },
-  "privacyResponsibleTitle": "¿Quién es responsable del tratamiento de datos?",
+  "privacyResponsibleTitle": "¿Quién es el responsable del tratamiento?",
   "@privacyResponsibleTitle": {
     "description": "Protección de datos — título de la sección del responsable del tratamiento."
   },
@@ -6387,23 +6407,23 @@
   "@privacyEmailCopied": {
     "description": "Protección de datos — aviso mostrado cuando no se puede abrir el correo y se copia la dirección."
   },
-  "privacyResponsibleIntro": "La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:",
+  "privacyResponsibleIntro": "1. La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:",
   "@privacyResponsibleIntro": {
     "description": "Protección de datos — párrafo introductorio del responsable del tratamiento."
   },
-  "privacyResponsibleItemProfile": "Información del perfil de usuario.",
+  "privacyResponsibleItemProfile": "Visualización de las notificaciones y registro",
   "@privacyResponsibleItemProfile": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemVisualizations": "Visualización de datos seleccionados de la Administración regional y de otros temas de interés.",
+  "privacyResponsibleItemVisualizations": "Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado",
   "@privacyResponsibleItemVisualizations": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemRecommendations": "Recomendaciones personalizadas según los hechos vitales indicados.",
+  "privacyResponsibleItemRecommendations": "Recomendaciones realizadas en base a los hechos vitales marcados.",
   "@privacyResponsibleItemRecommendations": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemDownloads": "Descargas de los carnés seleccionados.",
+  "privacyResponsibleItemDownloads": "Descargas de los carnés seleccionados",
   "@privacyResponsibleItemDownloads": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
@@ -6411,19 +6431,19 @@
   "@privacyResponsibleItemAgenda": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleOrgParagraph": "Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.",
+  "privacyResponsibleOrgParagraph": "Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.",
   "@privacyResponsibleOrgParagraph": {
     "description": "Protección de datos — párrafo sobre los órganos responsables de cada opción."
   },
-  "privacyResponsibleContactIntro": "Para contactar con el responsable, puedes hacelo mediante:",
+  "privacyResponsibleContactIntro": "Los datos de contacto de este responsable son los siguientes:",
   "@privacyResponsibleContactIntro": {
     "description": "Protección de datos — introducción de los datos de contacto del responsable."
   },
-  "privacyResponsibleContactAddressLabel": "Dirección postal\n",
+  "privacyResponsibleContactAddressLabel": "Dirección Postal:\n",
   "@privacyResponsibleContactAddressLabel": {
     "description": "Protección de datos — etiqueta en negrita de la dirección postal del responsable (termina en salto de línea)."
   },
-  "privacyResponsibleContactAddressValue": "Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es",
+  "privacyResponsibleContactAddressValue": "Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071 Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es",
   "@privacyResponsibleContactAddressValue": {
     "description": "Protección de datos — bloque con la dirección postal y el correo del responsable."
   },
@@ -6640,6 +6660,14 @@
   "legalNoticeHeading": "Aviso legal",
   "@legalNoticeHeading": {
     "description": "Aviso legal — encabezado H1 de la página."
+  },
+  "legalNoticeOfficialDescription": "Consulta el Aviso Legal completo y actualizado en el portal oficial de Espacio Ciudadano.",
+  "@legalNoticeOfficialDescription": {
+    "description": "Aviso legal — descripción que dirige al documento oficial."
+  },
+  "legalNoticeOfficialAction": "Abrir Aviso Legal oficial",
+  "@legalNoticeOfficialAction": {
+    "description": "Aviso legal — acción para abrir el documento oficial."
   },
   "supportErrorSubmitUnauthorized": "No tienes permisos para enviar el formulario de soporte.",
   "@supportErrorSubmitUnauthorized": {

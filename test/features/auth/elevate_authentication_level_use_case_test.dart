@@ -54,6 +54,16 @@ void main() {
     expect(repository.lastExtraParameters, const {'acr_values': 'substantial'});
   });
 
+  // Sin el nivel en el scope, Cerbero no lo pide a Cl@ve y Cl@ve Permanente
+  // entra sin OTP: el token volvía con el mismo nivel (22/10).
+  test('pide a Cerbero el nivel mínimo en el scope', () async {
+    repository.tokenFor = _token(_claimsToken(document: '99999999R', level: 'substantial'));
+
+    await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
+
+    expect(repository.lastScopes, const ['openid', 'substantial']);
+  });
+
   test('nivel suficiente y misma persona: elevación correcta', () async {
     repository.tokenFor = _token(_claimsToken(document: '99999999R', level: 'substantial'));
 
@@ -151,6 +161,7 @@ final class _FakeAuthRepository implements AuthRepository {
   AuthException? error;
 
   Map<String, String>? lastExtraParameters;
+  List<String>? lastScopes;
   int loginCalls = 0;
   int logoutCalls = 0;
 
@@ -162,6 +173,7 @@ final class _FakeAuthRepository implements AuthRepository {
   }) async {
     loginCalls++;
     lastExtraParameters = extraParameters;
+    lastScopes = scopes;
     onLogin();
     final pendingError = error;
     if (pendingError != null) {

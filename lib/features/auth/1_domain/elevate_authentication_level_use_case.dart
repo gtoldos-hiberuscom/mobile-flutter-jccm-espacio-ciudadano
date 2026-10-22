@@ -2,6 +2,7 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
 
 // ── Sealed result ─────────────────────────────────────────────────────────────
@@ -74,18 +75,20 @@ final class ElevationFailed extends ElevationResult {
 
 /// Eleva el nivel de seguridad de la sesión reidentificando al ciudadano.
 ///
-/// **Es el único sitio del código que nombra el mecanismo.** Hoy el mecanismo
-/// es repetir el login: la petición de autorización ya sale con `prompt=login`
-/// a secas, y eso es lo que hace que Cerbero propague `ForceAuthn="true"` y
-/// Cl@ve vuelva a desafiar y a mostrar el selector de método, así que el
-/// ciudadano puede elegir uno más fuerte —certificado o DNI-e— o completar el
-/// OTP de Cl@ve Permanente. No hace falta ningún endpoint nuevo.
+/// **Es el único sitio del código que nombra el mecanismo:** repetir el login
+/// **pidiendo el nivel en el scope** (`openid substantial`). La petición ya sale
+/// con `prompt=login` a secas, que hace que Cerbero propague
+/// `ForceAuthn="true"` y Cl@ve vuelva a desafiar; el scope del nivel es lo que
+/// Cerbero traduce al `AuthnContextClassRef` hacia Cl@ve, de modo que el
+/// selector solo ofrece métodos que lo alcanzan y Cl@ve Permanente pide el OTP.
+/// Sin él, repetir el login devolvía el mismo nivel. No hace falta ningún
+/// endpoint nuevo.
 ///
-/// Lo que **no** está confirmado es que Cerbero devuelva un nivel mayor tras
-/// esa reidentificación; se comprueba en PRE con un login por método. Si
-/// resultara que exige pedirlo explícitamente, el parámetro entra por
-/// `AppConfig.ssoStepUpParameters` y **este fichero es el único que cambia**:
-/// la pantalla no se enterará.
+/// El login normal **no** pide nivel: eso obligaría a todos los ciudadanos a
+/// identificarse con nivel medio para entrar en la app.
+///
+/// `AppConfig.ssoStepUpParameters` sigue disponible para añadir parámetros que
+/// exija un entorno sin tocar código.
 ///
 /// No se construye un formulario de OTP propio. El código de prueba que da el
 /// documento del cliente para elevar con Cl@ve Permanente describe un paso
@@ -121,7 +124,10 @@ final class ElevateAuthenticationLevelUseCase {
     required final AuthenticationLevel minimum,
     required final JwtClaims currentClaims,
   }) async {
-    final result = await _login(extraParameters: _stepUpParameters);
+    final result = await _login(
+      scopes: [...authDefaultScopes, minimum.cerberoScope],
+      extraParameters: _stepUpParameters,
+    );
 
     switch (result) {
       case LoginFailed(:final message, :final cause):

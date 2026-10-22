@@ -126,7 +126,15 @@ class AppConfig {
   }
 
   Uri get sescamUrl => Uri.parse('https://sanidad.castillalamancha.es/');
-  Uri get digitalHealthUrl => environmentUrl(uat: 'https://sescam.jccm.es/misaluddigital/#/app/inicio', pre: 'https://sescampre.jccm.es/misaluddigital/app/inicio', pro: 'https://sescam.jccm.es/misaluddigital/#/app/inicio');
+  /// Mi Salud Digital is entered through Cerbero with the substantial level
+  /// (JCCMEC-275). It uses the web client: Cerbero only allows this
+  /// redirect_uri for `add-sede_ciudadanos-fo`, not for the app's client.
+  /// UAT has no SESCAM portal of its own, so it keeps using PRO.
+  Uri get digitalHealthUrl => environmentUrl(
+    uat: 'https://cerbero.jccm.es/auth/realms/usuarios/protocol/openid-connect/auth?client_id=add-sede_ciudadanos-fo&redirect_uri=https%3A%2F%2Fsescam.jccm.es%2Fmisaluddigital%2Fapp%2Fsso%3Fprovider%3DCLAVE&response_type=code&scope=openid%20substantial',
+    pre: 'https://sso-cerbero-pre.cm-pre.jccm.es/auth/realms/usuarios/protocol/openid-connect/auth?client_id=add-sede_ciudadanos-fo&redirect_uri=https%3A%2F%2Fsescampre.jccm.es%2Fmisaluddigital%2Fapp%2Fsso%3Fprovider%3DCLAVE&response_type=code&scope=openid%20substantial',
+    pro: 'https://cerbero.jccm.es/auth/realms/usuarios/protocol/openid-connect/auth?client_id=add-sede_ciudadanos-fo&redirect_uri=https%3A%2F%2Fsescam.jccm.es%2Fmisaluddigital%2Fapp%2Fsso%3Fprovider%3DCLAVE&response_type=code&scope=openid%20substantial',
+  );
   Uri get clinicalHistoryUrl => Uri.parse('https://sescam.jccm.es/hcdSnsWeb/accesoCiudadano/indexAction.do');
   Uri get socialHistoryUrl => environmentUrl(uat: 'https://historiasocial-pre.castillalamancha.es/historiasocial/avisoLegal.do', pre: 'https://historiasocial-pre.castillalamancha.es/historiasocial/avisoLegal.do', pro: 'https://historiasocial.castillalamancha.es/historiasocial/avisoLegal.do');
   Uri get childrenAndFamiliesUrl => Uri.parse('https://infanciayfamilias.castillalamancha.es/');

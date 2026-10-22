@@ -4,6 +4,7 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/ci
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/controllers/past_primary_care_appointments_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_health_provider.dart';
@@ -94,6 +95,16 @@ void main() {
       expect(state.hasMore, isFalse);
     });
 
+    test('reports a missing CIP instead of a service failure (JCCMEC-266)', () async {
+      final repository = _FakeHealthRepository(pages: const [], cipMissing: true);
+      final container = _container(repository);
+
+      final state = await _settled(container);
+
+      expect(state.status, PastPrimaryCareAppointmentsStatus.cipMissing);
+      expect(state.hasMore, isFalse);
+    });
+
     test('surfaces an error when the first page fails', () async {
       final repository = _FakeHealthRepository(pages: const [], failFromPage: 0);
       final container = _container(repository);
@@ -162,11 +173,12 @@ HealthAppointment _appointment(final DateTime dateTime) => HealthAppointment(
 );
 
 final class _FakeHealthRepository implements MyDataHealthRepository {
-  _FakeHealthRepository({required this.pages, this.failFromPage, this.unauthorized = false});
+  _FakeHealthRepository({required this.pages, this.failFromPage, this.unauthorized = false, this.cipMissing = false});
 
   final List<List<HealthAppointment>> pages;
   final int? failFromPage;
   final bool unauthorized;
+  final bool cipMissing;
   final List<int> requestedPages = [];
   final List<String> requestedCitizenIds = [];
 
@@ -183,6 +195,9 @@ final class _FakeHealthRepository implements MyDataHealthRepository {
     requestedCitizenIds.add(citizenId);
     if (unauthorized) {
       throw const MyDataAuthorizationRequired();
+    }
+    if (cipMissing) {
+      throw const MyDataHealthCipMissing();
     }
     final failFrom = failFromPage;
     if (failFrom != null && page >= failFrom) {

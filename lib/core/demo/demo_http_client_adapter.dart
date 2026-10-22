@@ -37,6 +37,9 @@ final class DemoHttpClientAdapter implements HttpClientAdapter {
       method: options.method.toUpperCase(),
       uri: options.uri,
       jsonBody: _decodeJsonBody(options, bodyBytes),
+      headers: <String, Object?>{
+        for (final entry in options.headers.entries) entry.key.toLowerCase(): entry.value,
+      },
     );
     final response = _backend.handle(request);
 

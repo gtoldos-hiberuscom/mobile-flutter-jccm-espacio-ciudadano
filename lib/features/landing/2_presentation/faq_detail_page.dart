@@ -73,7 +73,6 @@ String _faqAccessCategory(final AppLocalizations l10n) => l10n.faqCategoryAccess
 String _faqMyDataCategory(final AppLocalizations l10n) => l10n.faqCategoryMyData;
 String _faqManagementsCategory(final AppLocalizations l10n) => l10n.faqCategoryManagements;
 String _faqAgendaCategory(final AppLocalizations l10n) => l10n.faqCategoryAgenda;
-String _faqPopulationCategory(final AppLocalizations l10n) => l10n.faqCategoryPopulation;
 
 /// Categories and their questions for the accordion on the Help screen.
 final faqCategories = <FaqCategory>[
@@ -81,7 +80,6 @@ final faqCategories = <FaqCategory>[
   FaqCategory(title: _faqMyDataCategory, entries: faqEntries.sublist(3, 4)),
   FaqCategory(title: _faqManagementsCategory, entries: faqEntries.sublist(4, 5)),
   FaqCategory(title: _faqAgendaCategory, entries: faqEntries.sublist(5, 6)),
-  const FaqCategory(title: _faqPopulationCategory, entries: []),
 ];
 
 FaqEntry? faqEntryById(final String id) {

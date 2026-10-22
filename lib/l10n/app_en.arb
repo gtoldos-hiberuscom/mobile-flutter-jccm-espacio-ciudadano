@@ -4648,7 +4648,7 @@
   "@myDataHealthScopeHospital": {
     "description": "Care scope selector in Health: hospital care."
   },
-  "myDataHealthHospitalAppointmentsTitle": "Hospital appointments",
+  "myDataHealthHospitalAppointmentsTitle": "Hospital care appointments",
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Title of the hospital appointments block."
   },
@@ -4660,7 +4660,7 @@
   "@myDataHealthHospitalNavTitle": {
     "description": "Health — menu card leading to hospital appointments."
   },
-  "myDataHealthHospitalNavVerificationRequired": "Verify your identity to continue",
+  "myDataHealthHospitalNavVerificationRequired": "Your hospital data is protected. Verify your identity to access it.",
   "@myDataHealthHospitalNavVerificationRequired": {
     "description": "Health — note under the hospital appointments card, with a lock, when the current identification level is not enough to view them."
   },
@@ -4712,22 +4712,6 @@
   "@myDataHealthHospitalFieldAgenda": {
     "description": "Health — label for the agenda of a hospital appointment."
   },
-  "myDataHealthHospitalFieldDateTime": "Date and time",
-  "@myDataHealthHospitalFieldDateTime": {
-    "description": "Health — label for the date and time of a hospital appointment."
-  },
-  "myDataHealthHospitalDateTimeValue": "{date}, {time}",
-  "@myDataHealthHospitalDateTimeValue": {
-    "description": "Health — date and time of a hospital appointment, e.g. \"03/02/2026, 11:40\".",
-    "placeholders": {
-      "date": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
   "myDataHealthCipUnavailable": "CIP unavailable",
   "@myDataHealthCipUnavailable": {
     "description": "Health — text shown when the CIP could not be retrieved."
@@ -4751,6 +4735,10 @@
   "identityVerificationDialogContinue": "Go to Cl@ve",
   "@identityVerificationDialogContinue": {
     "description": "Health — action to go to Cl@ve and identify again."
+  },
+  "identityVerificationCompletedMessage": "Verification completed",
+  "@identityVerificationCompletedMessage": {
+    "description": "Success snackbar after raising the authentication level with Cl@ve."
   },
   "myDataHealthLevelRequiredMessage": "Your current access level does not meet the application security policy. Press \"Continue\" to restart the session with the required higher access level.",
   "@myDataHealthLevelRequiredMessage": {

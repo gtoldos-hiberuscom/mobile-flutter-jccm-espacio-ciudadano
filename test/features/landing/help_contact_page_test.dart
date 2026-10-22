@@ -26,7 +26,7 @@ void main() {
     expect(find.text('Mis datos (1)'), findsOneWidget);
     expect(find.text('Mis gestiones y notificaciones (1)'), findsOneWidget);
     expect(find.text('Agenda (1)'), findsOneWidget);
-    expect(find.text('Registro de población (0)'), findsOneWidget);
+    expect(find.text('Registro de población (0)'), findsNothing);
 
     await tester.tap(find.text('Acceso (3)'));
     await tester.pumpAndSettle();
