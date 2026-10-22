@@ -10,6 +10,7 @@ final class DemoRequest {
     required this.uri,
     this.jsonBody,
     this.pathMatch,
+    this.headers = const <String, Object?>{},
   });
 
   /// Método HTTP en mayúsculas.
@@ -23,6 +24,10 @@ final class DemoRequest {
 
   /// Coincidencia de la ruta que atendió la petición; la rellena el enrutador.
   final RegExpMatch? pathMatch;
+
+  /// Cabeceras de la petición, con el nombre en minúsculas. Las rutas que
+  /// responden según la sesión leen de aquí el `authorization`.
+  final Map<String, Object?> headers;
 
   String get path => uri.path;
 
@@ -46,7 +51,7 @@ final class DemoRequest {
     return const <String, Object?>{};
   }
 
-  DemoRequest withMatch(final RegExpMatch match) => DemoRequest(method: method, uri: uri, jsonBody: jsonBody, pathMatch: match);
+  DemoRequest withMatch(final RegExpMatch match) => DemoRequest(method: method, uri: uri, jsonBody: jsonBody, pathMatch: match, headers: headers);
 }
 
 /// Respuesta del backend demo: un sobre JSON o un fichero binario.

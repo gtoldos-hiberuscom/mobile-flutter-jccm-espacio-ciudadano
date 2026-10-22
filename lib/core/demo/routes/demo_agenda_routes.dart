@@ -1,5 +1,7 @@
 import 'package:jccm_espacio_ciudadano/core/demo/demo_backend_core.dart';
+import 'package:jccm_espacio_ciudadano/core/demo/demo_session.dart';
 import 'package:jccm_espacio_ciudadano/core/demo/fixtures/demo_agenda_fixtures.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment_access.dart';
 
 /// Rutas de la agenda general del backend demo.
 ///
@@ -12,9 +14,12 @@ List<DemoRoute> demoAgendaRoutes({required final DateTime Function() now}) {
   const citizen = '/api/v1/ciudadanos/([^/]+)';
   return [
     // El periodo va en mayúsculas y la app solo pide TODOS.
-    DemoRoute('GET', '$citizen/eventos/TODOS', (final _) {
+    // La cita hospitalaria solo sale con nivel suficiente: así la demo enseña
+    // el aviso de Agenda y, tras «verificar», la cita.
+    DemoRoute('GET', '$citizen/eventos/TODOS', (final request) {
       final at = now();
-      return DemoResponse.ok(DemoAgendaFixtures.eventos(at), now: at);
+      final includeHospital = DemoSession.levelOfAuthorization(request.headers['authorization']).meets(kHospitalAppointmentsMinimumLevel);
+      return DemoResponse.ok(DemoAgendaFixtures.eventos(at, includeHospital: includeHospital), now: at);
     }),
     // Refrescar no hace nada en demo: no hay sistemas origen que consultar.
     // Devuelve los contadores del contrato y la app recarga los eventos.
