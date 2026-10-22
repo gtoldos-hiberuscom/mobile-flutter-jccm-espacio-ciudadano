@@ -6,6 +6,8 @@ import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointme
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointments_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/agenda_page.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_elevation_notifier.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 const _citasSanitariasCaidas = 'No hemos podido cargar tus citas sanitarias.';
@@ -13,6 +15,9 @@ const _sinCip = 'En el servicio del SESCAM no existe ningún CIP vinculado a su 
 const _eventosCaidos = 'No hemos podido cargar los eventos de tu agenda.';
 const _errorTotal = 'No hemos podido cargar tu agenda.';
 const _sinCitas = 'No hay citas para el periodo seleccionado.';
+const _hospitalariasOcultas = 'Citas hospitalarias ocultas';
+const _verificar = 'Verificar';
+const _verificacionCompletada = 'Verificación completada';
 
 void main() {
   testWidgets('con una fuente caída se pintan las citas que sí llegaron y un aviso que nombra la que falta', (final tester) async {
@@ -197,6 +202,74 @@ void main() {
     expect(find.text(_sinCitas), findsOneWidget);
     expect(tester.getTopLeft(find.text(_sinCitas)).dy, lessThan(tester.getTopLeft(find.byType(AppCalendar)).dy));
   });
+
+  testWidgets('la (i) abre la hoja «Saber más sobre Agenda»', (final tester) async {
+    await _pumpAgenda(tester, appointments: const []);
+
+    await tester.tap(find.byTooltip('Saber más sobre Agenda'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Saber más sobre Agenda'), findsWidgets);
+    expect(find.textContaining('verifiques tu identidad con un método de seguridad alta'), findsOneWidget);
+    expect(find.text('Consultar más información'), findsOneWidget);
+  });
+
+  testWidgets('con nivel suficiente no se avisa de citas hospitalarias ocultas', (final tester) async {
+    await _pumpAgenda(tester, appointments: const []);
+
+    expect(find.text(_hospitalariasOcultas), findsNothing);
+  });
+
+  testWidgets('sin nivel suficiente el aviso va antes del calendario y «Verificar» explica la verificación', (final tester) async {
+    await _pumpAgenda(tester, appointments: const [], hospitalAppointmentsLocked: true);
+
+    expect(find.text(_hospitalariasOcultas), findsOneWidget);
+    expect(tester.getTopLeft(find.text(_hospitalariasOcultas)).dy, lessThan(tester.getTopLeft(find.byType(AppCalendar)).dy));
+
+    await tester.tap(find.text(_verificar));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Verificación de identidad'), findsOneWidget);
+  });
+
+  testWidgets('al terminar la verificación con éxito se muestra «Verificación completada»', (final tester) async {
+    await _pumpAgenda(tester, appointments: const [], hospitalAppointmentsLocked: true, elevation: _SucceedingElevationNotifier.new);
+
+    await tester.tap(find.text(_verificar));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Acceder a cl@ve'));
+    await tester.tap(find.text('Acceder a cl@ve'));
+    await tester.pumpAndSettle();
+
+    expect(find.text(_verificacionCompletada), findsOneWidget);
+  });
+
+  testWidgets('si se cancela Cl@ve no se anuncia nada y el aviso sigue', (final tester) async {
+    await _pumpAgenda(tester, appointments: const [], hospitalAppointmentsLocked: true, elevation: _CancellingElevationNotifier.new);
+
+    await tester.tap(find.text(_verificar));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Acceder a cl@ve'));
+    await tester.tap(find.text('Acceder a cl@ve'));
+    await tester.pumpAndSettle();
+
+    expect(find.text(_verificacionCompletada), findsNothing);
+    expect(find.text(_hospitalariasOcultas), findsOneWidget);
+  });
+}
+
+class _SucceedingElevationNotifier extends ElevationNotifier {
+  @override
+  Future<void> elevate({required final AuthenticationLevel minimum}) async {
+    state = const ElevationState(outcome: ElevationOutcome.succeeded);
+  }
+}
+
+class _CancellingElevationNotifier extends ElevationNotifier {
+  @override
+  Future<void> elevate({required final AuthenticationLevel minimum}) async {
+    state = const ElevationState(outcome: ElevationOutcome.cancelled);
+  }
 }
 
 Future<void> _pumpAgenda(
@@ -204,10 +277,13 @@ Future<void> _pumpAgenda(
   required final List<AgendaAppointment> appointments,
   final Set<AgendaAppointmentSource> failedSources = const {},
   final bool healthCipMissing = false,
+  final bool hospitalAppointmentsLocked = false,
+  final ElevationNotifier Function()? elevation,
 }) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        if (elevation != null) elevationProvider.overrideWith(elevation),
         agendaAppointmentsProvider.overrideWith(
           (final ref) async => AgendaAppointmentsState(
             appointments: appointments,
@@ -215,6 +291,7 @@ Future<void> _pumpAgenda(
             hasJccmAuthorization: true,
             failedSources: failedSources,
             healthCipMissing: healthCipMissing,
+            hospitalAppointmentsLocked: hospitalAppointmentsLocked,
           ),
         ),
       ],
