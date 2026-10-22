@@ -3622,14 +3622,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthHospitalFieldAgenda => 'Agenda';
 
   @override
-  String get myDataHealthHospitalFieldDateTime => 'Fecha y hora';
-
-  @override
-  String myDataHealthHospitalDateTimeValue(String date, String time) {
-    return '$date, $time';
-  }
-
-  @override
   String get myDataHealthCipUnavailable => 'CIP no disponible';
 
   @override

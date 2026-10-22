@@ -4795,22 +4795,6 @@
   "@myDataHealthHospitalFieldAgenda": {
     "description": "Salud — etiqueta de la agenda de una cita hospitalaria."
   },
-  "myDataHealthHospitalFieldDateTime": "Fecha y hora",
-  "@myDataHealthHospitalFieldDateTime": {
-    "description": "Salud — etiqueta de la fecha y hora de una cita hospitalaria."
-  },
-  "myDataHealthHospitalDateTimeValue": "{date}, {time}",
-  "@myDataHealthHospitalDateTimeValue": {
-    "description": "Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».",
-    "placeholders": {
-      "date": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
   "myDataHealthCipUnavailable": "CIP no disponible",
   "@myDataHealthCipUnavailable": {
     "description": "Salud — texto cuando el CIP no se ha podido obtener."

@@ -4712,22 +4712,6 @@
   "@myDataHealthHospitalFieldAgenda": {
     "description": "Health — label for the agenda of a hospital appointment."
   },
-  "myDataHealthHospitalFieldDateTime": "Date and time",
-  "@myDataHealthHospitalFieldDateTime": {
-    "description": "Health — label for the date and time of a hospital appointment."
-  },
-  "myDataHealthHospitalDateTimeValue": "{date}, {time}",
-  "@myDataHealthHospitalDateTimeValue": {
-    "description": "Health — date and time of a hospital appointment, e.g. \"03/02/2026, 11:40\".",
-    "placeholders": {
-      "date": {
-        "type": "String"
-      },
-      "time": {
-        "type": "String"
-      }
-    }
-  },
   "myDataHealthCipUnavailable": "CIP unavailable",
   "@myDataHealthCipUnavailable": {
     "description": "Health — text shown when the CIP could not be retrieved."
