@@ -46,7 +46,8 @@ void main() {
       expect(primaryCare.description, 'Cita de Atención Primaria');
       expect(primaryCare.channel, 'Presencial');
       expect(primaryCare.detail, 'Consulta a demanda');
-      expect(primaryCare.center, DemoHealthFixtures.primaryCareCenter);
+      // El centro llega de SESCAM, pero en primaria no se muestra (JCCMEC-274).
+      expect(primaryCare.center, isNull);
     });
 
     test('la fuente de salud la sirve la ruta compartida de my_data', () async {

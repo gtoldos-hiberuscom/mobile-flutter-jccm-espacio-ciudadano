@@ -385,6 +385,11 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       AgendaAppointmentSource.general when isPrimaryCare => AgendaAppointmentKind.health,
       AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
     };
+    // Las citas de atención primaria no muestran el centro (JCCMEC-274): ni el
+    // campo de SESCAM, ni como texto secundario de reserva, ni el párrafo
+    // «Centro:» del mensaje. Las hospitalarias y el resto de eventos sí.
+    final showsCenter = kind != AgendaAppointmentKind.health;
+    final visibleCenter = showsCenter ? center : null;
 
     // La agenda general publica el cuerpo del evento como párrafos HTML
     // («<p>Profesional: …</p> <p>Sala: …</p>»). Cuando traen filas etiquetadas
@@ -394,15 +399,19 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     // fecha de la cita.
     if (source == AgendaAppointmentSource.general) {
       final structured = _structuredMessage(rawMessage);
-      if (structured.details.isNotEmpty) {
+      final details = [
+        for (final row in structured.details)
+          if (showsCenter || row.label.toLowerCase() != 'centro') row,
+      ];
+      if (details.isNotEmpty) {
         return AgendaAppointment(
           dateTime: dateTime,
           title: title ?? (isPrimaryCare ? 'Cita de Atención Primaria' : specialty ?? 'Cita'),
           description: structured.intro ?? message ?? title ?? 'Cita',
           kind: kind,
           channel: primaryCareDetails?.channel ?? channel,
-          center: center,
-          details: structured.details,
+          center: visibleCenter,
+          details: List<AgendaAppointmentDetail>.unmodifiable(details),
         );
       }
     }
@@ -424,8 +433,8 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       description: description,
       kind: kind,
       channel: primaryCareDetails?.channel ?? channel,
-      detail: isOnDemandHealthAppointment ? _primaryCareAppointmentDetail(specialty, channel) : primaryCareDetails?.appointmentDetail ?? notificationDetails.issuer ?? detail ?? center,
-      center: center,
+      detail: isOnDemandHealthAppointment ? _primaryCareAppointmentDetail(specialty, channel) : primaryCareDetails?.appointmentDetail ?? notificationDetails.issuer ?? detail ?? visibleCenter,
+      center: visibleCenter,
     );
   }
 

@@ -51,6 +51,10 @@ void main() {
       expect(appointments[2].details.map((final detail) => detail.label), ['Profesional', 'Tipo de cita', 'Modo de cita']);
       expect(appointments[3].description, 'Consulta Medicina de Familia');
       expect(appointments[3].kind, AgendaAppointmentKind.health);
+      // SESCAM trae `centro`, pero en primaria no se muestra (JCCMEC-274): ni
+      // como campo ni como texto secundario de reserva.
+      expect(appointments[3].center, isNull);
+      expect(appointments[3].detail, isNull);
       expect(appointments[4].title, 'Caducidad de carnet joven');
       expect(
         appointments[4].description,
@@ -235,6 +239,36 @@ void main() {
         (label: 'Sala', value: 'CONSULTAS B-203'),
       ]);
       expect(appointment.detail, isNull, reason: 'el servicio ya va en su fila: no se repite como texto secundario');
+    });
+
+    test('una cita de primaria de la agenda general descarta el párrafo del centro (JCCMEC-274)', () async {
+      final adapter = _AgendaAdapter(
+        primaryCareAppointments: const [],
+        eventos: const [
+          {
+            'fechaVencimiento': '2026-10-16T09:55:00',
+            'titulo': 'Cita de atención primaria',
+            'tipoEvento': 'CITA',
+            'centro': 'C.S. PALOMAREJOS',
+            'mensaje': '<p>Tiene una cita de atención primaria el próximo 16/10/2026</p> <p>Hora:09:55</p> <p>Profesional:LAGUNA RUIDERA MONTESINOS</p> <p>Centro: C.S. PALOMAREJOS</p> <p>Tipo de cita:DEMANDA</p> <p>Modo de cita:Presencial</p>',
+          },
+        ],
+      );
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+      final repository = AgendaRepositoryImpl(dio: dio);
+
+      final appointment = (await repository.loadAppointments(
+        documentNumber: '12345678A',
+        agentId: 'agent-1',
+      )).appointments.single;
+
+      expect(appointment.kind, AgendaAppointmentKind.health);
+      expect(appointment.details, [
+        (label: 'Profesional', value: 'LAGUNA RUIDERA MONTESINOS'),
+        (label: 'Tipo de cita', value: 'DEMANDA'),
+        (label: 'Modo de cita', value: 'Presencial'),
+      ]);
+      expect(appointment.center, isNull);
     });
 
     test('refreshes events through the gateway refrescar endpoint', () async {

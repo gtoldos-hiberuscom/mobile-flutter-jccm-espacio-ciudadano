@@ -105,10 +105,10 @@ void main() {
     expect(find.text('PRESENCIAL'), findsOneWidget);
     expect(find.text('Alvaro nombre largo garcia bulero'), findsOneWidget);
     expect(find.text('Consulta a demanda'), findsOneWidget);
-    // El centro de SESCAM se muestra con etiqueta y respetando las siglas:
-    // sin ella el cliente no sabía qué era ese dato (JCCMEC-256).
-    expect(find.text('Centro: C.S. palomarejos_pren'), findsOneWidget);
-    expect(find.text('C.S. PALOMAREJOS_PREN'), findsNothing);
+    // Las citas de primaria no muestran el centro (JCCMEC-274).
+    expect(find.textContaining('Centro'), findsNothing);
+    expect(find.textContaining('PALOMAREJOS', findRichText: true), findsNothing);
+    expect(find.textContaining('palomarejos', findRichText: true), findsNothing);
   });
 
   testWidgets('un evento con párrafos etiquetados se pinta con título, intro y una fila por etiqueta (JCCMEC-256)', (final tester) async {
