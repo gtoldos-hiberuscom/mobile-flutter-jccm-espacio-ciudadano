@@ -100,6 +100,25 @@ void main() {
     expect(find.text(_servicioCaido), findsNothing);
   });
 
+  // JCCMEC-266: SESCAM devuelve el 3031 en las dos consultas para un ciudadano
+  // sin CIP, y la pestaña de pasadas lo pintaba como servicio caído.
+  testWidgets('el CIP ausente se explica igual en pendientes y en pasadas', (final tester) async {
+    final repository = _FakeHealthRepository(
+      pending: const [],
+      pendingError: const MyDataHealthCipMissing(),
+      pastError: const MyDataHealthCipMissing(),
+    );
+    await _pump(tester, repository: repository);
+
+    expect(find.text(_sinCip), findsOneWidget);
+
+    await tester.tap(find.text(_pasadas));
+    await tester.pumpAndSettle();
+
+    expect(find.text(_sinCip), findsOneWidget);
+    expect(find.text(_servicioCaido), findsNothing);
+  });
+
   testWidgets('sin autorización no se pintan las pestañas', (final tester) async {
     await _pump(tester, hasAuthorization: false);
 
@@ -148,13 +167,14 @@ Future<void> _pump(
 }
 
 final class _FakeHealthRepository implements MyDataHealthRepository {
-  _FakeHealthRepository({required this.pending, this.pastPages = const [], this.pendingError});
+  _FakeHealthRepository({required this.pending, this.pastPages = const [], this.pendingError, this.pastError});
 
   final List<HealthAppointment> pending;
 
   /// Una lista por página; la que falte vuelve vacía y cierra la paginación.
   final List<List<HealthAppointment>> pastPages;
   final Object? pendingError;
+  final Object? pastError;
 
   final List<int> requestedPastPages = <int>[];
 
@@ -175,6 +195,10 @@ final class _FakeHealthRepository implements MyDataHealthRepository {
       return pending;
     }
     requestedPastPages.add(page);
+    if (pastError != null) {
+      // ignore: only_throw_errors — el error a simular lo elige el test.
+      throw pastError!;
+    }
     return page < pastPages.length ? pastPages[page] : const [];
   }
 
