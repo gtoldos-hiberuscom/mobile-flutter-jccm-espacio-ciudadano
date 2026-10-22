@@ -6845,7 +6845,7 @@ abstract class AppLocalizations {
   /// Título del bloque de citas hospitalarias.
   ///
   /// In es, this message translates to:
-  /// **'Citas hospitalarias'**
+  /// **'Citas de atención hospitalaria'**
   String get myDataHealthHospitalAppointmentsTitle;
 
   /// Salud — tarjeta del menú que lleva a las citas de atención primaria.

@@ -4648,7 +4648,7 @@
   "@myDataHealthScopeHospital": {
     "description": "Care scope selector in Health: hospital care."
   },
-  "myDataHealthHospitalAppointmentsTitle": "Hospital appointments",
+  "myDataHealthHospitalAppointmentsTitle": "Hospital care appointments",
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Title of the hospital appointments block."
   },

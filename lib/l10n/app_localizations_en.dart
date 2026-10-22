@@ -3549,7 +3549,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthScopeHospital => 'Hospital';
 
   @override
-  String get myDataHealthHospitalAppointmentsTitle => 'Hospital appointments';
+  String get myDataHealthHospitalAppointmentsTitle => 'Hospital care appointments';
 
   @override
   String get myDataHealthPrimaryCareNavTitle => 'Primary care appointments';
