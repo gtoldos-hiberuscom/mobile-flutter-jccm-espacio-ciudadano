@@ -116,9 +116,7 @@ void main() {
     );
   });
 
-  testWidgets('los destinos externos del aviso legal tienen rol de enlace', (
-    final tester,
-  ) async {
+  testWidgets('el aviso legal se muestra integrado, sin enlaces externos', (final tester) async {
     await tester.pumpWidget(
       const ProviderScope(
         child: MaterialApp(
@@ -130,56 +128,9 @@ void main() {
       ),
     );
 
-    for (final label in _legalNoticeLinks) {
-      final matches = find.semantics.byLabel(label);
-      expect(matches, findsOneWidget);
-
-      final data = matches.evaluate().single.getSemanticsData();
-      expect(data.flagsCollection.isLink, isTrue, reason: label);
-      expect(data.flagsCollection.isButton, isFalse, reason: label);
-      expect(data.hint, 'Abre en navegador externo', reason: label);
-      expect(data.hasAction(SemanticsAction.tap), isTrue, reason: label);
-    }
-    expect(find.semantics.byLabel(RegExp('⇲')), findsNothing);
-  });
-
-  testWidgets('aviso legal: el tabulador llega a los dos enlaces con anillo y sin velo de foco', (final tester) async {
-    await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(
-          locale: Locale('es'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: LegalNoticePage(),
-        ),
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    final reached = <String>[];
-    for (var i = 0; i < 10 && reached.length < _legalNoticeLinks.length; i++) {
-      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
-      await tester.pumpAndSettle();
-      final focused = primaryFocus?.context;
-      if (focused == null) {
-        continue;
-      }
-      final link = find.ancestor(of: find.byWidget(focused.widget), matching: find.byType(AppInlineLink));
-      if (link.evaluate().isEmpty) {
-        continue;
-      }
-      reached.add(tester.widget<AppInlineLink>(link).text);
-      expect(
-        find.descendant(
-          of: link,
-          matching: find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter),
-        ),
-        findsOneWidget,
-      );
-      // WCAG 1.4.3: el foco no pinta un velo que baje el contraste del texto.
-      expect(tester.widget<InkWell>(find.descendant(of: link, matching: find.byType(InkWell))).focusColor, Colors.transparent);
-    }
-    expect(reached, _legalNoticeLinks);
+    expect(find.text('1. Objeto y ámbito de aplicación.'), findsOneWidget);
+    expect(find.text('12. Normativa aplicable.'), findsOneWidget);
+    expect(find.byType(AppInlineLink), findsNothing);
   });
 }
 
@@ -188,9 +139,4 @@ const _accessibilityLinks = [
   'https://espaciociudadano.jccm.es/',
   'formulario de contacto',
   'las oficinas del 012 y OIRES',
-];
-
-const _legalNoticeLinks = [
-  'Real Decreto 1112/2018, de 7 de septiembre',
-  'https://espaciociudadano.jccm.es/',
 ];

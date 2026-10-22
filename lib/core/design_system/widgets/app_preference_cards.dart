@@ -136,6 +136,7 @@ class AppPreferenceCard extends StatelessWidget {
     this.activeSummary,
     this.activeFooterText,
     this.showActiveStatus = false,
+    this.showActiveHeaderAction = true,
   }) : assert(title != '', 'title must not be empty'),
        assert(inactiveDescription != '', 'inactiveDescription must not be empty'),
        assert(pendingDescription != '', 'pendingDescription must not be empty'),
@@ -161,6 +162,9 @@ class AppPreferenceCard extends StatelessWidget {
   final Widget? activeSummary;
   final String? activeFooterText;
   final bool showActiveStatus;
+
+  /// Whether the active card exposes the redundant action arrow in its header.
+  final bool showActiveHeaderAction;
 
   @override
   Widget build(final BuildContext context) {
@@ -242,7 +246,7 @@ class AppPreferenceCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (isActive && onAction != null)
+                  if (isActive && showActiveHeaderAction && onAction != null)
                     AppPreferenceHeaderAction(
                       onPressed: onAction!,
                     ),

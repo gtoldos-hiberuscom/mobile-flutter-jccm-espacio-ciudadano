@@ -222,6 +222,7 @@ class AppDigitalCard extends StatelessWidget {
                                               'assets/icons/carnets/download.svg',
                                               width: AppDimensions.iconMedium * scale,
                                               height: AppDimensions.iconMedium * scale,
+                                              colorFilter: const ColorFilter.mode(downloadColor, BlendMode.srcIn),
                                             ),
                                       label: Text(downloadLabel, style: AppTypography.smallBold.copyWith(fontSize: 14 * scale)),
                                     ),
@@ -312,7 +313,7 @@ abstract final class AppDigitalCardAssets {
 }
 
 @visibleForTesting
-const Color downloadColor = AppColors.secondaryLight200;
+const Color downloadColor = AppColors.secondaryLight300;
 
 class _CardArt extends StatelessWidget {
   const _CardArt({required this.asset, required this.scale});
