@@ -395,12 +395,13 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
 /// que los que no caben van en las filas etiquetadas de `details`.
 ///
 /// Reparto de los siete campos del apartado 6.3:
-/// - día de la semana y fecha → raíl de fecha, más la cabecera de mes/año de la
-///   sección que la contiene;
+/// - día de la semana, fecha y hora → raíl de fecha, más la cabecera de mes/año
+///   de la sección que la contiene. No se repiten en una fila «Fecha y hora»:
+///   el raíl ya las muestra;
 /// - servicio → título, el hueco prominente (el papel que en primaria hace la
 ///   descripción de la cita);
 /// - prestación → línea de tipo, en mayúsculas pequeñas;
-/// - sala, centro, agenda y fecha y hora → filas etiquetadas.
+/// - sala, centro y agenda → filas etiquetadas.
 ///
 /// No se pintan `estadoCita` —la pestaña ya lo comunica—, `agendaCode`, `id`
 /// ni el **NHC**: es un dato de salud que no debe salir en pantalla, y no es el
@@ -414,7 +415,6 @@ class HospitalAppointmentCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final date = appointment.dateTime;
-    final formattedDate = '${_two(date.day)}/${_two(date.month)}/${date.year}';
     final formattedTime = '${_two(date.hour)}:${_two(date.minute)}';
 
     // Se filtran los vacíos en vez de pintar «null» o un guion: los campos
@@ -425,13 +425,6 @@ class HospitalAppointmentCard extends StatelessWidget {
       if (_present(appointment.room)) (label: l10n.myDataHealthHospitalFieldRoom, value: appointment.room!),
       if (_present(appointment.center)) (label: l10n.myDataHealthHospitalFieldCenter, value: appointment.center!),
       if (_present(appointment.agendaDescription)) (label: l10n.myDataHealthHospitalFieldAgenda, value: appointment.agendaDescription!),
-      // Repite la fecha que ya muestra el raíl, a propósito: el apartado 6.3 la
-      // enumera como campo propio y es lo que hace Espacio Ciudadano Web, así
-      // que conviene la literalidad para que se pueda marcar en UAT.
-      (
-        label: l10n.myDataHealthHospitalFieldDateTime,
-        value: l10n.myDataHealthHospitalDateTimeValue(formattedDate, formattedTime),
-      ),
     ];
 
     return AppAgendaInfoCard(

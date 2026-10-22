@@ -6986,18 +6986,6 @@ abstract class AppLocalizations {
   /// **'Agenda'**
   String get myDataHealthHospitalFieldAgenda;
 
-  /// Salud — etiqueta de la fecha y hora de una cita hospitalaria.
-  ///
-  /// In es, this message translates to:
-  /// **'Fecha y hora'**
-  String get myDataHealthHospitalFieldDateTime;
-
-  /// Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».
-  ///
-  /// In es, this message translates to:
-  /// **'{date}, {time}'**
-  String myDataHealthHospitalDateTimeValue(String date, String time);
-
   /// Salud — texto cuando el CIP no se ha podido obtener.
   ///
   /// In es, this message translates to:
