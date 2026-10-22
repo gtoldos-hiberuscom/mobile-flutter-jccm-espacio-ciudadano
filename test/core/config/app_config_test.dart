@@ -69,8 +69,28 @@ void main() {
 
   test('resolves environment-specific service portals', () {
     expect(_config('uat').teachingStaffUrl.host, 'portalpersonaldocente-uat.cm-pre.jccm.es');
-    expect(_config('pre').digitalHealthUrl.host, 'sescampre.jccm.es');
     expect(_config('pro').employmentUrl.path, '/private/posicion-global');
+  });
+
+  test('opens Mi Salud Digital through Cerbero with the substantial level', () {
+    final pre = _config('pre').digitalHealthUrl;
+    expect(pre.host, 'sso-cerbero-pre.cm-pre.jccm.es');
+    expect(pre.path, '/auth/realms/usuarios/protocol/openid-connect/auth');
+    expect(pre.queryParameters, {
+      'client_id': 'add-sede_ciudadanos-fo',
+      'redirect_uri': 'https://sescampre.jccm.es/misaluddigital/app/sso?provider=CLAVE',
+      'response_type': 'code',
+      'scope': 'openid substantial',
+    });
+
+    final pro = _config('pro').digitalHealthUrl;
+    expect(pro.host, 'cerbero.jccm.es');
+    expect(pro.queryParameters, {
+      'client_id': 'add-sede_ciudadanos-fo',
+      'redirect_uri': 'https://sescam.jccm.es/misaluddigital/app/sso?provider=CLAVE',
+      'response_type': 'code',
+      'scope': 'openid substantial',
+    });
   });
 
   test('resolves the authenticated support facade for every environment', () {
