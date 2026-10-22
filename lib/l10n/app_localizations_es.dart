@@ -624,6 +624,30 @@ class AppLocalizationsEs extends AppLocalizations {
   String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
 
   @override
+  String get agendaInfoTooltip => 'Saber más sobre Agenda';
+
+  @override
+  String get agendaInfoSheetTitle => 'Saber más sobre Agenda';
+
+  @override
+  String get agendaInfoSheetBody => 'Consulta tus citas de atención primaria y hospitalaria, los avisos de tus notificaciones y de la caducidad de tus carnets.\n\nPara mostrarte las citas hospitalarias, necesitamos que verifiques tu identidad con un método de seguridad alta que garantice la protección de estos datos.\n\nEs posible que algunas citas o avisos no aparezcan, porque todavía no están disponibles.';
+
+  @override
+  String get agendaInfoSheetFooter => 'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Junta de Comunidades de Castilla-La Mancha (JCCM).';
+
+  @override
+  String get agendaInfoSheetMoreInformation => 'Consultar más información';
+
+  @override
+  String get agendaHospitalLockedTitle => 'Citas hospitalarias ocultas';
+
+  @override
+  String get agendaHospitalLockedBody => 'Tus datos hospitalarios están protegidos. Verifica tu identidad para consultar estas citas.';
+
+  @override
+  String get agendaHospitalLockedAction => 'Verificar';
+
+  @override
   String agendaLastUpdated(String timestamp) {
     return 'Última actualización: $timestamp';
   }
@@ -3622,6 +3646,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get identityVerificationDialogContinue => 'Acceder a cl@ve';
+
+  @override
+  String get identityVerificationCompletedMessage => 'Verificación completada';
 
   @override
   String get myDataHealthLevelRequiredMessage => 'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.';
