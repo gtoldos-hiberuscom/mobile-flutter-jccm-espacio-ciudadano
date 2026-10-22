@@ -152,6 +152,7 @@ void main() {
     });
     expect(spans.map((final span) => span.text), ['Sala: ', 'Consultas B-203']);
     expect(spans.first.style!.fontWeight, FontWeight.w700);
+    expect(spans.first.style!.color, AppColors.textPrimary, reason: 'la etiqueta va del color del título');
     expect(spans.last.style!.fontWeight, FontWeight.w400);
   });
 }

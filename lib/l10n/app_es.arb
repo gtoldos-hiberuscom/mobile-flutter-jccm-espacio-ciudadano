@@ -4699,7 +4699,7 @@
   "@myDataHealthScopeHospital": {
     "description": "Selector de ámbito asistencial en Salud: atención hospitalaria."
   },
-  "myDataHealthHospitalAppointmentsTitle": "Citas hospitalarias",
+  "myDataHealthHospitalAppointmentsTitle": "Citas de atención hospitalaria",
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Título del bloque de citas hospitalarias."
   },
