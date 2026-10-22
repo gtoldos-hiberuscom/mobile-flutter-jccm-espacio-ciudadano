@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
 import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
 
 /// Identidad ficticia del **modo demostración** para los revisores de las
 /// tiendas (App Store / Google Play), que no pueden identificarse con Cl@ve.
@@ -52,8 +54,30 @@ abstract final class DemoSession {
   /// `true` si [claims] pertenecen a una sesión demo.
   static bool isDemo(final JwtClaims? claims) => claims?.iss == issuer;
 
+  /// Nivel con el que **entra** la demo. Bajo a propósito: así el revisor ve
+  /// los avisos de verificación (Agenda, citas hospitalarias) y puede recorrer
+  /// la elevación, que en demo es `DemoAuthRepository.login` devolviendo
+  /// [elevatedLevel] sin pasar por Cl@ve.
+  static const AuthenticationLevel initialLevel = AuthenticationLevel.low;
+
+  /// Nivel que devuelve la «elevación» demo.
+  static const AuthenticationLevel elevatedLevel = AuthenticationLevel.high;
+
+  /// Nivel del token de una cabecera `Authorization: Bearer …`, para que el
+  /// backend demo responda como el real según el nivel de la sesión.
+  static AuthenticationLevelReading levelOfAuthorization(final Object? authorization) {
+    if (authorization is! String || !authorization.startsWith('Bearer ')) {
+      return const MissingAuthenticationLevel();
+    }
+    try {
+      return AuthenticationLevelReading.parse(JwtDecoder.decodePayload(authorization.substring('Bearer '.length))['authNLevel']);
+    } on Object {
+      return const MissingAuthenticationLevel();
+    }
+  }
+
   /// Payload del access token demo, con la forma que escribe Cerbero.
-  static Map<String, Object?> payload({final DateTime? now}) {
+  static Map<String, Object?> payload({final DateTime? now, final AuthenticationLevel level = initialLevel}) {
     final issuedAt = now ?? DateTime.now();
     final expiresAt = issuedAt.add(lifetime);
     return <String, Object?>{
@@ -66,9 +90,8 @@ abstract final class DemoSession {
       'first_surname': firstSurname,
       'second_surname': secondSurname,
       'name': '$givenName $firstSurname $secondSurname',
-      // Nivel alto: las consultas que exigen elevación (citas hospitalarias)
-      // se ven sin pasar por Cl@ve, que en demo no existe.
-      'authNLevel': 'http://eidas.europa.eu/loa/high',
+      // URN de eIDAS, como la manda Cerbero.
+      'authNLevel': 'http://eidas.europa.eu/loa/${level.name}',
       'idpSelected': 'DEMO',
       'typ': 'Bearer',
       'aud': <String>['espacio-ciudadano'],
@@ -79,9 +102,9 @@ abstract final class DemoSession {
   }
 
   /// Access token demo: JWT `alg: none` con [payload] y una firma de relleno.
-  static String buildAccessToken({final DateTime? now}) {
+  static String buildAccessToken({final DateTime? now, final AuthenticationLevel level = initialLevel}) {
     String segment(final Map<String, Object?> value) => base64Url.encode(utf8.encode(json.encode(value))).replaceAll('=', '');
-    return '${segment(const <String, Object?>{'alg': 'none', 'typ': 'JWT'})}.${segment(payload(now: now))}.demo';
+    return '${segment(const <String, Object?>{'alg': 'none', 'typ': 'JWT'})}.${segment(payload(now: now, level: level))}.demo';
   }
 
   static JwtClaims claims({final DateTime? now}) => JwtClaims.fromMap(payload(now: now));
@@ -91,10 +114,10 @@ abstract final class DemoSession {
   /// Sin `idToken` a propósito: así `rememberBrowserSession` no guarda nada,
   /// los cierres de sesión no llaman a `end_session` y `endStaleBrowserSession`
   /// nunca tiene un id_token ficticio que mandar a Cerbero.
-  static TokenResponse tokenResponse({final DateTime? now}) {
+  static TokenResponse tokenResponse({final DateTime? now, final AuthenticationLevel level = initialLevel}) {
     final issuedAt = now ?? DateTime.now();
     return TokenResponse(
-      buildAccessToken(now: issuedAt),
+      buildAccessToken(now: issuedAt, level: level),
       refreshToken,
       issuedAt.add(lifetime),
       null,

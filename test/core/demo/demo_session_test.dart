@@ -28,12 +28,34 @@ void main() {
       expect(claims.isRepresentative, isFalse);
     });
 
-    test('declara nivel alto para que las citas hospitalarias no exijan elevación', () {
+    test('entra con nivel bajo para que la demo enseñe la verificación de identidad', () {
       final claims = JwtDecoder.decode(DemoSession.buildAccessToken(now: now));
 
       final reading = AuthenticationLevelReading.parse(claims.authNLevelRaw);
       expect(reading, isA<KnownAuthenticationLevel>());
+      expect((reading as KnownAuthenticationLevel).level, AuthenticationLevel.low);
+    });
+
+    test('con el nivel elevado declara nivel alto', () {
+      final claims = JwtDecoder.decode(DemoSession.buildAccessToken(now: now, level: DemoSession.elevatedLevel));
+
+      final reading = AuthenticationLevelReading.parse(claims.authNLevelRaw);
       expect((reading as KnownAuthenticationLevel).level, AuthenticationLevel.high);
+    });
+  });
+
+  group('DemoSession.levelOfAuthorization', () {
+    test('lee el nivel del token de la cabecera Bearer', () {
+      final low = DemoSession.levelOfAuthorization('Bearer ${DemoSession.buildAccessToken(now: now)}');
+      final high = DemoSession.levelOfAuthorization('Bearer ${DemoSession.buildAccessToken(now: now, level: AuthenticationLevel.high)}');
+
+      expect(low.meets(AuthenticationLevel.substantial), isFalse);
+      expect(high.meets(AuthenticationLevel.substantial), isTrue);
+    });
+
+    test('sin cabecera o con un token ilegible no concede nada', () {
+      expect(DemoSession.levelOfAuthorization(null), isA<MissingAuthenticationLevel>());
+      expect(DemoSession.levelOfAuthorization('Bearer no-es-un-jwt'), isA<MissingAuthenticationLevel>());
     });
 
     test('caduca muy lejos: la sesión demo no debe renovarse nunca', () {
