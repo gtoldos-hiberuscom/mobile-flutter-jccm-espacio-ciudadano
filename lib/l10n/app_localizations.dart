@@ -6863,7 +6863,7 @@ abstract class AppLocalizations {
   /// Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas.
   ///
   /// In es, this message translates to:
-  /// **'Verifica tu identidad para continuar'**
+  /// **'Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.'**
   String get myDataHealthHospitalNavVerificationRequired;
 
   /// Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM.

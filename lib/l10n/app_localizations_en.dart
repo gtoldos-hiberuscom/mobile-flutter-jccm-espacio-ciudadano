@@ -3558,7 +3558,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthHospitalNavTitle => 'Hospital care appointments';
 
   @override
-  String get myDataHealthHospitalNavVerificationRequired => 'Verify your identity to continue';
+  String get myDataHealthHospitalNavVerificationRequired => 'Your hospital data is protected. Verify your identity to access it.';
 
   @override
   String get myDataHealthHospitalLinkTitle => 'My hospital appointments';

@@ -4711,7 +4711,7 @@
   "@myDataHealthHospitalNavTitle": {
     "description": "Salud — tarjeta del menú que lleva a las citas hospitalarias."
   },
-  "myDataHealthHospitalNavVerificationRequired": "Verifica tu identidad para continuar",
+  "myDataHealthHospitalNavVerificationRequired": "Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.",
   "@myDataHealthHospitalNavVerificationRequired": {
     "description": "Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas."
   },
