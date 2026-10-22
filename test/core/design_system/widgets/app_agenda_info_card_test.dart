@@ -141,5 +141,17 @@ void main() {
     expect(find.text('Centro: C.S. palomarejos_pren'), findsOneWidget);
     expect(find.text('Sala: Consultas B-203'), findsOneWidget);
     expect(find.text('Organismo emisor: Delegación de hacienda, aapp y TD'), findsOneWidget);
+
+    // Etiqueta en negrita, valor en peso normal.
+    final spans = <TextSpan>[];
+    tester.widget<RichText>(find.text('Sala: Consultas B-203', findRichText: true)).text.visitChildren((final span) {
+      if (span is TextSpan && span.text != null) {
+        spans.add(span);
+      }
+      return true;
+    });
+    expect(spans.map((final span) => span.text), ['Sala: ', 'Consultas B-203']);
+    expect(spans.first.style!.fontWeight, FontWeight.w700);
+    expect(spans.last.style!.fontWeight, FontWeight.w400);
   });
 }

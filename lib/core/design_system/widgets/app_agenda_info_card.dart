@@ -343,9 +343,12 @@ class _ContentBlock extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    // La etiqueta va en negrita y el valor en peso normal:
+                    // `captionRegular` es negrita en este sistema, así que el
+                    // valor usa `bodyCaption`.
                     TextSpan(
                       text: _displayCase(detail.value),
-                      style: AppTypography.captionRegular.copyWith(color: AppColors.textPrimary),
+                      style: AppTypography.bodyCaption.copyWith(color: AppColors.textPrimary),
                     ),
                   ],
                 ),
