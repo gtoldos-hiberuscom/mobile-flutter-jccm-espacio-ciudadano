@@ -338,8 +338,9 @@ class _ContentBlock extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: '${detail.label}: ',
+                      // Mismo color que el título de la tarjeta.
                       style: AppTypography.captionRegular.copyWith(
-                        color: AppColors.blueMuted900,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
