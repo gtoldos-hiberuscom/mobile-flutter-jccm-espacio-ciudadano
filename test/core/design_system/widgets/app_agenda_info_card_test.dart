@@ -63,6 +63,53 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('la notificación usa su variante de Card-info: borde de marca, esquinas y sombra (Figma 791:1258)', (final tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        locale: Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: Column(
+            children: [
+              AppAgendaInfoCard(
+                type: AppAgendaInfoCardType.notification,
+                day: '11',
+                weekday: 'martes',
+                time: '23:32',
+                title: 'Caducidad de notificación',
+                primaryText: 'Asunto: Gestión electrónica',
+              ),
+              AppAgendaInfoCard(
+                type: AppAgendaInfoCardType.credential,
+                day: '12',
+                weekday: 'miércoles',
+                title: 'Carnet familia numerosa',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    BoxDecoration decorationOf(final String title) {
+      final container = tester.widget<Container>(
+        find.ancestor(of: find.text(title), matching: find.byType(Container)).last,
+      );
+      return container.decoration! as BoxDecoration;
+    }
+
+    final notification = decorationOf('Caducidad de notificación');
+    expect(notification.border, Border.all(color: AppColors.secondaryLight400, width: 2));
+    expect(notification.borderRadius, BorderRadius.circular(AppDimensions.radiusMedium));
+    expect(notification.boxShadow, AppShadows.medium);
+
+    // El resto de variantes conserva la barra lateral y no lleva sombra.
+    final credential = decorationOf('Carnet familia numerosa');
+    expect((credential.border! as Border).left.width, 4);
+    expect(credential.boxShadow, isNull);
+  });
+
   testWidgets('al pasar a tipo frase respeta siglas y códigos', (final tester) async {
     await tester.pumpWidget(
       const MaterialApp(
