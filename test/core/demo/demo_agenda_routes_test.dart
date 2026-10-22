@@ -12,11 +12,17 @@ import 'package:jccm_espacio_ciudadano/features/agenda/3_data/agenda_repository_
 
 final _now = DateTime(2026, 10, 16, 10, 30);
 
-Dio _demoDio(final List<DemoRoute> routes) => Dio(BaseOptions(baseUrl: 'https://demo.invalid'))
-  ..httpClientAdapter = DemoHttpClientAdapter(
-    DemoBackend(routes: routes, now: () => _now),
-    latency: Duration.zero,
-  );
+Dio _demoDio(final List<DemoRoute> routes, {final String? accessToken}) =>
+    Dio(
+        BaseOptions(
+          baseUrl: 'https://demo.invalid',
+          headers: <String, Object?>{if (accessToken != null) 'Authorization': 'Bearer $accessToken'},
+        ),
+      )
+      ..httpClientAdapter = DemoHttpClientAdapter(
+        DemoBackend(routes: routes, now: () => _now),
+        latency: Duration.zero,
+      );
 
 /// Las dos listas, como las registra `DemoBackend.seeded`: la fuente de salud
 /// de la agenda es la ruta compartida que vive en `demoMyDataRoutes`.
@@ -63,6 +69,32 @@ void main() {
       expect(snapshot.appointments.where((final appointment) => appointment.kind == AgendaAppointmentKind.health), hasLength(1));
     });
 
+    test('sin nivel suficiente no publica la cita hospitalaria', () async {
+      final repository = AgendaRepositoryImpl(
+        dio: _demoDio(_allRoutes(), accessToken: DemoSession.buildAccessToken(now: _now)),
+      );
+
+      final snapshot = await repository.loadAppointments(documentNumber: DemoSession.idAgente, agentId: DemoSession.idAgente);
+
+      expect(snapshot.appointments, hasLength(4));
+      expect(snapshot.appointments.where(_isHospital), isEmpty);
+    });
+
+    test('con el nivel elevado publica la cita hospitalaria pendiente', () async {
+      final repository = AgendaRepositoryImpl(
+        dio: _demoDio(
+          _allRoutes(),
+          accessToken: DemoSession.buildAccessToken(now: _now, level: DemoSession.elevatedLevel),
+        ),
+      );
+
+      final snapshot = await repository.loadAppointments(documentNumber: DemoSession.idAgente, agentId: DemoSession.idAgente);
+
+      expect(snapshot.appointments, hasLength(5));
+      final hospital = snapshot.appointments.singleWhere(_isHospital);
+      expect(hospital.dateTime, DemoHealthFixtures.hospitalPendingDate(_now));
+    });
+
     test('refrescar responde y la app puede recargar los eventos', () async {
       final repository = AgendaRepositoryImpl(dio: _demoDio(_allRoutes()));
 
@@ -79,3 +111,5 @@ void main() {
     });
   });
 }
+
+bool _isHospital(final AgendaAppointment appointment) => appointment.title.toLowerCase().contains('hospitalaria');

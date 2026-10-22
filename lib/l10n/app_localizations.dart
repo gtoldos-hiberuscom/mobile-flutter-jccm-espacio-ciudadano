@@ -1280,6 +1280,54 @@ abstract class AppLocalizations {
   /// **'No hemos podido cargar los eventos de tu agenda.'**
   String get agendaEventsUnavailable;
 
+  /// Agenda — tooltip y etiqueta accesible del botón (i) de la barra superior.
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre Agenda'**
+  String get agendaInfoTooltip;
+
+  /// Agenda — título de la hoja informativa que abre la (i) (Figma 45536:38108).
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre Agenda'**
+  String get agendaInfoSheetTitle;
+
+  /// Agenda — cuerpo de la hoja informativa de la (i), tres párrafos.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tus citas de atención primaria y hospitalaria, los avisos de tus notificaciones y de la caducidad de tus carnets.\n\nPara mostrarte las citas hospitalarias, necesitamos que verifiques tu identidad con un método de seguridad alta que garantice la protección de estos datos.\n\nEs posible que algunas citas o avisos no aparezcan, porque todavía no están disponibles.'**
+  String get agendaInfoSheetBody;
+
+  /// Agenda — pie de la hoja informativa de la (i).
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Junta de Comunidades de Castilla-La Mancha (JCCM).'**
+  String get agendaInfoSheetFooter;
+
+  /// Agenda — enlace al final de la hoja informativa de la (i); lleva a Ayuda y contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Consultar más información'**
+  String get agendaInfoSheetMoreInformation;
+
+  /// Agenda — título del aviso cuando el nivel de autenticación no permite ver las citas hospitalarias (Figma 45049:59928).
+  ///
+  /// In es, this message translates to:
+  /// **'Citas hospitalarias ocultas'**
+  String get agendaHospitalLockedTitle;
+
+  /// Agenda — texto del aviso de citas hospitalarias ocultas.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus datos hospitalarios están protegidos. Verifica tu identidad para consultar estas citas.'**
+  String get agendaHospitalLockedBody;
+
+  /// Agenda — botón del aviso de citas hospitalarias ocultas: abre la verificación de identidad con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Verificar'**
+  String get agendaHospitalLockedAction;
+
   /// Agenda — etiqueta del timestamp de última actualización.
   ///
   /// In es, this message translates to:
@@ -6985,6 +7033,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Acceder a cl@ve'**
   String get identityVerificationDialogContinue;
+
+  /// Snackbar de éxito al terminar la elevación del nivel de seguridad con Cl@ve (Figma 45536:38213).
+  ///
+  /// In es, this message translates to:
+  /// **'Verificación completada'**
+  String get identityVerificationCompletedMessage;
 
   /// Salud — bloqueo por nivel de autenticación insuficiente para datos de salud.
   ///

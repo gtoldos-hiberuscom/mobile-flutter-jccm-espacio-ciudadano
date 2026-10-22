@@ -556,7 +556,7 @@ class AppAlertSnackbar extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (icon != null) ...[
-                    ExcludeSemantics(child: AppIcon(icon, color: Colors.white)),
+                    ExcludeSemantics(child: AppIcon(icon, color: _iconColor(severity))),
                     const SizedBox(width: AppDimensions.space8),
                   ],
                   messageContent,
@@ -571,7 +571,7 @@ class AppAlertSnackbar extends StatelessWidget {
               Row(
                 children: [
                   if (icon != null) ...[
-                    ExcludeSemantics(child: AppIcon(icon, color: Colors.white)),
+                    ExcludeSemantics(child: AppIcon(icon, color: _iconColor(severity))),
                     const SizedBox(width: AppDimensions.space8),
                   ],
                   messageContent,
@@ -592,6 +592,10 @@ class AppAlertSnackbar extends StatelessWidget {
     AppAlertSeverity.error => AppIcons.cancel,
     _ => null,
   };
+
+  /// El check de éxito va en verde sobre el fondo oscuro (Figma `45536:38213`);
+  /// el resto de iconos, en blanco como el texto.
+  static Color _iconColor(final AppAlertSeverity severity) => severity == AppAlertSeverity.success ? AppColors.success : Colors.white;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════

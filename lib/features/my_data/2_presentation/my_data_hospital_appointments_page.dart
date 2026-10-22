@@ -6,12 +6,10 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level_required.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_elevation_notifier.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/identity_verification_prompt.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
@@ -129,6 +127,14 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    // El éxito se cuenta desde la página y no desde el bloqueo: al elevar, el
+    // bloqueo deja de pintarse por derivación y no queda nadie que lo diga.
+    ref.listen<ElevationState>(elevationProvider, (final previous, final next) {
+      if (next.outcome == ElevationOutcome.succeeded && previous?.outcome != ElevationOutcome.succeeded) {
+        ref.read(elevationProvider.notifier).acknowledge();
+        AppAlertSnackbar.show(context, message: l10n.identityVerificationCompletedMessage, severity: AppAlertSeverity.success);
+      }
+    });
     // La comprobación de autorización se observa **aquí**, por encima del área
     // que conmuta, para que cambiar de pestaña no la revalide.
     final authorizationAsync = ref.watch(jccmDataAuthorizationProvider);
@@ -322,18 +328,6 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
     }
   }
 
-  String? get _suppressionKey {
-    final idAgente = ref.read(citizenEndpointIdsProvider).idAgente;
-    return idAgente == null || idAgente.isEmpty
-        ? null
-        : '${StorageKeys.identityVerificationNoticeSuppressedPrefix}$idAgente';
-  }
-
-  bool get _isSuppressed {
-    final key = _suppressionKey;
-    return key != null && (ref.read(appStorageProvider).read<bool>(key) ?? false);
-  }
-
   void _elevate() {
     final notifier = ref.read(elevationProvider.notifier)..acknowledge();
     // El notifier lleva su propia guarda de reentrada y traza sus fallos.
@@ -355,29 +349,15 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
       logger.w({'event': 'auth_level_not_readable', 'reading': widget.reading.toString()});
     }
 
-    if (message == null && _isSuppressed) {
-      _elevate();
-      return;
-    }
-
     _isShowing = true;
-    final choice = await AppIdentityVerificationDialog.show(context, message: message);
+    final accepted = await confirmIdentityVerification(context, ref, message: message);
     _isShowing = false;
     if (!mounted) {
       return;
     }
-    // La preferencia se guarda con cualquiera de los dos botones: es sobre el
-    // aviso, no sobre la decisión de ir o no a Cl@ve.
-    if (choice?.suppressFuture ?? false) {
-      final key = _suppressionKey;
-      if (key != null) {
-        unawaited(ref.read(appStorageProvider).write(key, true));
-      }
-    }
-    // Sin elección es el botón atrás del sistema, que cierra el diálogo: es
-    // «Volver», y como tal lleva a Salud. Quedarse dejaba la pantalla vacía y
-    // el aviso volvía a salir.
-    if (choice == null || !choice.accepted) {
+    // «Volver» —también el botón atrás del sistema— lleva a Salud. Quedarse
+    // dejaba la pantalla vacía y el aviso volvía a salir.
+    if (!accepted) {
       context.go(Routes.myDataHealth);
       return;
     }

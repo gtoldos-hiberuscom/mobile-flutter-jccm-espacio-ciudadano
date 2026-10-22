@@ -14,8 +14,13 @@ abstract final class DemoAgendaFixtures {
   const DemoAgendaFixtures._();
 
   /// `GET {id}/eventos/TODOS` → `body.eventos[]`.
-  static Map<String, Object?> eventos(final DateTime now) {
+  ///
+  /// [includeHospital] añade la cita hospitalaria pendiente: el backend solo
+  /// la publica cuando la sesión tiene nivel suficiente, y la app explica su
+  /// ausencia con el aviso «Citas hospitalarias ocultas».
+  static Map<String, Object?> eventos(final DateTime now, {final bool includeHospital = false}) {
     final primaryCare = DemoHealthFixtures.primaryCarePendingDates(now).first;
+    final hospital = DemoHealthFixtures.hospitalPendingDate(now);
     final notification = DateTime(now.year, now.month, now.day + 5, 23, 30);
     final parkingCard = DemoMyDataFixtures.parkingCardValidUntil(now);
     return {
@@ -27,6 +32,14 @@ abstract final class DemoAgendaFixtures {
           'area': 'SESCAM',
           'mensaje': '<p>Tiene una cita de atención primaria el próximo ${demoShortDate(primaryCare)}</p> <p>Hora:${demoTime(primaryCare)}</p> <p>Profesional:${DemoHealthFixtures.primaryCareProfessional}</p> <p>Tipo de cita:DEMANDA</p> <p>Modo de cita:Presencial</p>',
         },
+        if (includeHospital)
+          {
+            'fechaVencimiento': demoIsoDateTime(hospital),
+            'titulo': 'Cita de Atención Hospitalaria',
+            'tipoEvento': 'CITA',
+            'area': 'SESCAM',
+            'mensaje': '<p>Tiene una cita de atención hospitalaria el próximo ${demoShortDate(hospital)}</p> <p>Hora:${demoTime(hospital)}</p> <p>Servicio:${DemoHealthFixtures.hospitalPendingService}</p> <p>Sala:${DemoHealthFixtures.hospitalPendingRoom}</p> <p>Centro:${DemoHealthFixtures.hospitalCenter}</p>',
+          },
         {
           'fechaVencimiento': demoIsoDateTime(notification),
           'titulo': 'Caducidad de notificación',

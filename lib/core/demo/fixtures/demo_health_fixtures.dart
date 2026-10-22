@@ -67,8 +67,15 @@ abstract final class DemoHealthFixtures {
   /// `GET {id}/salud/hospitalaria-citas-pendientes`: `body` es un array de
   /// `CitaHospitalariaDetalleSescam`.
   static List<Object?> hospitalPending(final DateTime now) => [
-    _hospital(DateTime(now.year, now.month, now.day + 33, 8, 30), id: '90000001', service: 'TRAUMATOLOGIA', provision: 'CONSULTA SUCESIVA', room: 'CONSULTA 12 - PLANTA 1', agendaCode: 'TRAU-D', agenda: 'TRAUMATOLOGIA 4 - CONSULTAS EXTERNAS', status: 'PENDIENTE'),
+    _hospital(hospitalPendingDate(now), id: '90000001', service: hospitalPendingService, provision: 'CONSULTA SUCESIVA', room: hospitalPendingRoom, agendaCode: 'TRAU-D', agenda: 'TRAUMATOLOGIA 4 - CONSULTAS EXTERNAS', status: 'PENDIENTE'),
   ];
+
+  /// Fecha, servicio y sala de la cita hospitalaria pendiente; la agenda
+  /// general la publica también, como hace el servicio real.
+  static DateTime hospitalPendingDate(final DateTime now) => DateTime(now.year, now.month, now.day + 33, 8, 30);
+  static const String hospitalPendingService = 'TRAUMATOLOGIA';
+  static const String hospitalPendingRoom = 'CONSULTA 12 - PLANTA 1';
+  static const String hospitalCenter = 'HOSPITAL UNIVERSITARIO DE TOLEDO';
 
   /// `GET {id}/salud/hospitalaria-citas-pasadas`: dos citas en meses
   /// distintos, para que el listado agrupado por mes tenga más de un grupo.
@@ -109,7 +116,7 @@ abstract final class DemoHealthFixtures {
     'prestacion': provision,
     'sala': room,
     'estadoCita': status,
-    'centro': {'nombre': 'HOSPITAL UNIVERSITARIO DE TOLEDO'},
+    'centro': {'nombre': hospitalCenter},
     'agenda': {'codigo': agendaCode, 'descripcion': agenda},
     'fecha': demoShortDate(date),
     'hora': demoTime(date),
