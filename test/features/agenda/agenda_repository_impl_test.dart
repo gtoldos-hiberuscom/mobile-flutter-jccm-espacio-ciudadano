@@ -232,7 +232,9 @@ void main() {
       final appointment = appointments.single;
       expect(appointment.title, 'Cita de atención hospitalaria');
       expect(appointment.description, 'Tiene una cita de atención hospitalaria para el próximo 02/11/2026');
-      expect(appointment.kind, AgendaAppointmentKind.notification);
+      // Cita sanitaria, no notificación: lleva el icono de salud y conserva
+      // el centro, que en primaria se descarta (JCCMEC-274).
+      expect(appointment.kind, AgendaAppointmentKind.hospital);
       expect(appointment.details, [
         (label: 'Servicio', value: 'MEDICINA INTERNA'),
         (label: 'Centro', value: 'HOSPITAL UNIVERSITARIO DE TOLEDO'),

@@ -431,7 +431,7 @@ class _AgendaAppointmentCard extends StatelessWidget {
     return AppAgendaInfoCard(
       type: switch (appointment.kind) {
         AgendaAppointmentKind.notification => AppAgendaInfoCardType.notification,
-        AgendaAppointmentKind.health => AppAgendaInfoCardType.health,
+        AgendaAppointmentKind.health || AgendaAppointmentKind.hospital => AppAgendaInfoCardType.health,
         AgendaAppointmentKind.credential => AppAgendaInfoCardType.credential,
       },
       day: date.day.toString(),

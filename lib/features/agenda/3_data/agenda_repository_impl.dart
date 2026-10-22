@@ -381,6 +381,9 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final isOnDemandHealthAppointment = source == AgendaAppointmentSource.health && _isOnDemandAppointment(specialty);
     final kind = switch (source) {
       AgendaAppointmentSource.health => AgendaAppointmentKind.health,
+      // Antes que el carné: un mensaje hospitalario puede nombrar la tarjeta
+      // sanitaria.
+      AgendaAppointmentSource.general when _isHospitalEvent(title, specialty, message) => AgendaAppointmentKind.hospital,
       AgendaAppointmentSource.general when _isCredentialEvent(title, specialty, message) => AgendaAppointmentKind.credential,
       AgendaAppointmentSource.general when isPrimaryCare => AgendaAppointmentKind.health,
       AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
@@ -589,6 +592,15 @@ final class AgendaRepositoryImpl implements AgendaRepository {
   ) {
     final searchableText = '${title ?? ''} ${specialty ?? ''} ${message ?? ''} ${detail ?? ''} ${center ?? ''}'.toLowerCase();
     return searchableText.contains('atención primaria') || searchableText.contains('atencion primaria');
+  }
+
+  bool _isHospitalEvent(
+    final String? title,
+    final String? specialty,
+    final String? message,
+  ) {
+    final searchableText = '${title ?? ''} ${specialty ?? ''} ${message ?? ''}'.toLowerCase();
+    return searchableText.contains('atención hospitalaria') || searchableText.contains('atencion hospitalaria');
   }
 
   bool _isCredentialEvent(
