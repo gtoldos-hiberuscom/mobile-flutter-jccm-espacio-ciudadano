@@ -33,6 +33,21 @@ enum AuthenticationLevel {
     AuthenticationLevel.substantial => 2,
     AuthenticationLevel.high => 3,
   };
+
+  /// Scope con el que se pide este nivel a Cerbero en la petición de
+  /// autorización.
+  ///
+  /// Cerbero lo traduce al `AuthnContextClassRef` de la petición SAML a Cl@ve,
+  /// y Cl@ve solo ofrece los métodos que alcanzan el nivel: con Cl@ve
+  /// Permanente, eso es lo que hace que pida el OTP. Confirmado por Cerbero el
+  /// 22/10, y es lo que hace Espacio Ciudadano Web en UAT
+  /// (`scope=openid substantial`). Explícito y no derivado de `name`, como
+  /// [rank]: renombrar el enum no debe cambiar la petición.
+  String get cerberoScope => switch (this) {
+    AuthenticationLevel.low => 'low',
+    AuthenticationLevel.substantial => 'substantial',
+    AuthenticationLevel.high => 'high',
+  };
 }
 
 /// Lo que se ha podido leer del claim `authNLevel`.

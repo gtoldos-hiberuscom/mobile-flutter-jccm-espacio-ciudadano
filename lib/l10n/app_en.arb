@@ -4660,7 +4660,7 @@
   "@myDataHealthHospitalNavTitle": {
     "description": "Health — menu card leading to hospital appointments."
   },
-  "myDataHealthHospitalNavVerificationRequired": "Verify your identity to continue",
+  "myDataHealthHospitalNavVerificationRequired": "Your hospital data is protected. Verify your identity to access it.",
   "@myDataHealthHospitalNavVerificationRequired": {
     "description": "Health — note under the hospital appointments card, with a lock, when the current identification level is not enough to view them."
   },

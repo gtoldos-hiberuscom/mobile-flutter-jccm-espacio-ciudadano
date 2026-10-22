@@ -3583,7 +3583,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthHospitalNavTitle => 'Citas de atención hospitalaria';
 
   @override
-  String get myDataHealthHospitalNavVerificationRequired => 'Verifica tu identidad para continuar';
+  String get myDataHealthHospitalNavVerificationRequired => 'Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.';
 
   @override
   String get myDataHealthHospitalLinkTitle => 'Mis citas hospitalarias';

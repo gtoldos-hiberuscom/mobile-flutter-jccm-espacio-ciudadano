@@ -83,4 +83,15 @@ void main() {
 
     expect(capturedArguments?['scopes'], <String>['openid', 'offline_access']);
   });
+
+  test('the step-up level scope travels alongside offline_access', () async {
+    final repository = AuthRepositoryImpl(config: configWithOfflineAccess(enabled: true));
+
+    await expectLater(
+      repository.login(scopes: const ['openid', 'substantial']),
+      throwsA(isA<AuthException>()),
+    );
+
+    expect(capturedArguments?['scopes'], <String>['openid', 'substantial', 'offline_access']);
+  });
 }
