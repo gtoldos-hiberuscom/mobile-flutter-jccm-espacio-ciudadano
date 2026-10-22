@@ -414,12 +414,11 @@ class _AgendaAppointmentCard extends StatelessWidget {
     final date = appointment.dateTime;
     // Un evento cuyo mensaje llega por párrafos etiquetados se pinta como en
     // la web: título del evento, intro y una fila por etiqueta (JCCMEC-256).
-    // Las citas de SESCAM conservan la jerarquía de Figma; su centro pasa a
-    // una fila con etiqueta para que se sepa qué es ese dato.
+    // Las citas de SESCAM conservan la jerarquía de Figma, sin el centro
+    // (JCCMEC-274).
     final hasStructuredDetails = appointment.details.isNotEmpty;
     final isHealthLayout = appointment.kind == AgendaAppointmentKind.health && !hasStructuredDetails;
-    final center = appointment.center?.trim();
-    final legacyDetail = appointment.detail ?? center ?? '';
+    final legacyDetail = appointment.detail ?? appointment.center?.trim() ?? '';
     final String? secondaryText;
     if (hasStructuredDetails || appointment.kind == AgendaAppointmentKind.credential) {
       secondaryText = null;
@@ -432,7 +431,7 @@ class _AgendaAppointmentCard extends StatelessWidget {
     return AppAgendaInfoCard(
       type: switch (appointment.kind) {
         AgendaAppointmentKind.notification => AppAgendaInfoCardType.notification,
-        AgendaAppointmentKind.health => AppAgendaInfoCardType.health,
+        AgendaAppointmentKind.health || AgendaAppointmentKind.hospital => AppAgendaInfoCardType.health,
         AgendaAppointmentKind.credential => AppAgendaInfoCardType.credential,
       },
       day: date.day.toString(),
@@ -442,11 +441,7 @@ class _AgendaAppointmentCard extends StatelessWidget {
       channel: isHealthLayout ? _appointmentChannel(l10n, appointment.channel, legacyDetail) : null,
       primaryText: isHealthLayout ? appointment.title : appointment.description,
       secondaryText: secondaryText,
-      details: hasStructuredDetails
-          ? appointment.details
-          : [
-              if (isHealthLayout && center != null && center.isNotEmpty) (label: l10n.agendaDetailCentro, value: center),
-            ],
+      details: appointment.details,
     );
   }
 }

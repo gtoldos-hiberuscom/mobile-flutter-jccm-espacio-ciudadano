@@ -105,10 +105,10 @@ void main() {
     expect(find.text('PRESENCIAL'), findsOneWidget);
     expect(find.text('Alvaro nombre largo garcia bulero'), findsOneWidget);
     expect(find.text('Consulta a demanda'), findsOneWidget);
-    // El centro de SESCAM se muestra con etiqueta y respetando las siglas:
-    // sin ella el cliente no sabía qué era ese dato (JCCMEC-256).
-    expect(find.text('Centro: C.S. palomarejos_pren'), findsOneWidget);
-    expect(find.text('C.S. PALOMAREJOS_PREN'), findsNothing);
+    // Las citas de primaria no muestran el centro (JCCMEC-274).
+    expect(find.textContaining('Centro'), findsNothing);
+    expect(find.textContaining('PALOMAREJOS', findRichText: true), findsNothing);
+    expect(find.textContaining('palomarejos', findRichText: true), findsNothing);
   });
 
   testWidgets('un evento con párrafos etiquetados se pinta con título, intro y una fila por etiqueta (JCCMEC-256)', (final tester) async {
@@ -119,6 +119,7 @@ void main() {
           dateTime: DateTime(2026, 11, 2, 13),
           title: 'Cita de atención hospitalaria',
           description: 'Tiene una cita de atención hospitalaria para el próximo 02/11/2026',
+          kind: AgendaAppointmentKind.hospital,
           details: const [
             (label: 'Servicio', value: 'MEDICINA INTERNA'),
             (label: 'Centro', value: 'HOSPITAL UNIVERSITARIO DE TOLEDO'),
@@ -134,6 +135,9 @@ void main() {
     expect(find.text('Centro: Hospital universitario de toledo'), findsOneWidget);
     expect(find.text('Sala: Consultas B-203'), findsOneWidget);
     expect(find.textContaining('Hora'), findsNothing);
+    // Es una cita sanitaria: corazón, no el sobre de las notificaciones.
+    expect(find.byWidgetPredicate((final widget) => widget is AppSvgIcon && widget.assetPath == AppIconAssets.health), findsOneWidget);
+    expect(find.byWidgetPredicate((final widget) => widget is AppSvgIcon && widget.assetPath == AppIconAssets.mail), findsNothing);
   });
 
   testWidgets('la cita de primaria publicada por la agenda general usa el mismo diseño por filas que el resto de eventos', (final tester) async {

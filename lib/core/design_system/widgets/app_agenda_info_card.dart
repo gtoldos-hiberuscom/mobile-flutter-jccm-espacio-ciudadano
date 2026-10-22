@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -90,11 +91,15 @@ class AppAgendaInfoCard extends StatelessWidget {
     ].where((final part) => part.isNotEmpty);
     final effectiveLabel = semanticsLabel ?? l10n.a11yAgendaCard(typeLabel, semanticParts.join(', '));
     final useVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
+    // Las notificaciones usan su propia variante de Card-info en Figma
+    // (`791:1258`): borde de marca, esquinas redondeadas, sombra y sin la
+    // línea vertical tras la fecha.
+    final isNotification = type == AppAgendaInfoCardType.notification;
     final dateBlock = _DateBlock(
       day: day,
       weekday: weekday,
       time: time,
-      showVerticalDivider: !useVerticalLayout,
+      showVerticalDivider: !useVerticalLayout && !isNotification,
     );
     final contentBlock = _ContentBlock(
       title: title,
@@ -104,6 +109,7 @@ class AppAgendaInfoCard extends StatelessWidget {
       details: details,
       channelBeforeTitle: channelBeforeTitle,
       titleIsRegular: titleIsRegular,
+      titleSpacing: isNotification ? AppDimensions.space8 : 0,
     );
     final typeIcon = showTypeIcon ? _TypeIcon(type: type, semanticsLabel: typeLabel) : null;
 
@@ -113,11 +119,13 @@ class AppAgendaInfoCard extends StatelessWidget {
       child: ExcludeSemantics(
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(AppDimensions.space8).copyWith(
-            top: AppDimensions.space16,
-            bottom: AppDimensions.space16,
-          ),
-          decoration: _decoration,
+          padding: isNotification
+              ? const EdgeInsets.all(AppDimensions.space16)
+              : const EdgeInsets.all(AppDimensions.space8).copyWith(
+                  top: AppDimensions.space16,
+                  bottom: AppDimensions.space16,
+                ),
+          decoration: isNotification ? _notificationDecoration : _decoration,
           child: useVerticalLayout
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -139,7 +147,7 @@ class AppAgendaInfoCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       dateBlock,
-                      const SizedBox(width: AppDimensions.space8),
+                      SizedBox(width: isNotification ? AppDimensions.space4 : AppDimensions.space8),
                       Expanded(child: contentBlock),
                       if (typeIcon != null) ...[
                         const SizedBox(width: AppDimensions.space4),
@@ -162,6 +170,13 @@ class AppAgendaInfoCard extends StatelessWidget {
       bottom: BorderSide(color: AppColors.borderBlueMutedLight),
     ),
     borderRadius: BorderRadius.all(Radius.circular(1)),
+  );
+
+  BoxDecoration get _notificationDecoration => BoxDecoration(
+    color: AppColors.surface,
+    border: Border.all(color: AppColors.secondaryLight400, width: 2),
+    borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+    boxShadow: AppShadows.medium,
   );
 }
 
@@ -247,6 +262,7 @@ class _ContentBlock extends StatelessWidget {
     required this.details,
     required this.channelBeforeTitle,
     required this.titleIsRegular,
+    required this.titleSpacing,
   });
 
   final String title;
@@ -257,8 +273,12 @@ class _ContentBlock extends StatelessWidget {
   final bool channelBeforeTitle;
   final bool titleIsRegular;
 
+  /// Hueco bajo el título cuando no lo sigue el canal.
+  final double titleSpacing;
+
   @override
   Widget build(final BuildContext context) {
+    final hasChannelBelowTitle = !channelBeforeTitle && channel != null && channel!.isNotEmpty;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -277,6 +297,7 @@ class _ContentBlock extends StatelessWidget {
           _displayCase(title),
           style: (titleIsRegular ? AppTypography.bodyRegular : AppTypography.bodyBold).copyWith(color: AppColors.textPrimary),
         ),
+        if (!hasChannelBelowTitle && titleSpacing > 0) SizedBox(height: titleSpacing),
         if (!channelBeforeTitle && channel != null && channel!.isNotEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
@@ -322,9 +343,12 @@ class _ContentBlock extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    // La etiqueta va en negrita y el valor en peso normal:
+                    // `captionRegular` es negrita en este sistema, así que el
+                    // valor usa `bodyCaption`.
                     TextSpan(
                       text: _displayCase(detail.value),
-                      style: AppTypography.captionRegular.copyWith(color: AppColors.textPrimary),
+                      style: AppTypography.bodyCaption.copyWith(color: AppColors.textPrimary),
                     ),
                   ],
                 ),
