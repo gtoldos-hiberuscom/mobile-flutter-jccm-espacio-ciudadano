@@ -13,7 +13,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/clave_login_veil.dart';
-import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/demo_mode_confirmation_sheet.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/landing_login_action.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// "Saber más sobre Espacio Ciudadano" screen — Figma `44469:24782`.
@@ -181,7 +181,7 @@ class LandingAboutPage extends ConsumerWidget {
                   label: l10n.landingAboutAccessButton,
                   icon: const Icon(Icons.check, size: AppDimensions.iconMedium),
                   isLoading: landingState.isLoggingIn,
-                  onPressed: landingState.isLoggingIn ? null : () => ref.read(landingProvider.notifier).login(),
+                  onPressed: landingState.isLoggingIn ? null : () => startLandingLogin(context, ref),
                 ),
                 // Ghost — «Acceder a demostración» (revisores de las tiendas).
                 // Aquí y no en la home pública: visible y localizable con las
@@ -192,7 +192,7 @@ class LandingAboutPage extends ConsumerWidget {
                     label: l10n.landingDemoButton,
                     hierarchy: AppButtonHierarchy.ghost,
                     icon: const Icon(Icons.visibility_outlined, size: AppDimensions.iconMedium),
-                    onPressed: landingState.isLoggingIn ? null : () => _openDemoConfirmation(context, ref),
+                    onPressed: landingState.isLoggingIn ? null : () => openDemoModeEntry(context, ref),
                   ),
               ],
             ),
@@ -201,20 +201,4 @@ class LandingAboutPage extends ConsumerWidget {
       ),
     );
   }
-}
-
-/// Abre la hoja de la demostración y, si el ciudadano confirma con el código,
-/// entra. Se consulta antes si hay una sesión guardada: entrar la cierra, y
-/// eso hay que decirlo antes, no después.
-Future<void> _openDemoConfirmation(final BuildContext context, final WidgetRef ref) async {
-  final notifier = ref.read(landingProvider.notifier);
-  final hasPersistedSession = await notifier.hasPersistedSession();
-  if (!context.mounted) {
-    return;
-  }
-  final confirmed = await DemoModeConfirmationSheet.show(context, hasPersistedSession: hasPersistedSession);
-  if (!context.mounted || !confirmed) {
-    return;
-  }
-  await notifier.enterDemoMode(closePersistedSession: hasPersistedSession);
 }

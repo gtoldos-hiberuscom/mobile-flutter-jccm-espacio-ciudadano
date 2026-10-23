@@ -16,6 +16,7 @@ import 'package:jccm_espacio_ciudadano/core/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/clave_login_veil.dart';
+import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/landing_login_action.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Public anonymous landing screen — 00_Splash/Inicio from Figma.
@@ -282,7 +283,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                 label: l10n.landingCtaButton,
                 icon: const Icon(Icons.check, size: AppDimensions.iconMedium),
                 isLoading: landingState.isLoggingIn,
-                onPressed: landingState.isLoggingIn ? null : () => ref.read(landingProvider.notifier).login(),
+                onPressed: landingState.isLoggingIn ? null : () => startLandingLogin(context, ref),
               ),
             ],
           ),
