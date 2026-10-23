@@ -196,7 +196,11 @@ class _HospitalAppointmentsList extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
 
+    // `skipLoadingOnRefresh: false`: al elevar, el gate se rehace con el nivel
+    // nuevo y, por defecto, `.when` seguiría pintando el error anterior —el
+    // bloqueo— hasta que llegue el listado.
     return ref.watch(myDataHospitalAppointmentsProvider(filter)).when(
+      skipLoadingOnRefresh: false,
       loading: () => const Center(child: Padding(padding: EdgeInsets.all(AppDimensions.space32), child: AppLoadingIndicator())),
       error: (final error, final _) => switch (error) {
         MyDataAuthorizationRequired() => MyDataAuthorizationContextualHelper(onOpenSettings: onOpenConsentSettings),
@@ -320,11 +324,16 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
       case ElevationOutcome.failed:
         unawaited(_open(message: l10n.myDataHealthLevelElevationFailedMessage));
       // `succeeded` deja de bloquear y la pantalla pinta el listado por
-      // derivación, e `identityChanged` cierra sesión: si aun así hay bloqueo
-      // montado, es una entrada nueva.
+      // derivación. Este bloqueo puede seguir montado unos frames mientras el
+      // listado se rehace, y abrir aquí el diálogo era JCCMEC-278: el aviso
+      // volvía a salir tras elevar, y al pulsarlo solo se cerraba porque el
+      // bloqueo ya no existía. Si de verdad sigue haciendo falta, el gate lo
+      // vuelve a pintar y su `_start` lo trata como una entrada nueva.
       case ElevationOutcome.succeeded:
+        break;
+      // `identityChanged` cierra sesión: el guard de ruta saca de aquí.
       case ElevationOutcome.identityChanged:
-        unawaited(_open());
+        break;
     }
   }
 

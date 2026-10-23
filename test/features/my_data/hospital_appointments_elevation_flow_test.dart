@@ -140,12 +140,34 @@ void main() {
     expect(find.text(_acceder), findsOneWidget);
     expect(clave.calls, 1);
   });
+
+  /// JCCMEC-278: tras elevar con éxito **el aviso volvía a salir**, y pulsar
+  /// «Acceder» solo lo cerraba. El bloqueo seguía montado mientras el listado
+  /// se rehacía y trataba `succeeded` como una entrada nueva.
+  testWidgets('elevar con éxito muestra el listado sin volver a abrir el aviso', (final tester) async {
+    final container = await _pump(tester, storage: storage, elevation: elevation, repository: _EmptyRepository());
+
+    await tester.tap(find.text(_acceder));
+    await _settle(tester);
+    expect(clave.calls, 1);
+
+    // Como el notifier real: adopta el token nuevo y, después, el desenlace.
+    container.read(jwtClaimsProvider.notifier).update(_claims(level: 'substantial'));
+    elevation.finish(ElevationOutcome.succeeded);
+    await _settle(tester);
+
+    expect(find.text(_acceder), findsNothing);
+    expect(find.text('Verificación completada'), findsOneWidget);
+    expect(find.text('No tienes citas hospitalarias pendientes.'), findsOneWidget);
+    expect(clave.calls, 1);
+  });
 }
 
 Future<ProviderContainer> _pump(
   final WidgetTester tester, {
   required final FakeAppStorage storage,
   required final _FakeElevationNotifier elevation,
+  final MyDataHealthRepository? repository,
 }) async {
   // Pantalla de móvil: en la de 800×600 por defecto el botón de Cl@ve del
   // diálogo queda fuera del área que recibe toques.
@@ -172,7 +194,7 @@ Future<ProviderContainer> _pump(
       jwtClaimsProvider.overrideWith(_LowLevelClaims.new),
       appStorageProvider.overrideWithValue(storage),
       elevationProvider.overrideWith(() => elevation),
-      myDataHealthRepositoryProvider.overrideWithValue(_NoCallsRepository()),
+      myDataHealthRepositoryProvider.overrideWithValue(repository ?? _NoCallsRepository()),
       jccmDataAuthorizationProvider.overrideWith((final ref) async => true),
       myDataHealthCipProvider.overrideWith((final ref) async => 'CIP-1'),
     ],
@@ -233,16 +255,36 @@ final class _FakeElevationNotifier extends ElevationNotifier {
 
 final class _LowLevelClaims extends JwtClaimsNotifier {
   @override
-  JwtClaims? build() => const JwtClaims(
-    exp: 0,
-    iat: 0,
-    iss: 'issuer',
-    aud: [],
-    sub: 'subject',
-    subAlt: 'PER1',
-    idAgente: 'PER1',
-    authNLevelRaw: 'low',
-  );
+  JwtClaims? build() => _claims(level: 'low');
+}
+
+JwtClaims _claims({required final String level}) => JwtClaims(
+  exp: 0,
+  iat: 0,
+  iss: 'issuer',
+  aud: const [],
+  sub: 'subject',
+  subAlt: 'PER1',
+  idAgente: 'PER1',
+  authNLevelRaw: level,
+);
+
+final class _EmptyRepository implements MyDataHealthRepository {
+  @override
+  Future<String?> loadCip({required final String citizenId}) async => 'CIP-1';
+
+  @override
+  Future<List<HospitalAppointment>> loadHospitalAppointments({
+    required final String citizenId,
+    required final HealthAppointmentFilter filter,
+  }) async => const [];
+
+  @override
+  Future<List<Never>> loadPrimaryCareAppointments({
+    required final String citizenId,
+    required final HealthAppointmentFilter filter,
+    final int page = 0,
+  }) => throw UnimplementedError();
 }
 
 final class _NoCallsRepository implements MyDataHealthRepository {
