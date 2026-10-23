@@ -10,6 +10,7 @@ import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/widgets/d
 /// no debe llegar a `develop`: la build de revisión sale de PRE, los revisores
 /// no están tras la VPN y Cl@ve les falla. Con `DEMO_MODE_ENABLED` el acceso
 /// abre directamente la hoja de la demostración; sin él, Cl@ve como siempre.
+/// Solo en la home pública y en «Saber más»: «Cómo acceder» sigue con Cl@ve.
 Future<void> startLandingLogin(final BuildContext context, final WidgetRef ref) async {
   if (ref.read(appConfigProvider).demoModeEnabled) {
     await openDemoModeEntry(context, ref);
