@@ -3642,6 +3642,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get identityVerificationCompletedMessage => 'Verification completed';
 
   @override
+  String get identityVerificationSwitchedMessage => 'You signed in as a different person. The previous session has been closed.';
+
+  @override
   String get myDataHealthLevelRequiredMessage => 'Your current access level does not meet the application security policy. Press \"Continue\" to restart the session with the required higher access level.';
 
   @override

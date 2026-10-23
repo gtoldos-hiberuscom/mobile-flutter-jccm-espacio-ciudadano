@@ -13,7 +13,8 @@ import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dar
 ///
 /// El mecanismo de elevación es repetir el login, que ya fuerza el desafío de
 /// Cl@ve. Lo que se fija aquí es el reparto de desenlaces y, sobre todo, que
-/// una identidad distinta **no se adopta** aunque su nivel baste.
+/// una identidad distinta se entrega como **cambio de sesión** (JCCMEC-278),
+/// nunca como una elevación de la sesión anterior.
 void main() {
   const minimum = AuthenticationLevel.substantial;
 
@@ -98,16 +99,28 @@ void main() {
     expect((result as ElevationInsufficient).tokenResponse, isNotNull);
   });
 
-  // El caso del móvil compartido, y el P1 abierto del proyecto.
-  test('otro documento: mismatch, y no se adopta aunque el nivel baste', () async {
-    repository.tokenFor = _token(_claimsToken(document: '00000000T', level: 'high'));
+  // JCCMEC-278: como en la web, quien se identifica se queda con la sesión.
+  test('otro documento: cambio de persona, con la sesión de la nueva', () async {
+    final token = _token(_claimsToken(document: '00000000T', level: 'high'));
+    repository.tokenFor = token;
 
     final result = await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
 
-    expect(result, isA<ElevationIdentityMismatch>());
-    // Lleva el `id_token` de esa otra persona: sin él no habría con qué cerrar
-    // su sesión de navegador antes del siguiente login.
-    expect((result as ElevationIdentityMismatch).idToken, 'id-token');
+    expect(result, isA<ElevationIdentitySwitched>());
+    final switched = result as ElevationIdentitySwitched;
+    expect(switched.tokenResponse, same(token));
+    expect(switched.jwtClaims.effectivePersonIdentifier, '00000000T');
+  });
+
+  // Aunque no alcance el mínimo: primero es otra persona, y el gate ya la
+  // bloqueará como ella.
+  test('otro documento con nivel insuficiente: también es cambio de persona', () async {
+    repository.tokenFor = _token(_claimsToken(document: '00000000T', level: 'low'));
+
+    final result = await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
+
+    expect(result, isA<ElevationIdentitySwitched>());
+    expect((result as ElevationIdentitySwitched).reading.meets(minimum), isFalse);
   });
 
   // Elevar cambia de proveedor de identidad y con él el `sub`, así que comparar

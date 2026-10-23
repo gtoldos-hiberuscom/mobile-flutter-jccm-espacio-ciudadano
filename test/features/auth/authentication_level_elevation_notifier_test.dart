@@ -124,14 +124,35 @@ void main() {
     expect(await container.read(authSessionControllerProvider).hasPersistedSession(), isFalse);
   });
 
-  test('otra identidad: se cierra la sesión y no se adopta el token nuevo', () async {
-    final container = buildContainer(_token(_claimsToken(level: 'high', document: '00000000T')));
+  // JCCMEC-278: como en la web, la sesión pasa a ser de quien se identificó.
+  test('otra identidad: la sesión pasa a ser suya, como un login nuevo', () async {
+    final switched = _token(_claimsToken(level: 'high', document: '00000000T'));
+    final container = buildContainer(switched);
     startLowLevelSession(container);
 
     await container.read(elevationProvider.notifier).elevate(minimum: AuthenticationLevel.substantial);
 
-    expect(container.read(elevationProvider).outcome, ElevationOutcome.identityChanged);
-    expect(container.read(tokenResponseProvider), isNull);
+    expect(container.read(elevationProvider).outcome, ElevationOutcome.identitySwitched);
+    expect(container.read(tokenResponseProvider)?.accessToken, switched.accessToken);
+    expect(container.read(authenticationLevelProvider).meets(AuthenticationLevel.substantial), isTrue);
+    // La sesión offline de la persona anterior se revoca: es la suya.
+    expect(repository.revokedRefreshTokens, ['refresh']);
+  });
+
+  test('otra identidad con acceso rápido: no queda nada de la sesión anterior en el almacén', () async {
+    appStorage.values['${StorageKeys.biometricQuickAccessEnabledPrefix}PER1'] = true;
+    storage.store[StorageKeys.accessToken] = 'access-token-anterior';
+    storage.store[StorageKeys.refreshToken] = 'refresh-anterior';
+    storage.store[StorageKeys.sessionExpiresAt] = DateTime(2030).toIso8601String();
+    final container = buildContainer(_token(_claimsToken(level: 'high', document: '00000000T', idAgente: 'PER2')));
+    startLowLevelSession(container);
+
+    await container.read(elevationProvider.notifier).elevate(minimum: AuthenticationLevel.substantial);
+
+    expect(container.read(elevationProvider).outcome, ElevationOutcome.identitySwitched);
+    expect(storage.store.containsKey(StorageKeys.accessToken), isFalse);
+    expect(storage.store.containsKey(StorageKeys.refreshToken), isFalse);
+    expect(storage.store.containsKey(StorageKeys.sessionExpiresAt), isFalse);
   });
 
   // Regresión del 14/10: la cancelación dejaba el estado como si no hubiera
@@ -185,26 +206,24 @@ void main() {
       expect(repository.logoutCalls, isEmpty);
     });
 
-    test('otra identidad: queda la pista de esa persona para que el siguiente login la cierre', () async {
+    test('otra identidad: la pista pasa a ser la de la persona nueva', () async {
       storage.store[StorageKeys.idToken] = 'id-token-previo';
       final container = buildContainer(_token(_claimsToken(level: 'high', document: '00000000T'), idToken: 'id-token-de-otra-persona'));
       startLowLevelSession(container);
 
       await container.read(elevationProvider.notifier).elevate(minimum: AuthenticationLevel.substantial);
 
-      expect(container.read(elevationProvider).outcome, ElevationOutcome.identityChanged);
-      expect(container.read(tokenResponseProvider), isNull);
+      expect(container.read(elevationProvider).outcome, ElevationOutcome.identitySwitched);
       expect(storage.store[StorageKeys.idToken], 'id-token-de-otra-persona');
-      expect(storage.store.containsKey(StorageKeys.accessToken), isFalse);
     });
   });
 }
 
-String _claimsToken({required final String level, final String document = '99999999R'}) {
+String _claimsToken({required final String level, final String document = '99999999R', final String idAgente = 'PER1'}) {
   final payload = jsonEncode({
     'sub': 'subject',
-    'sub_alt': 'PER1',
-    'idAgente': 'PER1',
+    'sub_alt': idAgente,
+    'idAgente': idAgente,
     'PersonIdentifier': document,
     'authNLevel': level,
   });
@@ -249,7 +268,11 @@ final class _FakeAuthRepository implements AuthRepository {
   }) => throw UnimplementedError();
 
   @override
-  Future<void> revokeOfflineSession({required final String refreshToken}) => throw UnimplementedError();
+  Future<void> revokeOfflineSession({required final String refreshToken}) async {
+    revokedRefreshTokens.add(refreshToken);
+  }
+
+  final List<String> revokedRefreshTokens = [];
 
   @override
   Future<void> logout({required final String idToken, final String? postLogoutRedirectUri}) async {

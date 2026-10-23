@@ -134,6 +134,13 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
         ref.read(elevationProvider.notifier).acknowledge();
         AppAlertSnackbar.show(context, message: l10n.identityVerificationCompletedMessage, severity: AppAlertSeverity.success);
       }
+      // Otra persona: la sesión ya es suya y entra como en un login nuevo, por
+      // el inicio, para que el guard le pase sus propias comprobaciones.
+      if (next.outcome == ElevationOutcome.identitySwitched && previous?.outcome != ElevationOutcome.identitySwitched) {
+        ref.read(elevationProvider.notifier).acknowledge();
+        AppAlertSnackbar.show(context, message: l10n.identityVerificationSwitchedMessage);
+        context.go(Routes.home);
+      }
     });
     // La comprobación de autorización se observa **aquí**, por encima del área
     // que conmuta, para que cambiar de pestaña no la revalide.
@@ -331,8 +338,8 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
       // vuelve a pintar y su `_start` lo trata como una entrada nueva.
       case ElevationOutcome.succeeded:
         break;
-      // `identityChanged` cierra sesión: el guard de ruta saca de aquí.
-      case ElevationOutcome.identityChanged:
+      // Otra persona: lo atiende la página, que lleva al inicio.
+      case ElevationOutcome.identitySwitched:
         break;
     }
   }

@@ -223,10 +223,13 @@ class _HealthServicesTabState extends ConsumerState<_HealthServicesTab> {
         await _verifyIdentityThenOpenDigitalHealth(message: l10n.myDataHealthLevelStillInsufficientMessage);
       case ElevationOutcome.failed:
         await _verifyIdentityThenOpenDigitalHealth(message: l10n.myDataHealthLevelElevationFailedMessage);
-      // Cancelar deja al ciudadano en Salud, sin relanzar Cl@ve, y el cambio
-      // de identidad ya cerró la sesión: el guard de ruta lo saca de aquí.
+      // Otra persona: la sesión ya es suya y entra como en un login nuevo, por
+      // el inicio; Mi Salud Digital no se abre a quien no lo ha pedido.
+      case ElevationOutcome.identitySwitched:
+        AppAlertSnackbar.show(context, message: l10n.identityVerificationSwitchedMessage);
+        context.go(Routes.home);
+      // Cancelar deja al ciudadano en Salud, sin relanzar Cl@ve.
       case ElevationOutcome.cancelled:
-      case ElevationOutcome.identityChanged:
       case null:
         return;
     }

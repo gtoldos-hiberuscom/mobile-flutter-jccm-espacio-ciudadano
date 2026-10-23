@@ -4823,6 +4823,10 @@
   "@identityVerificationCompletedMessage": {
     "description": "Snackbar de éxito al terminar la elevación del nivel de seguridad con Cl@ve (Figma 45536:38213)."
   },
+  "identityVerificationSwitchedMessage": "Te has identificado con otra persona. Se ha cerrado la sesión anterior.",
+  "@identityVerificationSwitchedMessage": {
+    "description": "Snackbar informativo cuando, al elevar el nivel en Cl@ve, se identifica una persona distinta y la sesión pasa a ser suya (JCCMEC-278)."
+  },
   "myDataHealthLevelRequiredMessage": "El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.",
   "@myDataHealthLevelRequiredMessage": {
     "description": "Salud — bloqueo por nivel de autenticación insuficiente para datos de salud."

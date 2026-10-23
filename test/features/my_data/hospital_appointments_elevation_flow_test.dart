@@ -19,6 +19,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 import '../auth/auth_session_controller_test.dart' show FakeAppStorage;
 
 const _salud = 'pantalla de Salud';
+const _inicio = 'pantalla de inicio';
 const _acceder = 'Acceder a cl@ve';
 const _volver = 'Volver';
 const _noVolverAMostrar = 'No volver a mostrar';
@@ -161,6 +162,22 @@ void main() {
     expect(find.text('No tienes citas hospitalarias pendientes.'), findsOneWidget);
     expect(clave.calls, 1);
   });
+
+  // JCCMEC-278: con el certificado de otra persona la sesión pasa a ser suya,
+  // como en la web, y entra por el inicio igual que tras un login.
+  testWidgets('identificarse con otra persona lleva al inicio y lo explica, sin volver a Cl@ve', (final tester) async {
+    await _pump(tester, storage: storage, elevation: elevation);
+
+    await tester.tap(find.text(_acceder));
+    await _settle(tester);
+    elevation.finish(ElevationOutcome.identitySwitched);
+    await _settle(tester);
+
+    expect(find.text(_inicio), findsOneWidget);
+    expect(find.text('Te has identificado con otra persona. Se ha cerrado la sesión anterior.'), findsOneWidget);
+    expect(find.text(_acceder), findsNothing);
+    expect(clave.calls, 1);
+  });
 }
 
 Future<ProviderContainer> _pump(
@@ -180,6 +197,7 @@ Future<ProviderContainer> _pump(
     initialLocation: Routes.myDataHealthHospitalAppointments,
     routes: [
       GoRoute(path: Routes.myDataHealth, builder: (final _, final _) => const Scaffold(body: Text(_salud))),
+      GoRoute(path: Routes.home, builder: (final _, final _) => const Scaffold(body: Text(_inicio))),
       GoRoute(
         path: Routes.myDataHealthHospitalAppointments,
         builder: (final _, final _) => const MyDataHospitalAppointmentsPage(),

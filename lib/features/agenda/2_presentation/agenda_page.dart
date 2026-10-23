@@ -131,10 +131,12 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
         unawaited(_verifyIdentity(message: l10n.myDataHealthLevelStillInsufficientMessage));
       case ElevationOutcome.failed:
         unawaited(_verifyIdentity(message: l10n.myDataHealthLevelElevationFailedMessage));
-      // Cancelar deja el aviso donde estaba; con otra identidad la sesión ya
-      // se ha cerrado y el guard de rutas saca de aquí.
+      // Otra persona: la sesión ya es suya y entra como en un login nuevo.
+      case ElevationOutcome.identitySwitched:
+        AppAlertSnackbar.show(context, message: l10n.identityVerificationSwitchedMessage);
+        context.go(Routes.home);
+      // Cancelar deja el aviso donde estaba.
       case ElevationOutcome.cancelled:
-      case ElevationOutcome.identityChanged:
         break;
     }
   }
