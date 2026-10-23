@@ -3960,10 +3960,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionNotificacionesAltaSaveButton => 'Activar';
 
   @override
-  String get gestionNotificacionesAltaInfoTitle => 'Datos de contacto';
+  String get gestionNotificacionesAltaInfoTitle => 'Saber más sobre los datos de Mis notificaciones';
 
   @override
-  String get gestionNotificacionesAltaInfoBody => 'Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.';
+  String get gestionNotificacionesAltaInfoBody => 'Esta información de contacto se utilizará únicamente para avisarte de que tienes una nueva notificación electrónica.\n\nPuedes modificar los datos en cualquier momento. Después los cambios se aplicarán a las nuevas notificaciones.';
 
   @override
   String get gestionNotificacionesAltaErrorAtLeastOne => 'Debes indicar al menos un teléfono móvil o un correo electrónico.';
@@ -4531,7 +4531,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeNewsSectionTitle => 'Mis novedades';
 
   @override
-  String get homeMyDataAccessesTitle => 'Acceso a mis datos';
+  String get homeMyDataAccessesTitle => 'Mis datos';
 
   @override
   String get homeNewsNotificationsTitle => 'Notificaciones';

@@ -3959,10 +3959,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionNotificacionesAltaSaveButton => 'Activate';
 
   @override
-  String get gestionNotificacionesAltaInfoTitle => 'Contact details';
+  String get gestionNotificacionesAltaInfoTitle => 'Learn more about My notifications contact details';
 
   @override
-  String get gestionNotificacionesAltaInfoBody => 'Provide a mobile phone number or an email address to receive notification alerts.';
+  String get gestionNotificacionesAltaInfoBody => 'This contact information will only be used to notify you that you have received a new electronic notification.\n\nYou can change these details at any time. The changes will apply to new notifications.';
 
   @override
   String get gestionNotificacionesAltaErrorAtLeastOne => 'You must provide at least a mobile phone number or an email address.';

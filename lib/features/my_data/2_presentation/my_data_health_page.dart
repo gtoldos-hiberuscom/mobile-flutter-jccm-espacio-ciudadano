@@ -38,15 +38,15 @@ class MyDataHealthPage extends ConsumerStatefulWidget {
 }
 
 class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
-  /// Nulo hasta que el ciudadano elija: la pestaña inicial depende de quién
-  /// entre, y un representante no tiene nada que ver en la de datos.
+  /// Nulo hasta que el ciudadano elija; la pantalla siempre abre en «Mis
+  /// datos», también para representantes, donde se muestra la restricción.
   _HealthTab? _selectedTab;
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
-    final selectedTab = _selectedTab ?? (isRepresentative ? _HealthTab.services : _HealthTab.data);
+    final selectedTab = _selectedTab ?? _HealthTab.data;
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataHealthTitle,
@@ -78,52 +78,54 @@ class _HealthMenuTab extends ConsumerWidget {
     // con el mismo umbral que aplica el gate de la consulta.
     final hospitalNeedsVerification = !ref.watch(authenticationLevelProvider).meets(kHospitalAppointmentsMinimumLevel);
 
-    return ref.watch(jccmDataAuthorizationProvider).when(
-      loading: () => const Padding(
-        padding: EdgeInsets.only(top: AppDimensions.space24),
-        child: Center(child: AppLoadingIndicator()),
-      ),
-      // Fallo del check ≠ «no autorizado»: sin respuesta del backend solo cabe
-      // error + reintentar, nunca pedir re-autorizar un consentimiento que
-      // puede estar concedido.
-      error: (final _, final _) => ErrorStateWidget(
-        message: l10n.authorizationCheckFailedMessage,
-        onRetry: () => ref.invalidate(jccmDataAuthorizationProvider),
-      ),
-      data: (final hasJccmAuthorization) => SingleChildScrollView(
-        padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (!hasJccmAuthorization) ...[
-              MyDataAuthorizationContextualHelper(onOpenSettings: () => _openConsentSettings(context)),
-              const SizedBox(height: AppDimensions.space16),
-            ],
-            if (hasJccmAuthorization) ...[
-              // Sin autorización no se puede consultar al SESCAM: el CIP sale
-              // solo cuando hay con qué pedirlo.
-              const MyDataHealthCipField(),
-              const SizedBox(height: AppDimensions.space16),
-              AppNavigationCard(
-                title: l10n.myDataHealthPrimaryCareNavTitle,
-                onTap: () => context.go(Routes.myDataHealthPrimaryCareAppointments),
-              ),
-            ] else
-              MyDataDisabledNavigationCard(title: l10n.myDataHealthPrimaryCareNavTitle),
-            const SizedBox(height: AppDimensions.space16),
-            if (hasJccmAuthorization)
-              AppNavigationCard(
-                title: l10n.myDataHealthHospitalNavTitle,
-                description: hospitalNeedsVerification ? l10n.myDataHealthHospitalNavVerificationRequired : null,
-                descriptionIcon: hospitalNeedsVerification ? AppIcons.lock : null,
-                onTap: () => context.go(Routes.myDataHealthHospitalAppointments),
-              )
-            else
-              MyDataDisabledNavigationCard(title: l10n.myDataHealthHospitalNavTitle),
-          ],
-        ),
-      ),
-    );
+    return ref
+        .watch(jccmDataAuthorizationProvider)
+        .when(
+          loading: () => const Padding(
+            padding: EdgeInsets.only(top: AppDimensions.space24),
+            child: Center(child: AppLoadingIndicator()),
+          ),
+          // Fallo del check ≠ «no autorizado»: sin respuesta del backend solo cabe
+          // error + reintentar, nunca pedir re-autorizar un consentimiento que
+          // puede estar concedido.
+          error: (final _, final _) => ErrorStateWidget(
+            message: l10n.authorizationCheckFailedMessage,
+            onRetry: () => ref.invalidate(jccmDataAuthorizationProvider),
+          ),
+          data: (final hasJccmAuthorization) => SingleChildScrollView(
+            padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!hasJccmAuthorization) ...[
+                  MyDataAuthorizationContextualHelper(onOpenSettings: () => _openConsentSettings(context)),
+                  const SizedBox(height: AppDimensions.space16),
+                ],
+                if (hasJccmAuthorization) ...[
+                  // Sin autorización no se puede consultar al SESCAM: el CIP sale
+                  // solo cuando hay con qué pedirlo.
+                  const MyDataHealthCipField(),
+                  const SizedBox(height: AppDimensions.space16),
+                  AppNavigationCard(
+                    title: l10n.myDataHealthPrimaryCareNavTitle,
+                    onTap: () => context.go(Routes.myDataHealthPrimaryCareAppointments),
+                  ),
+                ] else
+                  MyDataDisabledNavigationCard(title: l10n.myDataHealthPrimaryCareNavTitle),
+                const SizedBox(height: AppDimensions.space16),
+                if (hasJccmAuthorization)
+                  AppNavigationCard(
+                    title: l10n.myDataHealthHospitalNavTitle,
+                    description: hospitalNeedsVerification ? l10n.myDataHealthHospitalNavVerificationRequired : null,
+                    descriptionIcon: hospitalNeedsVerification ? AppIcons.lock : null,
+                    onTap: () => context.go(Routes.myDataHealthHospitalAppointments),
+                  )
+                else
+                  MyDataDisabledNavigationCard(title: l10n.myDataHealthHospitalNavTitle),
+              ],
+            ),
+          ),
+        );
   }
 }
 
