@@ -33,7 +33,8 @@ import 'auth_session_controller_test.dart' show FakeAppStorage, FakeSecureStorag
 ///
 /// Persistir es decisión del guard (`_persistSessionNowConsentIsOnRecord`), y
 /// la elevación debe hacer lo mismo que `LandingNotifier.login`: memoria, pista
-/// de navegador, y nada más. Se comprueba sobre el almacén, no espiando
+/// de navegador, y nada más — salvo que la sesión ya estuviera guardada, en
+/// cuyo caso se reescribe con la elevada, como hace el refresco. Se comprueba sobre el almacén, no espiando
 /// llamadas: lo que importa es que la sesión no quede persistida.
 void main() {
   late FakeSecureStorage storage;
@@ -81,6 +82,24 @@ void main() {
     // es lo que llevaba al guard a borrar la sesión y rebotar al landing.
     expect(await container.read(authSessionControllerProvider).hasPersistedSession(), isFalse);
     expect(storage.store.containsKey(StorageKeys.accessToken), isFalse);
+  });
+
+  // JCCMEC-278: con acceso rápido la sesión ya estaba en el almacén y el guard
+  // no la reescribe; sin esto, al reabrir la app se hidrataba el token de
+  // nivel bajo y el aviso volvía a salir.
+  test('con la sesión ya persistida (acceso rápido), se guarda la elevada', () async {
+    appStorage.values['${StorageKeys.biometricQuickAccessEnabledPrefix}PER1'] = true;
+    storage.store[StorageKeys.accessToken] = 'access-token-de-nivel-bajo';
+    storage.store[StorageKeys.refreshToken] = 'refresh-de-nivel-bajo';
+    final elevated = _token(_claimsToken(level: 'substantial'), idToken: 'id-token-elevado');
+    final container = buildContainer(elevated);
+    startLowLevelSession(container);
+
+    await container.read(elevationProvider.notifier).elevate(minimum: AuthenticationLevel.substantial);
+
+    expect(container.read(elevationProvider).outcome, ElevationOutcome.succeeded);
+    expect(storage.store[StorageKeys.accessToken], elevated.accessToken);
+    expect(storage.store[StorageKeys.refreshToken], elevated.refreshToken);
   });
 
   test('el nivel nuevo queda en memoria y la lectura lo refleja', () async {

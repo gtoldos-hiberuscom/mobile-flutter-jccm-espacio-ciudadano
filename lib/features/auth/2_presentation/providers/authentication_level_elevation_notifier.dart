@@ -114,6 +114,19 @@ class ElevationNotifier extends Notifier<ElevationState> {
           // destructiva del guard —`clear()` + rebote— y **echaba al ciudadano
           // al landing público justo después de elevar**. Sin persistir, ese
           // mismo `ConsentRequired` lleva al gate legal, que es recuperable.
+          //
+          // **Salvo que ya estuviera persistida** (acceso rápido): entonces el
+          // guard ya no la vuelve a escribir, y el almacén se quedaba con el
+          // token de nivel bajo; al reabrir la app volvía el aviso
+          // (JCCMEC-278). Es lo mismo que hace el refresco: si había sesión
+          // guardada, se guarda la nueva. El flag no cambia, así que no reabre
+          // lo de arriba.
+          if (await session.hasPersistedSession()) {
+            await session.persistCurrentSession();
+            if (!ref.mounted) {
+              return;
+            }
+          }
           state = ElevationState(
             outcome: result is ElevationSucceeded ? ElevationOutcome.succeeded : ElevationOutcome.stillInsufficient,
           );
