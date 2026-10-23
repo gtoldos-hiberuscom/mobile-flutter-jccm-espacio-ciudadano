@@ -73,6 +73,20 @@ void main() {
     expect((result as ElevationSucceeded).reading.meets(minimum), isTrue);
   });
 
+  // JCCMEC-278: la elevación y el gate leían el nivel con reglas distintas. Si
+  // el claim viaja solo en el id token, el gate ya dejaba pasar y la elevación
+  // decía «insuficiente».
+  test('nivel solo en el id token: misma regla que el gate, elevación correcta', () async {
+    repository.tokenFor = _token(
+      _claimsToken(document: '99999999R'),
+      idToken: _claimsToken(document: '99999999R', level: 'substantial'),
+    );
+
+    final result = await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
+
+    expect(result, isA<ElevationSucceeded>());
+  });
+
   // Desenlace esperado, no error: con Permanente sin reforzar se vuelve igual.
   test('se reidentifica pero sigue sin bastar: insuficiente, y la sesión nueva se entrega', () async {
     repository.tokenFor = _token(_claimsToken(document: '99999999R', level: 'low'));
@@ -137,16 +151,16 @@ JwtClaims _claims({required final String document, required final String level, 
 );
 
 /// Token JWT sin firmar cuyo payload es lo único que el caso de uso lee.
-String _claimsToken({required final String document, required final String level, final String subject = 'subject'}) {
-  final payload = jsonEncode({'sub': subject, 'PersonIdentifier': document, 'authNLevel': level});
+String _claimsToken({required final String document, final String? level, final String subject = 'subject'}) {
+  final payload = jsonEncode({'sub': subject, 'PersonIdentifier': document, 'authNLevel': ?level});
   return 'header.${base64Url.encode(utf8.encode(payload))}.signature';
 }
 
-TokenResponse _token(final String accessToken) => TokenResponse(
+TokenResponse _token(final String accessToken, {final String idToken = 'id-token'}) => TokenResponse(
   accessToken,
   'refresh',
   DateTime(2030),
-  'id-token',
+  idToken,
   'Bearer',
   const ['openid'],
   const <String, dynamic>{},

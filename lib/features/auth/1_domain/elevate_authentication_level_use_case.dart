@@ -143,7 +143,10 @@ final class ElevateAuthenticationLevelUseCase {
           return ElevationIdentityMismatch(previous: currentClaims, next: jwtClaims, idToken: tokenResponse.idToken);
         }
 
-        final reading = AuthenticationLevelReading.parse(jwtClaims.authNLevelRaw);
+        // Misma regla que el gate: si aquí se leyera solo el access token, un
+        // nivel que viaje en el id token daría la elevación por insuficiente
+        // con el gate ya abierto.
+        final reading = AuthenticationLevelReading.fromSession(accessTokenClaims: jwtClaims, idToken: tokenResponse.idToken);
         if (!reading.meets(minimum)) {
           return ElevationInsufficient(
             tokenResponse: tokenResponse,
