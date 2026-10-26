@@ -378,11 +378,12 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final notificationDetails = _notificationDetails(raw, rawMessage);
     final primaryCareDetails = _parsePrimaryCareMessage(message);
     final isPrimaryCare = source == AgendaAppointmentSource.general && (_isPrimaryCareEvent(title, specialty, message, detail, center) || primaryCareDetails != null);
+    final isHealthEvent = source == AgendaAppointmentSource.general && (isPrimaryCare || _isHospitalAppointmentEvent(title, specialty, message, detail, center));
     final isOnDemandHealthAppointment = source == AgendaAppointmentSource.health && _isOnDemandAppointment(specialty);
     final kind = switch (source) {
       AgendaAppointmentSource.health => AgendaAppointmentKind.health,
       AgendaAppointmentSource.general when _isCredentialEvent(title, specialty, message) => AgendaAppointmentKind.credential,
-      AgendaAppointmentSource.general when isPrimaryCare => AgendaAppointmentKind.health,
+      AgendaAppointmentSource.general when isHealthEvent => AgendaAppointmentKind.health,
       AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
     };
 
@@ -397,7 +398,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       if (structured.details.isNotEmpty) {
         return AgendaAppointment(
           dateTime: dateTime,
-          title: title ?? (isPrimaryCare ? 'Cita de Atención Primaria' : specialty ?? 'Cita'),
+          title: title ?? (isHealthEvent ? 'Cita sanitaria' : specialty ?? 'Cita'),
           description: structured.intro ?? message ?? title ?? 'Cita',
           kind: kind,
           channel: primaryCareDetails?.channel ?? channel,
@@ -580,6 +581,17 @@ final class AgendaRepositoryImpl implements AgendaRepository {
   ) {
     final searchableText = '${title ?? ''} ${specialty ?? ''} ${message ?? ''} ${detail ?? ''} ${center ?? ''}'.toLowerCase();
     return searchableText.contains('atención primaria') || searchableText.contains('atencion primaria');
+  }
+
+  bool _isHospitalAppointmentEvent(
+    final String? title,
+    final String? specialty,
+    final String? message,
+    final String? detail,
+    final String? center,
+  ) {
+    final searchableText = '${title ?? ''} ${specialty ?? ''} ${message ?? ''} ${detail ?? ''} ${center ?? ''}'.toLowerCase();
+    return searchableText.contains('atención hospitalaria') || searchableText.contains('atencion hospitalaria');
   }
 
   bool _isCredentialEvent(

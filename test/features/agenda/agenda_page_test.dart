@@ -119,6 +119,7 @@ void main() {
           dateTime: DateTime(2026, 11, 2, 13),
           title: 'Cita de atención hospitalaria',
           description: 'Tiene una cita de atención hospitalaria para el próximo 02/11/2026',
+          kind: AgendaAppointmentKind.health,
           details: const [
             (label: 'Servicio', value: 'MEDICINA INTERNA'),
             (label: 'Centro', value: 'HOSPITAL UNIVERSITARIO DE TOLEDO'),
@@ -134,6 +135,12 @@ void main() {
     expect(find.text('Centro: Hospital universitario de toledo'), findsOneWidget);
     expect(find.text('Sala: Consultas B-203'), findsOneWidget);
     expect(find.textContaining('Hora'), findsNothing);
+    expect(
+      find.byWidgetPredicate(
+        (final widget) => widget is AppSvgIcon && widget.assetPath == AppIconAssets.health,
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('la cita de primaria publicada por la agenda general usa el mismo diseño por filas que el resto de eventos', (final tester) async {
