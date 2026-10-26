@@ -6,12 +6,10 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
-import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level_required.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_elevation_notifier.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/identity_verification_prompt.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
@@ -129,6 +127,21 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    // El éxito se cuenta desde la página y no desde el bloqueo: al elevar, el
+    // bloqueo deja de pintarse por derivación y no queda nadie que lo diga.
+    ref.listen<ElevationState>(elevationProvider, (final previous, final next) {
+      if (next.outcome == ElevationOutcome.succeeded && previous?.outcome != ElevationOutcome.succeeded) {
+        ref.read(elevationProvider.notifier).acknowledge();
+        AppAlertSnackbar.show(context, message: l10n.identityVerificationCompletedMessage, severity: AppAlertSeverity.success);
+      }
+      // Otra persona: la sesión ya es suya y entra como en un login nuevo, por
+      // el inicio, para que el guard le pase sus propias comprobaciones.
+      if (next.outcome == ElevationOutcome.identitySwitched && previous?.outcome != ElevationOutcome.identitySwitched) {
+        ref.read(elevationProvider.notifier).acknowledge();
+        AppAlertSnackbar.show(context, message: l10n.identityVerificationSwitchedMessage);
+        context.go(Routes.home);
+      }
+    });
     // La comprobación de autorización se observa **aquí**, por encima del área
     // que conmuta, para que cambiar de pestaña no la revalide.
     final authorizationAsync = ref.watch(jccmDataAuthorizationProvider);
@@ -190,7 +203,11 @@ class _HospitalAppointmentsList extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
 
+    // `skipLoadingOnRefresh: false`: al elevar, el gate se rehace con el nivel
+    // nuevo y, por defecto, `.when` seguiría pintando el error anterior —el
+    // bloqueo— hasta que llegue el listado.
     return ref.watch(myDataHospitalAppointmentsProvider(filter)).when(
+      skipLoadingOnRefresh: false,
       loading: () => const Center(child: Padding(padding: EdgeInsets.all(AppDimensions.space32), child: AppLoadingIndicator())),
       error: (final error, final _) => switch (error) {
         MyDataAuthorizationRequired() => MyDataAuthorizationContextualHelper(onOpenSettings: onOpenConsentSettings),
@@ -314,24 +331,17 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
       case ElevationOutcome.failed:
         unawaited(_open(message: l10n.myDataHealthLevelElevationFailedMessage));
       // `succeeded` deja de bloquear y la pantalla pinta el listado por
-      // derivación, e `identityChanged` cierra sesión: si aun así hay bloqueo
-      // montado, es una entrada nueva.
+      // derivación. Este bloqueo puede seguir montado unos frames mientras el
+      // listado se rehace, y abrir aquí el diálogo era JCCMEC-278: el aviso
+      // volvía a salir tras elevar, y al pulsarlo solo se cerraba porque el
+      // bloqueo ya no existía. Si de verdad sigue haciendo falta, el gate lo
+      // vuelve a pintar y su `_start` lo trata como una entrada nueva.
       case ElevationOutcome.succeeded:
-      case ElevationOutcome.identityChanged:
-        unawaited(_open());
+        break;
+      // Otra persona: lo atiende la página, que lleva al inicio.
+      case ElevationOutcome.identitySwitched:
+        break;
     }
-  }
-
-  String? get _suppressionKey {
-    final idAgente = ref.read(citizenEndpointIdsProvider).idAgente;
-    return idAgente == null || idAgente.isEmpty
-        ? null
-        : '${StorageKeys.identityVerificationNoticeSuppressedPrefix}$idAgente';
-  }
-
-  bool get _isSuppressed {
-    final key = _suppressionKey;
-    return key != null && (ref.read(appStorageProvider).read<bool>(key) ?? false);
   }
 
   void _elevate() {
@@ -355,29 +365,15 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
       logger.w({'event': 'auth_level_not_readable', 'reading': widget.reading.toString()});
     }
 
-    if (message == null && _isSuppressed) {
-      _elevate();
-      return;
-    }
-
     _isShowing = true;
-    final choice = await AppIdentityVerificationDialog.show(context, message: message);
+    final accepted = await confirmIdentityVerification(context, ref, message: message);
     _isShowing = false;
     if (!mounted) {
       return;
     }
-    // La preferencia se guarda con cualquiera de los dos botones: es sobre el
-    // aviso, no sobre la decisión de ir o no a Cl@ve.
-    if (choice?.suppressFuture ?? false) {
-      final key = _suppressionKey;
-      if (key != null) {
-        unawaited(ref.read(appStorageProvider).write(key, true));
-      }
-    }
-    // Sin elección es el botón atrás del sistema, que cierra el diálogo: es
-    // «Volver», y como tal lleva a Salud. Quedarse dejaba la pantalla vacía y
-    // el aviso volvía a salir.
-    if (choice == null || !choice.accepted) {
+    // «Volver» —también el botón atrás del sistema— lleva a Salud. Quedarse
+    // dejaba la pantalla vacía y el aviso volvía a salir.
+    if (!accepted) {
       context.go(Routes.myDataHealth);
       return;
     }
@@ -415,12 +411,13 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
 /// que los que no caben van en las filas etiquetadas de `details`.
 ///
 /// Reparto de los siete campos del apartado 6.3:
-/// - día de la semana y fecha → raíl de fecha, más la cabecera de mes/año de la
-///   sección que la contiene;
+/// - día de la semana, fecha y hora → raíl de fecha, más la cabecera de mes/año
+///   de la sección que la contiene. No se repiten en una fila «Fecha y hora»:
+///   el raíl ya las muestra;
 /// - servicio → título, el hueco prominente (el papel que en primaria hace la
 ///   descripción de la cita);
 /// - prestación → línea de tipo, en mayúsculas pequeñas;
-/// - sala, centro, agenda y fecha y hora → filas etiquetadas.
+/// - sala, centro y agenda → filas etiquetadas.
 ///
 /// No se pintan `estadoCita` —la pestaña ya lo comunica—, `agendaCode`, `id`
 /// ni el **NHC**: es un dato de salud que no debe salir en pantalla, y no es el
@@ -434,7 +431,6 @@ class HospitalAppointmentCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final date = appointment.dateTime;
-    final formattedDate = '${_two(date.day)}/${_two(date.month)}/${date.year}';
     final formattedTime = '${_two(date.hour)}:${_two(date.minute)}';
 
     // Se filtran los vacíos en vez de pintar «null» o un guion: los campos
@@ -445,13 +441,6 @@ class HospitalAppointmentCard extends StatelessWidget {
       if (_present(appointment.room)) (label: l10n.myDataHealthHospitalFieldRoom, value: appointment.room!),
       if (_present(appointment.center)) (label: l10n.myDataHealthHospitalFieldCenter, value: appointment.center!),
       if (_present(appointment.agendaDescription)) (label: l10n.myDataHealthHospitalFieldAgenda, value: appointment.agendaDescription!),
-      // Repite la fecha que ya muestra el raíl, a propósito: el apartado 6.3 la
-      // enumera como campo propio y es lo que hace Espacio Ciudadano Web, así
-      // que conviene la literalidad para que se pueda marcar en UAT.
-      (
-        label: l10n.myDataHealthHospitalFieldDateTime,
-        value: l10n.myDataHealthHospitalDateTimeValue(formattedDate, formattedTime),
-      ),
     ];
 
     return AppAgendaInfoCard(

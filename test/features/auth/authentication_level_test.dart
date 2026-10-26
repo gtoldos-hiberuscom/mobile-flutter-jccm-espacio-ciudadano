@@ -110,6 +110,14 @@ void main() {
     });
   });
 
+  group('AuthenticationLevel.cerberoScope', () {
+    test('uses the literals Cerbero expects in the scope', () {
+      expect(AuthenticationLevel.low.cerberoScope, 'low');
+      expect(AuthenticationLevel.substantial.cerberoScope, 'substantial');
+      expect(AuthenticationLevel.high.cerberoScope, 'high');
+    });
+  });
+
   group('value equality', () {
     // Sin esto, cada refresco de token notificaría a los providers que observan
     // el nivel aunque el nivel no haya cambiado.

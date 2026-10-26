@@ -119,6 +119,7 @@ No deducir el nivel efectivo únicamente del método de acceso: utilizar el clai
 - Implementar el control antes de solicitar o mostrar información hospitalaria.
 - Confirmar el mecanismo oficial de elevación para la integración móvil: parámetros, redirección, intercambio de tokens y retorno.
 - No asumir que `acr_values`, un formulario OTP propio o una simple repetición del login son el mecanismo correcto sin verificar el contrato.
+  - **Confirmado por Cerbero (22/10):** el nivel se pide en el **scope** de la petición de autorización con el literal `low`, `substantial` o `high` (p. ej. `scope=openid substantial`, como ya hace la web en UAT); Cerbero lo traduce al `AuthnContextClassRef` hacia Cl@ve. La app lo envía solo en la elevación (`ElevateAuthenticationLevelUseCase`).
 - Resolver cancelación, error, nivel todavía insuficiente y sesión expirada.
 - Actualizar el estado de sesión y los proveedores dependientes tras la elevación, evitando datos de una sesión anterior.
 - Revisar el comportamiento ante cierre de sesión, revocación de consentimiento o pérdida del nivel requerido.

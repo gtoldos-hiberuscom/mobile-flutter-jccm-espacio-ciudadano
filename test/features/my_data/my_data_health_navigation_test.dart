@@ -20,7 +20,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 const _primaria = 'Citas de atención primaria';
 const _hospitalaria = 'Citas de atención hospitalaria';
 const _cip = 'Código de Identificación Personal (CIP): CIP-1';
-const _verificar = 'Verifica tu identidad para continuar';
+const _verificar = 'Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.';
 
 /// Salud es un **menú** de dos opciones al mismo nivel, como Bienestar Social y
 /// Educación. Antes primaria se mostraba dentro de Salud y hospitalaria se
@@ -94,6 +94,13 @@ void main() {
     expect(find.text('Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'), findsNothing);
   });
 
+  testWidgets('un representante abre Salud en Mis datos, no en Información y servicios', (final tester) async {
+    await _pumpHealth(tester, representedAgentId: 'PER-REPRESENTADO');
+
+    expect(find.text('Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'), findsOneWidget);
+    expect(find.text('Trámites que te pueden interesar'), findsNothing);
+  });
+
   testWidgets('sin autorización las dos salen deshabilitadas, sin CIP, y no navegan', (final tester) async {
     await _pumpHealth(tester, hasAuthorization: false);
 
@@ -115,6 +122,7 @@ Future<GoRouter> _pumpHealth(
   final bool hasAuthorization = true,
   final String authNLevel = 'substantial',
   final String? scope,
+  final String? representedAgentId,
 }) async {
   final router = GoRouter(
     initialLocation: Routes.myDataHealth,
@@ -140,7 +148,7 @@ Future<GoRouter> _pumpHealth(
         myDataHealthCipProvider.overrideWith((final ref) async => 'CIP-1'),
         myDataHealthRepositoryProvider.overrideWithValue(_EmptyHealthRepository()),
         // Hospitalaria gatea por nivel; sin claims no llegaría a pintarse.
-        jwtClaimsProvider.overrideWith(() => _StubClaims(authNLevel, scope: scope)),
+        jwtClaimsProvider.overrideWith(() => _StubClaims(authNLevel, scope: scope, representedAgentId: representedAgentId)),
       ],
       child: MaterialApp.router(
         locale: const Locale('es'),
@@ -155,10 +163,11 @@ Future<GoRouter> _pumpHealth(
 }
 
 final class _StubClaims extends JwtClaimsNotifier {
-  _StubClaims(this.authNLevel, {this.scope});
+  _StubClaims(this.authNLevel, {this.scope, this.representedAgentId});
 
   final String authNLevel;
   final String? scope;
+  final String? representedAgentId;
 
   @override
   JwtClaims? build() => JwtClaims(
@@ -171,6 +180,7 @@ final class _StubClaims extends JwtClaimsNotifier {
     idAgente: 'PER1',
     authNLevelRaw: authNLevel,
     scope: scope,
+    representedAgentId: representedAgentId,
   );
 }
 

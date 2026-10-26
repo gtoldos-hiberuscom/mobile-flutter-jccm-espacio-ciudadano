@@ -1280,6 +1280,54 @@ abstract class AppLocalizations {
   /// **'No hemos podido cargar los eventos de tu agenda.'**
   String get agendaEventsUnavailable;
 
+  /// Agenda — tooltip y etiqueta accesible del botón (i) de la barra superior.
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre Agenda'**
+  String get agendaInfoTooltip;
+
+  /// Agenda — título de la hoja informativa que abre la (i) (Figma 45536:38108).
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre Agenda'**
+  String get agendaInfoSheetTitle;
+
+  /// Agenda — cuerpo de la hoja informativa de la (i), tres párrafos.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tus citas de atención primaria y hospitalaria, los avisos de tus notificaciones y de la caducidad de tus carnets.\n\nPara mostrarte las citas hospitalarias, necesitamos que verifiques tu identidad con un método de seguridad alta que garantice la protección de estos datos.\n\nEs posible que algunas citas o avisos no aparezcan, porque todavía no están disponibles.'**
+  String get agendaInfoSheetBody;
+
+  /// Agenda — pie de la hoja informativa de la (i).
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Junta de Comunidades de Castilla-La Mancha (JCCM).'**
+  String get agendaInfoSheetFooter;
+
+  /// Agenda — enlace al final de la hoja informativa de la (i); lleva a Ayuda y contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Consultar más información'**
+  String get agendaInfoSheetMoreInformation;
+
+  /// Agenda — título del aviso cuando el nivel de autenticación no permite ver las citas hospitalarias (Figma 45049:59928).
+  ///
+  /// In es, this message translates to:
+  /// **'Citas hospitalarias ocultas'**
+  String get agendaHospitalLockedTitle;
+
+  /// Agenda — texto del aviso de citas hospitalarias ocultas.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus datos hospitalarios están protegidos. Verifica tu identidad para consultar estas citas.'**
+  String get agendaHospitalLockedBody;
+
+  /// Agenda — botón del aviso de citas hospitalarias ocultas: abre la verificación de identidad con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Verificar'**
+  String get agendaHospitalLockedAction;
+
   /// Agenda — etiqueta del timestamp de última actualización.
   ///
   /// In es, this message translates to:
@@ -5261,7 +5309,7 @@ abstract class AppLocalizations {
   /// Recommendations — app bar title for the citizen recommendations list.
   ///
   /// In es, this message translates to:
-  /// **'Para mí'**
+  /// **'Recomendaciones para mí'**
   String get recommendationsTitle;
 
   /// Recommendations — tab label for the unfiltered bucket.
@@ -6845,7 +6893,7 @@ abstract class AppLocalizations {
   /// Título del bloque de citas hospitalarias.
   ///
   /// In es, this message translates to:
-  /// **'Citas hospitalarias'**
+  /// **'Citas de atención hospitalaria'**
   String get myDataHealthHospitalAppointmentsTitle;
 
   /// Salud — tarjeta del menú que lleva a las citas de atención primaria.
@@ -6863,7 +6911,7 @@ abstract class AppLocalizations {
   /// Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas.
   ///
   /// In es, this message translates to:
-  /// **'Verifica tu identidad para continuar'**
+  /// **'Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.'**
   String get myDataHealthHospitalNavVerificationRequired;
 
   /// Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM.
@@ -6938,18 +6986,6 @@ abstract class AppLocalizations {
   /// **'Agenda'**
   String get myDataHealthHospitalFieldAgenda;
 
-  /// Salud — etiqueta de la fecha y hora de una cita hospitalaria.
-  ///
-  /// In es, this message translates to:
-  /// **'Fecha y hora'**
-  String get myDataHealthHospitalFieldDateTime;
-
-  /// Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».
-  ///
-  /// In es, this message translates to:
-  /// **'{date}, {time}'**
-  String myDataHealthHospitalDateTimeValue(String date, String time);
-
   /// Salud — texto cuando el CIP no se ha podido obtener.
   ///
   /// In es, this message translates to:
@@ -6985,6 +7021,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Acceder a cl@ve'**
   String get identityVerificationDialogContinue;
+
+  /// Snackbar de éxito al terminar la elevación del nivel de seguridad con Cl@ve (Figma 45536:38213).
+  ///
+  /// In es, this message translates to:
+  /// **'Verificación completada'**
+  String get identityVerificationCompletedMessage;
+
+  /// Snackbar informativo cuando, al elevar el nivel en Cl@ve, se identifica una persona distinta y la sesión pasa a ser suya (JCCMEC-278).
+  ///
+  /// In es, this message translates to:
+  /// **'Te has identificado con otra persona. Se ha cerrado la sesión anterior.'**
+  String get identityVerificationSwitchedMessage;
 
   /// Salud — bloqueo por nivel de autenticación insuficiente para datos de salud.
   ///
@@ -7727,13 +7775,13 @@ abstract class AppLocalizations {
   /// Título del bottom sheet informativo de la pantalla de activación.
   ///
   /// In es, this message translates to:
-  /// **'Datos de contacto'**
+  /// **'Saber más sobre los datos de Mis notificaciones'**
   String get gestionNotificacionesAltaInfoTitle;
 
   /// Cuerpo del bottom sheet informativo de la pantalla de activación.
   ///
   /// In es, this message translates to:
-  /// **'Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.'**
+  /// **'Esta información de contacto se utilizará únicamente para avisarte de que tienes una nueva notificación electrónica.\n\nPuedes modificar los datos en cualquier momento. Después los cambios se aplicarán a las nuevas notificaciones.'**
   String get gestionNotificacionesAltaInfoBody;
 
   /// Error de validación cuando no se rellena ningún campo de contacto.
@@ -8699,7 +8747,7 @@ abstract class AppLocalizations {
   /// Home — título de la sección de accesos rápidos a Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Accesos Mis datos'**
+  /// **'Mis datos'**
   String get homeMyDataAccessesTitle;
 
   /// Home — etiqueta de la tarjeta de notificaciones en Mis novedades.
@@ -9299,7 +9347,7 @@ abstract class AppLocalizations {
   /// Protección de datos — título de la sección del responsable del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'¿Quién es responsable del tratamiento de datos?'**
+  /// **'¿Quién es el responsable del tratamiento?'**
   String get privacyResponsibleTitle;
 
   /// Protección de datos — título del documento.
@@ -9317,31 +9365,31 @@ abstract class AppLocalizations {
   /// Protección de datos — párrafo introductorio del responsable del tratamiento.
   ///
   /// In es, this message translates to:
-  /// **'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:'**
+  /// **'1. La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:'**
   String get privacyResponsibleIntro;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Información del perfil de usuario.'**
+  /// **'Visualización de las notificaciones y registro'**
   String get privacyResponsibleItemProfile;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Visualización de datos seleccionados de la Administración regional y de otros temas de interés.'**
+  /// **'Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado'**
   String get privacyResponsibleItemVisualizations;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Recomendaciones personalizadas según los hechos vitales indicados.'**
+  /// **'Recomendaciones realizadas en base a los hechos vitales marcados.'**
   String get privacyResponsibleItemRecommendations;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Descargas de los carnés seleccionados.'**
+  /// **'Descargas de los carnés seleccionados'**
   String get privacyResponsibleItemDownloads;
 
   /// Protección de datos — elemento de la lista de servicios del responsable.
@@ -9353,25 +9401,25 @@ abstract class AppLocalizations {
   /// Protección de datos — párrafo sobre los órganos responsables de cada opción.
   ///
   /// In es, this message translates to:
-  /// **'Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.'**
+  /// **'Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.'**
   String get privacyResponsibleOrgParagraph;
 
   /// Protección de datos — introducción de los datos de contacto del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Para contactar con el responsable, puedes hacelo mediante:'**
+  /// **'Los datos de contacto de este responsable son los siguientes:'**
   String get privacyResponsibleContactIntro;
 
   /// Protección de datos — etiqueta en negrita de la dirección postal del responsable (termina en salto de línea).
   ///
   /// In es, this message translates to:
-  /// **'Dirección postal\n'**
+  /// **'Dirección Postal:\n'**
   String get privacyResponsibleContactAddressLabel;
 
   /// Protección de datos — bloque con la dirección postal y el correo del responsable.
   ///
   /// In es, this message translates to:
-  /// **'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es'**
+  /// **'Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071 Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es'**
   String get privacyResponsibleContactAddressValue;
 
   /// Protección de datos — título de la sección de finalidad del tratamiento.
@@ -9721,6 +9769,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Aviso legal'**
   String get legalNoticeHeading;
+
+  /// Aviso legal — descripción que dirige al documento oficial.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta el Aviso Legal completo y actualizado en el portal oficial de Espacio Ciudadano.'**
+  String get legalNoticeOfficialDescription;
+
+  /// Aviso legal — acción para abrir el documento oficial.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir Aviso Legal oficial'**
+  String get legalNoticeOfficialAction;
 
   /// Error al enviar el formulario de soporte sin permisos (401/403).
   ///

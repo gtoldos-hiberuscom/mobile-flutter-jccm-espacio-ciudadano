@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
@@ -14,7 +15,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/m
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Housing detail page — Figma nodes 43973:2061 and 43973:2085.
-class MyDataHousingPage extends StatefulWidget {
+class MyDataHousingPage extends ConsumerStatefulWidget {
   const MyDataHousingPage({
     super.key,
     this.backRoute = Routes.myData,
@@ -23,15 +24,16 @@ class MyDataHousingPage extends StatefulWidget {
   final String backRoute;
 
   @override
-  State<MyDataHousingPage> createState() => _MyDataHousingPageState();
+  ConsumerState<MyDataHousingPage> createState() => _MyDataHousingPageState();
 }
 
-class _MyDataHousingPageState extends State<MyDataHousingPage> {
+class _MyDataHousingPageState extends ConsumerState<MyDataHousingPage> {
   _HousingTab _selectedTab = _HousingTab.data;
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataHousingTitle,
@@ -39,9 +41,9 @@ class _MyDataHousingPageState extends State<MyDataHousingPage> {
       tabs: [l10n.myDataHousingDataTab, l10n.myDataHousingServicesTab],
       selectedIndex: _selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _HousingTab.values[index]),
-      tabViews: const [
-        _HousingDataTab(),
-        _HousingServicesTab(),
+      tabViews: [
+        _HousingDataTab(isRepresentative: isRepresentative),
+        const _HousingServicesTab(),
       ],
     );
   }
@@ -50,7 +52,9 @@ class _MyDataHousingPageState extends State<MyDataHousingPage> {
 enum _HousingTab { data, services }
 
 class _HousingDataTab extends ConsumerWidget {
-  const _HousingDataTab();
+  const _HousingDataTab({required this.isRepresentative});
+
+  final bool isRepresentative;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
@@ -59,6 +63,7 @@ class _HousingDataTab extends ConsumerWidget {
     return authorizationAsync.when(
       data: (final hasAgeAuthorization) => _HousingDataContent(
         hasAgeAuthorization: hasAgeAuthorization,
+        isRepresentative: isRepresentative,
       ),
       loading: () => const Center(child: AppLoadingIndicator()),
       // Fallo del check ≠ "no autorizado": sin respuesta del backend solo
@@ -72,9 +77,10 @@ class _HousingDataTab extends ConsumerWidget {
 }
 
 class _HousingDataContent extends StatelessWidget {
-  const _HousingDataContent({required this.hasAgeAuthorization});
+  const _HousingDataContent({required this.hasAgeAuthorization, required this.isRepresentative});
 
   final bool hasAgeAuthorization;
+  final bool isRepresentative;
 
   @override
   Widget build(final BuildContext context) {
@@ -104,7 +110,7 @@ class _HousingDataContent extends StatelessWidget {
               description: l10n.myDataHousingRealEstateDescription,
             ),
           const SizedBox(height: AppDimensions.space16),
-          if (hasAgeAuthorization)
+          if (hasAgeAuthorization && !isRepresentative)
             AppNavigationCard(
               title: l10n.myDataHousingAddressTitle,
               description: l10n.myDataHousingAddressDescription,
@@ -115,6 +121,13 @@ class _HousingDataContent extends StatelessWidget {
               title: l10n.myDataHousingAddressTitle,
               description: l10n.myDataHousingAddressDescription,
             ),
+          if (isRepresentative) ...[
+            const SizedBox(height: AppDimensions.space16),
+            AppAlertContextual(
+              size: AppAlertContextualSize.small,
+              message: l10n.representativeUnavailableMessage,
+            ),
+          ],
         ],
       ),
     );

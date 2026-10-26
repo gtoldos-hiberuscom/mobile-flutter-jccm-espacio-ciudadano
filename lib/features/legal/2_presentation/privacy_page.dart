@@ -276,6 +276,7 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
       l10n.privacyResponsibleItemVisualizations,
       l10n.privacyResponsibleItemRecommendations,
       l10n.privacyResponsibleItemDownloads,
+      l10n.privacyResponsibleItemAgenda,
     ];
     final responsibleOrg = l10n.privacyResponsibleOrgParagraph;
     final responsibleContactIntro = l10n.privacyResponsibleContactIntro;
@@ -335,8 +336,19 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
           color: textColor,
           highlightQuery: _searchQuery,
           links: {
-            'vicealyca@jccm.es': () => _openEmail(context, 'vicealyca@jccm.es'),
+            'direcciongerenciaatd@jccm.es': () => _openEmail(context, 'direcciongerenciaatd@jccm.es'),
           },
+        ),
+      ),
+      _SearchableEntry(
+        id: 'population-controller',
+        searchText: l10n.privacyPopulationControllerText,
+        child: _LinkedBodyBlock(
+          text: l10n.privacyPopulationControllerText,
+          style: bodyStyle,
+          color: textColor,
+          highlightQuery: _searchQuery,
+          links: {'oficinadeldato@jccm.es': () => _openEmail(context, 'oficinadeldato@jccm.es')},
         ),
       ),
       _SearchableEntry(
@@ -353,6 +365,26 @@ class _PrivacyPageState extends ConsumerState<PrivacyPage> {
         id: 'purpose-items',
         searchText: purposeItems.join(' '),
         child: _BulletList(style: bodyStyle, color: textColor, items: purposeItems, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'legal-basis-title',
+        searchText: l10n.privacyLegalBasisTitle,
+        child: _SectionTitle(l10n.privacyLegalBasisTitle, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'legal-basis-text',
+        searchText: l10n.privacyLegalBasisText,
+        child: _BodyBlock(l10n.privacyLegalBasisText, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'transfers-title',
+        searchText: l10n.privacyTransfersTitle,
+        child: _SectionTitle(l10n.privacyTransfersTitle, highlightQuery: _searchQuery),
+      ),
+      _SearchableEntry(
+        id: 'transfers-text',
+        searchText: l10n.privacyTransfersText,
+        child: _BodyBlock(l10n.privacyTransfersText, style: bodyStyle, color: textColor, highlightQuery: _searchQuery),
       ),
       _SearchableEntry(
         id: 'rights-title',

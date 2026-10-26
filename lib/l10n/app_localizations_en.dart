@@ -623,6 +623,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
 
   @override
+  String get agendaInfoTooltip => 'Saber más sobre Agenda';
+
+  @override
+  String get agendaInfoSheetTitle => 'Saber más sobre Agenda';
+
+  @override
+  String get agendaInfoSheetBody => 'Consulta tus citas de atención primaria y hospitalaria, los avisos de tus notificaciones y de la caducidad de tus carnets.\n\nPara mostrarte las citas hospitalarias, necesitamos que verifiques tu identidad con un método de seguridad alta que garantice la protección de estos datos.\n\nEs posible que algunas citas o avisos no aparezcan, porque todavía no están disponibles.';
+
+  @override
+  String get agendaInfoSheetFooter => 'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Junta de Comunidades de Castilla-La Mancha (JCCM).';
+
+  @override
+  String get agendaInfoSheetMoreInformation => 'Consultar más información';
+
+  @override
+  String get agendaHospitalLockedTitle => 'Citas hospitalarias ocultas';
+
+  @override
+  String get agendaHospitalLockedBody => 'Tus datos hospitalarios están protegidos. Verifica tu identidad para consultar estas citas.';
+
+  @override
+  String get agendaHospitalLockedAction => 'Verificar';
+
+  @override
   String agendaLastUpdated(String timestamp) {
     return 'Last updated: $timestamp';
   }
@@ -3549,7 +3573,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthScopeHospital => 'Hospital';
 
   @override
-  String get myDataHealthHospitalAppointmentsTitle => 'Hospital appointments';
+  String get myDataHealthHospitalAppointmentsTitle => 'Hospital care appointments';
 
   @override
   String get myDataHealthPrimaryCareNavTitle => 'Primary care appointments';
@@ -3558,7 +3582,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthHospitalNavTitle => 'Hospital care appointments';
 
   @override
-  String get myDataHealthHospitalNavVerificationRequired => 'Verify your identity to continue';
+  String get myDataHealthHospitalNavVerificationRequired => 'Your hospital data is protected. Verify your identity to access it.';
 
   @override
   String get myDataHealthHospitalLinkTitle => 'My hospital appointments';
@@ -3597,14 +3621,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthHospitalFieldAgenda => 'Agenda';
 
   @override
-  String get myDataHealthHospitalFieldDateTime => 'Date and time';
-
-  @override
-  String myDataHealthHospitalDateTimeValue(String date, String time) {
-    return '$date, $time';
-  }
-
-  @override
   String get myDataHealthCipUnavailable => 'CIP unavailable';
 
   @override
@@ -3621,6 +3637,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get identityVerificationDialogContinue => 'Go to Cl@ve';
+
+  @override
+  String get identityVerificationCompletedMessage => 'Verification completed';
+
+  @override
+  String get identityVerificationSwitchedMessage => 'You signed in as a different person. The previous session has been closed.';
 
   @override
   String get myDataHealthLevelRequiredMessage => 'Your current access level does not meet the application security policy. Press \"Continue\" to restart the session with the required higher access level.';
@@ -3992,10 +4014,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionNotificacionesAltaSaveButton => 'Activate';
 
   @override
-  String get gestionNotificacionesAltaInfoTitle => 'Contact details';
+  String get gestionNotificacionesAltaInfoTitle => 'Learn more about My notifications contact details';
 
   @override
-  String get gestionNotificacionesAltaInfoBody => 'Provide a mobile phone number or an email address to receive notification alerts.';
+  String get gestionNotificacionesAltaInfoBody => 'This contact information will only be used to notify you that you have received a new electronic notification.\n\nYou can change these details at any time. The changes will apply to new notifications.';
 
   @override
   String get gestionNotificacionesAltaErrorAtLeastOne => 'You must provide at least a mobile phone number or an email address.';
@@ -5082,6 +5104,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalNoticeHeading => 'Legal notice';
+
+  @override
+  String get legalNoticeOfficialDescription => 'Consulta el Aviso Legal completo y actualizado en el portal oficial de Espacio Ciudadano.';
+
+  @override
+  String get legalNoticeOfficialAction => 'Abrir Aviso Legal oficial';
 
   @override
   String get supportErrorSubmitUnauthorized => 'You do not have permission to submit the support form.';

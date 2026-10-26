@@ -1,4 +1,5 @@
 import 'dart:async' show TimeoutException, unawaited;
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -140,118 +141,87 @@ class _LandingPageState extends ConsumerState<LandingPage> {
         children: [
           // ── Scrollable hero content ─────────────────────────────────────
           Expanded(
-            child: SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: appPageHorizontalPadding(context),
-                  top: AppDimensions.space8,
-                  right: appPageHorizontalPadding(context),
-                ),
-                // Con el texto ampliado (WCAG 1.4.4) el contenido se desplaza
-                // en lugar de encogerse: un `FittedBox` reduciría logotipos y
-                // eslogan hasta hacerlos ilegibles.
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 358),
-                      // Rule 3.2 — H1 announced BEFORE navigation via Positioned(top:0,left:0)
-                      child: Stack(
-                        children: [
-                          // ── H1 semantic heading — 1×1px node announced first by SR ──
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            child: Semantics(
-                              header: true,
-                              headingLevel: 1,
-                              focusable: true,
-                              label: l10n.a11yLandingH1Label,
-                              child: const SizedBox(width: 1, height: 1),
-                            ),
-                          ),
-                          Column(
+            child: LayoutBuilder(
+              builder: (final context, final viewportConstraints) {
+                // La barra de acciones reduce el alto disponible de este
+                // Expanded. El arte se encoge antes de llegar a ella, para
+                // que ni el molino ni el patrón de fondo queden ocultos.
+                final heroMaxHeight = (viewportConstraints.maxHeight * 0.4).clamp(180.0, 420.0);
+                return SafeArea(
+                  bottom: false,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: appPageHorizontalPadding(context),
+                      top: AppDimensions.space8,
+                      right: appPageHorizontalPadding(context),
+                    ),
+                    // Con el texto ampliado (WCAG 1.4.4) el contenido se desplaza
+                    // en lugar de encogerse: un `FittedBox` reduciría logotipos y
+                    // eslogan hasta hacerlos ilegibles.
+                    child: SingleChildScrollView(
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 358),
+                          // Rule 3.2 — H1 announced BEFORE navigation via Positioned(top:0,left:0)
+                          child: Stack(
                             children: [
-                              const SizedBox(height: AppDimensions.space16),
-
-                              // ── Castilla-La Mancha institutional logo ───────────
-                              Semantics(
-                                label: l10n.a11yCastillaLogoLabel,
-                                image: true,
-                                excludeSemantics: true,
-                                child: SvgPicture.asset(
-                                  'assets/images/castilla_logo.svg',
-                                  width: 116,
-                                  height: 68,
+                              // ── H1 semantic heading — 1×1px node announced first by SR ──
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                child: Semantics(
+                                  header: true,
+                                  headingLevel: 1,
+                                  focusable: true,
+                                  label: l10n.a11yLandingH1Label,
+                                  child: const SizedBox(width: 1, height: 1),
                                 ),
                               ),
-                              const SizedBox(height: AppDimensions.space24),
+                              Column(
+                                children: [
+                                  const SizedBox(height: AppDimensions.space16),
 
-                              // ── Espacio Ciudadano logo ──────────────────────────
-                              ExcludeSemantics(
-                                child: SvgPicture.asset(
-                                  'assets/images/espacioCiudadano_logo.svg',
-                                  width: 256,
-                                  height: 64,
-                                ),
-                              ),
-                              const SizedBox(height: AppDimensions.space24),
-
-                              // ── Tagline ─────────────────────────────────────────
-                              const Padding(
-                                padding: EdgeInsets.symmetric(vertical: AppDimensions.space20),
-                                child: _TaglineText(),
-                              ),
-                              const SizedBox(height: AppDimensions.space24),
-
-                              // ── Hero composition (splash_logo bg + mask group) ──
-                              ExcludeSemantics(
-                                child: AspectRatio(
-                                  aspectRatio: 358 / 301.445,
-                                  child: LayoutBuilder(
-                                    builder: (final context, final constraints) {
-                                      final w = constraints.maxWidth;
-                                      final h = constraints.maxHeight;
-                                      return Stack(
-                                        clipBehavior: Clip.none,
-                                        children: [
-                                          // Figma: 353.147 px inside the 358 px
-                                          // artwork container.
-                                          Positioned(
-                                            left: 0,
-                                            top: 0,
-                                            bottom: 0,
-                                            width: w * (353.147 / 358),
-                                            child: Image.asset(
-                                              'assets/images/splash_logo.png',
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ),
-                                          // Foreground mask group (windmill + hands)
-                                          Positioned(
-                                            left: w * (75.0 / 353.15),
-                                            right: w * (-5.0 / 353.15),
-                                            bottom: h * (25.0 / 301.45),
-                                            child: Image.asset(
-                                              'assets/images/splash_image.png',
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
+                                  // ── Castilla-La Mancha institutional logo ───────────
+                                  Semantics(
+                                    label: l10n.a11yCastillaLogoLabel,
+                                    image: true,
+                                    excludeSemantics: true,
+                                    child: SvgPicture.asset(
+                                      'assets/images/castilla_logo.svg',
+                                      width: 116,
+                                      height: 68,
+                                    ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(height: AppDimensions.space16),
+                                  const SizedBox(height: AppDimensions.space24),
+
+                                  // ── Espacio Ciudadano logo ──────────────────────────
+                                  ExcludeSemantics(
+                                    child: SvgPicture.asset(
+                                      'assets/images/espacioCiudadano_logo.svg',
+                                      width: 256,
+                                      height: 64,
+                                    ),
+                                  ),
+                                  const SizedBox(height: AppDimensions.space24),
+
+                                  // ── Tagline ─────────────────────────────────────────
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: AppDimensions.space20),
+                                    child: _TaglineText(),
+                                  ),
+                                  const SizedBox(height: AppDimensions.space16),
+
+                                  _LandingHeroComposition(maxHeight: heroMaxHeight),
+                                ],
+                              ), // Column
                             ],
-                          ), // Column
-                        ],
-                      ), // Stack
+                          ), // Stack
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
 
@@ -297,6 +267,53 @@ class _LandingPageState extends ConsumerState<LandingPage> {
       child: ClaveLoginVeil(isAuthenticating: _isAuthenticating, child: scaffold),
     );
   }
+}
+
+class _LandingHeroComposition extends StatelessWidget {
+  const _LandingHeroComposition({required this.maxHeight});
+
+  static const _aspectRatio = 358 / 301.445;
+
+  final double maxHeight;
+
+  @override
+  Widget build(final BuildContext context) => ExcludeSemantics(
+    child: LayoutBuilder(
+      builder: (final context, final constraints) {
+        final width = math.min(constraints.maxWidth, maxHeight * _aspectRatio);
+        final height = width / _aspectRatio;
+        return SizedBox(
+          key: const Key('landing-hero-composition'),
+          width: width,
+          height: height,
+          child: LayoutBuilder(
+            builder: (final context, final constraints) {
+              final w = constraints.maxWidth;
+              final h = constraints.maxHeight;
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: w * (353.147 / 358),
+                    child: Image.asset('assets/images/splash_logo.png', fit: BoxFit.fill),
+                  ),
+                  Positioned(
+                    left: w * (75.0 / 353.15),
+                    right: w * (-5.0 / 353.15),
+                    bottom: h * (25.0 / 301.45),
+                    child: Image.asset('assets/images/splash_image.png', fit: BoxFit.contain),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    ),
+  );
 }
 
 // ── Tagline with mixed weight (Body/Large/Medium + Headings/H2) ───────────────

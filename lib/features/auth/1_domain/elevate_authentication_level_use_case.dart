@@ -2,6 +2,7 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dart';
 
 // ── Sealed result ─────────────────────────────────────────────────────────────
@@ -41,23 +42,27 @@ final class ElevationInsufficient extends ElevationResult {
   final AuthenticationLevelReading reading;
 }
 
-/// El token nuevo es **de otra persona**.
+/// El token nuevo es **de otra persona**: la sesión pasa a ser suya.
 ///
-/// Pasa en un móvil compartido, o al elegir otro certificado. No se adopta el
-/// token nuevo, y tampoco vale seguir con el viejo: acaba de identificarse
-/// **otra persona** en este dispositivo, y no hay forma de saber si quien lo
-/// tiene en la mano sigue siendo el titular de la sesión anterior. Quien llama
-/// tiene que cerrar sesión del todo.
-final class ElevationIdentityMismatch extends ElevationResult {
-  ElevationIdentityMismatch({required this.previous, required this.next, this.idToken});
+/// Pasa al elegir el certificado de otra persona, o en un móvil compartido. Es
+/// lo que hace la web (Mi Salud Digital entra con quien se identifique), y el
+/// cliente lo pide así (JCCMEC-278): quien llama adopta el token nuevo **como
+/// un login nuevo** y descarta del todo la sesión anterior. Seguir con la
+/// sesión vieja no vale —acaba de identificarse otra persona en este
+/// dispositivo—, y mezclar las dos tampoco.
+///
+/// El nivel se lee igual que en [ElevationSucceeded]: si la persona nueva
+/// tampoco alcanza el mínimo, el gate la vuelve a bloquear ya como ella.
+final class ElevationIdentitySwitched extends ElevationResult {
+  ElevationIdentitySwitched({
+    required this.tokenResponse,
+    required this.jwtClaims,
+    required this.reading,
+  });
 
-  final JwtClaims previous;
-  final JwtClaims next;
-
-  /// `id_token` de la identificación nueva. No se adopta nada con él: es la
-  /// pista para que el siguiente login cierre en el navegador la sesión de esa
-  /// otra persona, que de lo contrario Cerbero encontraría viva.
-  final String? idToken;
+  final TokenResponse tokenResponse;
+  final JwtClaims jwtClaims;
+  final AuthenticationLevelReading reading;
 }
 
 /// El ciudadano volvió atrás. Se mantiene el bloqueo, sin ruido.
@@ -74,18 +79,20 @@ final class ElevationFailed extends ElevationResult {
 
 /// Eleva el nivel de seguridad de la sesión reidentificando al ciudadano.
 ///
-/// **Es el único sitio del código que nombra el mecanismo.** Hoy el mecanismo
-/// es repetir el login: la petición de autorización ya sale con `prompt=login`
-/// a secas, y eso es lo que hace que Cerbero propague `ForceAuthn="true"` y
-/// Cl@ve vuelva a desafiar y a mostrar el selector de método, así que el
-/// ciudadano puede elegir uno más fuerte —certificado o DNI-e— o completar el
-/// OTP de Cl@ve Permanente. No hace falta ningún endpoint nuevo.
+/// **Es el único sitio del código que nombra el mecanismo:** repetir el login
+/// **pidiendo el nivel en el scope** (`openid substantial`). La petición ya sale
+/// con `prompt=login` a secas, que hace que Cerbero propague
+/// `ForceAuthn="true"` y Cl@ve vuelva a desafiar; el scope del nivel es lo que
+/// Cerbero traduce al `AuthnContextClassRef` hacia Cl@ve, de modo que el
+/// selector solo ofrece métodos que lo alcanzan y Cl@ve Permanente pide el OTP.
+/// Sin él, repetir el login devolvía el mismo nivel. No hace falta ningún
+/// endpoint nuevo.
 ///
-/// Lo que **no** está confirmado es que Cerbero devuelva un nivel mayor tras
-/// esa reidentificación; se comprueba en PRE con un login por método. Si
-/// resultara que exige pedirlo explícitamente, el parámetro entra por
-/// `AppConfig.ssoStepUpParameters` y **este fichero es el único que cambia**:
-/// la pantalla no se enterará.
+/// El login normal **no** pide nivel: eso obligaría a todos los ciudadanos a
+/// identificarse con nivel medio para entrar en la app.
+///
+/// `AppConfig.ssoStepUpParameters` sigue disponible para añadir parámetros que
+/// exija un entorno sin tocar código.
 ///
 /// No se construye un formulario de OTP propio. El código de prueba que da el
 /// documento del cliente para elevar con Cl@ve Permanente describe un paso
@@ -121,7 +128,10 @@ final class ElevateAuthenticationLevelUseCase {
     required final AuthenticationLevel minimum,
     required final JwtClaims currentClaims,
   }) async {
-    final result = await _login(extraParameters: _stepUpParameters);
+    final result = await _login(
+      scopes: [...authDefaultScopes, minimum.cerberoScope],
+      extraParameters: _stepUpParameters,
+    );
 
     switch (result) {
       case LoginFailed(:final message, :final cause):
@@ -131,13 +141,15 @@ final class ElevateAuthenticationLevelUseCase {
         return ElevationFailed(message: message, cause: cause);
 
       case LoginSuccess(:final tokenResponse, :final jwtClaims):
-        // Identidad primero, nivel después: un token de otra persona no se
-        // adopta aunque su nivel baste.
+        // Misma regla que el gate: si aquí se leyera solo el access token, un
+        // nivel que viaje en el id token daría la elevación por insuficiente
+        // con el gate ya abierto.
+        final reading = AuthenticationLevelReading.fromSession(accessTokenClaims: jwtClaims, idToken: tokenResponse.idToken);
+        // Identidad antes que nivel: con otra persona, el desenlace es el
+        // cambio de sesión, alcance o no el mínimo.
         if (!currentClaims.identifiesSamePersonAs(jwtClaims)) {
-          return ElevationIdentityMismatch(previous: currentClaims, next: jwtClaims, idToken: tokenResponse.idToken);
+          return ElevationIdentitySwitched(tokenResponse: tokenResponse, jwtClaims: jwtClaims, reading: reading);
         }
-
-        final reading = AuthenticationLevelReading.parse(jwtClaims.authNLevelRaw);
         if (!reading.meets(minimum)) {
           return ElevationInsufficient(
             tokenResponse: tokenResponse,

@@ -53,6 +53,7 @@ final class SaludApi {
     return _get(
       _path(citizenId, 'primaria-citas-pasadas'),
       queryParameters: {'pagina': page},
+      mapCipMissingError: true,
     );
   }
 
@@ -85,10 +86,9 @@ final class SaludApi {
         options: Options(validateStatus: isHandledIntermediacionStatus),
       );
     } on DioException catch (error) {
-      // El mismo 3031 que en las citas pendientes significa «sin CIP» puede
-      // venir de `primaria-citas-pasadas` cuando la operación no existe o
-      // está caída en SESCAM. Solo las pendientes pueden clasificarlo como
-      // falta de CIP; las pasadas deben llegar como fallo de servicio.
+      // Las dos consultas de primaria clasifican el 3031 igual: para un
+      // ciudadano sin CIP SESCAM lo devuelve en ambas, y tratarlo distinto
+      // en cada pestaña contaba dos cosas contradictorias (JCCMEC-266).
       if (mapCipMissingError && _containsErrorCode(error.response?.data, '3031')) {
         throw const MyDataHealthCipMissing();
       }

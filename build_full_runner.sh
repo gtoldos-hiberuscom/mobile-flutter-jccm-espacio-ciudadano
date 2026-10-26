@@ -31,10 +31,6 @@ fi
 echo "🔄 Limpiando proyecto Flutter..."
 $FLUTTER clean
 
-echo "🗑️ Eliminando Pods y Podfile.lock..."
-rm -rf ios/Pods
-rm -f ios/Podfile.lock
-
 echo "📦 Ejecutando flutter pub get..."
 $FLUTTER pub get
 
@@ -42,9 +38,6 @@ echo "🏗️ Ejecutando build_runner (cliente OpenAPI generado)..."
 cd generated/dart_dio_client
 $DART run build_runner build --delete-conflicting-outputs
 cd ../..
-
-echo "📦 Instalando dependencias iOS (pod install)..."
-cd ios && pod install && cd ..
 
 echo "🤖 [Android] Generando App Bundle (release)..."
 $FLUTTER build appbundle --release --dart-define-from-file="$CONFIG"

@@ -29,6 +29,13 @@ final class AgendaAppointment {
 
 enum AgendaAppointmentKind {
   notification,
+
+  /// Cita de atención primaria (SESCAM o publicada por la agenda general).
   health,
+
+  /// Cita de atención hospitalaria publicada por la agenda general. Se pinta
+  /// como cita sanitaria pero, a diferencia de primaria, conserva el centro y
+  /// no se deduplica contra SESCAM, que solo publica primaria.
+  hospital,
   credential,
 }
