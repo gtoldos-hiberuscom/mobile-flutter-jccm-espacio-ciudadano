@@ -7775,13 +7775,13 @@ abstract class AppLocalizations {
   /// Título del bottom sheet informativo de la pantalla de activación.
   ///
   /// In es, this message translates to:
-  /// **'Datos de contacto'**
+  /// **'Saber más sobre los datos de Mis notificaciones'**
   String get gestionNotificacionesAltaInfoTitle;
 
   /// Cuerpo del bottom sheet informativo de la pantalla de activación.
   ///
   /// In es, this message translates to:
-  /// **'Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.'**
+  /// **'Esta información de contacto se utilizará únicamente para avisarte de que tienes una nueva notificación electrónica.\n\nPuedes modificar los datos en cualquier momento. Después los cambios se aplicarán a las nuevas notificaciones.'**
   String get gestionNotificacionesAltaInfoBody;
 
   /// Error de validación cuando no se rellena ningún campo de contacto.
@@ -8747,7 +8747,7 @@ abstract class AppLocalizations {
   /// Home — título de la sección de accesos rápidos a Mis datos.
   ///
   /// In es, this message translates to:
-  /// **'Acceso a mis datos'**
+  /// **'Mis datos'**
   String get homeMyDataAccessesTitle;
 
   /// Home — etiqueta de la tarjeta de notificaciones en Mis novedades.

@@ -5319,11 +5319,11 @@
   "@gestionNotificacionesAltaSaveButton": {
     "description": "Etiqueta del botón principal sticky de la pantalla de activación."
   },
-  "gestionNotificacionesAltaInfoTitle": "Datos de contacto",
+  "gestionNotificacionesAltaInfoTitle": "Saber más sobre los datos de Mis notificaciones",
   "@gestionNotificacionesAltaInfoTitle": {
     "description": "Título del bottom sheet informativo de la pantalla de activación."
   },
-  "gestionNotificacionesAltaInfoBody": "Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.",
+  "gestionNotificacionesAltaInfoBody": "Esta información de contacto se utilizará únicamente para avisarte de que tienes una nueva notificación electrónica.\n\nPuedes modificar los datos en cualquier momento. Después los cambios se aplicarán a las nuevas notificaciones.",
   "@gestionNotificacionesAltaInfoBody": {
     "description": "Cuerpo del bottom sheet informativo de la pantalla de activación."
   },
@@ -5977,7 +5977,7 @@
   "@homeNewsSectionTitle": {
     "description": "Home — título de la sección Mis novedades."
   },
-  "homeMyDataAccessesTitle": "Acceso a mis datos",
+  "homeMyDataAccessesTitle": "Mis datos",
   "@homeMyDataAccessesTitle": {
     "description": "Home — título de la sección de accesos rápidos a Mis datos."
   },

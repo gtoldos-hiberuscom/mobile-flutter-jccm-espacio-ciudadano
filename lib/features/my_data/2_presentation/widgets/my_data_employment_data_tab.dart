@@ -28,8 +28,6 @@ class MyDataEmploymentDataTab extends ConsumerStatefulWidget {
 }
 
 class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTab> {
-  bool _showUnavailableBanner = true;
-
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -54,7 +52,6 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
                     MyDataAuthorizationContextualHelper(
                       message: l10n.myDataEmploymentDemandAuthorizationRequiredMessage,
                       semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
-                      showTextAction: true,
                       onOpenSettings: _openSettings,
                     ),
                   ],
@@ -71,7 +68,6 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
                     MyDataAuthorizationRequiredState(
                       returnTo: Routes.myDataEmployment,
                       message: l10n.myDataEmploymentDemandAuthorizationRequiredMessage,
-                      showTextAction: true,
                       onAuthorized: () => ref.invalidate(employmentDemandProvider),
                       scrollable: false,
                     ),
@@ -80,13 +76,7 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
               }
               if (demandAsync.hasError) {
                 return MyDataEmploymentServerError(
-                  showBanner: _showUnavailableBanner,
-                  onDismiss: () => setState(() => _showUnavailableBanner = false),
-                  onRetry: () {
-                    setState(() => _showUnavailableBanner = true);
-                    ref.invalidate(employmentDemandProvider);
-                  },
-                  onOpenSettings: _openSettings,
+                  onRetry: () => ref.invalidate(employmentDemandProvider),
                 );
               }
 
@@ -136,7 +126,6 @@ class _MyDataEmploymentDataTabState extends ConsumerState<MyDataEmploymentDataTa
                   MyDataAuthorizationContextualHelper(
                     message: l10n.myDataEmploymentOffersAuthorizationRequiredMessage,
                     semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
-                    showTextAction: true,
                     onOpenSettings: _openSettings,
                   ),
                 ],

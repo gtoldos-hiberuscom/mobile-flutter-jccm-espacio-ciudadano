@@ -5,16 +5,22 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_housing_page.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Hoja «Mis datos > Vivienda» de la auditoría de accesibilidad.
 void main() {
   Finder ring() => find.byWidgetPredicate((final w) => w is CustomPaint && w.foregroundPainter is AppFocusRingPainter);
 
-  Widget buildApp({final TextScaler textScaler = TextScaler.noScaling}) => ProviderScope(
-    overrides: [ageDataAuthorizationProvider.overrideWith((final ref) async => true)],
+  Widget buildApp({final TextScaler textScaler = TextScaler.noScaling, final bool isRepresentative = false}) => ProviderScope(
+    overrides: [
+      ageDataAuthorizationProvider.overrideWith((final ref) async => true),
+      if (isRepresentative) jwtClaimsProvider.overrideWith(_RepresentativeClaims.new),
+    ],
     child: MaterialApp(
       locale: const Locale('es'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -94,4 +100,35 @@ void main() {
     expect(tester.getTopLeft(find.text('Bienes inmuebles')).dy, lessThan(AppDimensions.space64));
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('un representante ve deshabilitado el acceso al domicilio', (final tester) async {
+    await tester.pumpWidget(buildApp(isRepresentative: true));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AppNavigationCard), findsOneWidget);
+    expect(find.byType(MyDataDisabledNavigationCard), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(MyDataDisabledNavigationCard),
+        matching: find.text('Domicilio en Castilla-La Mancha'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'),
+      findsOneWidget,
+    );
+  });
+}
+
+final class _RepresentativeClaims extends JwtClaimsNotifier {
+  @override
+  JwtClaims? build() => const JwtClaims(
+    exp: 0,
+    iat: 0,
+    iss: 'issuer',
+    aud: [],
+    sub: 'subject',
+    representedAgentId: 'PER-REPRESENTADO',
+  );
 }

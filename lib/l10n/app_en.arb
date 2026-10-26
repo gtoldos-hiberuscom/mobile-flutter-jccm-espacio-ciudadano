@@ -5232,11 +5232,11 @@
   "@gestionNotificacionesAltaSaveButton": {
     "description": "Label of the sticky main button on the activation screen."
   },
-  "gestionNotificacionesAltaInfoTitle": "Contact details",
+  "gestionNotificacionesAltaInfoTitle": "Learn more about My notifications contact details",
   "@gestionNotificacionesAltaInfoTitle": {
     "description": "Title of the informative bottom sheet on the activation screen."
   },
-  "gestionNotificacionesAltaInfoBody": "Provide a mobile phone number or an email address to receive notification alerts.",
+  "gestionNotificacionesAltaInfoBody": "This contact information will only be used to notify you that you have received a new electronic notification.\n\nYou can change these details at any time. The changes will apply to new notifications.",
   "@gestionNotificacionesAltaInfoBody": {
     "description": "Body of the informative bottom sheet on the activation screen."
   },
