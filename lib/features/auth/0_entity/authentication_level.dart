@@ -8,6 +8,8 @@
 /// método de identificación.
 library;
 
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_claims.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
 import 'package:meta/meta.dart';
 
 /// Los tres niveles de la escala.
@@ -83,6 +85,28 @@ sealed class AuthenticationLevelReading {
 
     final level = _byLiteral[trimmed.toLowerCase()];
     return level == null ? UnknownAuthenticationLevel(trimmed) : KnownAuthenticationLevel(level, trimmed);
+  }
+
+  /// Lee el nivel de una sesión: del **access token** ([accessTokenClaims]) y,
+  /// si ahí no viene, del **id token**. Nunca lanza.
+  ///
+  /// Es la única regla de lectura: la usan el gate y la elevación. Con dos
+  /// reglas, un `authNLevel` que viajara solo en el id token daba la elevación
+  /// por insuficiente mientras el gate ya dejaba pasar (JCCMEC-278).
+  static AuthenticationLevelReading fromSession({
+    required final JwtClaims? accessTokenClaims,
+    required final String? idToken,
+  }) {
+    if (accessTokenClaims != null) {
+      final fromAccessToken = parse(accessTokenClaims.authNLevelRaw);
+      if (fromAccessToken is! MissingAuthenticationLevel) {
+        return fromAccessToken;
+      }
+    }
+    if (idToken == null || idToken.isEmpty) {
+      return const MissingAuthenticationLevel();
+    }
+    return parse(JwtDecoder.decodePayload(idToken)['authNLevel']);
   }
 
   static const Map<String, AuthenticationLevel> _byLiteral = {

@@ -134,6 +134,13 @@ class _MyDataHospitalAppointmentsPageState extends ConsumerState<MyDataHospitalA
         ref.read(elevationProvider.notifier).acknowledge();
         AppAlertSnackbar.show(context, message: l10n.identityVerificationCompletedMessage, severity: AppAlertSeverity.success);
       }
+      // Otra persona: la sesión ya es suya y entra como en un login nuevo, por
+      // el inicio, para que el guard le pase sus propias comprobaciones.
+      if (next.outcome == ElevationOutcome.identitySwitched && previous?.outcome != ElevationOutcome.identitySwitched) {
+        ref.read(elevationProvider.notifier).acknowledge();
+        AppAlertSnackbar.show(context, message: l10n.identityVerificationSwitchedMessage);
+        context.go(Routes.home);
+      }
     });
     // La comprobación de autorización se observa **aquí**, por encima del área
     // que conmuta, para que cambiar de pestaña no la revalide.
@@ -196,7 +203,11 @@ class _HospitalAppointmentsList extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
 
+    // `skipLoadingOnRefresh: false`: al elevar, el gate se rehace con el nivel
+    // nuevo y, por defecto, `.when` seguiría pintando el error anterior —el
+    // bloqueo— hasta que llegue el listado.
     return ref.watch(myDataHospitalAppointmentsProvider(filter)).when(
+      skipLoadingOnRefresh: false,
       loading: () => const Center(child: Padding(padding: EdgeInsets.all(AppDimensions.space32), child: AppLoadingIndicator())),
       error: (final error, final _) => switch (error) {
         MyDataAuthorizationRequired() => MyDataAuthorizationContextualHelper(onOpenSettings: onOpenConsentSettings),
@@ -320,11 +331,16 @@ class _LevelBlockedStateState extends ConsumerState<_LevelBlockedState> {
       case ElevationOutcome.failed:
         unawaited(_open(message: l10n.myDataHealthLevelElevationFailedMessage));
       // `succeeded` deja de bloquear y la pantalla pinta el listado por
-      // derivación, e `identityChanged` cierra sesión: si aun así hay bloqueo
-      // montado, es una entrada nueva.
+      // derivación. Este bloqueo puede seguir montado unos frames mientras el
+      // listado se rehace, y abrir aquí el diálogo era JCCMEC-278: el aviso
+      // volvía a salir tras elevar, y al pulsarlo solo se cerraba porque el
+      // bloqueo ya no existía. Si de verdad sigue haciendo falta, el gate lo
+      // vuelve a pintar y su `_start` lo trata como una entrada nueva.
       case ElevationOutcome.succeeded:
-      case ElevationOutcome.identityChanged:
-        unawaited(_open());
+        break;
+      // Otra persona: lo atiende la página, que lleva al inicio.
+      case ElevationOutcome.identitySwitched:
+        break;
     }
   }
 

@@ -3643,6 +3643,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get identityVerificationCompletedMessage => 'Verificación completada';
 
   @override
+  String get identityVerificationSwitchedMessage => 'Te has identificado con otra persona. Se ha cerrado la sesión anterior.';
+
+  @override
   String get myDataHealthLevelRequiredMessage => 'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.';
 
   @override

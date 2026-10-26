@@ -7028,6 +7028,12 @@ abstract class AppLocalizations {
   /// **'Verificación completada'**
   String get identityVerificationCompletedMessage;
 
+  /// Snackbar informativo cuando, al elevar el nivel en Cl@ve, se identifica una persona distinta y la sesión pasa a ser suya (JCCMEC-278).
+  ///
+  /// In es, this message translates to:
+  /// **'Te has identificado con otra persona. Se ha cerrado la sesión anterior.'**
+  String get identityVerificationSwitchedMessage;
+
   /// Salud — bloqueo por nivel de autenticación insuficiente para datos de salud.
   ///
   /// In es, this message translates to:
