@@ -384,11 +384,11 @@ class _QrPreview extends StatelessWidget {
         // Keep enough vertical space for the download actions. The parent
         // bottom sheet remains scrollable as a fallback for very small
         // viewports and large accessibility text sizes.
-        // Reserve room for the heading, explanatory copy and the three
-        // download actions. On taller screens the preview grows up to its
-        // design size; on short screens it shrinks before actions need scroll.
-        final heightLimit = (MediaQuery.sizeOf(context).height - 520).clamp(
-          120.0,
+        // Reserve room for the sheet header, explanatory copy and all three
+        // download actions. On short phones, make the preview smaller first
+        // so the final action (PDF) does not fall below the visible sheet.
+        final heightLimit = (MediaQuery.sizeOf(context).height - 560).clamp(
+          48.0,
           331.0,
         );
         final availableWidth = constraints.maxWidth < 326 ? constraints.maxWidth : 326.0;

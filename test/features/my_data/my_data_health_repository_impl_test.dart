@@ -177,6 +177,38 @@ void main() {
       );
     });
 
+    test('identifica el 500/3031 de citas pasadas como ausencia de CIP, igual que en pendientes (JCCMEC-266)', () async {
+      final adapter = _MyDataHealthAdapter(
+        errorStatus: 500,
+        errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"Error al obtener las citas pasadas"}]}}',
+      );
+      final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+      await expectLater(
+        repository.loadPrimaryCareAppointments(
+          citizenId: _citizenId,
+          filter: HealthAppointmentFilter.past,
+        ),
+        throwsA(isA<MyDataHealthCipMissing>()),
+      );
+    });
+
+    test('deja fallar un 500 de citas pasadas sin 3031 como servicio no disponible', () async {
+      final adapter = _MyDataHealthAdapter(
+        errorStatus: 500,
+        errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":5000,"mensaje-error":"Error interno"}]}}',
+      );
+      final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+      await expectLater(
+        repository.loadPrimaryCareAppointments(
+          citizenId: _citizenId,
+          filter: HealthAppointmentFilter.past,
+        ),
+        throwsA(isA<DioException>()),
+      );
+    });
+
     test('lets a 429 rate limit fail instead of reporting an empty list', () async {
       final adapter = _MyDataHealthAdapter(errorStatus: 429);
       final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));

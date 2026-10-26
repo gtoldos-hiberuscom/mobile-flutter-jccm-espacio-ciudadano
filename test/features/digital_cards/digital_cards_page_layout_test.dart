@@ -47,9 +47,11 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final widths = tester.widgetList<AppDigitalCard>(find.byType(AppDigitalCard)).map(
-      (final card) => tester.getSize(find.byWidget(card)).width,
-    );
+    final widths = tester
+        .widgetList<AppDigitalCard>(find.byType(AppDigitalCard))
+        .map(
+          (final card) => tester.getSize(find.byWidget(card)).width,
+        );
     expect(widths.toSet(), hasLength(1));
   });
 }

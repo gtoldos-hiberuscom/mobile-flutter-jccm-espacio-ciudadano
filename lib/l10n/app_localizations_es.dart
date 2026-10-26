@@ -38,6 +38,39 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingHelpLink => 'Ayuda y contacto';
 
   @override
+  String get landingDemoButton => 'Acceder a demostración';
+
+  @override
+  String get demoConfirmTitle => 'Modo demostración';
+
+  @override
+  String get demoConfirmBody => 'Verás la aplicación con los datos ficticios de una persona inventada, sin identificarte con Cl@ve. Nada de lo que hagas se envía ni se guarda en ningún servicio real. Para salir, cierra sesión.';
+
+  @override
+  String get demoConfirmEnter => 'Entrar en la demostración';
+
+  @override
+  String get demoConfirmBack => 'Volver';
+
+  @override
+  String get demoConfirmPersistedSessionBody => 'En este dispositivo hay una sesión guardada con acceso rápido. Para entrar en la demostración se cerrará primero: cuando quieras volver a tu espacio tendrás que identificarte de nuevo con Cl@ve.';
+
+  @override
+  String get demoConfirmCloseSessionAndEnter => 'Cerrar la sesión guardada y entrar';
+
+  @override
+  String get demoConfirmCodeLabel => 'Código de acceso';
+
+  @override
+  String get demoConfirmCodeError => 'Código incorrecto. Comprueba el código de acceso a la demostración.';
+
+  @override
+  String get demoBannerLabel => 'DEMO';
+
+  @override
+  String get demoPersistedSessionNotice => 'Hay una sesión guardada en este dispositivo. Entra con tu acceso rápido y cierra sesión antes de usar la demostración.';
+
+  @override
   String get landingHelpPageTitle => 'Cómo acceder';
 
   @override
@@ -589,6 +622,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
+
+  @override
+  String get agendaInfoTooltip => 'Saber más sobre Agenda';
+
+  @override
+  String get agendaInfoSheetTitle => 'Saber más sobre Agenda';
+
+  @override
+  String get agendaInfoSheetBody => 'Consulta tus citas de atención primaria y hospitalaria, los avisos de tus notificaciones y de la caducidad de tus carnets.\n\nPara mostrarte las citas hospitalarias, necesitamos que verifiques tu identidad con un método de seguridad alta que garantice la protección de estos datos.\n\nEs posible que algunas citas o avisos no aparezcan, porque todavía no están disponibles.';
+
+  @override
+  String get agendaInfoSheetFooter => 'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Junta de Comunidades de Castilla-La Mancha (JCCM).';
+
+  @override
+  String get agendaInfoSheetMoreInformation => 'Consultar más información';
+
+  @override
+  String get agendaHospitalLockedTitle => 'Citas hospitalarias ocultas';
+
+  @override
+  String get agendaHospitalLockedBody => 'Tus datos hospitalarios están protegidos. Verifica tu identidad para consultar estas citas.';
+
+  @override
+  String get agendaHospitalLockedAction => 'Verificar';
 
   @override
   String agendaLastUpdated(String timestamp) {
@@ -1450,13 +1507,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsPageTitle => 'Mis carnets digitales';
 
   @override
-  String get digitalCardsTypeFamiliaNumerosa => 'Familia Numerosa';
+  String get digitalCardsTypeFamiliaNumerosa => 'Carnet de familia numerosa';
 
   @override
   String get digitalCardsTypeJoven => 'Carnet Joven';
 
   @override
-  String get digitalCardsTypeDiscapacidad => 'Discapacidad';
+  String get digitalCardsTypeDiscapacidad => 'Carnet de discapacidad';
 
   @override
   String get digitalCardsIssueDate => 'Fecha de emisión';
@@ -2582,7 +2639,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHousingRealEstateServiceUnavailableMessage => 'El servicio de consulta de tus bienes inmuebles no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
 
   @override
-  String get myDataHealthAppointmentsServiceUnavailableMessage => 'El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get myDataHealthAppointmentsServiceUnavailableMessage => 'El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.';
+
+  @override
+  String get myDataHealthHospitalAppointmentsServiceUnavailableMessage => 'El servicio de consulta de datos de citas de atención hospitalaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.';
 
   @override
   String get familiaNumerosaRetry => 'Reintentar';
@@ -2668,7 +2728,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get discapacidadActionPkpass => 'Añadir a Wallet';
 
   @override
-  String get recommendationsTitle => 'Mis Recomendaciones';
+  String get recommendationsTitle => 'Recomendaciones para mí';
 
   @override
   String get recommendationsTabAll => 'Todo';
@@ -2695,7 +2755,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsLifeEventPrefix => 'Hecho vital:';
 
   @override
-  String get recommendationsAssociatedLifeEventsLabel => 'Hechos vitales asociados';
+  String get recommendationsAssociatedLifeEventsLabel => 'Hechos vitales relacionados';
 
   @override
   String get recommendationsStatusLabel => 'Estado';
@@ -3514,7 +3574,91 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthScopeHospital => 'Hospitalaria';
 
   @override
-  String get myDataHealthHospitalAppointmentsTitle => 'Citas hospitalarias';
+  String get myDataHealthHospitalAppointmentsTitle => 'Citas de atención hospitalaria';
+
+  @override
+  String get myDataHealthPrimaryCareNavTitle => 'Citas de atención primaria';
+
+  @override
+  String get myDataHealthHospitalNavTitle => 'Citas de atención hospitalaria';
+
+  @override
+  String get myDataHealthHospitalNavVerificationRequired => 'Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.';
+
+  @override
+  String get myDataHealthHospitalLinkTitle => 'Mis citas hospitalarias';
+
+  @override
+  String get myDataHealthHospitalLinkDescription => 'Consulta la información sobre tus citas hospitalarias del SESCAM.';
+
+  @override
+  String get myDataHealthHospitalContactHint => 'Si alguno de los datos no está actualizado deberás ponerte en contacto con el SESCAM.';
+
+  @override
+  String get myDataHealthHospitalPendingTab => 'Citas pendientes';
+
+  @override
+  String get myDataHealthHospitalPastTab => 'Citas pasadas';
+
+  @override
+  String get myDataHealthHospitalPendingEmpty => 'No tienes citas hospitalarias pendientes.';
+
+  @override
+  String get myDataHealthHospitalPastEmpty => 'No tienes citas hospitalarias pasadas.';
+
+  @override
+  String get myDataHealthHospitalFieldService => 'Servicio';
+
+  @override
+  String get myDataHealthHospitalFieldProvision => 'Prestación';
+
+  @override
+  String get myDataHealthHospitalFieldRoom => 'Sala';
+
+  @override
+  String get myDataHealthHospitalFieldCenter => 'Centro';
+
+  @override
+  String get myDataHealthHospitalFieldAgenda => 'Agenda';
+
+  @override
+  String get myDataHealthCipUnavailable => 'CIP no disponible';
+
+  @override
+  String get identityVerificationDialogTitle => 'Verificación de identidad';
+
+  @override
+  String get identityVerificationDialogBody => 'Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.';
+
+  @override
+  String get identityVerificationDialogDoNotShowAgain => 'No volver a mostrar';
+
+  @override
+  String get identityVerificationDialogBack => 'Volver';
+
+  @override
+  String get identityVerificationDialogContinue => 'Acceder a cl@ve';
+
+  @override
+  String get identityVerificationCompletedMessage => 'Verificación completada';
+
+  @override
+  String get identityVerificationSwitchedMessage => 'Te has identificado con otra persona. Se ha cerrado la sesión anterior.';
+
+  @override
+  String get myDataHealthLevelRequiredMessage => 'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.';
+
+  @override
+  String get myDataHealthLevelUnverifiedMessage => 'No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.';
+
+  @override
+  String get myDataHealthLevelElevateAction => 'Continuar';
+
+  @override
+  String get myDataHealthLevelStillInsufficientMessage => 'El método de identificación utilizado no alcanza el nivel de acceso requerido. Pulse «Continuar» e identifíquese con certificado digital o DNI electrónico.';
+
+  @override
+  String get myDataHealthLevelElevationFailedMessage => 'No ha sido posible elevar su nivel de acceso. Inténtelo de nuevo.';
 
   @override
   String get myDataHealthLoadMoreAppointments => 'Cargar más citas';
@@ -3637,7 +3781,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportarDocumentacionSeleccionarButton => 'Seleccionar documentos';
 
   @override
-  String get gestionAportarDocumentacionRegistrarButton => 'Enviar documentos';
+  String get gestionAportarDocumentacionRegistrarButton => 'Enviar documentos aportados';
 
   @override
   String get gestionAportarDocumentacionMaxFilesError => 'No puedes aportar más de 5 ficheros.';
@@ -3712,10 +3856,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionRegistrosCardDateLabel => 'FECHA DE REGISTRO';
 
   @override
-  String get gestionRegistrosConsejeriaOrigenLabel => 'CONSERJERÍA DE ORIGEN';
+  String get gestionRegistrosConsejeriaOrigenLabel => 'CONSEJERÍA DE ORIGEN';
 
   @override
-  String get gestionRegistrosConsejeriaDestinoLabel => 'CONSERJERÍA DE DESTINO';
+  String get gestionRegistrosConsejeriaDestinoLabel => 'CONSEJERÍA DE DESTINO';
 
   @override
   String get gestionRegistrosDatosRegistroTitle => 'Datos del Registro';
@@ -3871,10 +4015,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionNotificacionesAltaSaveButton => 'Activar';
 
   @override
-  String get gestionNotificacionesAltaInfoTitle => 'Datos de contacto';
+  String get gestionNotificacionesAltaInfoTitle => 'Saber más sobre los datos de Mis notificaciones';
 
   @override
-  String get gestionNotificacionesAltaInfoBody => 'Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.';
+  String get gestionNotificacionesAltaInfoBody => 'Esta información de contacto se utilizará únicamente para avisarte de que tienes una nueva notificación electrónica.\n\nPuedes modificar los datos en cualquier momento. Después los cambios se aplicarán a las nuevas notificaciones.';
 
   @override
   String get gestionNotificacionesAltaErrorAtLeastOne => 'Debes indicar al menos un teléfono móvil o un correo electrónico.';
@@ -3949,7 +4093,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mainTabAgenda => 'Agenda';
 
   @override
-  String get mainTabRecommendations => 'Recomendados';
+  String get mainTabRecommendations => 'Para mí';
 
   @override
   String get notFoundPageTitle => 'Página no encontrada';
@@ -4442,7 +4586,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeNewsSectionTitle => 'Mis novedades';
 
   @override
-  String get homeMyDataAccessesTitle => 'Accesos “Mis datos”';
+  String get homeMyDataAccessesTitle => 'Mis datos';
 
   @override
   String get homeNewsNotificationsTitle => 'Notificaciones';
@@ -4473,13 +4617,13 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get homeRecommendedProceduresTitle => 'Trámites recomendados';
+  String get homeRecommendedProceduresTitle => 'Para mí';
 
   @override
-  String get homeGoToRecommendationsButton => 'Ir a recomendaciones';
+  String get homeGoToRecommendationsButton => 'Mostrar todas mis recomendaciones';
 
   @override
-  String get homeCardsFabLabel => 'Carnets';
+  String get homeCardsFabLabel => 'Mis carnets';
 
   @override
   String get homeCardsFabShowAll => 'Mostrar todos';
@@ -4517,6 +4661,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get helpFaqIntro => 'Resuelve las dudas más habituales sobre Espacio ciudadano.';
+
+  @override
+  String get faqCategoryAccess => 'Acceso';
+
+  @override
+  String get faqCategoryMyData => 'Mis datos';
+
+  @override
+  String get faqCategoryManagements => 'Mis gestiones y notificaciones';
+
+  @override
+  String get faqCategoryAgenda => 'Agenda';
+
+  @override
+  String get faqCategoryPopulation => 'Registro de población';
 
   @override
   String get helpContactGuidesIntro => 'Consulta las guías disponibles para resolver tus dudas paso a paso.';
@@ -4735,7 +4894,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get legalSearchCloseTooltip => 'Cerrar búsqueda';
 
   @override
-  String get privacyResponsibleTitle => '¿Quién es responsable del tratamiento de datos?';
+  String get privacyResponsibleTitle => '¿Quién es el responsable del tratamiento?';
 
   @override
   String get privacyDocumentTitle => 'Información de protección de datos sobre el tratamiento de datos personales en Espacio Ciudadano';
@@ -4744,34 +4903,34 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyEmailCopied => 'No hay una aplicación de correo disponible. La dirección se ha copiado al portapapeles.';
 
   @override
-  String get privacyResponsibleIntro => 'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:';
+  String get privacyResponsibleIntro => '1. La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:';
 
   @override
-  String get privacyResponsibleItemProfile => 'Información del perfil de usuario.';
+  String get privacyResponsibleItemProfile => 'Visualización de las notificaciones y registro';
 
   @override
-  String get privacyResponsibleItemVisualizations => 'Visualización de datos seleccionados de la Administración regional y de otros temas de interés.';
+  String get privacyResponsibleItemVisualizations => 'Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado';
 
   @override
-  String get privacyResponsibleItemRecommendations => 'Recomendaciones personalizadas según los hechos vitales indicados.';
+  String get privacyResponsibleItemRecommendations => 'Recomendaciones realizadas en base a los hechos vitales marcados.';
 
   @override
-  String get privacyResponsibleItemDownloads => 'Descargas de los carnés seleccionados.';
+  String get privacyResponsibleItemDownloads => 'Descargas de los carnés seleccionados';
 
   @override
   String get privacyResponsibleItemAgenda => 'Visualización de la agenda';
 
   @override
-  String get privacyResponsibleOrgParagraph => 'Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.';
+  String get privacyResponsibleOrgParagraph => 'Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.';
 
   @override
-  String get privacyResponsibleContactIntro => 'Para contactar con el responsable, puedes hacelo mediante:';
+  String get privacyResponsibleContactIntro => 'Los datos de contacto de este responsable son los siguientes:';
 
   @override
-  String get privacyResponsibleContactAddressLabel => 'Dirección postal\n';
+  String get privacyResponsibleContactAddressLabel => 'Dirección Postal:\n';
 
   @override
-  String get privacyResponsibleContactAddressValue => 'Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es';
+  String get privacyResponsibleContactAddressValue => 'Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071 Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es';
 
   @override
   String get privacyPurposeTitle => '¿Cuál es la denominación y finalidad del tratamiento?';
@@ -4949,6 +5108,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get legalNoticeHeading => 'Aviso legal';
 
   @override
+  String get legalNoticeOfficialDescription => 'Consulta el Aviso Legal completo y actualizado en el portal oficial de Espacio Ciudadano.';
+
+  @override
+  String get legalNoticeOfficialAction => 'Abrir Aviso Legal oficial';
+
+  @override
   String get supportErrorSubmitUnauthorized => 'No tienes permisos para enviar el formulario de soporte.';
 
   @override
@@ -5010,4 +5175,32 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get biometricAccessDialogConfirm => 'Activar';
+
+  @override
+  String get appUpdateRequiredTitle => 'Actualización necesaria';
+
+  @override
+  String appUpdateRequiredBody(String version) {
+    return 'Para seguir usando la aplicación necesitas instalar la versión $version. Las versiones anteriores ya no reciben soporte.';
+  }
+
+  @override
+  String get appUpdateRecommendedTitle => 'Hay una nueva versión disponible';
+
+  @override
+  String appUpdateRecommendedBody(String version) {
+    return 'La versión $version incluye mejoras y correcciones. Puedes actualizar ahora o hacerlo más tarde.';
+  }
+
+  @override
+  String get appUpdateAction => 'Actualizar';
+
+  @override
+  String get appUpdateLater => 'Ahora no';
+
+  @override
+  String get appUpdateStoreUnavailable => 'No se ha podido abrir la tienda de aplicaciones. Inténtalo de nuevo más tarde.';
+
+  @override
+  String get appUpdateA11yDialog => 'Aviso de actualización de la aplicación';
 }

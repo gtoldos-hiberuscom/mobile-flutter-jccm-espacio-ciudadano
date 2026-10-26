@@ -13,11 +13,14 @@ class AppConfig {
         'BASE_URL': String.fromEnvironment('BASE_URL'),
         'TIMEOUT': String.fromEnvironment('TIMEOUT'),
         'DEBUG_MODE': String.fromEnvironment('DEBUG_MODE'),
+        'DEMO_MODE_ENABLED': String.fromEnvironment('DEMO_MODE_ENABLED'),
         'SSO_CLIENT_ID': String.fromEnvironment('SSO_CLIENT_ID'),
         'SSO_REDIRECT_URI': String.fromEnvironment('SSO_REDIRECT_URI'),
         'SSO_REALM': String.fromEnvironment('SSO_REALM'),
         'SSO_BASE_URL': String.fromEnvironment('SSO_BASE_URL'),
         'SSO_OFFLINE_ACCESS': String.fromEnvironment('SSO_OFFLINE_ACCESS'),
+        'SSO_STEP_UP_PARAMS': String.fromEnvironment('SSO_STEP_UP_PARAMS'),
+        'APP_STORE_ID': String.fromEnvironment('APP_STORE_ID'),
       };
 
   final Map<String, Object?> _json;
@@ -123,7 +126,15 @@ class AppConfig {
   }
 
   Uri get sescamUrl => Uri.parse('https://sanidad.castillalamancha.es/');
-  Uri get digitalHealthUrl => environmentUrl(uat: 'https://sescam.jccm.es/misaluddigital/#/app/inicio', pre: 'https://sescampre.jccm.es/misaluddigital/app/inicio', pro: 'https://sescam.jccm.es/misaluddigital/#/app/inicio');
+  /// Mi Salud Digital is entered through Cerbero with the substantial level
+  /// (JCCMEC-275). It uses the web client: Cerbero only allows this
+  /// redirect_uri for `add-sede_ciudadanos-fo`, not for the app's client.
+  /// UAT has no SESCAM portal of its own, so it keeps using PRO.
+  Uri get digitalHealthUrl => environmentUrl(
+    uat: 'https://cerbero.jccm.es/auth/realms/usuarios/protocol/openid-connect/auth?client_id=add-sede_ciudadanos-fo&redirect_uri=https%3A%2F%2Fsescam.jccm.es%2Fmisaluddigital%2Fapp%2Fsso%3Fprovider%3DCLAVE&response_type=code&scope=openid%20substantial',
+    pre: 'https://sso-cerbero-pre.cm-pre.jccm.es/auth/realms/usuarios/protocol/openid-connect/auth?client_id=add-sede_ciudadanos-fo&redirect_uri=https%3A%2F%2Fsescampre.jccm.es%2Fmisaluddigital%2Fapp%2Fsso%3Fprovider%3DCLAVE&response_type=code&scope=openid%20substantial',
+    pro: 'https://cerbero.jccm.es/auth/realms/usuarios/protocol/openid-connect/auth?client_id=add-sede_ciudadanos-fo&redirect_uri=https%3A%2F%2Fsescam.jccm.es%2Fmisaluddigital%2Fapp%2Fsso%3Fprovider%3DCLAVE&response_type=code&scope=openid%20substantial',
+  );
   Uri get clinicalHistoryUrl => Uri.parse('https://sescam.jccm.es/hcdSnsWeb/accesoCiudadano/indexAction.do');
   Uri get socialHistoryUrl => environmentUrl(uat: 'https://historiasocial-pre.castillalamancha.es/historiasocial/avisoLegal.do', pre: 'https://historiasocial-pre.castillalamancha.es/historiasocial/avisoLegal.do', pro: 'https://historiasocial.castillalamancha.es/historiasocial/avisoLegal.do');
   Uri get childrenAndFamiliesUrl => Uri.parse('https://infanciayfamilias.castillalamancha.es/');
@@ -143,6 +154,12 @@ class AppConfig {
   /// Whether verbose/debug logging is enabled.
   bool get debugMode => _getConfigValue('DEBUG_MODE', _parseBool);
 
+  /// Si este entorno ofrece el **modo demostración** (revisores de las
+  /// tiendas): la entrada en «Saber más» y la propia sesión demo. Apagado en
+  /// producción por decisión del proyecto; la build que se mande a revisión
+  /// tiene que llevarlo encendido o los revisores no tendrán cómo entrar.
+  bool get demoModeEnabled => _getConfigValue('DEMO_MODE_ENABLED', _parseBool);
+
   String get ssoClientId => _getConfigValue('SSO_CLIENT_ID', (final v) => v as String);
 
   String get ssoRedirectUri => _getConfigValue('SSO_REDIRECT_URI', (final v) => v as String);
@@ -161,6 +178,45 @@ class AppConfig {
   /// breaks login, so it must never default to true.
   bool get ssoOfflineAccess => _getConfigValue('SSO_OFFLINE_ACCESS', _parseBool);
 
+  /// Parámetros extra que este entorno añade a la petición de autorización
+  /// cuando se eleva el nivel de seguridad, en formato `clave=valor&clave=valor`.
+  ///
+  /// **Vacío en los tres entornos**, y a propósito: el mecanismo que funciona
+  /// hoy es repetir el login, que ya fuerza la reautenticación de Cl@ve por el
+  /// `prompt=login`, y no consta que Cerbero soporte pedir un nivel concreto.
+  /// Esta clave existe para poder **probarlo** —`acr_values=...`, por ejemplo—
+  /// cambiando la configuración y volviendo a entrar, sin tocar código ni
+  /// desplegar una build especial. Si resulta que Cerbero lo atiende, se
+  /// promueve; si no, se queda vacía y no se ha perdido nada.
+  ///
+  /// Un valor mal formado se ignora entero en vez de romper el login: elevar
+  /// sin el parámetro sigue siendo mejor que no poder entrar.
+  Map<String, String> get ssoStepUpParameters {
+    final raw = _getConfigValue('SSO_STEP_UP_PARAMS', (final v) => v as String).trim();
+    if (raw.isEmpty) {
+      return const <String, String>{};
+    }
+    final parsed = <String, String>{};
+    for (final pair in raw.split('&')) {
+      final separator = pair.indexOf('=');
+      if (separator <= 0) {
+        return const <String, String>{};
+      }
+      final key = pair.substring(0, separator).trim();
+      final value = pair.substring(separator + 1).trim();
+      if (key.isEmpty || value.isEmpty) {
+        return const <String, String>{};
+      }
+      parsed[key] = value;
+    }
+    return Map.unmodifiable(parsed);
+  }
+
+  /// Numeric App Store Connect id of the app (Apple ID). The App Store page
+  /// is built from it (`apps.apple.com/app/id<appStoreId>`); unlike Google
+  /// Play, it cannot be derived from the bundle id.
+  String get appStoreId => _getConfigValue('APP_STORE_ID', _parseAppStoreId);
+
   T _getConfigValue<T>(final String key, final T Function(Object) parser) {
     final value = _json[key];
     if (value == null) {
@@ -177,6 +233,12 @@ class AppConfig {
     final int intValue => intValue,
     final String stringValue => int.parse(stringValue),
     _ => throw FormatException('Expected int-compatible value: $value'),
+  };
+
+  /// Only digits: an empty or mistyped id would open a broken store page.
+  String _parseAppStoreId(final Object value) => switch (value) {
+    final String id when RegExp(r'^[0-9]+$').hasMatch(id) => id,
+    _ => throw FormatException('Expected a numeric App Store id: $value'),
   };
 
   bool _parseBool(final Object value) => switch (value) {

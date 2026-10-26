@@ -6,7 +6,7 @@ import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/ex
 class MyDataNoData extends StatelessWidget {
   const MyDataNoData({
     required this.message,
-    required this.actionLabel,
+    this.actionLabel,
     this.contactUrl,
     this.onAction,
     this.scrollable = true,
@@ -14,7 +14,7 @@ class MyDataNoData extends StatelessWidget {
   });
 
   final String message;
-  final String actionLabel;
+  final String? actionLabel;
   final String? contactUrl;
   final VoidCallback? onAction;
   final bool scrollable;
@@ -54,16 +54,18 @@ class MyDataNoData extends StatelessWidget {
               ),
             ),
           ],
-          const SizedBox(height: AppDimensions.space16),
-          Align(
-            child: AppButton(
-              label: actionLabel,
-              hierarchy: AppButtonHierarchy.ghost,
-              trailingIcon: AppIcons.openInNew,
-              isExternalLink: true,
-              onPressed: onAction ?? () => _openContact(context),
+          if (actionLabel != null) ...[
+            const SizedBox(height: AppDimensions.space16),
+            Align(
+              child: AppButton(
+                label: actionLabel!,
+                hierarchy: AppButtonHierarchy.ghost,
+                trailingIcon: AppIcons.openInNew,
+                isExternalLink: true,
+                onPressed: onAction ?? () => _openContact(context),
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );

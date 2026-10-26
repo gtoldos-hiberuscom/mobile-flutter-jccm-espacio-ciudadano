@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
+import 'package:jccm_espacio_ciudadano/core/demo/demo_mode_banner.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_theme.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/app_router.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/app_update/2_presentation/widgets/app_update_gate.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/consent_revocation_notifier.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -62,6 +64,12 @@ class App extends ConsumerWidget {
       // bajo tarjetas blancas fijas y textos del tema oscuro sobre ellas.
       // Cuando el DS tenga tokens por brillo, restaurarlo junto a `themeMode`.
       routerConfig: router,
+      // El aviso de actualización vive por encima del router: así una
+      // actualización forzada no desaparece cuando el router sustituye la
+      // página de debajo (`router.go`, redirects del guard). La cinta del
+      // modo demostración va aún más arriba: debe verse en todas las
+      // pantallas, incluido el propio aviso.
+      builder: (final context, final child) => DemoModeBanner(child: AppUpdateGate(child: child ?? const SizedBox.shrink())),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

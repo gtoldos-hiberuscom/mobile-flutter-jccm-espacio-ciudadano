@@ -74,18 +74,28 @@ void main() {
   });
 
   group('SessionGuard representative restrictions', () {
-    test('redirects restricted sections without calling their backend', () async {
+    test('allows restricted sections so their own page can show its help links', () async {
       final container = buildContainer();
       startSession(container, representedAgentId: 'PJU0349051');
 
       for (final path in [
+        Routes.myDataHealth,
+        Routes.myDataEducation,
         Routes.myDataEducationUniversityTitles,
+        Routes.myDataEducationNonUniversityTitles,
+        Routes.myDataSocialWelfare,
+        Routes.myDataSocialWelfareFamily,
+        Routes.myDataSocialWelfareDisability,
+        Routes.myDataSocialWelfareThermalSpa,
+        Routes.myDataSocialWelfareDependency,
+        Routes.myDataSocialWelfareParking,
+        Routes.myDataEmployment,
+        Routes.myDataEmploymentOffers,
+        Routes.myDataVehicles,
+        Routes.myDataHousingAddress,
+        Routes.digitalCards,
       ]) {
-        expect(
-          await container.read(_guardProvider).redirectPath(path),
-          Routes.representativeUnavailable,
-          reason: path,
-        );
+        expect(await container.read(_guardProvider).redirectPath(path), isNull, reason: path);
       }
     });
 
@@ -96,14 +106,6 @@ void main() {
       for (final path in [
         Routes.home,
         Routes.myData,
-        Routes.myDataHealth,
-        Routes.myDataEducation,
-        Routes.myDataSocialWelfare,
-        Routes.myDataEmployment,
-        Routes.myDataVehicles,
-        Routes.myDataEducationNonUniversityTitles,
-        Routes.myDataSocialWelfareFamily,
-        Routes.myDataEmploymentOffers,
         Routes.myDataHousing,
         Routes.myDataHousingRealEstate,
         Routes.myDataHousingAddress,
@@ -372,19 +374,17 @@ final class _FakeSecureStorage implements SecureStorage {
   final Map<String, String> store = {};
 
   @override
-  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => store[key];
+  Future<String?> read(final String key) async => store[key];
 
   @override
-  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => store[key] = value;
+  Future<void> write(final String key, final String value) async => store[key] = value;
 
   @override
-  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async => store.remove(key);
+  Future<void> delete(final String key) async => store.remove(key);
+
 
   @override
-  Future<void> clearBiometric() async => store.remove(StorageKeys.refreshToken);
-
-  @override
-  Future<void> clear({final bool includeBiometric = true}) async => store.clear();
+  Future<void> clear() async => store.clear();
 }
 
 /// Repository whose refresh always fails with the given [AuthException].
@@ -397,7 +397,11 @@ final class _FailingAuthRepository implements AuthRepository {
   final AuthException error;
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => throw UnimplementedError();
+  Future<TokenResponse> login({
+    final List<String> scopes = authDefaultScopes,
+    final String? loginHint,
+    final Map<String, String> extraParameters = const <String, String>{},
+  }) => throw UnimplementedError();
 
   @override
   Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw error;
@@ -416,7 +420,11 @@ final class _UnusedAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<TokenResponse> login({final List<String> scopes = authDefaultScopes, final String? loginHint}) => throw UnimplementedError();
+  Future<TokenResponse> login({
+    final List<String> scopes = authDefaultScopes,
+    final String? loginHint,
+    final Map<String, String> extraParameters = const <String, String>{},
+  }) => throw UnimplementedError();
 
   @override
   Future<TokenResponse> refreshToken({required final String refreshToken, final List<String> scopes = authDefaultScopes}) => throw UnimplementedError();

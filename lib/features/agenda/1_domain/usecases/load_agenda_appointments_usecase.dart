@@ -37,11 +37,13 @@ final class LoadAgendaAppointmentsUsecase {
   Future<LoadAgendaAppointmentsResult> execute({
     required final String documentNumber,
     final String? agentId,
+    final bool includeHealth = true,
   }) async {
     try {
       final snapshot = await _repository.loadAppointments(
         documentNumber: documentNumber,
         agentId: agentId,
+        includeHealth: includeHealth,
       );
       return LoadAgendaAppointmentsSuccess(
         appointments: snapshot.appointments,

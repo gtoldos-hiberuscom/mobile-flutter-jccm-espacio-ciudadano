@@ -16,6 +16,8 @@ void main() {
 
       await repository.loadEntradas(citizenId: 'sid-1', documentNumber: 'B12345674');
 
+      expect(adapter.requests.single.sendTimeout, const Duration(minutes: 5));
+      expect(adapter.requests.single.receiveTimeout, const Duration(minutes: 5));
       expect(adapter.requests.single.jsonBody, <String, dynamic>{
         'numerodocumento': 'B12345674',
         'tipodocumento': 'CIF',
@@ -41,7 +43,8 @@ void main() {
       expect(result.single.fecha, '2026-06-21');
       expect(result.single.consejeria, 'Consejería B');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/listado-registro-entrada');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/registros');
+      expect(adapter.requests.single.queryParameters, <String, dynamic>{'tipo': 'entrada'});
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{
@@ -69,7 +72,8 @@ void main() {
       expect(result.single.fecha, '2026-06-22');
       expect(result.single.consejeria, 'Consejería C');
       expect(adapter.requests.single.method, 'POST');
-      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/expedientes/listado-registro-salida');
+      expect(adapter.requests.single.path, '/api/v1/ciudadanos/sid-1/registros');
+      expect(adapter.requests.single.queryParameters, <String, dynamic>{'tipo': 'salida'});
       expect(
         adapter.requests.single.jsonBody,
         <String, dynamic>{

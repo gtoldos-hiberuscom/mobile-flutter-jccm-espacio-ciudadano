@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
+import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/network/network_interceptors.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/auth_failure.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/1_domain/auth_repository.dart';
@@ -13,10 +14,41 @@ final class AuthRepositoryImpl implements AuthRepository {
   final AppConfig _config;
   final FlutterAppAuth _appAuth = const FlutterAppAuth();
 
+  /// Parámetros de la petición de autorización: los de elevación, más lo que
+  /// sostiene la reautenticación, que **no se puede pisar**.
+  ///
+  /// `prompt` y `max_age` son justo lo que hace que Cerbero propague
+  /// `ForceAuthn` a Cl@ve (#282296). Un parámetro de elevación que los tocara
+  /// apagaría la reautenticación **que la propia elevación necesita**, y no
+  /// fallaría nada a la vista: el login seguiría entrando y Cl@ve dejaría de
+  /// desafiar. Así que se descartan de la entrada, con aviso en la traza, en vez
+  /// de confiar en el orden de la fusión — `prompt` viaja además por
+  /// `promptValues`, y duplicarlo en la URL no tiene un ganador definido.
+  ///
+  /// El valor viene de configuración (`SSO_STEP_UP_PARAMS`), así que esto
+  /// protege también de una configuración mal puesta, no solo del código.
+  Map<String, String> _authorizationParameters(final Map<String, String> extraParameters) {
+    final reserved = extraParameters.keys.where(_reservedAuthorizationKeys.contains).toList(growable: false);
+    if (reserved.isNotEmpty) {
+      logger.w({
+        'event': 'auth_step_up_reserved_parameters_ignored',
+        'keys': reserved,
+      });
+    }
+    return {
+      for (final entry in extraParameters.entries)
+        if (!_reservedAuthorizationKeys.contains(entry.key)) entry.key: entry.value,
+      'max_age': '0',
+    };
+  }
+
+  static const Set<String> _reservedAuthorizationKeys = {'prompt', 'max_age'};
+
   @override
   Future<AuthorizationTokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) async {
     try {
       // `prompt=login` and `max_age=0` are sent on every attempt so the
@@ -41,7 +73,7 @@ final class AuthRepositoryImpl implements AuthRepository {
           // `select_account` no aportaba nada: Cerbero no tiene cuentas
           // múltiples. Se puede volver a añadir cuando soporten la combinación.
           promptValues: const [Prompt.login],
-          additionalParameters: const {'max_age': '0'},
+          additionalParameters: _authorizationParameters(extraParameters),
           // En iOS, SFSafariViewController: almacén propio de la app, aislado
           // de Safari pero compartido con las pestañas que abre la propia app
           // (`LaunchMode.inAppBrowserView`). Es lo que permite que los portales
@@ -63,7 +95,7 @@ final class AuthRepositoryImpl implements AuthRepository {
       );
     } on FlutterAppAuthPlatformException catch (error, stackTrace) {
       Error.throwWithStackTrace(
-        _mapPlatformException(error),
+        _isSafariViewControllerDismissal(error) ? AuthException.cancelled(cause: error) : _mapPlatformException(error),
         stackTrace,
       );
     } on AuthException {
@@ -165,6 +197,9 @@ final class AuthRepositoryImpl implements AuthRepository {
     } on FlutterAppAuthUserCancelledException {
       return;
     } on FlutterAppAuthPlatformException catch (error, stackTrace) {
+      if (_isSafariViewControllerDismissal(error)) {
+        return;
+      }
       Error.throwWithStackTrace(
         _mapPlatformException(error),
         stackTrace,
@@ -216,6 +251,22 @@ final class AuthRepositoryImpl implements AuthRepository {
   /// distinguishing an OAuth error returned by the authorization server
   /// (`error`/`error_description` per RFC 6749) from a technical failure in
   /// the AppAuth SDK or the browser session.
+  /// En iOS, cerrar Cl@ve con «OK» del `SFSafariViewController` **es una
+  /// cancelación del ciudadano**, pero `flutter_appauth` 12.0.0 no la reporta
+  /// como tal: su agente la emite como `OIDErrorCodeProgramCanceledAuthorizationFlow`
+  /// (`-4`, `OIDExternalUserAgentIOSSafariViewController.m`,
+  /// `safariViewControllerDidFinish`) y el plugin solo marca `user_did_cancel`
+  /// con `-3` (`FlutterAppAuth.m`). Sin esto, cerrar Cl@ve en iOS salía como
+  /// fallo inesperado: el aviso de elevación volvía a abrirse con «No ha sido
+  /// posible elevar» y el ciudadano no podía salir.
+  ///
+  /// La app no cancela flujos por programa, y en esa versión del plugin ese
+  /// código solo lo produce el cierre del `SFSafariViewController`.
+  static bool _isSafariViewControllerDismissal(final FlutterAppAuthPlatformException error) {
+    final details = error.platformErrorDetails;
+    return details.type == 'org.openid.appauth.general' && details.code == '-4';
+  }
+
   static AuthException _mapPlatformException(
     final FlutterAppAuthPlatformException error,
   ) {

@@ -1,5 +1,4 @@
 import 'dart:async' show unawaited;
-import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -252,16 +251,18 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
             title: l10n.preferencesNotificationContactTitle,
             icon: const AppIcon(AppIcons.alternateEmail, color: AppColors.textPrimary),
             status: preferences.notificationContact == null ? AppPreferenceStatus.disabled : AppPreferenceStatus.enabled,
-            inactiveDescription: l10n.preferencesNotificationContactInactiveDescription,
+            // Un 404 de `/contacto` equivale a que no existe alta en
+            // Notifica; no es solo que falte rellenar un canal.
+            inactiveDescription: l10n.notificationContactNotRegistered,
             pendingDescription: l10n.preferencesNotificationContactPendingDescription,
             activeDescription: l10n.preferencesNotificationContactActiveDescription,
             actionLabel: preferences.notificationContact == null ? l10n.preferencesAddContactAction : l10n.preferencesManageAction,
             actionIcon: AppIcons.edit,
             showActiveStatus: true,
-            summaryItems: [
-              ?preferences.notificationContact?.phone,
-              ?preferences.notificationContact?.email,
-            ],
+            activeSummary: AppNotificationContactSummary(
+              phone: preferences.notificationContact?.phone,
+              email: preferences.notificationContact?.email,
+            ),
             onAction: () => context.go(
               Uri(
                 path: Routes.notificationContact,
@@ -282,6 +283,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           onAction: _updatingBiometrics ? null : () => unawaited(_toggleBiometrics(preferencesArgs, preferences.biometricEnabled)),
           showInactiveIcon: true,
           showActiveStatus: true,
+          showActiveHeaderAction: false,
         ),
         const SizedBox(height: AppDimensions.space24),
         AppButton(
@@ -322,6 +324,9 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
     try {
       if (currentlyEnabled) {
         await appStorage.write('${StorageKeys.biometricQuickAccessEnabledPrefix}${preferencesArgs.idAgente}', false);
+        // Desactivarlo a mano también es un «no»: la home no se lo vuelve a
+        // ofrecer en el siguiente login.
+        await appStorage.write('${StorageKeys.biometricQuickAccessDeclinedPrefix}${preferencesArgs.idAgente}', true);
       } else {
         final authenticator = ref.read(biometricAuthenticatorProvider);
         if (!await authenticator.canAuthenticateWithBiometrics()) {
@@ -336,15 +341,15 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
           return;
         }
 
-        // Igual que en la home: en Android la escritura en el KeyStore ya
-        // autentica, así que pedirlo también aquí encadenaba dos huellas.
-        if (!Platform.isAndroid) {
-          final authenticated = await authenticator.authenticateForSessionUnlock(
-            localizedReason: l10n.sessionUnlockBiometricReason,
-          );
-          if (!authenticated) {
-            return;
-          }
+        // Igual que en la home: guardar no pide huella, así que la
+        // comprobación al activar se hace aquí.
+        final authenticated = await authenticator.authenticateForSessionUnlock(
+          localizedReason: l10n.sessionUnlockBiometricReason,
+          title: l10n.sessionUnlockBiometricTitle,
+          cancelLabel: l10n.sessionUnlockBiometricCancel,
+        );
+        if (!authenticated) {
+          return;
         }
         await appStorage.write('${StorageKeys.biometricQuickAccessEnabledPrefix}${preferencesArgs.idAgente}', true);
       }

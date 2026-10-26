@@ -164,6 +164,18 @@ abstract final class AppTypography {
     letterSpacing: 0.15,
   );
 
+  /// Figma: Body/Caption — Inter Regular 12 / 18  (letterSpacing 0)
+  ///
+  /// Not to be confused with [captionRegular]: despite its name, that one is
+  /// bold and tracked.
+  static const TextStyle bodyCaption = TextStyle(
+    fontFamily: _fontFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    height: 18 / 12,
+    letterSpacing: 0,
+  );
+
   // ═══════════════════════════════════════════════════════════════════════════
   // ALIASES — backward-compat names kept for existing widget code
   // ═══════════════════════════════════════════════════════════════════════════

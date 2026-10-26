@@ -39,11 +39,13 @@ final class LoginUseCase {
   Future<LoginResult> call({
     final String? loginHint,
     final List<String> scopes = authDefaultScopes,
+    final Map<String, String> extraParameters = const <String, String>{},
   }) async {
     try {
       final session = await _repository.login(
         loginHint: loginHint,
         scopes: scopes,
+        extraParameters: extraParameters,
       );
       final accessToken = session.accessToken!;
       final payload = JwtDecoder.decodePayload(accessToken);

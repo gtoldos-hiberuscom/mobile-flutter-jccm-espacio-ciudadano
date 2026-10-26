@@ -12,6 +12,17 @@ class FaqEntry {
   final String Function(AppLocalizations l10n) answer;
 }
 
+/// A group of related FAQ entries shown as an expandable section in Help.
+class FaqCategory {
+  const FaqCategory({
+    required this.title,
+    required this.entries,
+  });
+
+  final String Function(AppLocalizations l10n) title;
+  final List<FaqEntry> entries;
+}
+
 String _faqQuestion1(final AppLocalizations l10n) => l10n.faqQuestion1;
 String _faqAnswer1(final AppLocalizations l10n) => l10n.faqAnswer1;
 String _faqQuestion2(final AppLocalizations l10n) => l10n.faqQuestion2;
@@ -56,6 +67,19 @@ const faqEntries = <FaqEntry>[
     question: _faqQuestion6,
     answer: _faqAnswer6,
   ),
+];
+
+String _faqAccessCategory(final AppLocalizations l10n) => l10n.faqCategoryAccess;
+String _faqMyDataCategory(final AppLocalizations l10n) => l10n.faqCategoryMyData;
+String _faqManagementsCategory(final AppLocalizations l10n) => l10n.faqCategoryManagements;
+String _faqAgendaCategory(final AppLocalizations l10n) => l10n.faqCategoryAgenda;
+
+/// Categories and their questions for the accordion on the Help screen.
+final faqCategories = <FaqCategory>[
+  FaqCategory(title: _faqAccessCategory, entries: faqEntries.sublist(0, 3)),
+  FaqCategory(title: _faqMyDataCategory, entries: faqEntries.sublist(3, 4)),
+  FaqCategory(title: _faqManagementsCategory, entries: faqEntries.sublist(4, 5)),
+  FaqCategory(title: _faqAgendaCategory, entries: faqEntries.sublist(5, 6)),
 ];
 
 FaqEntry? faqEntryById(final String id) {

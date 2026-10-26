@@ -18,9 +18,18 @@ const String offlineAccessScope = 'offline_access';
 /// `prompt` importa: Cerbero lo compara entero contra `"login"` y cualquier
 /// combinación adicional apaga el `ForceAuthn` hacia Cl@ve (#282296).
 abstract interface class AuthRepository {
+  /// [extraParameters] añade parámetros a la petición de autorización, para la
+  /// elevación de nivel de seguridad.
+  ///
+  /// **No puede pisar `prompt` ni `max_age`**, y la implementación lo impide:
+  /// son lo que sostiene el `ForceAuthn` hacia Cl@ve, así que un parámetro de
+  /// elevación mal puesto no debe poder desactivar la reautenticación que la
+  /// elevación necesita. Existe para poder probar en un entorno lo que exija
+  /// Cerbero (`acr_values` u otro) sin tocar código.
   Future<TokenResponse> login({
     final List<String> scopes = authDefaultScopes,
     final String? loginHint,
+    final Map<String, String> extraParameters = const <String, String>{},
   });
 
   Future<TokenResponse> refreshToken({

@@ -3,7 +3,10 @@ import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointme
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointments_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/usecases/load_agenda_appointments_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment_access.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 
 final class AgendaAppointmentsState {
@@ -13,6 +16,7 @@ final class AgendaAppointmentsState {
     required this.hasJccmAuthorization,
     this.failedSources = const {},
     this.healthCipMissing = false,
+    this.hospitalAppointmentsLocked = false,
   });
 
   final List<AgendaAppointment> appointments;
@@ -22,6 +26,11 @@ final class AgendaAppointmentsState {
   /// Fuentes caídas en esta carga; vacío = la agenda llegó completa.
   final Set<AgendaAppointmentSource> failedSources;
   final bool healthCipMissing;
+
+  /// El nivel de la sesión no alcanza el de las citas hospitalarias: la
+  /// pantalla avisa de que están ocultas y ofrece verificar la identidad. Qué
+  /// citas llegan lo decide el backend; esto solo explica la ausencia.
+  final bool hospitalAppointmentsLocked;
 
   bool get isPartial => failedSources.isNotEmpty;
 
@@ -45,6 +54,11 @@ final agendaAppointmentsProvider = FutureProvider.autoDispose<AgendaAppointments
   // del token: contra el gateway toda la app debe mandar el mismo identificador
   // (`sub_alt`); leer `idAgente` del claim mandaba `PER…` y daba 403/404.
   final ids = ref.watch(citizenEndpointIdsProvider);
+  final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
+  // Se observa el nivel para que, al elevarlo, la agenda se vuelva a pedir sola
+  // con el token nuevo y lleguen las citas hospitalarias. A quien actúa como
+  // representante no se le ofrece: la agenda no le muestra datos de salud.
+  final hospitalAppointmentsLocked = !isRepresentative && !ref.watch(authenticationLevelProvider).meets(kHospitalAppointmentsMinimumLevel);
   final documentNumber = ids.numDocumento;
   if (documentNumber == null || documentNumber.isEmpty) {
     throw StateError('No se ha encontrado el documento del usuario.');
@@ -55,6 +69,7 @@ final agendaAppointmentsProvider = FutureProvider.autoDispose<AgendaAppointments
       .execute(
         documentNumber: documentNumber,
         agentId: ids.idAgente,
+        includeHealth: !isRepresentative,
       );
 
   return switch (result) {
@@ -64,6 +79,7 @@ final agendaAppointmentsProvider = FutureProvider.autoDispose<AgendaAppointments
       hasJccmAuthorization: true,
       failedSources: failedSources,
       healthCipMissing: healthCipMissing,
+      hospitalAppointmentsLocked: hospitalAppointmentsLocked,
     ),
     LoadAgendaAppointmentsFailed(:final message) => throw Exception(message),
   };

@@ -41,6 +41,50 @@
   "@landingHelpLink": {
     "description": "Enlace de texto que navega a la pantalla de ayuda con el acceso."
   },
+  "landingDemoButton": "Acceder a demostración",
+  "@landingDemoButton": {
+    "description": "Enlace discreto de la pantalla inicial que abre la hoja de confirmación del modo demostración (para revisores de las tiendas y curiosos): la app con datos ficticios, sin Cl@ve."
+  },
+  "demoConfirmTitle": "Modo demostración",
+  "@demoConfirmTitle": {
+    "description": "Título de la hoja de confirmación previa a entrar en el modo demostración."
+  },
+  "demoConfirmBody": "Verás la aplicación con los datos ficticios de una persona inventada, sin identificarte con Cl@ve. Nada de lo que hagas se envía ni se guarda en ningún servicio real. Para salir, cierra sesión.",
+  "@demoConfirmBody": {
+    "description": "Cuerpo de la hoja de confirmación del modo demostración: explica que los datos son ficticios y que nada se envía."
+  },
+  "demoConfirmEnter": "Entrar en la demostración",
+  "@demoConfirmEnter": {
+    "description": "Botón principal de la hoja de confirmación del modo demostración."
+  },
+  "demoConfirmBack": "Volver",
+  "@demoConfirmBack": {
+    "description": "Botón secundario de la hoja de confirmación del modo demostración; cierra la hoja sin entrar."
+  },
+  "demoConfirmPersistedSessionBody": "En este dispositivo hay una sesión guardada con acceso rápido. Para entrar en la demostración se cerrará primero: cuando quieras volver a tu espacio tendrás que identificarte de nuevo con Cl@ve.",
+  "@demoConfirmPersistedSessionBody": {
+    "description": "Párrafo adicional de la hoja de confirmación del modo demostración cuando hay una sesión real guardada en el dispositivo (acceso rápido): avisa de que entrar la cerrará."
+  },
+  "demoConfirmCloseSessionAndEnter": "Cerrar la sesión guardada y entrar",
+  "@demoConfirmCloseSessionAndEnter": {
+    "description": "Botón principal de la hoja de confirmación del modo demostración cuando hay una sesión guardada: la cierra y entra en la demostración."
+  },
+  "demoConfirmCodeLabel": "Código de acceso",
+  "@demoConfirmCodeLabel": {
+    "description": "Etiqueta del campo de código de la hoja de confirmación del modo demostración. El código se facilita en las notas de revisión de las tiendas."
+  },
+  "demoConfirmCodeError": "Código incorrecto. Comprueba el código de acceso a la demostración.",
+  "@demoConfirmCodeError": {
+    "description": "Error inline del campo de código de la hoja del modo demostración cuando el código no coincide."
+  },
+  "demoBannerLabel": "DEMO",
+  "@demoBannerLabel": {
+    "description": "Texto de la cinta diagonal que se pinta sobre toda la app mientras la sesión es la de demostración. Muy corto: va en una cinta."
+  },
+  "demoPersistedSessionNotice": "Hay una sesión guardada en este dispositivo. Entra con tu acceso rápido y cierra sesión antes de usar la demostración.",
+  "@demoPersistedSessionNotice": {
+    "description": "Aviso al intentar entrar en la demostración con una sesión real guardada en el dispositivo (acceso rápido): hay que cerrarla antes."
+  },
   "landingHelpPageTitle": "Cómo acceder",
   "@landingHelpPageTitle": {
     "description": "Título del AppBar de la pantalla de ayuda con el acceso."
@@ -776,6 +820,38 @@
   "agendaEventsUnavailable": "No hemos podido cargar los eventos de tu agenda.",
   "@agendaEventsUnavailable": {
     "description": "Agenda — aviso de carga parcial cuando la fuente de eventos de la agenda no responde y el resto de la agenda sí se ha cargado."
+  },
+  "agendaInfoTooltip": "Saber más sobre Agenda",
+  "@agendaInfoTooltip": {
+    "description": "Agenda — tooltip y etiqueta accesible del botón (i) de la barra superior."
+  },
+  "agendaInfoSheetTitle": "Saber más sobre Agenda",
+  "@agendaInfoSheetTitle": {
+    "description": "Agenda — título de la hoja informativa que abre la (i) (Figma 45536:38108)."
+  },
+  "agendaInfoSheetBody": "Consulta tus citas de atención primaria y hospitalaria, los avisos de tus notificaciones y de la caducidad de tus carnets.\n\nPara mostrarte las citas hospitalarias, necesitamos que verifiques tu identidad con un método de seguridad alta que garantice la protección de estos datos.\n\nEs posible que algunas citas o avisos no aparezcan, porque todavía no están disponibles.",
+  "@agendaInfoSheetBody": {
+    "description": "Agenda — cuerpo de la hoja informativa de la (i), tres párrafos."
+  },
+  "agendaInfoSheetFooter": "Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Junta de Comunidades de Castilla-La Mancha (JCCM).",
+  "@agendaInfoSheetFooter": {
+    "description": "Agenda — pie de la hoja informativa de la (i)."
+  },
+  "agendaInfoSheetMoreInformation": "Consultar más información",
+  "@agendaInfoSheetMoreInformation": {
+    "description": "Agenda — enlace al final de la hoja informativa de la (i); lleva a Ayuda y contacto."
+  },
+  "agendaHospitalLockedTitle": "Citas hospitalarias ocultas",
+  "@agendaHospitalLockedTitle": {
+    "description": "Agenda — título del aviso cuando el nivel de autenticación no permite ver las citas hospitalarias (Figma 45049:59928)."
+  },
+  "agendaHospitalLockedBody": "Tus datos hospitalarios están protegidos. Verifica tu identidad para consultar estas citas.",
+  "@agendaHospitalLockedBody": {
+    "description": "Agenda — texto del aviso de citas hospitalarias ocultas."
+  },
+  "agendaHospitalLockedAction": "Verificar",
+  "@agendaHospitalLockedAction": {
+    "description": "Agenda — botón del aviso de citas hospitalarias ocultas: abre la verificación de identidad con Cl@ve."
   },
   "agendaLastUpdated": "Última actualización: {timestamp}",
   "@agendaLastUpdated": {
@@ -1943,7 +2019,7 @@
   "@digitalCardsPageTitle": {
     "description": "Título de la pantalla de catálogo de carnets digitales (STORY-48)."
   },
-  "digitalCardsTypeFamiliaNumerosa": "Familia Numerosa",
+  "digitalCardsTypeFamiliaNumerosa": "Carnet de familia numerosa",
   "@digitalCardsTypeFamiliaNumerosa": {
     "description": "Carnets — etiqueta del tipo familia numerosa."
   },
@@ -1951,7 +2027,7 @@
   "@digitalCardsTypeJoven": {
     "description": "Carnets — etiqueta del tipo carnet joven."
   },
-  "digitalCardsTypeDiscapacidad": "Discapacidad",
+  "digitalCardsTypeDiscapacidad": "Carnet de discapacidad",
   "digitalCardsIssueDate": "Fecha de emisión",
   "digitalCardsEffectiveDate": "Fecha de entrada en vigor",
   "digitalCardsExpiryDate": "Fecha de caducidad",
@@ -3399,7 +3475,11 @@
   "myDataVehiclesServiceUnavailableMessage": "El servicio de consulta de tus vehículos no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
   "myDataHousingAddressServiceUnavailableMessage": "El servicio de consulta de tus datos de domicilio no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
   "myDataHousingRealEstateServiceUnavailableMessage": "El servicio de consulta de tus bienes inmuebles no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "myDataHealthAppointmentsServiceUnavailableMessage": "El servicio de consulta de tus citas sanitarias no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "myDataHealthAppointmentsServiceUnavailableMessage": "El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.",
+  "myDataHealthHospitalAppointmentsServiceUnavailableMessage": "El servicio de consulta de datos de citas de atención hospitalaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.",
+  "@myDataHealthHospitalAppointmentsServiceUnavailableMessage": {
+    "description": "Citas hospitalarias — el servicio del SESCAM no responde."
+  },
   "familiaNumerosaRetry": "Reintentar",
   "@familiaNumerosaRetry": {
     "description": "Familia numerosa detail — retry button label."
@@ -3524,7 +3604,7 @@
   "@discapacidadActionPkpass": {
     "description": "Carnet Discapacidad detail — PKPass action section label."
   },
-  "recommendationsTitle": "Mis Recomendaciones",
+  "recommendationsTitle": "Recomendaciones para mí",
   "@recommendationsTitle": {
     "description": "Recommendations — app bar title for the citizen recommendations list."
   },
@@ -3560,7 +3640,7 @@
   "@recommendationsLifeEventPrefix": {
     "description": "Recommendations — prefix shown before the life event label inside a card chip."
   },
-  "recommendationsAssociatedLifeEventsLabel": "Hechos vitales asociados",
+  "recommendationsAssociatedLifeEventsLabel": "Hechos vitales relacionados",
   "@recommendationsAssociatedLifeEventsLabel": {
     "description": "Recommendations — label shown above the life events associated with a recommendation card."
   },
@@ -4620,7 +4700,7 @@
   },
   "myDataHealthCipLabel": "Código de Identificación Personal (CIP): {cip}",
   "@myDataHealthCipLabel": {
-    "description": "Código de identificación personal mostrado encima de las citas de Atención Primaria.",
+    "description": "Código de identificación personal mostrado encima de las citas de Atención Primaria y de las hospitalarias.",
     "placeholders": {
       "cip": {
         "type": "String"
@@ -4651,9 +4731,121 @@
   "@myDataHealthScopeHospital": {
     "description": "Selector de ámbito asistencial en Salud: atención hospitalaria."
   },
-  "myDataHealthHospitalAppointmentsTitle": "Citas hospitalarias",
+  "myDataHealthHospitalAppointmentsTitle": "Citas de atención hospitalaria",
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Título del bloque de citas hospitalarias."
+  },
+  "myDataHealthPrimaryCareNavTitle": "Citas de atención primaria",
+  "@myDataHealthPrimaryCareNavTitle": {
+    "description": "Salud — tarjeta del menú que lleva a las citas de atención primaria."
+  },
+  "myDataHealthHospitalNavTitle": "Citas de atención hospitalaria",
+  "@myDataHealthHospitalNavTitle": {
+    "description": "Salud — tarjeta del menú que lleva a las citas hospitalarias."
+  },
+  "myDataHealthHospitalNavVerificationRequired": "Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.",
+  "@myDataHealthHospitalNavVerificationRequired": {
+    "description": "Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas."
+  },
+  "myDataHealthHospitalLinkTitle": "Mis citas hospitalarias",
+  "@myDataHealthHospitalLinkTitle": {
+    "description": "Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM."
+  },
+  "myDataHealthHospitalLinkDescription": "Consulta la información sobre tus citas hospitalarias del SESCAM.",
+  "@myDataHealthHospitalLinkDescription": {
+    "description": "Salud — descripción del enlace a citas hospitalarias."
+  },
+  "myDataHealthHospitalContactHint": "Si alguno de los datos no está actualizado deberás ponerte en contacto con el SESCAM.",
+  "@myDataHealthHospitalContactHint": {
+    "description": "Salud — aviso de que los datos hospitalarios los mantiene el SESCAM."
+  },
+  "myDataHealthHospitalPendingTab": "Citas pendientes",
+  "@myDataHealthHospitalPendingTab": {
+    "description": "Salud — pestaña de citas hospitalarias pendientes."
+  },
+  "myDataHealthHospitalPastTab": "Citas pasadas",
+  "@myDataHealthHospitalPastTab": {
+    "description": "Salud — pestaña de citas hospitalarias pasadas."
+  },
+  "myDataHealthHospitalPendingEmpty": "No tienes citas hospitalarias pendientes.",
+  "@myDataHealthHospitalPendingEmpty": {
+    "description": "Salud — mensaje cuando no hay citas hospitalarias pendientes."
+  },
+  "myDataHealthHospitalPastEmpty": "No tienes citas hospitalarias pasadas.",
+  "@myDataHealthHospitalPastEmpty": {
+    "description": "Salud — mensaje cuando no hay citas hospitalarias pasadas."
+  },
+  "myDataHealthHospitalFieldService": "Servicio",
+  "@myDataHealthHospitalFieldService": {
+    "description": "Salud — etiqueta del servicio médico de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldProvision": "Prestación",
+  "@myDataHealthHospitalFieldProvision": {
+    "description": "Salud — etiqueta de la prestación de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldRoom": "Sala",
+  "@myDataHealthHospitalFieldRoom": {
+    "description": "Salud — etiqueta de la sala de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldCenter": "Centro",
+  "@myDataHealthHospitalFieldCenter": {
+    "description": "Salud — etiqueta del hospital de una cita hospitalaria."
+  },
+  "myDataHealthHospitalFieldAgenda": "Agenda",
+  "@myDataHealthHospitalFieldAgenda": {
+    "description": "Salud — etiqueta de la agenda de una cita hospitalaria."
+  },
+  "myDataHealthCipUnavailable": "CIP no disponible",
+  "@myDataHealthCipUnavailable": {
+    "description": "Salud — texto cuando el CIP no se ha podido obtener."
+  },
+  "identityVerificationDialogTitle": "Verificación de identidad",
+  "@identityVerificationDialogTitle": {
+    "description": "Salud — título del aviso de que la consulta exige más nivel de seguridad."
+  },
+  "identityVerificationDialogBody": "Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.",
+  "@identityVerificationDialogBody": {
+    "description": "Salud — motivo del aviso de verificación de identidad."
+  },
+  "identityVerificationDialogDoNotShowAgain": "No volver a mostrar",
+  "@identityVerificationDialogDoNotShowAgain": {
+    "description": "Salud — casilla para omitir el aviso y pasar directo a Cl@ve la próxima vez."
+  },
+  "identityVerificationDialogBack": "Volver",
+  "@identityVerificationDialogBack": {
+    "description": "Salud — acción de salir de la consulta sin elevar el nivel."
+  },
+  "identityVerificationDialogContinue": "Acceder a cl@ve",
+  "@identityVerificationDialogContinue": {
+    "description": "Salud — acción de ir a Cl@ve a identificarse de nuevo."
+  },
+  "identityVerificationCompletedMessage": "Verificación completada",
+  "@identityVerificationCompletedMessage": {
+    "description": "Snackbar de éxito al terminar la elevación del nivel de seguridad con Cl@ve (Figma 45536:38213)."
+  },
+  "identityVerificationSwitchedMessage": "Te has identificado con otra persona. Se ha cerrado la sesión anterior.",
+  "@identityVerificationSwitchedMessage": {
+    "description": "Snackbar informativo cuando, al elevar el nivel en Cl@ve, se identifica una persona distinta y la sesión pasa a ser suya (JCCMEC-278)."
+  },
+  "myDataHealthLevelRequiredMessage": "El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.",
+  "@myDataHealthLevelRequiredMessage": {
+    "description": "Salud — bloqueo por nivel de autenticación insuficiente para datos de salud."
+  },
+  "myDataHealthLevelUnverifiedMessage": "No ha sido posible comprobar su nivel de acceso, por lo que no se pueden mostrar sus citas hospitalarias. Pulse «Continuar» para reiniciar la sesión.",
+  "@myDataHealthLevelUnverifiedMessage": {
+    "description": "Salud — el nivel de autenticación no se ha podido leer del token."
+  },
+  "myDataHealthLevelElevateAction": "Continuar",
+  "@myDataHealthLevelElevateAction": {
+    "description": "Salud — acción para volver a identificarse con un método más seguro."
+  },
+  "myDataHealthLevelStillInsufficientMessage": "El método de identificación utilizado no alcanza el nivel de acceso requerido. Pulse «Continuar» e identifíquese con certificado digital o DNI electrónico.",
+  "@myDataHealthLevelStillInsufficientMessage": {
+    "description": "Salud — la elevación se completó pero el nivel sigue siendo insuficiente."
+  },
+  "myDataHealthLevelElevationFailedMessage": "No ha sido posible elevar su nivel de acceso. Inténtelo de nuevo.",
+  "@myDataHealthLevelElevationFailedMessage": {
+    "description": "Salud — la elevación de nivel falló por un error."
   },
   "myDataHealthLoadMoreAppointments": "Cargar más citas",
   "@myDataHealthLoadMoreAppointments": {
@@ -4815,7 +5007,7 @@
   "@gestionAportarDocumentacionSeleccionarButton": {
     "description": "Botón para abrir el selector de ficheros."
   },
-  "gestionAportarDocumentacionRegistrarButton": "Enviar documentos",
+  "gestionAportarDocumentacionRegistrarButton": "Enviar documentos aportados",
   "@gestionAportarDocumentacionRegistrarButton": {
     "description": "Botón para registrar los documentos aportados."
   },
@@ -4915,11 +5107,11 @@
   "@gestionRegistrosCardDateLabel": {
     "description": "Etiqueta de fecha en las tarjetas de entradas y salidas de registro."
   },
-  "gestionRegistrosConsejeriaOrigenLabel": "CONSERJERÍA DE ORIGEN",
+  "gestionRegistrosConsejeriaOrigenLabel": "CONSEJERÍA DE ORIGEN",
   "@gestionRegistrosConsejeriaOrigenLabel": {
     "description": "Etiqueta del campo consejería de origen (salidas)."
   },
-  "gestionRegistrosConsejeriaDestinoLabel": "CONSERJERÍA DE DESTINO",
+  "gestionRegistrosConsejeriaDestinoLabel": "CONSEJERÍA DE DESTINO",
   "@gestionRegistrosConsejeriaDestinoLabel": {
     "description": "Etiqueta del campo consejería de destino (entradas)."
   },
@@ -5127,11 +5319,11 @@
   "@gestionNotificacionesAltaSaveButton": {
     "description": "Etiqueta del botón principal sticky de la pantalla de activación."
   },
-  "gestionNotificacionesAltaInfoTitle": "Datos de contacto",
+  "gestionNotificacionesAltaInfoTitle": "Saber más sobre los datos de Mis notificaciones",
   "@gestionNotificacionesAltaInfoTitle": {
     "description": "Título del bottom sheet informativo de la pantalla de activación."
   },
-  "gestionNotificacionesAltaInfoBody": "Indica un teléfono móvil o un correo electrónico para recibir avisos de notificaciones.",
+  "gestionNotificacionesAltaInfoBody": "Esta información de contacto se utilizará únicamente para avisarte de que tienes una nueva notificación electrónica.\n\nPuedes modificar los datos en cualquier momento. Después los cambios se aplicarán a las nuevas notificaciones.",
   "@gestionNotificacionesAltaInfoBody": {
     "description": "Cuerpo del bottom sheet informativo de la pantalla de activación."
   },
@@ -5231,7 +5423,7 @@
   "@mainTabAgenda": {
     "description": "Etiqueta de la pestaña Agenda en la barra de navegación inferior."
   },
-  "mainTabRecommendations": "Recomendados",
+  "mainTabRecommendations": "Para mí",
   "@mainTabRecommendations": {
     "description": "Etiqueta de la pestaña Recomendados en la barra de navegación inferior."
   },
@@ -5785,7 +5977,7 @@
   "@homeNewsSectionTitle": {
     "description": "Home — título de la sección Mis novedades."
   },
-  "homeMyDataAccessesTitle": "Accesos “Mis datos”",
+  "homeMyDataAccessesTitle": "Mis datos",
   "@homeMyDataAccessesTitle": {
     "description": "Home — título de la sección de accesos rápidos a Mis datos."
   },
@@ -5833,15 +6025,15 @@
       "count": { "type": "int" }
     }
   },
-  "homeRecommendedProceduresTitle": "Trámites recomendados",
+  "homeRecommendedProceduresTitle": "Para mí",
   "@homeRecommendedProceduresTitle": {
     "description": "Home — título de la sección de trámites recomendados."
   },
-  "homeGoToRecommendationsButton": "Ir a recomendaciones",
+  "homeGoToRecommendationsButton": "Mostrar todas mis recomendaciones",
   "@homeGoToRecommendationsButton": {
     "description": "Home — botón que navega a la pantalla de recomendaciones."
   },
-  "homeCardsFabLabel": "Carnets",
+  "homeCardsFabLabel": "Mis carnets",
   "@homeCardsFabLabel": {
     "description": "Home — etiqueta del botón flotante de carnets digitales."
   },
@@ -5898,6 +6090,26 @@
   "helpFaqIntro": "Resuelve las dudas más habituales sobre Espacio ciudadano.",
   "@helpFaqIntro": {
     "description": "Ayuda y contacto — introducción al listado de preguntas frecuentes."
+  },
+  "faqCategoryAccess": "Acceso",
+  "@faqCategoryAccess": {
+    "description": "FAQ — categoría de preguntas sobre acceso."
+  },
+  "faqCategoryMyData": "Mis datos",
+  "@faqCategoryMyData": {
+    "description": "FAQ — categoría de preguntas sobre datos personales."
+  },
+  "faqCategoryManagements": "Mis gestiones y notificaciones",
+  "@faqCategoryManagements": {
+    "description": "FAQ — categoría de preguntas sobre gestiones y notificaciones."
+  },
+  "faqCategoryAgenda": "Agenda",
+  "@faqCategoryAgenda": {
+    "description": "FAQ — categoría de preguntas sobre agenda."
+  },
+  "faqCategoryPopulation": "Registro de población",
+  "@faqCategoryPopulation": {
+    "description": "FAQ — categoría de preguntas sobre registro de población."
   },
   "helpContactGuidesIntro": "Consulta las guías disponibles para resolver tus dudas paso a paso.",
   "@helpContactGuidesIntro": {
@@ -6187,7 +6399,7 @@
   "@legalSearchCloseTooltip": {
     "description": "Páginas legales — tooltip del botón para cerrar la búsqueda en la barra superior."
   },
-  "privacyResponsibleTitle": "¿Quién es responsable del tratamiento de datos?",
+  "privacyResponsibleTitle": "¿Quién es el responsable del tratamiento?",
   "@privacyResponsibleTitle": {
     "description": "Protección de datos — título de la sección del responsable del tratamiento."
   },
@@ -6199,23 +6411,23 @@
   "@privacyEmailCopied": {
     "description": "Protección de datos — aviso mostrado cuando no se puede abrir el correo y se copia la dirección."
   },
-  "privacyResponsibleIntro": "La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:",
+  "privacyResponsibleIntro": "1. La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:",
   "@privacyResponsibleIntro": {
     "description": "Protección de datos — párrafo introductorio del responsable del tratamiento."
   },
-  "privacyResponsibleItemProfile": "Información del perfil de usuario.",
+  "privacyResponsibleItemProfile": "Visualización de las notificaciones y registro",
   "@privacyResponsibleItemProfile": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemVisualizations": "Visualización de datos seleccionados de la Administración regional y de otros temas de interés.",
+  "privacyResponsibleItemVisualizations": "Visualización de los datos seleccionados de la Administración regional y de la Administración General del Estado",
   "@privacyResponsibleItemVisualizations": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemRecommendations": "Recomendaciones personalizadas según los hechos vitales indicados.",
+  "privacyResponsibleItemRecommendations": "Recomendaciones realizadas en base a los hechos vitales marcados.",
   "@privacyResponsibleItemRecommendations": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleItemDownloads": "Descargas de los carnés seleccionados.",
+  "privacyResponsibleItemDownloads": "Descargas de los carnés seleccionados",
   "@privacyResponsibleItemDownloads": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
@@ -6223,19 +6435,19 @@
   "@privacyResponsibleItemAgenda": {
     "description": "Protección de datos — elemento de la lista de servicios del responsable."
   },
-  "privacyResponsibleOrgParagraph": "Tras acceder a una de las opciones disponibles en Espacio ciudadano, el órgano u organismo responsable del trámite o procedimiento será también el responsable del tratamiento de los datos correspondientes.",
+  "privacyResponsibleOrgParagraph": "Una vez se seleccione cada una de las opciones proporcionadas por Espacio Ciudadano, el responsable del tratamiento será cada uno de los órganos y organismos competentes en ese procedimiento u hecho administrativo.",
   "@privacyResponsibleOrgParagraph": {
     "description": "Protección de datos — párrafo sobre los órganos responsables de cada opción."
   },
-  "privacyResponsibleContactIntro": "Para contactar con el responsable, puedes hacelo mediante:",
+  "privacyResponsibleContactIntro": "Los datos de contacto de este responsable son los siguientes:",
   "@privacyResponsibleContactIntro": {
     "description": "Protección de datos — introducción de los datos de contacto del responsable."
   },
-  "privacyResponsibleContactAddressLabel": "Dirección postal\n",
+  "privacyResponsibleContactAddressLabel": "Dirección Postal:\n",
   "@privacyResponsibleContactAddressLabel": {
     "description": "Protección de datos — etiqueta en negrita de la dirección postal del responsable (termina en salto de línea)."
   },
-  "privacyResponsibleContactAddressValue": "Viceconsejería de Administración Local y Coordinación Administrativa\nAvda. de Portugal s/n\n45071 Toledo\n\nCorreo electrónico\nvicealyca@jccm.es",
+  "privacyResponsibleContactAddressValue": "Dirección Gerencia de la Agencia de Transformación Digital de Castilla-La Mancha\nEdificio CEMAR\nPlaza de Grecia, S/N\n45071 Toledo\n\nDirección de correo electrónico: direcciongerenciaatd@jccm.es",
   "@privacyResponsibleContactAddressValue": {
     "description": "Protección de datos — bloque con la dirección postal y el correo del responsable."
   },
@@ -6453,6 +6665,14 @@
   "@legalNoticeHeading": {
     "description": "Aviso legal — encabezado H1 de la página."
   },
+  "legalNoticeOfficialDescription": "Consulta el Aviso Legal completo y actualizado en el portal oficial de Espacio Ciudadano.",
+  "@legalNoticeOfficialDescription": {
+    "description": "Aviso legal — descripción que dirige al documento oficial."
+  },
+  "legalNoticeOfficialAction": "Abrir Aviso Legal oficial",
+  "@legalNoticeOfficialAction": {
+    "description": "Aviso legal — acción para abrir el documento oficial."
+  },
   "supportErrorSubmitUnauthorized": "No tienes permisos para enviar el formulario de soporte.",
   "@supportErrorSubmitUnauthorized": {
     "description": "Error al enviar el formulario de soporte sin permisos (401/403)."
@@ -6521,5 +6741,47 @@
   "biometricAccessDialogTitle": "¿Quieres activar el acceso rápido con huella dactilar o reconocimiento facial?",
   "biometricAccessDialogDescription": "Podrás acceder a la aplicación de forma más rápida sin tener que autentificarte cada vez. Para proteger tus datos te pediremos que vuelvas a autentificarte cada cierto tiempo.",
   "biometricAccessDialogCancel": "Completar más tarde",
-  "biometricAccessDialogConfirm": "Activar"
+  "biometricAccessDialogConfirm": "Activar",
+  "appUpdateRequiredTitle": "Actualización necesaria",
+  "@appUpdateRequiredTitle": {
+    "description": "Título del aviso a pantalla completa cuando la versión instalada ya no tiene soporte y es obligatorio actualizar."
+  },
+  "appUpdateRequiredBody": "Para seguir usando la aplicación necesitas instalar la versión {version}. Las versiones anteriores ya no reciben soporte.",
+  "@appUpdateRequiredBody": {
+    "description": "Cuerpo del aviso de actualización obligatoria.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateRecommendedTitle": "Hay una nueva versión disponible",
+  "@appUpdateRecommendedTitle": {
+    "description": "Título del aviso cuando existe una versión más nueva pero actualizar es opcional."
+  },
+  "appUpdateRecommendedBody": "La versión {version} incluye mejoras y correcciones. Puedes actualizar ahora o hacerlo más tarde.",
+  "@appUpdateRecommendedBody": {
+    "description": "Cuerpo del aviso de actualización recomendada.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateAction": "Actualizar",
+  "@appUpdateAction": {
+    "description": "Botón principal del aviso de actualización: abre la ficha de la app en la tienda."
+  },
+  "appUpdateLater": "Ahora no",
+  "@appUpdateLater": {
+    "description": "Botón secundario del aviso de actualización recomendada: lo cierra y no vuelve a avisar de esa versión."
+  },
+  "appUpdateStoreUnavailable": "No se ha podido abrir la tienda de aplicaciones. Inténtalo de nuevo más tarde.",
+  "@appUpdateStoreUnavailable": {
+    "description": "Error mostrado dentro del aviso cuando el sistema no consigue abrir la tienda."
+  },
+  "appUpdateA11yDialog": "Aviso de actualización de la aplicación",
+  "@appUpdateA11yDialog": {
+    "description": "Etiqueta accesible del aviso de actualización, anunciada por el lector de pantalla al aparecer."
+  }
 }

@@ -129,6 +129,91 @@ void main() {
       expect(claims.effectivePersonIdentifier, '99999999R');
       expect(claims.effectiveDisplayName, isNull);
     });
+
+    test('does not treat the Cl@ve representative scope as an active representation', () {
+      final claims = JwtClaims.fromMap(const {
+        'scope': 'openid profile clave_representado offline_access',
+      });
+
+      expect(claims.isRepresentative, isFalse);
+    });
+  });
+
+  group('JwtClaims authentication level', () {
+    // Los dos ejemplos del documento funcional de citas hospitalarias, con los
+    // identificadores sustituidos: lo que importa es la forma del token y la
+    // pareja authNLevel/idpSelected.
+    test('reads the level and the identity provider from a Cl@ve PIN token', () {
+      final claims = JwtClaims.fromMap(const {
+        'authNLevel': 'low',
+        'idpSelected': 'SEGSOC',
+      });
+
+      expect(claims.authNLevelRaw, 'low');
+      expect(claims.idpSelected, 'SEGSOC');
+    });
+
+    test('reads the level from a certificate token', () {
+      final claims = JwtClaims.fromMap(const {
+        'authNLevel': 'substantial',
+        'idpSelected': 'AFIRMA',
+      });
+
+      expect(claims.authNLevelRaw, 'substantial');
+      expect(claims.idpSelected, 'AFIRMA');
+    });
+
+    test('leaves the level null when the token does not carry the claim', () {
+      final claims = JwtClaims.fromMap(const {'sub': 'citizen'});
+
+      expect(claims.authNLevelRaw, isNull);
+      expect(claims.idpSelected, isNull);
+    });
+  });
+
+  group('JwtClaims.identifiesSamePersonAs', () {
+    // El caso que hace que comparar `sub` no valga: elevar el nivel cambia de
+    // proveedor de identidad, y con él el sujeto, sin cambiar de ciudadano.
+    test('matches the same document across different subjects', () {
+      final before = JwtClaims.fromMap(const {'sub': 'seg-social-subject', 'PersonIdentifier': '99999999R'});
+      final after = JwtClaims.fromMap(const {'sub': 'afirma-subject', 'PersonIdentifier': '99999999r'});
+
+      expect(before.identifiesSamePersonAs(after), isTrue);
+    });
+
+    test('rejects a different document', () {
+      final before = JwtClaims.fromMap(const {'PersonIdentifier': '99999999R'});
+      final after = JwtClaims.fromMap(const {'PersonIdentifier': '00000000T'});
+
+      expect(before.identifiesSamePersonAs(after), isFalse);
+    });
+
+    test('falls back to sub_alt when there is no document', () {
+      final before = JwtClaims.fromMap(const {'sub_alt': 'PER9999927'});
+      final after = JwtClaims.fromMap(const {'sub_alt': 'PER9999927'});
+
+      expect(before.identifiesSamePersonAs(after), isTrue);
+    });
+
+    test('refuses to claim a match when either side has no identifier', () {
+      final identified = JwtClaims.fromMap(const {'PersonIdentifier': '99999999R'});
+      final anonymous = JwtClaims.fromMap(const {'sub': 'citizen'});
+
+      expect(identified.identifiesSamePersonAs(anonymous), isFalse);
+      expect(anonymous.identifiesSamePersonAs(identified), isFalse);
+      expect(anonymous.identifiesSamePersonAs(anonymous), isFalse);
+    });
+
+    test('treats entering or leaving a representation as a different identity', () {
+      final own = JwtClaims.fromMap(const {'PersonIdentifier': 'Q0000000J'});
+      final representing = JwtClaims.fromMap(const {
+        'PersonIdentifier': '99999999R',
+        'idagente_representado': 'PJU0349051',
+        'nifRepresentado': 'Q0000000J',
+      });
+
+      expect(own.identifiesSamePersonAs(representing), isFalse);
+    });
   });
 }
 

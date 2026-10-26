@@ -4,12 +4,12 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 class MyDataDisabledNavigationCard extends StatelessWidget {
   const MyDataDisabledNavigationCard({
     required this.title,
-    required this.description,
     super.key,
+    this.description,
   });
 
   final String title;
-  final String description;
+  final String? description;
 
   @override
   Widget build(final BuildContext context) {
@@ -17,7 +17,7 @@ class MyDataDisabledNavigationCard extends StatelessWidget {
 
     return Semantics(
       enabled: false,
-      label: '$title. $description',
+      label: description == null ? title : '$title. $description',
       child: ExcludeSemantics(
         child: DecoratedBox(
           decoration: BoxDecoration(
@@ -50,13 +50,15 @@ class MyDataDisabledNavigationCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: AppTypography.leadingMedium.copyWith(color: AppColors.textDisabled),
                           ),
-                          const SizedBox(height: AppDimensions.space4),
-                          Text(
-                            description,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTypography.smallRegular.copyWith(color: AppColors.textDisabled),
-                          ),
+                          if (description case final text?) ...[
+                            const SizedBox(height: AppDimensions.space4),
+                            Text(
+                              text,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTypography.smallRegular.copyWith(color: AppColors.textDisabled),
+                            ),
+                          ],
                         ],
                       ),
                     ),

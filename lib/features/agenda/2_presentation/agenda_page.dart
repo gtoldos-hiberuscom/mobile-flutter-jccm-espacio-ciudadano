@@ -13,8 +13,11 @@ import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointme
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/usecases/refresh_agenda_events_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_appointments_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/2_presentation/providers/agenda_usecase_providers.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_elevation_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/identity_verification_prompt.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment_access.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -30,6 +33,10 @@ class AgendaPage extends ConsumerStatefulWidget {
 class _AgendaPageState extends ConsumerState<AgendaPage> {
   _AgendaFilter _selectedFilter = _AgendaFilter.all;
   bool _refreshing = false;
+
+  /// La elevación en curso la pidió esta pantalla. El desenlace es una señal
+  /// de un solo uso: sin esta marca, Agenda se lo quitaría a Mis datos.
+  bool _elevationRequested = false;
 
   /// Pide al backend que consulte los sistemas origen (`eventos/refrescar`) y
   /// después recarga los eventos. Si el refresco falla se recarga igualmente
@@ -81,15 +88,87 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
     }
   }
 
+  Future<void> _showInfoSheet() async {
+    final l10n = AppLocalizations.of(context);
+    await AppInfoSheet.show(
+      context: context,
+      title: l10n.agendaInfoSheetTitle,
+      bodyText: l10n.agendaInfoSheetBody,
+      footerText: l10n.agendaInfoSheetFooter,
+      actionLabel: l10n.agendaInfoSheetMoreInformation,
+      actionIcon: Icons.north_east,
+      // Lleva a Ayuda y contacto, dentro de la app: no es un enlace externo.
+      onActionPressed: () {
+        Navigator.of(context).pop();
+        unawaited(context.push<void>(Routes.helpContact));
+      },
+    );
+  }
+
+  /// Explica por qué hace falta verificar y, si el ciudadano acepta, lanza la
+  /// elevación con Cl@ve. [message] es el motivo de un intento anterior.
+  Future<void> _verifyIdentity({final String? message}) async {
+    final accepted = await confirmIdentityVerification(context, ref, message: message);
+    if (!accepted || !mounted) {
+      return;
+    }
+    _elevationRequested = true;
+    final notifier = ref.read(elevationProvider.notifier)..acknowledge();
+    // El notifier lleva su propia guarda de reentrada y traza sus fallos.
+    unawaited(notifier.elevate(minimum: kHospitalAppointmentsMinimumLevel));
+  }
+
+  /// Desenlace de una elevación pedida desde aquí. Con éxito, la agenda se
+  /// vuelve a pedir sola (su provider observa el nivel) y el aviso desaparece.
+  void _handleElevationOutcome(final ElevationOutcome outcome) {
+    _elevationRequested = false;
+    ref.read(elevationProvider.notifier).acknowledge();
+    final l10n = AppLocalizations.of(context);
+    switch (outcome) {
+      case ElevationOutcome.succeeded:
+        AppAlertSnackbar.show(context, message: l10n.identityVerificationCompletedMessage, severity: AppAlertSeverity.success);
+      case ElevationOutcome.stillInsufficient:
+        unawaited(_verifyIdentity(message: l10n.myDataHealthLevelStillInsufficientMessage));
+      case ElevationOutcome.failed:
+        unawaited(_verifyIdentity(message: l10n.myDataHealthLevelElevationFailedMessage));
+      // Otra persona: la sesión ya es suya y entra como en un login nuevo.
+      case ElevationOutcome.identitySwitched:
+        AppAlertSnackbar.show(context, message: l10n.identityVerificationSwitchedMessage);
+        context.go(Routes.home);
+      // Cancelar deja el aviso donde estaba.
+      case ElevationOutcome.cancelled:
+        break;
+    }
+  }
+
   @override
   Widget build(final BuildContext context) {
     final agenda = ref.watch(agendaAppointmentsProvider);
+    final l10n = AppLocalizations.of(context);
+    ref.listen<ElevationState>(elevationProvider, (final previous, final next) {
+      final outcome = next.outcome;
+      if (!_elevationRequested || outcome == null || outcome == previous?.outcome) {
+        return;
+      }
+      _handleElevationOutcome(outcome);
+    });
 
     return Scaffold(
       appBar: AppNavBar(
-        title: AppLocalizations.of(context).agendaPageTitle,
+        title: l10n.agendaPageTitle,
         isLoggedIn: true,
         showNotifications: false,
+        actions: [
+          IconButton(
+            constraints: const BoxConstraints.tightFor(
+              width: AppDimensions.minTouchTarget,
+              height: AppDimensions.minTouchTarget,
+            ),
+            icon: const AppIcon(AppIcons.info, color: AppColors.textPrimary),
+            onPressed: () => unawaited(_showInfoSheet()),
+            tooltip: l10n.agendaInfoTooltip,
+          ),
+        ],
         profileInitials: authenticatedProfileInitials(ref),
         showLeading: false,
         onAvatarTap: () => showAuthenticatedProfileMenu(context: context, ref: ref),
@@ -148,6 +227,15 @@ class _AgendaPageState extends ConsumerState<AgendaPage> {
         for (final source in AgendaAppointmentSource.values.where(state.failedSources.contains)) ...[
           const SizedBox(height: AppDimensions.space8),
           _AgendaPartialLoadNotice(source: source),
+        ],
+        // Con la agenda sin autorizar, el aviso de consentimiento va primero y
+        // este esperaría: verificar no serviría de nada todavía.
+        if (state.hasJccmAuthorization && state.hospitalAppointmentsLocked) ...[
+          const SizedBox(height: AppDimensions.space8),
+          _AgendaHospitalLockedNotice(
+            isVerifying: ref.watch(elevationProvider.select((final elevation) => elevation.isElevating)),
+            onVerify: () => unawaited(_verifyIdentity()),
+          ),
         ],
         if (state.healthCipMissing) ...[
           const SizedBox(height: AppDimensions.space8),
@@ -412,21 +500,36 @@ class _AgendaAppointmentCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final date = appointment.dateTime;
-    final detail = appointment.detail ?? appointment.center ?? '';
+    // Un evento cuyo mensaje llega por párrafos etiquetados se pinta como en
+    // la web: título del evento, intro y una fila por etiqueta (JCCMEC-256).
+    // Las citas de SESCAM conservan la jerarquía de Figma, sin el centro
+    // (JCCMEC-274).
+    final hasStructuredDetails = appointment.details.isNotEmpty;
+    final isHealthLayout = appointment.kind == AgendaAppointmentKind.health && !hasStructuredDetails;
+    final legacyDetail = appointment.detail ?? appointment.center?.trim() ?? '';
+    final String? secondaryText;
+    if (hasStructuredDetails || appointment.kind == AgendaAppointmentKind.credential) {
+      secondaryText = null;
+    } else if (isHealthLayout) {
+      secondaryText = appointment.detail;
+    } else {
+      secondaryText = legacyDetail;
+    }
 
     return AppAgendaInfoCard(
       type: switch (appointment.kind) {
         AgendaAppointmentKind.notification => AppAgendaInfoCardType.notification,
-        AgendaAppointmentKind.health => AppAgendaInfoCardType.health,
+        AgendaAppointmentKind.health || AgendaAppointmentKind.hospital => AppAgendaInfoCardType.health,
         AgendaAppointmentKind.credential => AppAgendaInfoCardType.credential,
       },
       day: date.day.toString(),
       weekday: l10n.commonWeekdayName(_weekdayKey(date.weekday)),
       time: appointment.kind == AgendaAppointmentKind.credential ? null : _formatAppointmentTime(date),
-      title: appointment.kind == AgendaAppointmentKind.health ? appointment.description : appointment.title,
-      channel: appointment.kind == AgendaAppointmentKind.health ? _appointmentChannel(l10n, appointment.channel, detail) : null,
-      primaryText: appointment.kind == AgendaAppointmentKind.health ? appointment.title : appointment.description,
-      secondaryText: appointment.kind == AgendaAppointmentKind.credential ? null : detail,
+      title: isHealthLayout ? appointment.description : appointment.title,
+      channel: isHealthLayout ? _appointmentChannel(l10n, appointment.channel, legacyDetail) : null,
+      primaryText: isHealthLayout ? appointment.title : appointment.description,
+      secondaryText: secondaryText,
+      details: appointment.details,
     );
   }
 }
@@ -480,6 +583,81 @@ class _AgendaHealthCipMissingNotice extends StatelessWidget {
       message: AppLocalizations.of(context).agendaHealthCipMissing,
       size: AppAlertContextualSize.small,
       announce: true,
+    );
+  }
+}
+
+/// Aviso de citas hospitalarias ocultas — Figma 45049:59928.
+///
+/// Solo se pinta cuando el nivel de la sesión no alcanza el que exigen las
+/// citas hospitalarias; con nivel suficiente no hay nada que avisar (Figma
+/// 45049:60339). «Verificar» lleva a Cl@ve, fuera de la app, de ahí el icono.
+class _AgendaHospitalLockedNotice extends StatelessWidget {
+  const _AgendaHospitalLockedNotice({required this.isVerifying, required this.onVerify});
+
+  final bool isVerifying;
+  final VoidCallback onVerify;
+
+  @override
+  Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final usesLargeText = MediaQuery.textScalerOf(context).scale(1) > 1.3;
+    final message = Row(
+      children: [
+        const ExcludeSemantics(child: AppIcon(AppIcons.lock, color: AppColors.primaryDark)),
+        const SizedBox(width: AppDimensions.space8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Semantics(
+                header: true,
+                headingLevel: 2,
+                child: Text(
+                  l10n.agendaHospitalLockedTitle,
+                  style: AppTypography.bodyRegular.copyWith(color: AppColors.primaryDark),
+                ),
+              ),
+              Text(
+                l10n.agendaHospitalLockedBody,
+                style: AppTypography.smallRegular.copyWith(color: AppColors.primaryDark),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+    final button = AppButton(
+      label: l10n.agendaHospitalLockedAction,
+      size: AppButtonSize.small,
+      trailingIcon: AppIcons.openInNew,
+      isExternalLink: true,
+      isLoading: isVerifying,
+      onPressed: onVerify,
+    );
+
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.space4, vertical: AppDimensions.space8),
+        child: usesLargeText
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  message,
+                  const SizedBox(height: AppDimensions.space8),
+                  Align(alignment: AlignmentDirectional.centerEnd, child: button),
+                ],
+              )
+            : Row(
+                children: [
+                  Expanded(child: message),
+                  const SizedBox(width: AppDimensions.space8),
+                  button,
+                ],
+              ),
+      ),
     );
   }
 }

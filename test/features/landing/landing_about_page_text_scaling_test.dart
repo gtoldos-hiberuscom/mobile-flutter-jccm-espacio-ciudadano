@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config.dart';
+import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_about_page.dart';
 import 'package:jccm_espacio_ciudadano/features/landing/2_presentation/landing_notifier.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -9,7 +11,12 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// incluido el párrafo descriptivo, y el título de la barra no se recorta.
 void main() {
   Widget buildApp({required final TextScaler textScaler}) => ProviderScope(
-    overrides: [landingProvider.overrideWith(_StaticLandingNotifier.new)],
+    overrides: [
+      landingProvider.overrideWith(_StaticLandingNotifier.new),
+      // La página lee el flag del modo demostración; apagado, como en producción,
+      // la barra inferior conserva el único botón que miden estos tests.
+      appConfigProvider.overrideWithValue(const AppConfig.fromMap({'DEMO_MODE_ENABLED': 'false'})),
+    ],
     child: MaterialApp(
       locale: const Locale('es'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,

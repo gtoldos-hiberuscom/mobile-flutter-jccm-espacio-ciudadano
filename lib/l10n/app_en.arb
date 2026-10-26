@@ -41,6 +41,50 @@
   "@landingHelpLink": {
     "description": "Text link that navigates to the access help screen."
   },
+  "landingDemoButton": "Try the demo",
+  "@landingDemoButton": {
+    "description": "Discreet link on the landing screen that opens the demo-mode confirmation sheet (for store reviewers): the app with fictitious data, no Cl@ve."
+  },
+  "demoConfirmTitle": "Demo mode",
+  "@demoConfirmTitle": {
+    "description": "Title of the confirmation sheet shown before entering demo mode."
+  },
+  "demoConfirmBody": "You will see the app with the fictitious data of an invented person, without signing in with Cl@ve. Nothing you do is sent to or stored in any real service. Sign out to leave.",
+  "@demoConfirmBody": {
+    "description": "Body of the demo-mode confirmation sheet: explains that the data is fictitious and nothing is sent."
+  },
+  "demoConfirmEnter": "Enter the demo",
+  "@demoConfirmEnter": {
+    "description": "Primary button of the demo-mode confirmation sheet."
+  },
+  "demoConfirmBack": "Back",
+  "@demoConfirmBack": {
+    "description": "Secondary button of the demo-mode confirmation sheet; closes it without entering."
+  },
+  "demoConfirmPersistedSessionBody": "There is a session saved on this device with quick access. Entering the demo will close it first: to go back to your space you will need to sign in with Cl@ve again.",
+  "@demoConfirmPersistedSessionBody": {
+    "description": "Extra paragraph of the demo-mode confirmation sheet when a real session is saved on the device (quick access): warns that entering will close it."
+  },
+  "demoConfirmCloseSessionAndEnter": "Close the saved session and enter",
+  "@demoConfirmCloseSessionAndEnter": {
+    "description": "Primary button of the demo-mode confirmation sheet when a session is saved: closes it and enters the demo."
+  },
+  "demoConfirmCodeLabel": "Access code",
+  "@demoConfirmCodeLabel": {
+    "description": "Label of the code field in the demo-mode confirmation sheet. The code is given in the store review notes."
+  },
+  "demoConfirmCodeError": "Incorrect code. Check the demo access code.",
+  "@demoConfirmCodeError": {
+    "description": "Inline error of the code field in the demo-mode sheet when the code does not match."
+  },
+  "demoBannerLabel": "DEMO",
+  "@demoBannerLabel": {
+    "description": "Text of the diagonal ribbon painted over the whole app while the session is the demo one. Very short: it goes on a ribbon."
+  },
+  "demoPersistedSessionNotice": "There is a session saved on this device. Sign in with quick access and sign out before using the demo.",
+  "@demoPersistedSessionNotice": {
+    "description": "Notice when trying to enter the demo while a real session is saved on the device (quick access): it must be closed first."
+  },
   "landingHelpPageTitle": "How to access",
   "@landingHelpPageTitle": {
     "description": "AppBar title of the access help screen."
@@ -3369,7 +3413,8 @@
   "myDataVehiclesServiceUnavailableMessage": "The service for consulting your vehicles is unavailable. You can reload the information or try again later.",
   "myDataHousingAddressServiceUnavailableMessage": "The service for consulting your address details is unavailable. You can reload the information or try again later.",
   "myDataHousingRealEstateServiceUnavailableMessage": "The service for consulting your real-estate assets is unavailable. You can reload the information or try again later.",
-  "myDataHealthAppointmentsServiceUnavailableMessage": "The service for consulting your health appointments is unavailable. You can reload the information or try again later.",
+  "myDataHealthAppointmentsServiceUnavailableMessage": "The primary care appointments service is currently unavailable. Please try again later.",
+  "myDataHealthHospitalAppointmentsServiceUnavailableMessage": "The hospital appointments service is currently unavailable. Please try again later.",
   "familiaNumerosaRetry": "Retry",
   "@familiaNumerosaRetry": {
     "description": "Familia numerosa detail — retry button label."
@@ -4603,9 +4648,121 @@
   "@myDataHealthScopeHospital": {
     "description": "Care scope selector in Health: hospital care."
   },
-  "myDataHealthHospitalAppointmentsTitle": "Hospital appointments",
+  "myDataHealthHospitalAppointmentsTitle": "Hospital care appointments",
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Title of the hospital appointments block."
+  },
+  "myDataHealthPrimaryCareNavTitle": "Primary care appointments",
+  "@myDataHealthPrimaryCareNavTitle": {
+    "description": "Health — menu card leading to primary care appointments."
+  },
+  "myDataHealthHospitalNavTitle": "Hospital care appointments",
+  "@myDataHealthHospitalNavTitle": {
+    "description": "Health — menu card leading to hospital appointments."
+  },
+  "myDataHealthHospitalNavVerificationRequired": "Your hospital data is protected. Verify your identity to access it.",
+  "@myDataHealthHospitalNavVerificationRequired": {
+    "description": "Health — note under the hospital appointments card, with a lock, when the current identification level is not enough to view them."
+  },
+  "myDataHealthHospitalLinkTitle": "My hospital appointments",
+  "@myDataHealthHospitalLinkTitle": {
+    "description": "Health — link from My data to the SESCAM hospital appointments screen."
+  },
+  "myDataHealthHospitalLinkDescription": "Check the information about your SESCAM hospital appointments.",
+  "@myDataHealthHospitalLinkDescription": {
+    "description": "Health — description of the hospital appointments link."
+  },
+  "myDataHealthHospitalContactHint": "If any of the data is out of date, you must contact SESCAM.",
+  "@myDataHealthHospitalContactHint": {
+    "description": "Health — notice that hospital data is maintained by SESCAM."
+  },
+  "myDataHealthHospitalPendingTab": "Upcoming appointments",
+  "@myDataHealthHospitalPendingTab": {
+    "description": "Health — upcoming hospital appointments tab."
+  },
+  "myDataHealthHospitalPastTab": "Past appointments",
+  "@myDataHealthHospitalPastTab": {
+    "description": "Health — past hospital appointments tab."
+  },
+  "myDataHealthHospitalPendingEmpty": "You have no upcoming hospital appointments.",
+  "@myDataHealthHospitalPendingEmpty": {
+    "description": "Health — message when there are no upcoming hospital appointments."
+  },
+  "myDataHealthHospitalPastEmpty": "You have no past hospital appointments.",
+  "@myDataHealthHospitalPastEmpty": {
+    "description": "Health — message when there are no past hospital appointments."
+  },
+  "myDataHealthHospitalFieldService": "Service",
+  "@myDataHealthHospitalFieldService": {
+    "description": "Health — label for the medical service of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldProvision": "Provision",
+  "@myDataHealthHospitalFieldProvision": {
+    "description": "Health — label for the provision of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldRoom": "Room",
+  "@myDataHealthHospitalFieldRoom": {
+    "description": "Health — label for the room of a hospital appointment."
+  },
+  "myDataHealthHospitalFieldCenter": "Centre",
+  "@myDataHealthHospitalFieldCenter": {
+    "description": "Health — label for the hospital of an appointment."
+  },
+  "myDataHealthHospitalFieldAgenda": "Agenda",
+  "@myDataHealthHospitalFieldAgenda": {
+    "description": "Health — label for the agenda of a hospital appointment."
+  },
+  "myDataHealthCipUnavailable": "CIP unavailable",
+  "@myDataHealthCipUnavailable": {
+    "description": "Health — text shown when the CIP could not be retrieved."
+  },
+  "identityVerificationDialogTitle": "Identity verification",
+  "@identityVerificationDialogTitle": {
+    "description": "Health — title of the notice that the query requires a higher security level."
+  },
+  "identityVerificationDialogBody": "This query requires a higher security level and you need to identify yourself again.",
+  "@identityVerificationDialogBody": {
+    "description": "Health — reason shown in the identity verification notice."
+  },
+  "identityVerificationDialogDoNotShowAgain": "Do not show again",
+  "@identityVerificationDialogDoNotShowAgain": {
+    "description": "Health — checkbox to skip the notice and go straight to Cl@ve next time."
+  },
+  "identityVerificationDialogBack": "Back",
+  "@identityVerificationDialogBack": {
+    "description": "Health — action to leave the query without raising the level."
+  },
+  "identityVerificationDialogContinue": "Go to Cl@ve",
+  "@identityVerificationDialogContinue": {
+    "description": "Health — action to go to Cl@ve and identify again."
+  },
+  "identityVerificationCompletedMessage": "Verification completed",
+  "@identityVerificationCompletedMessage": {
+    "description": "Success snackbar after raising the authentication level with Cl@ve."
+  },
+  "identityVerificationSwitchedMessage": "You signed in as a different person. The previous session has been closed.",
+  "@identityVerificationSwitchedMessage": {
+    "description": "Info snackbar when a different person signs in while raising the authentication level, and the session becomes theirs."
+  },
+  "myDataHealthLevelRequiredMessage": "Your current access level does not meet the application security policy. Press \"Continue\" to restart the session with the required higher access level.",
+  "@myDataHealthLevelRequiredMessage": {
+    "description": "Health — blocked because the authentication level is too low for health data."
+  },
+  "myDataHealthLevelUnverifiedMessage": "Your access level could not be verified, so your hospital appointments cannot be shown. Press \"Continue\" to restart the session.",
+  "@myDataHealthLevelUnverifiedMessage": {
+    "description": "Health — the authentication level could not be read from the token."
+  },
+  "myDataHealthLevelElevateAction": "Continue",
+  "@myDataHealthLevelElevateAction": {
+    "description": "Health — action to sign in again with a stronger method."
+  },
+  "myDataHealthLevelStillInsufficientMessage": "The identification method used does not reach the required access level. Press \"Continue\" and identify yourself with a digital certificate or your electronic ID card.",
+  "@myDataHealthLevelStillInsufficientMessage": {
+    "description": "Health — elevation completed but the level is still insufficient."
+  },
+  "myDataHealthLevelElevationFailedMessage": "Your access level could not be raised. Please try again.",
+  "@myDataHealthLevelElevationFailedMessage": {
+    "description": "Health — the level elevation failed with an error."
   },
   "myDataHealthLoadMoreAppointments": "Load more appointments",
   "@myDataHealthLoadMoreAppointments": {
@@ -5075,11 +5232,11 @@
   "@gestionNotificacionesAltaSaveButton": {
     "description": "Label of the sticky main button on the activation screen."
   },
-  "gestionNotificacionesAltaInfoTitle": "Contact details",
+  "gestionNotificacionesAltaInfoTitle": "Learn more about My notifications contact details",
   "@gestionNotificacionesAltaInfoTitle": {
     "description": "Title of the informative bottom sheet on the activation screen."
   },
-  "gestionNotificacionesAltaInfoBody": "Provide a mobile phone number or an email address to receive notification alerts.",
+  "gestionNotificacionesAltaInfoBody": "This contact information will only be used to notify you that you have received a new electronic notification.\n\nYou can change these details at any time. The changes will apply to new notifications.",
   "@gestionNotificacionesAltaInfoBody": {
     "description": "Body of the informative bottom sheet on the activation screen."
   },
@@ -5841,6 +5998,26 @@
   "@helpFaqIntro": {
     "description": "Help and contact — introduction to the frequently asked questions list."
   },
+  "faqCategoryAccess": "Access",
+  "@faqCategoryAccess": {
+    "description": "FAQ — access questions category."
+  },
+  "faqCategoryMyData": "My data",
+  "@faqCategoryMyData": {
+    "description": "FAQ — personal data questions category."
+  },
+  "faqCategoryManagements": "My requests and notifications",
+  "@faqCategoryManagements": {
+    "description": "FAQ — requests and notifications questions category."
+  },
+  "faqCategoryAgenda": "Calendar",
+  "@faqCategoryAgenda": {
+    "description": "FAQ — calendar questions category."
+  },
+  "faqCategoryPopulation": "Population register",
+  "@faqCategoryPopulation": {
+    "description": "FAQ — population register questions category."
+  },
   "helpContactGuidesIntro": "Browse the available guides to resolve your questions step by step.",
   "@helpContactGuidesIntro": {
     "description": "Help and contact — introduction to the help guides."
@@ -6449,5 +6626,47 @@
   "biometricAccessDialogTitle": "Would you like to enable quick access with fingerprint or facial recognition?",
   "biometricAccessDialogDescription": "You will be able to access the application more quickly without having to authenticate every time. To protect your data, we will ask you to authenticate again periodically.",
   "biometricAccessDialogCancel": "Complete later",
-  "biometricAccessDialogConfirm": "Enable"
+  "biometricAccessDialogConfirm": "Enable",
+  "appUpdateRequiredTitle": "Update required",
+  "@appUpdateRequiredTitle": {
+    "description": "Título del aviso a pantalla completa cuando la versión instalada ya no tiene soporte y es obligatorio actualizar."
+  },
+  "appUpdateRequiredBody": "To keep using the app you need to install version {version}. Earlier versions are no longer supported.",
+  "@appUpdateRequiredBody": {
+    "description": "Cuerpo del aviso de actualización obligatoria.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateRecommendedTitle": "A new version is available",
+  "@appUpdateRecommendedTitle": {
+    "description": "Título del aviso cuando existe una versión más nueva pero actualizar es opcional."
+  },
+  "appUpdateRecommendedBody": "Version {version} includes improvements and fixes. You can update now or later.",
+  "@appUpdateRecommendedBody": {
+    "description": "Cuerpo del aviso de actualización recomendada.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateAction": "Update",
+  "@appUpdateAction": {
+    "description": "Botón principal del aviso de actualización: abre la ficha de la app en la tienda."
+  },
+  "appUpdateLater": "Not now",
+  "@appUpdateLater": {
+    "description": "Botón secundario del aviso de actualización recomendada: lo cierra y no vuelve a avisar de esa versión."
+  },
+  "appUpdateStoreUnavailable": "The app store could not be opened. Please try again later.",
+  "@appUpdateStoreUnavailable": {
+    "description": "Error mostrado dentro del aviso cuando el sistema no consigue abrir la tienda."
+  },
+  "appUpdateA11yDialog": "App update notice",
+  "@appUpdateA11yDialog": {
+    "description": "Etiqueta accesible del aviso de actualización, anunciada por el lector de pantalla al aparecer."
+  }
 }

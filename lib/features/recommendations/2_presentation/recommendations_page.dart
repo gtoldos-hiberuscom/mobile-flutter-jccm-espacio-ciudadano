@@ -94,10 +94,12 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
       return;
     }
     setState(() {
-      _selectedLifeEventFilterIds = selectedIds;
-      if (selectedIds.isEmpty) {
-        _selectedFilter = _RecommendationFilter.all;
-      }
+      // «Desmarcar todos» + «Aplicar filtros» devuelve una selección vacía, que
+      // equivale a no filtrar por hechos vitales: se vuelve a ver todo el
+      // listado. Antes se guardaba el conjunto vacío y se pintaba la lista
+      // vacía con el aviso de «Reiniciar filtro» (JCCMEC-257). La pestaña de
+      // segmento se mantiene: solo se tocan los hechos vitales.
+      _selectedLifeEventFilterIds = selectedIds.isEmpty ? null : selectedIds;
     });
     ref.invalidate(recommendationsProvider(_selectedFilter.segment));
   }
@@ -107,11 +109,8 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
     required final List<RecommendationLifeEventOption> events,
   }) {
     final selectedIds = _selectedLifeEventFilterIds;
-    if (selectedIds == null) {
+    if (selectedIds == null || selectedIds.isEmpty) {
       return recommendations;
-    }
-    if (selectedIds.isEmpty) {
-      return const [];
     }
     final availableIds = events.map((final event) => event.id).toSet();
     final activeIds = selectedIds.intersection(availableIds);
@@ -185,7 +184,10 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
     );
     final recommendations = lifeEventFilteredRecommendations;
     final hasRecommendations = state.recommendations.isNotEmpty;
-    final hasActiveFilters = _selectedFilter != _RecommendationFilter.all || _selectedLifeEventFilterIds != null;
+    final activeLifeEventFilterCount = _activeLifeEventFilterCount(state.selectedLifeEventOptions);
+    // Solo cuenta como filtro activo el que de verdad recorta el listado: una
+    // selección de hechos que ya no existe no debe ofrecer «Reiniciar filtro».
+    final hasActiveFilters = _selectedFilter != _RecommendationFilter.all || activeLifeEventFilterCount > 0;
     final showNoRecommendationsHelper = _selectedFilter == _RecommendationFilter.all && state.hasLifeEventsConsent && !hasRecommendations;
     final showNoFilteredRecommendationsHelper = hasActiveFilters && recommendations.isEmpty;
 
@@ -193,9 +195,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _LifeEventsFilterControls(
-          activeFilterCount: _activeLifeEventFilterCount(
-            state.selectedLifeEventOptions,
-          ),
+          activeFilterCount: activeLifeEventFilterCount,
           onFilter: state.hasConfiguredLifeEvents && state.recommendations.isNotEmpty ? () => unawaited(_openLifeEventFilters(state)) : null,
           onEditLifeEvents: () => unawaited(_openLifeEvents()),
         ),

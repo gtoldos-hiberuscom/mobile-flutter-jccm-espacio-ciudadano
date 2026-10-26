@@ -80,24 +80,24 @@ void main() {
       find.text('Información de protección de datos sobre el tratamiento de datos personales en Espacio Ciudadano', findRichText: true),
       findsNothing,
     );
-    expect(find.text('¿Quién es responsable del tratamiento de datos?', findRichText: true), findsOneWidget);
+    expect(find.text('¿Quién es el responsable del tratamiento?', findRichText: true), findsOneWidget);
     expect(
       find.text(
-        'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:',
+        '1. La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:',
         findRichText: true,
       ),
       findsOneWidget,
     );
-    expect(find.text('Información del perfil de usuario.', findRichText: true), findsOneWidget);
+    expect(find.text('Visualización de las notificaciones y registro', findRichText: true), findsOneWidget);
     expect(find.text('¿Cuál es la denominación y finalidad del tratamiento?', findRichText: true), findsOneWidget);
     expect(find.text('Información de contacto de la Delegada de Protección de Datos', findRichText: true), findsOneWidget);
 
     final firstHeading = tester.widget<RichText>(
-      find.text('¿Quién es responsable del tratamiento de datos?', findRichText: true),
+      find.text('¿Quién es el responsable del tratamiento?', findRichText: true),
     );
     final body = tester.widget<RichText>(
       find.text(
-        'La Viceconsejería de Administración Local y Coordinación Administrativa es responsable del tratamiento de los datos utilizados en los servicios prestados directamente desde el Espacio Ciudadano. Estos servicios son:',
+        '1. La Agencia de Transformación Digital es responsable del tratamiento de datos de los servicios que se prestan directamente desde Espacio Ciudadano y que son los siguientes:',
         findRichText: true,
       ),
     );

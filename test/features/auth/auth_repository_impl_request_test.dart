@@ -27,6 +27,7 @@ void main() {
     'SSO_REALM': 'test-realm',
     'SSO_BASE_URL': 'https://sso.example.invalid/auth',
     'SSO_OFFLINE_ACCESS': 'false',
+    'SSO_STEP_UP_PARAMS': '',
   });
 
   late AuthRepositoryImpl repository;
@@ -70,6 +71,85 @@ void main() {
 
     expect(capturedArguments?['promptValues'], <String>['login']);
     expect(capturedArguments?['additionalParameters'], containsPair('max_age', '0'));
+  });
+
+  // La elevación de nivel necesita justo la reautenticación que sostienen
+  // `prompt` y `max_age`, así que un parámetro de elevación no debe poder
+  // apagarla. Es el fallo que nadie vería: el login seguiría funcionando y
+  // Cl@ve dejaría de desafiar.
+  test('los parámetros de elevación NO pueden pisar prompt ni max_age', () async {
+    mockChannelThrowing('authorize_and_exchange_code_failed');
+
+    await expectLater(
+      repository.login(
+        extraParameters: const {
+          'acr_values': 'substantial',
+          // Los dos intentos de sabotaje, deliberados:
+          'max_age': '86400',
+          'prompt': 'none',
+        },
+      ),
+      throwsA(isA<AuthException>()),
+    );
+
+    expect(capturedArguments?['promptValues'], <String>['login']);
+    final additional = capturedArguments!['additionalParameters']! as Map<Object?, Object?>;
+    expect(additional['max_age'], '0');
+    expect(additional['acr_values'], 'substantial');
+    // El `prompt` se descarta de la entrada, no solo se fusiona por debajo:
+    // viaja además en `promptValues`, y duplicarlo en la URL no tiene un
+    // ganador definido.
+    expect(additional.containsKey('prompt'), isFalse);
+  });
+
+  /// Lo que `flutter_appauth` 12.0.0 manda en iOS al cerrar el
+  /// `SFSafariViewController`: `OIDErrorCodeProgramCanceledAuthorizationFlow`
+  /// (-4) y `user_did_cancel` a `false`.
+  void mockSafariViewControllerDismissed() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, (final call) async {
+      capturedArguments = call.arguments as Map<Object?, Object?>;
+      throw PlatformException(
+        code: 'authorize_and_exchange_code_failed',
+        message: 'Failed to authorize',
+        details: <String, String>{
+          'type': 'org.openid.appauth.general',
+          'code': '-4',
+          'user_did_cancel': 'false',
+        },
+      );
+    });
+  }
+
+  // Regresión del 14/10 en iOS: cerrar Cl@ve salía como fallo inesperado, y el
+  // aviso de elevación volvía a abrirse sin dejar salir al ciudadano.
+  test('iOS: cerrar el SFSafariViewController durante el login es una cancelación', () async {
+    mockSafariViewControllerDismissed();
+
+    await expectLater(
+      repository.login(),
+      throwsA(isA<AuthException>().having((final e) => e.reason, 'reason', AuthFailureReason.cancelled)),
+    );
+  });
+
+  test('iOS: cerrarlo durante el cierre de sesión tampoco es un error', () async {
+    mockSafariViewControllerDismissed();
+
+    await expectLater(repository.logout(idToken: 'fake-id-token'), completes);
+  });
+
+  test('otro código del dominio general de AppAuth sigue siendo inesperado', () async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, (final call) async {
+      throw PlatformException(
+        code: 'authorize_and_exchange_code_failed',
+        message: 'Failed to authorize',
+        details: <String, String>{'type': 'org.openid.appauth.general', 'code': '-5'},
+      );
+    });
+
+    await expectLater(
+      repository.login(),
+      throwsA(isA<AuthException>().having((final e) => e.reason, 'reason', AuthFailureReason.unexpected)),
+    );
   });
 
   test('login and logout ask for the SFSafariViewController agent', () async {

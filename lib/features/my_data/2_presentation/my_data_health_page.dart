@@ -7,23 +7,30 @@ import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/app_storage.dart';
+import 'package:jccm_espacio_ciudadano/core/storage/storage_keys.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_elevation_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_provider.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/citizen_endpoint_ids_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/1_domain/repositories/my_data_health_repository.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/controllers/past_primary_care_appointments_notifier.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/digital_health_access.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/hospital_appointment_access.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_health_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_health_cip_field.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart' show launchUrl;
 
-/// Health data detail — Figma node 43973:1861.
+/// Área de Salud de Mis datos — Figma node 43973:1861.
+///
+/// Es un **menú**, como Bienestar Social, Educación y Vivienda: las dos
+/// consultas de citas —atención primaria y atención hospitalaria— están al
+/// mismo nivel y cada una tiene su pantalla. Antes primaria se mostraba aquí
+/// dentro y hospitalaria se enlazaba, que eran dos cosas del mismo rango
+/// presentadas en planos distintos.
 class MyDataHealthPage extends ConsumerStatefulWidget {
   const MyDataHealthPage({
     super.key,
@@ -37,222 +44,94 @@ class MyDataHealthPage extends ConsumerStatefulWidget {
 }
 
 class _MyDataHealthPageState extends ConsumerState<MyDataHealthPage> {
+  /// Nulo hasta que el ciudadano elija; la pantalla siempre abre en «Mis
+  /// datos», también para representantes, donde se muestra la restricción.
   _HealthTab? _selectedTab;
-  HealthAppointmentScope _selectedScope = HealthAppointmentScope.primaryCare;
-  HealthAppointmentFilter _selectedAppointmentFilter = HealthAppointmentFilter.pending;
-  AppListFilters _appointmentFilters = const AppListFilters();
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
-    final selectedTab = _selectedTab ?? (isRepresentative ? _HealthTab.services : _HealthTab.data);
+    final selectedTab = _selectedTab ?? _HealthTab.data;
 
     return AppTabbedDetailScaffold(
       title: l10n.myDataHealthTitle,
       onBack: () => context.go(widget.backRoute),
-      onInfo: () => _showHealthInfoSheet(context),
-      actions: selectedTab == _HealthTab.data
-          ? [
-              IconButton(
-                tooltip: _appointmentFilters.activeCount > 0 ? l10n.myDataHealthActiveFiltersTooltip(_appointmentFilters.activeCount) : l10n.myDataHealthSearchAppointmentsTooltip,
-                icon: Badge.count(
-                  count: _appointmentFilters.activeCount,
-                  isLabelVisible: _appointmentFilters.activeCount > 0,
-                  child: const AppIcon(AppIcons.search, color: AppColors.textPrimary),
-                ),
-                onPressed: _showAppointmentFilters,
-              ),
-            ]
-          : const [],
       tabs: [l10n.myDataHealthDataTab, l10n.myDataHealthServicesTab],
       selectedIndex: selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _HealthTab.values[index]),
       tabViews: [
-        if (isRepresentative)
-          const MyDataRepresentativeUnavailable()
-        else
-          _HealthAppointmentsTab(
-            selectedScope: _selectedScope,
-            onScopeSelected: (final scope) => setState(() => _selectedScope = scope),
-            selectedAppointmentFilter: _selectedAppointmentFilter,
-            onAppointmentFilterSelected: (final filter) => setState(() => _selectedAppointmentFilter = filter),
-            filters: _appointmentFilters,
-          ),
+        if (isRepresentative) const MyDataRepresentativeUnavailable() else const _HealthMenuTab(),
         const _HealthServicesTab(),
       ],
     );
-  }
-
-  Future<void> _showAppointmentFilters() async {
-    final l10n = AppLocalizations.of(context);
-    final result = await AppBottomSheet.show<AppListFilters>(
-      context: context,
-      title: switch (_selectedScope) {
-        HealthAppointmentScope.primaryCare => l10n.myDataHealthFilterPrimaryCareTitle,
-        HealthAppointmentScope.hospital => l10n.myDataHealthFilterHospitalTitle,
-      },
-      body: AppListFilterSheet(
-        initialFilters: _appointmentFilters,
-        fields: [
-          AppListDateRangeFilterField(id: 'date', label: l10n.myDataHealthFilterDateLabel),
-        ],
-      ),
-    );
-    if (result != null && mounted) {
-      setState(() => _appointmentFilters = result);
-    }
-  }
-
-  Future<void> _showHealthInfoSheet(final BuildContext context) async {
-    final l10n = AppLocalizations.of(context);
-    final config = ref.read(appConfigProvider);
-    await AppInfoSheet.show(
-      context: context,
-      title: l10n.myDataHealthInfoSheetTitle,
-      bodyText: l10n.myDataHealthInfoSheetDescription,
-      footerText: l10n.myDataHealthInfoSheetContactHint,
-      actionLabel: l10n.myDataHealthInfoSheetMoreInformation,
-      actionIcon: AppIcons.openInNew,
-      actionIsExternalLink: true,
-      onActionPressed: () => _launchExternalUrl(context, config.sescamUrl),
-    );
-  }
-
-  Future<void> _launchExternalUrl(final BuildContext context, final Uri url) async {
-    await launchExternalUrlWithConfirmation(context, url);
   }
 }
 
 enum _HealthTab { data, services }
 
-/// Muestra el selector de ámbito asistencial y, con él, las citas hospitalarias.
+/// El CIP y las dos consultas de citas, como tarjetas de navegación.
 ///
-/// Desactivado mientras `BASE_URL` siga apuntando a la fachada: sus rutas
-/// (`/ciudadanos/{sid}/salud/hospitalaria-citas-*`) sólo existen en el gateway,
-/// así que hoy responderían 403 y la pantalla mostraría el aviso de autorización
-/// sin que el ciudadano pueda hacer nada al respecto.
-///
-/// La capa de datos, el mapeo y los tests siguen activos; para volver a
-/// publicarlo basta poner esto a `true`.
-const bool kHospitalAppointmentsEnabled = false;
-
-/// Distancia al final del listado, en píxeles, a la que se pide la página
-/// siguiente de citas pasadas de primaria.
-const double _loadMoreScrollThreshold = 240;
-
-class _HealthAppointmentsTab extends ConsumerWidget {
-  const _HealthAppointmentsTab({
-    required this.selectedScope,
-    required this.onScopeSelected,
-    required this.selectedAppointmentFilter,
-    required this.onAppointmentFilterSelected,
-    required this.filters,
-  });
-
-  final HealthAppointmentScope selectedScope;
-  final ValueChanged<HealthAppointmentScope> onScopeSelected;
-  final HealthAppointmentFilter selectedAppointmentFilter;
-  final ValueChanged<HealthAppointmentFilter> onAppointmentFilterSelected;
-  final AppListFilters filters;
-
-  /// Sólo las citas pasadas de primaria se paginan: es la única operación del
-  /// gateway que acepta el parámetro `pagina`.
-  bool get _isPaginated => selectedScope == HealthAppointmentScope.primaryCare && selectedAppointmentFilter == HealthAppointmentFilter.past;
+/// El CIP vive **solo aquí** (Figma `45045:57735`): es del ciudadano, no de una
+/// consulta, así que se muestra una vez encima de las dos y no se repite dentro.
+class _HealthMenuTab extends ConsumerWidget {
+  const _HealthMenuTab();
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final authorizationAsync = ref.watch(jccmDataAuthorizationProvider);
+    // Se avisa en la tarjeta de que hospitalaria pedirá verificar la identidad,
+    // con el mismo umbral que aplica el gate de la consulta.
+    final hospitalNeedsVerification = !ref.watch(authenticationLevelProvider).meets(kHospitalAppointmentsMinimumLevel);
 
-    return NotificationListener<ScrollNotification>(
-      onNotification: (final notification) {
-        if (_isPaginated && notification.metrics.axis == Axis.vertical && notification.metrics.extentAfter <= _loadMoreScrollThreshold) {
-          unawaited(ref.read(pastPrimaryCareAppointmentsProvider.notifier).loadMore());
-        }
-        return false;
-      },
-      child: SingleChildScrollView(
-        padding: appPagePadding(context, top: AppDimensions.space24, bottom: AppDimensions.space24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Encabezado de sección (WCAG 1.3.1).
-            Semantics(
-              header: true,
-              headingLevel: 2,
-              child: Text(
-                switch (selectedScope) {
-                  HealthAppointmentScope.primaryCare => l10n.myDataHealthAppointmentsTitle,
-                  HealthAppointmentScope.hospital => l10n.myDataHealthHospitalAppointmentsTitle,
-                },
-                style: AppTypography.h2.copyWith(
-                  color: AppColors.primary,
-                ),
-              ),
+    return ref
+        .watch(jccmDataAuthorizationProvider)
+        .when(
+          loading: () => const Padding(
+            padding: EdgeInsets.only(top: AppDimensions.space24),
+            child: Center(child: AppLoadingIndicator()),
+          ),
+          // Fallo del check ≠ «no autorizado»: sin respuesta del backend solo cabe
+          // error + reintentar, nunca pedir re-autorizar un consentimiento que
+          // puede estar concedido.
+          error: (final _, final _) => ErrorStateWidget(
+            message: l10n.authorizationCheckFailedMessage,
+            onRetry: () => ref.invalidate(jccmDataAuthorizationProvider),
+          ),
+          data: (final hasJccmAuthorization) => SingleChildScrollView(
+            padding: appPagePadding(context, top: AppDimensions.space16, bottom: AppDimensions.space64),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!hasJccmAuthorization) ...[
+                  MyDataAuthorizationContextualHelper(onOpenSettings: () => _openConsentSettings(context)),
+                  const SizedBox(height: AppDimensions.space16),
+                ],
+                if (hasJccmAuthorization) ...[
+                  // Sin autorización no se puede consultar al SESCAM: el CIP sale
+                  // solo cuando hay con qué pedirlo.
+                  const MyDataHealthCipField(),
+                  const SizedBox(height: AppDimensions.space16),
+                  AppNavigationCard(
+                    title: l10n.myDataHealthPrimaryCareNavTitle,
+                    onTap: () => context.go(Routes.myDataHealthPrimaryCareAppointments),
+                  ),
+                ] else
+                  MyDataDisabledNavigationCard(title: l10n.myDataHealthPrimaryCareNavTitle),
+                const SizedBox(height: AppDimensions.space16),
+                if (hasJccmAuthorization)
+                  AppNavigationCard(
+                    title: l10n.myDataHealthHospitalNavTitle,
+                    description: hospitalNeedsVerification ? l10n.myDataHealthHospitalNavVerificationRequired : null,
+                    descriptionIcon: hospitalNeedsVerification ? AppIcons.lock : null,
+                    onTap: () => context.go(Routes.myDataHealthHospitalAppointments),
+                  )
+                else
+                  MyDataDisabledNavigationCard(title: l10n.myDataHealthHospitalNavTitle),
+              ],
             ),
-            const SizedBox(height: AppDimensions.space24),
-            authorizationAsync.when(
-              data: (final hasJccmAuthorization) {
-                if (!hasJccmAuthorization) {
-                  return MyDataAuthorizationContextualHelper(
-                    message: l10n.myDataHealthAppointmentsAuthorizationRequiredMessage,
-                    semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
-                    onOpenSettings: () => _openConsentSettings(context),
-                  );
-                }
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _CipText(cip: ref.watch(myDataHealthCipProvider).asData?.value),
-                    const SizedBox(height: AppDimensions.space16),
-                    if (kHospitalAppointmentsEnabled) ...[
-                      AppSegmentedControl(
-                        segments: [l10n.myDataHealthScopePrimaryCare, l10n.myDataHealthScopeHospital],
-                        selectedIndex: selectedScope == HealthAppointmentScope.primaryCare ? 0 : 1,
-                        onSelected: (final index) => onScopeSelected(
-                          index == 0 ? HealthAppointmentScope.primaryCare : HealthAppointmentScope.hospital,
-                        ),
-                      ),
-                      const SizedBox(height: AppDimensions.space12),
-                    ],
-                    AppSegmentedControl(
-                      segments: [l10n.myDataHealthPendingTab, l10n.myDataHealthPastTab],
-                      selectedIndex: selectedAppointmentFilter == HealthAppointmentFilter.pending ? 0 : 1,
-                      onSelected: (final index) => onAppointmentFilterSelected(
-                        index == 0 ? HealthAppointmentFilter.pending : HealthAppointmentFilter.past,
-                      ),
-                    ),
-                    const SizedBox(height: AppDimensions.space20),
-                    if (_isPaginated)
-                      _PastPrimaryCareAppointmentsList(filters: filters, l10n: l10n)
-                    else
-                      _SingleShotAppointmentsList(
-                        scope: selectedScope,
-                        filter: selectedAppointmentFilter,
-                        filters: filters,
-                        l10n: l10n,
-                      ),
-                  ],
-                );
-              },
-              loading: () => const Padding(
-                padding: EdgeInsets.only(top: AppDimensions.space24),
-                child: Center(child: AppLoadingIndicator()),
-              ),
-              // Fallo del check ≠ "no autorizado": sin respuesta del backend
-              // solo cabe error + reintentar, nunca pedir re-autorizar un
-              // consentimiento que puede estar concedido.
-              error: (final error, final stackTrace) => ErrorStateWidget(
-                message: l10n.authorizationCheckFailedMessage,
-                onRetry: () => ref.invalidate(jccmDataAuthorizationProvider),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+        );
   }
 }
 
@@ -271,163 +150,107 @@ void _openConsentSettings(final BuildContext context) {
   );
 }
 
-/// Listados que se resuelven en una sola llamada: pendientes de primaria y
-/// ambos listados de hospitalaria.
-class _SingleShotAppointmentsList extends ConsumerWidget {
-  const _SingleShotAppointmentsList({
-    required this.scope,
-    required this.filter,
-    required this.filters,
-    required this.l10n,
-  });
-
-  final HealthAppointmentScope scope;
-  final HealthAppointmentFilter filter;
-  final AppListFilters filters;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
-    final appointmentsAsync = switch (scope) {
-      HealthAppointmentScope.primaryCare => ref.watch(myDataPrimaryCarePendingAppointmentsProvider),
-      HealthAppointmentScope.hospital => ref.watch(myDataHospitalAppointmentsProvider(filter)),
-    };
-
-    return appointmentsAsync.when(
-      data: (final appointments) => _AppointmentsContent(
-        entries: _appointmentEntries(appointments, filters),
-        emptyMessage: switch (scope) {
-          HealthAppointmentScope.primaryCare => l10n.myDataHealthAppointmentsNoDataMessage,
-          HealthAppointmentScope.hospital => l10n.myDataHealthHospitalAppointmentsNoDataMessage,
-        },
-        l10n: l10n,
-      ),
-      loading: () => const Padding(
-        padding: EdgeInsets.only(top: AppDimensions.space24),
-        child: Center(child: AppLoadingIndicator()),
-      ),
-      error: (final error, final stackTrace) => error is MyDataAuthorizationRequired
-          ? MyDataAuthorizationContextualHelper(
-              message: l10n.myDataHealthAppointmentsAuthorizationRequiredMessage,
-              semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
-              onOpenSettings: () => _openConsentSettings(context),
-            )
-          : error is MyDataHealthCipMissing
-          ? const _HealthCipMissingState()
-          : _HealthErrorState(
-              onRetry: () => switch (scope) {
-                HealthAppointmentScope.primaryCare => ref.invalidate(myDataPrimaryCarePendingAppointmentsProvider),
-                HealthAppointmentScope.hospital => ref.invalidate(myDataHospitalAppointmentsProvider(filter)),
-              },
-            ),
-    );
-  }
-}
-
-/// Citas pasadas de primaria, acumuladas por páginas.
-///
-/// El scroll dispara la carga automáticamente, pero el botón se mantiene visible
-/// mientras queden páginas: es el único camino accesible por teclado y lector de
-/// pantalla, y también rescata el caso en el que el filtro de fechas deja la
-/// lista tan corta que no hay scroll que disparar.
-class _PastPrimaryCareAppointmentsList extends ConsumerWidget {
-  const _PastPrimaryCareAppointmentsList({
-    required this.filters,
-    required this.l10n,
-  });
-
-  final AppListFilters filters;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
-    final state = ref.watch(pastPrimaryCareAppointmentsProvider);
-
-    switch (state.status) {
-      case PastPrimaryCareAppointmentsStatus.loading:
-        return const Padding(
-          padding: EdgeInsets.only(top: AppDimensions.space24),
-          child: Center(child: AppLoadingIndicator()),
-        );
-      case PastPrimaryCareAppointmentsStatus.authorizationRequired:
-        return MyDataAuthorizationContextualHelper(
-          message: l10n.myDataHealthAppointmentsAuthorizationRequiredMessage,
-          semanticsLabel: l10n.myDataJccmAuthorizationRequiredCta,
-          onOpenSettings: () => _openConsentSettings(context),
-        );
-      case PastPrimaryCareAppointmentsStatus.cipMissing:
-        return const _HealthCipMissingState();
-      case PastPrimaryCareAppointmentsStatus.loadError:
-        return _HealthErrorState(
-          onRetry: () => unawaited(ref.read(pastPrimaryCareAppointmentsProvider.notifier).retry()),
-        );
-      case PastPrimaryCareAppointmentsStatus.loaded:
-        final entries = _appointmentEntries(state.appointments, filters);
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Con páginas pendientes no se afirma que no hay citas: puede que
-            // simplemente no se hayan cargado todavía.
-            if (entries.isNotEmpty || !state.hasMore)
-              _AppointmentsContent(
-                entries: entries,
-                emptyMessage: l10n.myDataHealthAppointmentsNoDataMessage,
-                l10n: l10n,
-              ),
-            if (state.hasMore) ...[
-              const SizedBox(height: AppDimensions.space16),
-              AppButton(
-                label: l10n.myDataHealthLoadMoreAppointments,
-                hierarchy: AppButtonHierarchy.secondary,
-                isExpanded: true,
-                isLoading: state.isLoadingMore,
-                onPressed: state.isLoadingMore ? null : () => unawaited(ref.read(pastPrimaryCareAppointmentsProvider.notifier).loadMore()),
-              ),
-            ],
-          ],
-        );
-    }
-  }
-}
-
-/// Convierte primaria u hospitalaria en tarjetas fechadas para que el listado
-/// agrupe por año y mes de la misma forma en ambos ámbitos.
-List<_AppointmentEntry> _appointmentEntries(final List<Object> appointments, final AppListFilters filters) {
-  final range = filters.range('date');
-  final entries = <_AppointmentEntry>[];
-
-  for (final appointment in appointments) {
-    switch (appointment) {
-      case final HealthAppointment primaryCare:
-        if (appFilterDateInRange(primaryCare.dateTime, range)) {
-          entries.add(
-            _AppointmentEntry(
-              dateTime: primaryCare.dateTime,
-              card: _AppointmentCard(appointment: primaryCare),
-            ),
-          );
-        }
-      case final HospitalAppointment hospital:
-        if (appFilterDateInRange(hospital.dateTime, range)) {
-          entries.add(
-            _AppointmentEntry(
-              dateTime: hospital.dateTime,
-              card: _HospitalAppointmentCard(appointment: hospital),
-            ),
-          );
-        }
-    }
-  }
-
-  return entries;
-}
-
-class _HealthServicesTab extends ConsumerWidget {
+class _HealthServicesTab extends ConsumerStatefulWidget {
   const _HealthServicesTab();
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  ConsumerState<_HealthServicesTab> createState() => _HealthServicesTabState();
+}
+
+class _HealthServicesTabState extends ConsumerState<_HealthServicesTab> {
+  bool _isShowingVerification = false;
+
+  /// Abre Mi Salud Digital, elevando antes el nivel si la sesión no lo alcanza.
+  ///
+  /// Mismo aviso, misma preferencia de «No volver a mostrar» y misma elevación
+  /// que las citas hospitalarias (`_LevelBlockedState`). La diferencia es que
+  /// aquí no hay pantalla que bloquear: el desenlace se espera en el sitio y,
+  /// si basta, se abre el enlace sin otro aviso de navegación externa, porque
+  /// el ciudadano ya decidió ir y acaba de pasar por Cl@ve.
+  ///
+  /// Con nivel suficiente se abre en la pestaña integrada, como Educamos:
+  /// comparte la sesión de Cerbero del login y Mi Salud Digital entra ya
+  /// identificado.
+  Future<void> _openDigitalHealth() async {
+    if (ref.read(authenticationLevelProvider).meets(kDigitalHealthMinimumLevel)) {
+      await _launchExternalUrl(context, ref.read(appConfigProvider).digitalHealthUrl, mode: LaunchMode.inAppBrowserView);
+      return;
+    }
+    await _verifyIdentityThenOpenDigitalHealth();
+  }
+
+  /// [message] es el motivo de un intento anterior; con él el aviso sale
+  /// siempre, aunque el ciudadano pidiera no volver a verlo.
+  Future<void> _verifyIdentityThenOpenDigitalHealth({final String? message}) async {
+    if (message != null || !_isVerificationNoticeSuppressed) {
+      if (_isShowingVerification) {
+        return;
+      }
+      _isShowingVerification = true;
+      final choice = await AppIdentityVerificationDialog.show(context, message: message);
+      _isShowingVerification = false;
+      if (!mounted) {
+        return;
+      }
+      // La preferencia se guarda con cualquiera de los dos botones: es sobre el
+      // aviso, no sobre la decisión de ir o no a Cl@ve.
+      if (choice?.suppressFuture ?? false) {
+        final key = _verificationNoticeSuppressionKey;
+        if (key != null) {
+          unawaited(ref.read(appStorageProvider).write(key, true));
+        }
+      }
+      if (choice == null || !choice.accepted) {
+        return;
+      }
+    }
+
+    final notifier = ref.read(elevationProvider.notifier)..acknowledge();
+    await notifier.elevate(minimum: kDigitalHealthMinimumLevel);
+    if (!mounted) {
+      return;
+    }
+    final outcome = ref.read(elevationProvider).outcome;
+    notifier.acknowledge();
+    final l10n = AppLocalizations.of(context);
+    switch (outcome) {
+      case ElevationOutcome.succeeded:
+        final opened = await launchUrl(ref.read(appConfigProvider).digitalHealthUrl, mode: LaunchMode.inAppBrowserView);
+        if (!opened && mounted) {
+          AppAlertSnackbar.show(context, message: l10n.externalLinkOpenFailed, severity: AppAlertSeverity.error);
+        }
+      // El motivo sale **siempre**, aunque se pidiera no volver a ver el aviso:
+      // es otro mensaje, y saltárselo relanzaría Cl@ve sin que lo pida nadie.
+      case ElevationOutcome.stillInsufficient:
+        await _verifyIdentityThenOpenDigitalHealth(message: l10n.myDataHealthLevelStillInsufficientMessage);
+      case ElevationOutcome.failed:
+        await _verifyIdentityThenOpenDigitalHealth(message: l10n.myDataHealthLevelElevationFailedMessage);
+      // Otra persona: la sesión ya es suya y entra como en un login nuevo, por
+      // el inicio; Mi Salud Digital no se abre a quien no lo ha pedido.
+      case ElevationOutcome.identitySwitched:
+        AppAlertSnackbar.show(context, message: l10n.identityVerificationSwitchedMessage);
+        context.go(Routes.home);
+      // Cancelar deja al ciudadano en Salud, sin relanzar Cl@ve.
+      case ElevationOutcome.cancelled:
+      case null:
+        return;
+    }
+  }
+
+  String? get _verificationNoticeSuppressionKey {
+    final idAgente = ref.read(citizenEndpointIdsProvider).idAgente;
+    return idAgente == null || idAgente.isEmpty
+        ? null
+        : '${StorageKeys.identityVerificationNoticeSuppressedPrefix}$idAgente';
+  }
+
+  bool get _isVerificationNoticeSuppressed {
+    final key = _verificationNoticeSuppressionKey;
+    return key != null && (ref.read(appStorageProvider).read<bool>(key) ?? false);
+  }
+
+  @override
+  Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final config = ref.watch(appConfigProvider);
 
@@ -463,7 +286,7 @@ class _HealthServicesTab extends ConsumerWidget {
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkDigitalHealth,
-                onTap: () => _launchExternalUrl(context, config.digitalHealthUrl),
+                onTap: () => unawaited(_openDigitalHealth()),
               ),
               AppExternalLinkItem(
                 label: l10n.myDataHealthLinkClinicalHistory,
@@ -476,390 +299,11 @@ class _HealthServicesTab extends ConsumerWidget {
     );
   }
 
-  Future<void> _launchExternalUrl(final BuildContext context, final Uri url) async {
-    await launchExternalUrlWithConfirmation(context, url);
+  Future<void> _launchExternalUrl(
+    final BuildContext context,
+    final Uri url, {
+    final LaunchMode mode = LaunchMode.externalApplication,
+  }) async {
+    await launchExternalUrlWithConfirmation(context, url, mode: mode);
   }
 }
-
-class _CipText extends StatelessWidget {
-  const _CipText({required this.cip});
-
-  final String? cip;
-
-  @override
-  Widget build(final BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final value = cip?.trim();
-    final label = l10n.myDataHealthCipLabel(value == null || value.isEmpty ? '-' : value);
-
-    return Text(
-      label,
-      style: AppTypography.captionRegular.copyWith(
-        color: AppColors.primary,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0,
-      ),
-    );
-  }
-}
-
-class _AppointmentsContent extends StatelessWidget {
-  const _AppointmentsContent({
-    required this.entries,
-    required this.emptyMessage,
-    required this.l10n,
-  });
-
-  final List<_AppointmentEntry> entries;
-  final String emptyMessage;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(final BuildContext context) {
-    if (entries.isEmpty) {
-      return MyDataNoData(
-        message: emptyMessage,
-        actionLabel: l10n.myDataNoDataContact,
-        contactUrl: 'https://sanidad.castillalamancha.es/ciudadanos/listado-de-centros',
-        scrollable: false,
-      );
-    }
-
-    final sections = _buildSections(entries);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (final yearSection in sections) ...[
-          // Año y mes como encabezados; el mes se anuncia con su año
-          // («septiembre de 2026») para entenderse fuera de contexto (1.3.1).
-          Semantics(
-            header: true,
-            headingLevel: 3,
-            child: Text(
-              yearSection.year.toString(),
-              style: AppTypography.h2.copyWith(
-                color: AppColors.primary,
-              ),
-            ),
-          ),
-          const SizedBox(height: AppDimensions.space8),
-          for (final monthSection in yearSection.months) ...[
-            Semantics(
-              header: true,
-              headingLevel: 4,
-              label: l10n.a11yMonthYear(l10n.commonMonthName(_monthKey(monthSection.month)), yearSection.year.toString()),
-              excludeSemantics: true,
-              child: Text(
-                l10n.commonMonthName(_monthKey(monthSection.month)),
-                style: AppTypography.h3.copyWith(
-                  color: AppColors.primary,
-                ),
-              ),
-            ),
-            const SizedBox(height: AppDimensions.space8),
-            for (final entry in monthSection.entries) ...[
-              entry.card,
-              const SizedBox(height: AppDimensions.space12),
-            ],
-          ],
-        ],
-      ],
-    );
-  }
-
-  List<_AppointmentYearSection> _buildSections(final List<_AppointmentEntry> entries) {
-    final yearSections = <int, Map<int, List<_AppointmentEntry>>>{};
-    for (final entry in entries) {
-      final date = entry.dateTime;
-      yearSections.putIfAbsent(date.year, () => <int, List<_AppointmentEntry>>{});
-      yearSections[date.year]!.putIfAbsent(date.month, () => <_AppointmentEntry>[]);
-      yearSections[date.year]![date.month]!.add(entry);
-    }
-
-    return yearSections.entries
-        .map(
-          (final yearEntry) => _AppointmentYearSection(
-            year: yearEntry.key,
-            months: yearEntry.value.entries
-                .map(
-                  (final monthEntry) => _AppointmentMonthSection(
-                    month: monthEntry.key,
-                    entries: monthEntry.value,
-                  ),
-                )
-                .toList(growable: false),
-          ),
-        )
-        .toList(growable: false);
-  }
-}
-
-class _HealthErrorState extends StatelessWidget {
-  const _HealthErrorState({required this.onRetry});
-
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(final BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return MyDataServiceUnavailable(
-      message: l10n.myDataHealthAppointmentsServiceUnavailableMessage,
-      actionLabel: l10n.myDataServiceUnavailableUpdate,
-      onRetry: onRetry,
-      scrollable: false,
-    );
-  }
-}
-
-class _HealthCipMissingState extends StatelessWidget {
-  const _HealthCipMissingState();
-
-  @override
-  Widget build(final BuildContext context) {
-    return AppAlertContextual(
-      message: AppLocalizations.of(context).agendaHealthCipMissing,
-      size: AppAlertContextualSize.small,
-      announce: true,
-    );
-  }
-}
-
-class _AppointmentCard extends StatelessWidget {
-  const _AppointmentCard({required this.appointment});
-
-  final HealthAppointment appointment;
-
-  @override
-  Widget build(final BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final date = appointment.dateTime;
-    final detail = appointment.description;
-    final channel = appointment.channel?.trim();
-    final isPhone = detail.toLowerCase().contains('teleconsulta') || detail.toLowerCase().contains('telef');
-
-    return AppAgendaInfoCard(
-      type: AppAgendaInfoCardType.health,
-      day: date.day.toString(),
-      weekday: l10n.commonWeekdayName(_weekdayKey(date.weekday)),
-      time: '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
-      title: appointment.professional,
-      channel: channel != null && channel.isNotEmpty ? channel : (isPhone ? l10n.agendaChannelPhone : l10n.agendaChannelInPerson),
-      showTypeIcon: false,
-      channelBeforeTitle: true,
-      titleIsRegular: true,
-      secondaryText: detail,
-    );
-  }
-}
-
-class _HospitalAppointmentCard extends StatelessWidget {
-  const _HospitalAppointmentCard({required this.appointment});
-
-  final HospitalAppointment appointment;
-
-  @override
-  Widget build(final BuildContext context) {
-    final location = [appointment.room, appointment.center].nonNulls.where((final value) => value.isNotEmpty).join(' · ');
-
-    return _AppointmentCardShell(
-      dateTime: appointment.dateTime,
-      heading: appointment.service.toUpperCase(),
-      title: appointment.agendaDescription ?? appointment.provision,
-      lines: [
-        appointment.provision,
-        location,
-      ],
-    );
-  }
-}
-
-/// Tarjeta de cita: raíl de fecha a la izquierda y detalle a la derecha.
-///
-/// Presenta el detalle de las citas hospitalarias.
-class _AppointmentCardShell extends StatelessWidget {
-  const _AppointmentCardShell({
-    required this.dateTime,
-    required this.heading,
-    required this.title,
-    required this.lines,
-  });
-
-  final DateTime dateTime;
-
-  /// Servicio hospitalario en mayúsculas junto a la hora.
-  final String heading;
-  final String title;
-  final List<String> lines;
-
-  @override
-  Widget build(final BuildContext context) {
-    // Un único nodo por cita, en orden de lectura (WCAG 1.3.1).
-    return MergeSemantics(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          border: Border.all(color: AppColors.borderBlueMutedLight),
-        ),
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                width: 78,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    left: BorderSide(
-                      color: AppColors.borderBlueMutedLight,
-                      width: 4,
-                    ),
-                    right: BorderSide(color: AppColors.backgroundBlueMutedLight),
-                  ),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.space12,
-                  vertical: AppDimensions.space16,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      dateTime.day.toString(),
-                      style: AppTypography.h1.copyWith(
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    Text(
-                      AppLocalizations.of(context).commonWeekdayName(_weekdayKey(dateTime.weekday)),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.captionRegular.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: 0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppDimensions.space8,
-                    AppDimensions.space16,
-                    AppDimensions.space8,
-                    AppDimensions.space16,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            _formatTime(dateTime),
-                            style: AppTypography.smallRegular.copyWith(
-                              color: AppColors.primary,
-                            ),
-                          ),
-                          const SizedBox(width: AppDimensions.space16),
-                          Flexible(
-                            child: Text(
-                              heading,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTypography.captionUppercase.copyWith(
-                                color: AppColors.textPlaceholder,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: AppDimensions.space4),
-                      Text(
-                        title,
-                        style: AppTypography.bodyBold.copyWith(
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      const SizedBox(height: AppDimensions.space4),
-                      for (final line in lines)
-                        Text(
-                          line,
-                          style: AppTypography.smallRegular.copyWith(
-                            color: AppColors.primary,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _AppointmentEntry {
-  const _AppointmentEntry({
-    required this.dateTime,
-    required this.card,
-  });
-
-  final DateTime dateTime;
-  final Widget card;
-}
-
-class _AppointmentYearSection {
-  const _AppointmentYearSection({
-    required this.year,
-    required this.months,
-  });
-
-  final int year;
-  final List<_AppointmentMonthSection> months;
-}
-
-class _AppointmentMonthSection {
-  const _AppointmentMonthSection({
-    required this.month,
-    required this.entries,
-  });
-
-  final int month;
-  final List<_AppointmentEntry> entries;
-}
-
-String _formatTime(final DateTime dateTime) {
-  final hour = dateTime.hour.toString().padLeft(2, '0');
-  final minute = dateTime.minute.toString().padLeft(2, '0');
-  return '$hour:${minute}h';
-}
-
-String _weekdayKey(final int weekday) => switch (weekday) {
-  DateTime.monday => 'monday',
-  DateTime.tuesday => 'tuesday',
-  DateTime.wednesday => 'wednesday',
-  DateTime.thursday => 'thursday',
-  DateTime.friday => 'friday',
-  DateTime.saturday => 'saturday',
-  DateTime.sunday => 'sunday',
-  _ => 'other',
-};
-
-String _monthKey(final int month) => switch (month) {
-  1 => 'january',
-  2 => 'february',
-  3 => 'march',
-  4 => 'april',
-  5 => 'may',
-  6 => 'june',
-  7 => 'july',
-  8 => 'august',
-  9 => 'september',
-  10 => 'october',
-  11 => 'november',
-  12 => 'december',
-  _ => 'other',
-};

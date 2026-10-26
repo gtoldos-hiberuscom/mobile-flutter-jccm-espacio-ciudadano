@@ -17,29 +17,31 @@ final class AgendaRepositoryImpl implements AgendaRepository {
   Future<AgendaAppointmentsSnapshot> loadAppointments({
     required final String documentNumber,
     final String? agentId,
+    final bool includeHealth = true,
   }) async {
     final trimmedAgentId = agentId?.trim();
     // Cada fuente se resuelve por separado: si una cae, la agenda se pinta con
     // lo que sí llegó y la pantalla avisa de lo que falta. El error solo se
     // propaga cuando fallan todas las fuentes que se han llegado a intentar.
     final results = await Future.wait([
-      _captureAppointments(
-        AgendaAppointmentSource.health,
-        () => _loadAppointmentsFrom(
-          // La variante `1` apunta al path gateway
-          // /api/v1/ciudadanos/{numDocumento}/salud/primaria-citas-pendientes
-          // (el legacy /api/v1/sescam/citas/... no existe en el gateway y
-          // responde 404, igual que pasaba con /api/v1/agenda/...). Es el mismo
-          // endpoint que usa Mis Datos → Salud, que sí devuelve las citas.
-          () => _sescamApi.citasFuturas1(
-            numDocumento: documentNumber,
-            extra: _generatedExtra,
+      if (includeHealth)
+        _captureAppointments(
+          AgendaAppointmentSource.health,
+          () => _loadAppointmentsFrom(
+            // La variante `1` apunta al path gateway
+            // /api/v1/ciudadanos/{numDocumento}/salud/primaria-citas-pendientes
+            // (el legacy /api/v1/sescam/citas/... no existe en el gateway y
+            // responde 404, igual que pasaba con /api/v1/agenda/...). Es el mismo
+            // endpoint que usa Mis Datos → Salud, que sí devuelve las citas.
+            () => _sescamApi.citasFuturas1(
+              numDocumento: documentNumber,
+              extra: _generatedExtra,
+            ),
+            source: AgendaAppointmentSource.health,
+            ignoreUnauthorized: true,
+            emptyResultErrorCodes: const {'3031'},
           ),
-          source: AgendaAppointmentSource.health,
-          ignoreUnauthorized: true,
-          emptyResultErrorCodes: const {'3031'},
         ),
-      ),
       // Sin `idAgente` la agenda general ni se pide: eso no es un fallo y no
       // entra en `failedSources`.
       if (trimmedAgentId != null && trimmedAgentId.isNotEmpty)
@@ -63,7 +65,10 @@ final class AgendaRepositoryImpl implements AgendaRepository {
 
     final healthCipMissing = results.any((final result) => result.error is _HealthCipMissing);
     final failures = results.where((final result) => result.error != null && result.error is! _HealthCipMissing).toList(growable: false);
-    // `results` nunca está vacío: la fuente de salud siempre se intenta.
+    // Cuando hay representación se consulta solo la agenda de notificaciones.
+    if (results.isEmpty) {
+      return const AgendaAppointmentsSnapshot(appointments: []);
+    }
     if (failures.length == results.length) {
       final failure = failures.first;
       Error.throwWithStackTrace(failure.error!, failure.stackTrace!);
@@ -374,6 +379,45 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final primaryCareDetails = _parsePrimaryCareMessage(message);
     final isPrimaryCare = source == AgendaAppointmentSource.general && (_isPrimaryCareEvent(title, specialty, message, detail, center) || primaryCareDetails != null);
     final isOnDemandHealthAppointment = source == AgendaAppointmentSource.health && _isOnDemandAppointment(specialty);
+    final kind = switch (source) {
+      AgendaAppointmentSource.health => AgendaAppointmentKind.health,
+      // Antes que el carné: un mensaje hospitalario puede nombrar la tarjeta
+      // sanitaria.
+      AgendaAppointmentSource.general when _isHospitalEvent(title, specialty, message) => AgendaAppointmentKind.hospital,
+      AgendaAppointmentSource.general when _isCredentialEvent(title, specialty, message) => AgendaAppointmentKind.credential,
+      AgendaAppointmentSource.general when isPrimaryCare => AgendaAppointmentKind.health,
+      AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
+    };
+    // Las citas de atención primaria no muestran el centro (JCCMEC-274): ni el
+    // campo de SESCAM, ni como texto secundario de reserva, ni el párrafo
+    // «Centro:» del mensaje. Las hospitalarias y el resto de eventos sí.
+    final showsCenter = kind != AgendaAppointmentKind.health;
+    final visibleCenter = showsCenter ? center : null;
+
+    // La agenda general publica el cuerpo del evento como párrafos HTML
+    // («<p>Profesional: …</p> <p>Sala: …</p>»). Cuando traen filas etiquetadas
+    // se conservan una a una, para pintarlas como hace la web, en vez de
+    // aplanarlas en una sola frase (JCCMEC-256). El título es el del evento y
+    // la intro, los párrafos sin etiqueta. «Hora» se descarta: ya va en la
+    // fecha de la cita.
+    if (source == AgendaAppointmentSource.general) {
+      final structured = _structuredMessage(rawMessage);
+      final details = [
+        for (final row in structured.details)
+          if (showsCenter || row.label.toLowerCase() != 'centro') row,
+      ];
+      if (details.isNotEmpty) {
+        return AgendaAppointment(
+          dateTime: dateTime,
+          title: title ?? (isPrimaryCare ? 'Cita de Atención Primaria' : specialty ?? 'Cita'),
+          description: structured.intro ?? message ?? title ?? 'Cita',
+          kind: kind,
+          channel: primaryCareDetails?.channel ?? channel,
+          center: visibleCenter,
+          details: List<AgendaAppointmentDetail>.unmodifiable(details),
+        );
+      }
+    }
 
     final description = switch (source) {
       AgendaAppointmentSource.health when isOnDemandHealthAppointment => 'Cita de Atención Primaria',
@@ -390,15 +434,10 @@ final class AgendaRepositoryImpl implements AgendaRepository {
           ? primaryCareDetails?.professional ?? professional ?? title ?? 'Cita de Atención Primaria'
           : title ?? specialty ?? 'Cita',
       description: description,
-      kind: switch (source) {
-        AgendaAppointmentSource.health => AgendaAppointmentKind.health,
-        AgendaAppointmentSource.general when _isCredentialEvent(title, specialty, message) => AgendaAppointmentKind.credential,
-        AgendaAppointmentSource.general when isPrimaryCare => AgendaAppointmentKind.health,
-        AgendaAppointmentSource.general => AgendaAppointmentKind.notification,
-      },
+      kind: kind,
       channel: primaryCareDetails?.channel ?? channel,
-      detail: isOnDemandHealthAppointment ? _primaryCareAppointmentDetail(specialty, channel) : primaryCareDetails?.appointmentDetail ?? notificationDetails.issuer ?? detail ?? center,
-      center: center,
+      detail: isOnDemandHealthAppointment ? _primaryCareAppointmentDetail(specialty, channel) : primaryCareDetails?.appointmentDetail ?? notificationDetails.issuer ?? detail ?? visibleCenter,
+      center: visibleCenter,
     );
   }
 
@@ -431,6 +470,43 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       subject: subject == null ? null : _withLabel('Asunto', subject),
       issuer: issuer == null ? null : _withoutLabel(issuer, issuerLabels),
     );
+  }
+
+  /// Etiquetas que no se convierten en fila: la hora ya se muestra junto a la
+  /// fecha de la tarjeta.
+  static const _omittedDetailLabels = {'hora'};
+
+  /// Separa el mensaje HTML del evento en la intro (párrafos sin etiqueta,
+  /// unidos) y las filas «Etiqueta: valor» (un párrafo cada una), en el orden
+  /// original.
+  ({String? intro, List<AgendaAppointmentDetail> details}) _structuredMessage(final String? rawMessage) {
+    final intro = <String>[];
+    final details = <AgendaAppointmentDetail>[];
+    for (final line in _cleanHtmlLines(rawMessage)) {
+      final row = _labeledRow(line);
+      if (row == null) {
+        intro.add(line);
+      } else if (!_omittedDetailLabels.contains(row.label.toLowerCase())) {
+        details.add(row);
+      }
+    }
+    return (intro: intro.isEmpty ? null : intro.join(' '), details: details);
+  }
+
+  /// «Profesional:CAMPO CRIPTANA» → (Profesional, CAMPO CRIPTANA). Una línea
+  /// que termina en dos puntos («Tiene una notificación próxima a caducar:»)
+  /// no es una fila, es intro.
+  AgendaAppointmentDetail? _labeledRow(final String line) {
+    final match = RegExp(r'^([^:]{1,40}?)\s*:\s*(.+)$').firstMatch(line);
+    if (match == null) {
+      return null;
+    }
+    final label = match.group(1)!.trim();
+    final value = match.group(2)!.trim();
+    if (label.isEmpty || value.isEmpty) {
+      return null;
+    }
+    return (label: '${label[0].toUpperCase()}${label.substring(1)}', value: value);
   }
 
   List<String> _cleanHtmlLines(final String? value) {
@@ -516,6 +592,15 @@ final class AgendaRepositoryImpl implements AgendaRepository {
   ) {
     final searchableText = '${title ?? ''} ${specialty ?? ''} ${message ?? ''} ${detail ?? ''} ${center ?? ''}'.toLowerCase();
     return searchableText.contains('atención primaria') || searchableText.contains('atencion primaria');
+  }
+
+  bool _isHospitalEvent(
+    final String? title,
+    final String? specialty,
+    final String? message,
+  ) {
+    final searchableText = '${title ?? ''} ${specialty ?? ''} ${message ?? ''}'.toLowerCase();
+    return searchableText.contains('atención hospitalaria') || searchableText.contains('atencion hospitalaria');
   }
 
   bool _isCredentialEvent(

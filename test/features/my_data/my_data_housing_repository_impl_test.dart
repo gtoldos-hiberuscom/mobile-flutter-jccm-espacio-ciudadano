@@ -134,6 +134,26 @@ void main() {
       expect(properties, isEmpty);
     });
 
+    test('propaga el error funcional de Catastro aunque la fachada responda 200', () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))
+        ..httpClientAdapter = _StaticAdapter(200, {
+          'body': {
+            'atributos': {
+              'estado': {
+                'codigoEstado': '0101',
+                'literalError': 'Error al contactar con el servicio Web de Catastro',
+              },
+            },
+          },
+        });
+      final repository = MyDataHousingRepositoryImpl(dio: dio);
+
+      expect(
+        () => repository.loadRealEstateProperties(citizenId: 'citizen-1', documentNumber: '12345678A'),
+        throwsA(isA<StateError>()),
+      );
+    });
+
     // Contrato de estados de intermediación (el mismo que salud y bienestar
     // social): el sobre manda, el 403 desnudo es fallo de servicio y ningún
     // error de transporte puede leerse como «sin domicilio» o «sin inmuebles».

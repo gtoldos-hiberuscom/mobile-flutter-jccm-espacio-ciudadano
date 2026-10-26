@@ -53,12 +53,9 @@ void main() {
 
     expect(authRepository.logoutIdTokens, ['id-token']);
     expect(container.read(tokenResponseProvider), isNull);
-    // El refresh token no está en la lista a propósito: el almacén protegido
-    // no se toca al cerrar sesión, porque en Android inicializarlo autentica y
-    // pedía huella para hacer logout. Queda revocado en Keycloak, y sin access
-    // token la sesión guardada ya no se restaura.
-    expect(storage.deleted, containsAll([StorageKeys.accessToken, StorageKeys.idToken]));
-    expect(storage.deleted, isNot(contains(StorageKeys.refreshToken)));
+    // También el token de larga vida: borrarlo no pide huella, y dejarlo en
+    // el dispositivo sería guardar una credencial que ya no sirve.
+    expect(storage.deleted, containsAll([StorageKeys.accessToken, StorageKeys.idToken, StorageKeys.refreshToken]));
     expect(container.read(consentRevocationProvider), isTrue);
   });
 
@@ -148,26 +145,19 @@ final class _FakeSecureStorage implements SecureStorage {
   final List<String> deleted = [];
 
   @override
-  Future<String?> read(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async => values[key];
+  Future<String?> read(final String key) async => values[key];
 
   @override
-  Future<void> write(final String key, final String value, {final SecureStorageProtection protection = SecureStorageProtection.standard, final BiometricPromptCopy? prompt}) async {
+  Future<void> write(final String key, final String value) async {
     values[key] = value;
   }
 
   @override
-  Future<void> delete(final String key, {final SecureStorageProtection protection = SecureStorageProtection.standard}) async {
+  Future<void> delete(final String key) async {
     deleted.add(key);
     final _ = values.remove(key);
   }
 
-  @override
-  Future<void> clearBiometric() async {
-    // El almacén protegido se vacía entero, no clave a clave, para no pedir
-    // huella al cerrar sesión; el token de larga vida cae con él.
-    deleted.add(StorageKeys.refreshToken);
-    final _ = values.remove(StorageKeys.refreshToken);
-  }
 
 
   @override

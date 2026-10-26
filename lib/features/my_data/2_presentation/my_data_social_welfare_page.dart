@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/0_entity/external_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/1_domain/external_link_launcher.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
@@ -11,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/pr
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Social welfare data page — Figma node 43973:1893.
@@ -32,33 +34,22 @@ class _MyDataSocialWelfarePageState extends ConsumerState<MyDataSocialWelfarePag
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isRepresentative = ref.watch(jwtClaimsProvider.select((final claims) => claims?.isRepresentative ?? false));
     final selectedTab = _selectedTab ?? _SocialWelfareTab.data;
 
     return AppTabbedDetailScaffold(
       title: l10n.socialWelfareScreenTitle,
       onBack: () => context.go(widget.backRoute),
-      onInfo: () => _showInfoSheet(context, l10n),
       tabs: [
         l10n.socialWelfareDataTab,
         l10n.socialWelfareServicesTab,
       ],
       selectedIndex: selectedTab.index,
       onTabSelected: (final index) => setState(() => _selectedTab = _SocialWelfareTab.values[index]),
-      tabViews: const [
-        _SocialWelfareDataTab(),
-        _SocialWelfareServicesTab(),
+      tabViews: [
+        if (isRepresentative) const MyDataRepresentativeUnavailable() else const _SocialWelfareDataTab(),
+        const _SocialWelfareServicesTab(),
       ],
-    );
-  }
-
-  Future<void> _showInfoSheet(
-    final BuildContext context,
-    final AppLocalizations l10n,
-  ) async {
-    await AppInfoSheet.show(
-      context: context,
-      title: l10n.socialWelfareInfoSheetTitle,
-      bodyText: l10n.socialWelfareInfoSheetDescription,
     );
   }
 }

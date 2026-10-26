@@ -40,7 +40,10 @@ final class SaludApi {
   }
 
   Future<Map<String, dynamic>?> getPrimaryCarePendingAppointments({required final String citizenId}) {
-    return _get(_path(citizenId, 'primaria-citas-pendientes'));
+    return _get(
+      _path(citizenId, 'primaria-citas-pendientes'),
+      mapCipMissingError: true,
+    );
   }
 
   Future<Map<String, dynamic>?> getPrimaryCarePastAppointments({
@@ -50,6 +53,7 @@ final class SaludApi {
     return _get(
       _path(citizenId, 'primaria-citas-pasadas'),
       queryParameters: {'pagina': page},
+      mapCipMissingError: true,
     );
   }
 
@@ -68,6 +72,7 @@ final class SaludApi {
   Future<Map<String, dynamic>?> _get(
     final String path, {
     final Map<String, Object?>? queryParameters,
+    final bool mapCipMissingError = false,
   }) async {
     // Lo que no acepta `isHandledIntermediacionStatus` sale como `DioException`,
     // ya mapeada a `AppError` por `ErrorInterceptor`: el 401 tras un refresco
@@ -81,7 +86,10 @@ final class SaludApi {
         options: Options(validateStatus: isHandledIntermediacionStatus),
       );
     } on DioException catch (error) {
-      if (_containsErrorCode(error.response?.data, '3031')) {
+      // Las dos consultas de primaria clasifican el 3031 igual: para un
+      // ciudadano sin CIP SESCAM lo devuelve en ambas, y tratarlo distinto
+      // en cada pestaña contaba dos cosas contradictorias (JCCMEC-266).
+      if (mapCipMissingError && _containsErrorCode(error.response?.data, '3031')) {
         throw const MyDataHealthCipMissing();
       }
       rethrow;
