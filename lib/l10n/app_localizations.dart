@@ -6884,12 +6884,6 @@ abstract class AppLocalizations {
   /// **'{date}, {time}'**
   String myDataHealthHospitalDateTimeValue(String date, String time);
 
-  /// Salud — texto cuando el CIP no se ha podido obtener.
-  ///
-  /// In es, this message translates to:
-  /// **'CIP no disponible'**
-  String get myDataHealthCipUnavailable;
-
   /// Salud — título del aviso de que la consulta exige más nivel de seguridad.
   ///
   /// In es, this message translates to:
@@ -9395,7 +9389,7 @@ abstract class AppLocalizations {
   /// Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio).
   ///
   /// In es, this message translates to:
-  /// **'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la '**
+  /// **'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD), '**
   String get privacyAepdTextBeforeLink;
 
   /// Protección de datos — texto del enlace a la AEPD.

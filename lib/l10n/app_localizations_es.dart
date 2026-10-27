@@ -3573,9 +3573,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get myDataHealthCipUnavailable => 'CIP no disponible';
-
-  @override
   String get identityVerificationDialogTitle => 'Verificación de identidad';
 
   @override
@@ -4921,7 +4918,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyAepdTitle => '¿Puedo reclamar ante la Agencia Española de Protección de Datos?';
 
   @override
-  String get privacyAepdTextBeforeLink => 'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la ';
+  String get privacyAepdTextBeforeLink => 'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD), ';
 
   @override
   String get privacyAepdLinkLabel => 'Agencia Española de Protección de Datos (AEPD)';

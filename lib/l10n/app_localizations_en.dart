@@ -3572,9 +3572,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get myDataHealthCipUnavailable => 'CIP unavailable';
-
-  @override
   String get identityVerificationDialogTitle => 'Identity verification';
 
   @override

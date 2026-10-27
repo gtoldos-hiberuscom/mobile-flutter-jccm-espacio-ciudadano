@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_stickybar.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/gestion_expediente_detalle_page.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
@@ -21,6 +23,20 @@ void main() {
     await _pumpDetail(tester, canAttachDocuments: false, fechaInicio: '2026-07-15');
 
     expect(find.text('15/07/2026'), findsOneWidget);
+  });
+
+  testWidgets('uses the blue-lighter color in the detail app bar', (final tester) async {
+    await _pumpDetail(tester, canAttachDocuments: false);
+
+    final appBar = tester.widget<AppBar>(find.byType(AppBar));
+    expect(appBar.backgroundColor, AppColors.backgroundBlueLighter);
+  });
+
+  testWidgets('reduces the bottom margin of the attach-documents button', (final tester) async {
+    await _pumpDetail(tester, canAttachDocuments: true);
+
+    final stickyBar = tester.widget<AppStickybar>(find.byType(AppStickybar));
+    expect(stickyBar.bottomPadding, AppDimensions.space16);
   });
 
   testWidgets('shows a dash when fecha de inicio is missing', (final tester) async {

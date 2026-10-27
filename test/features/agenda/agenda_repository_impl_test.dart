@@ -280,10 +280,11 @@ void main() {
       expect(snapshot.appointments, hasLength(4));
     });
 
-    test('un 500/3031 de SESCAM se identifica como usuario sin CIP y no como fuente caída', () async {
+    test('un 500/3031 de SESCAM con el CIP confirmado como inexistente se identifica como usuario sin CIP y no como fuente caída', () async {
       final adapter = _AgendaAdapter(
         healthStatusCode: 500,
         healthErrorCode: 3031,
+        cipStatusCode: 404,
       );
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = AgendaRepositoryImpl(dio: dio);
@@ -298,6 +299,29 @@ void main() {
       expect(snapshot.healthCipMissing, isTrue);
       expect(snapshot.appointments, hasLength(4));
     });
+
+    for (final (description, cipStatusCode) in [('el ciudadano tiene CIP', 200), ('el CIP no se puede consultar', 500)]) {
+      test('un 500/3031 de SESCAM cuando $description es fuente caída, no usuario sin CIP', () async {
+        // El 3031 también llega con el servicio de citas caído en SESCAM: solo
+        // la consulta del CIP puede confirmar que de verdad falta.
+        final adapter = _AgendaAdapter(
+          healthStatusCode: 500,
+          healthErrorCode: 3031,
+          cipStatusCode: cipStatusCode,
+        );
+        final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+        final repository = AgendaRepositoryImpl(dio: dio);
+
+        final snapshot = await repository.loadAppointments(
+          documentNumber: '12345678A',
+          agentId: 'agent-1',
+        );
+
+        expect(snapshot.healthCipMissing, isFalse);
+        expect(snapshot.failedSources, unorderedEquals(<AgendaAppointmentSource>{AgendaAppointmentSource.health}));
+        expect(adapter.paths, contains('/api/v1/ciudadanos/12345678A/salud/cip'));
+      });
+    }
 
     for (final statusCode in [401, 403]) {
       test('un $statusCode de SESCAM se trata como lista vacía y no muestra aviso', () async {
@@ -398,6 +422,7 @@ final class _AgendaAdapter implements HttpClientAdapter {
     this.healthStatusCode = 200,
     this.eventosStatusCode = 200,
     this.healthErrorCode,
+    this.cipStatusCode = 200,
   }) : _primaryCareAppointments = primaryCareAppointments ?? _defaultPrimaryCareAppointments;
 
   /// Eventos de la agenda general; `null` usa la lista de ejemplo del test base.
@@ -408,6 +433,9 @@ final class _AgendaAdapter implements HttpClientAdapter {
   final int healthStatusCode;
   final int eventosStatusCode;
   final int? healthErrorCode;
+
+  /// Respuesta de `/salud/cip`, que decide si un 3031 es falta de CIP.
+  final int cipStatusCode;
 
   static ResponseBody _errorBody(final int statusCode, {final int? errorCode}) => ResponseBody.fromString(
     jsonEncode({
@@ -496,6 +524,21 @@ final class _AgendaAdapter implements HttpClientAdapter {
             },
           },
         ),
+        200,
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
+      );
+    }
+
+    if (options.path.endsWith('/salud/cip')) {
+      if (cipStatusCode != 200) {
+        return _errorBody(cipStatusCode);
+      }
+      return ResponseBody.fromString(
+        jsonEncode({
+          'body': {'cip': 'PNRV901264600010'},
+        }),
         200,
         headers: {
           Headers.contentTypeHeader: [Headers.jsonContentType],

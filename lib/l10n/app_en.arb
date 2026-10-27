@@ -4684,10 +4684,6 @@
       }
     }
   },
-  "myDataHealthCipUnavailable": "CIP unavailable",
-  "@myDataHealthCipUnavailable": {
-    "description": "Health — text shown when the CIP could not be retrieved."
-  },
   "identityVerificationDialogTitle": "Identity verification",
   "@identityVerificationDialogTitle": {
     "description": "Health — title of the notice that the query requires a higher security level."

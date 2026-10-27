@@ -4735,10 +4735,6 @@
       }
     }
   },
-  "myDataHealthCipUnavailable": "CIP no disponible",
-  "@myDataHealthCipUnavailable": {
-    "description": "Salud — texto cuando el CIP no se ha podido obtener."
-  },
   "identityVerificationDialogTitle": "Verificación de identidad",
   "@identityVerificationDialogTitle": {
     "description": "Salud — título del aviso de que la consulta exige más nivel de seguridad."
@@ -6423,7 +6419,7 @@
   "@privacyAepdTitle": {
     "description": "Protección de datos — título de la sección sobre reclamaciones ante la AEPD."
   },
-  "privacyAepdTextBeforeLink": "Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la ",
+  "privacyAepdTextBeforeLink": "Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD), ",
   "@privacyAepdTextBeforeLink": {
     "description": "Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio)."
   },

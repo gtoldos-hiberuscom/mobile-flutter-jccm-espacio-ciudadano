@@ -40,6 +40,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
             source: AgendaAppointmentSource.health,
             ignoreUnauthorized: true,
             emptyResultErrorCodes: const {'3031'},
+            confirmEmptyResult: () => _isCipMissing(documentNumber),
           ),
         ),
       // Sin `idAgente` la agenda general ni se pide: eso no es un fallo y no
@@ -131,6 +132,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final bool ignoreBadRequest = false,
     final bool ignoreUnauthorized = false,
     final Set<String> emptyResultErrorCodes = const {},
+    final Future<bool> Function()? confirmEmptyResult,
   }) async {
     final Object? payload;
     try {
@@ -157,7 +159,7 @@ final class AgendaRepositoryImpl implements AgendaRepository {
         rethrow;
       }
       final decodedError = _decodePayload(rawData);
-      if (_containsErrorCode(decodedError, emptyResultErrorCodes)) {
+      if (_containsErrorCode(decodedError, emptyResultErrorCodes) && (confirmEmptyResult == null || await confirmEmptyResult())) {
         throw const _HealthCipMissing();
       }
       // Salvage-or-rethrow: si el cuerpo del error no contiene citas parseables,
@@ -194,6 +196,25 @@ final class AgendaRepositoryImpl implements AgendaRepository {
       final code = _firstString(map, const ['codigo-error', 'codigoError']);
       return code != null && expectedCodes.contains(code);
     });
+  }
+
+  /// SESCAM devuelve el mismo 3031 cuando el ciudadano no tiene CIP y cuando el
+  /// servicio de citas está caído; solo la consulta del CIP los distingue. Si
+  /// esa consulta falla tampoco se confirma nada: la fuente se da por caída en
+  /// vez de afirmar que no hay CIP.
+  Future<bool> _isCipMissing(final String documentNumber) async {
+    final Object? payload;
+    try {
+      final response = await _sescamApi.getCipFromNif1(
+        numDocumento: documentNumber,
+        extra: _generatedExtra,
+      );
+      payload = response.extra[generatedApiRawResponseDataExtraKey] ?? response.data;
+    } on DioException catch (error) {
+      return error.response?.statusCode == 404;
+    }
+    final body = _asStringMap(_asStringMap(_decodePayload(payload))?['body']);
+    return body == null || _firstString(body, const ['cip']) == null;
   }
 
   Map<String, dynamic> get _generatedExtra => const {

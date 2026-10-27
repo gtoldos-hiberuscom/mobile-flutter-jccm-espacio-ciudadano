@@ -31,6 +31,7 @@ class GestionExpedienteDetallePage extends ConsumerWidget {
 
     return AppDetailScaffold(
       title: l10n.gestionExpedientesDetalleTitle,
+      appBarBackgroundColor: AppColors.backgroundBlueLighter,
       onBack: () {
         if (context.canPop()) {
           context.pop();
@@ -164,6 +165,7 @@ class _ExpedienteDetalleBody extends StatelessWidget {
         ),
         if (expediente.canAttachDocuments)
           AppStickybar(
+            bottomPadding: AppDimensions.space16,
             children: [
               AppButton(
                 label: l10n.gestionExpedientesAportarDocumentacionButton,

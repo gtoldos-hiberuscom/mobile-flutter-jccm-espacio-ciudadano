@@ -72,6 +72,22 @@ void main() {
     expect(style.color, AppColors.primary);
   });
 
+  // Sin CIP, o con su servicio caído, el menú no afirma nada ni bloquea: cada
+  // consulta tiene su propio servicio y cuenta su propio error al entrar.
+  for (final (description, loadCip) in <(String, Future<String?> Function())>[
+    ('sin CIP', () async => null),
+    ('con la consulta del CIP caída', () async => throw Exception('SESCAM caído')),
+  ]) {
+    testWidgets('$description muestra «CIP: -» y deja las dos consultas habilitadas', (final tester) async {
+      await _pumpHealth(tester, loadCip: loadCip);
+
+      expect(find.text('Código de Identificación Personal (CIP): -'), findsOneWidget);
+      expect(find.byType(AppNavigationCard), findsNWidgets(2));
+      expect(find.byType(MyDataDisabledNavigationCard), findsNothing);
+      expect(find.byType(AppAlertContextual), findsNothing);
+    });
+  }
+
   testWidgets('con nivel bajo, hospitalaria avisa con candado de que pedirá verificar la identidad', (final tester) async {
     await _pumpHealth(tester, authNLevel: 'low');
 
@@ -123,6 +139,7 @@ Future<GoRouter> _pumpHealth(
   final String authNLevel = 'substantial',
   final String? scope,
   final String? representedAgentId,
+  final Future<String?> Function()? loadCip,
 }) async {
   final router = GoRouter(
     initialLocation: Routes.myDataHealth,
@@ -145,7 +162,7 @@ Future<GoRouter> _pumpHealth(
       retry: (final _, final _) => null,
       overrides: [
         jccmDataAuthorizationProvider.overrideWith((final ref) async => hasAuthorization),
-        myDataHealthCipProvider.overrideWith((final ref) async => 'CIP-1'),
+        myDataHealthCipProvider.overrideWith((final ref) => loadCip?.call() ?? Future.value('CIP-1')),
         myDataHealthRepositoryProvider.overrideWithValue(_EmptyHealthRepository()),
         // Hospitalaria gatea por nivel; sin claims no llegaría a pintarse.
         jwtClaimsProvider.overrideWith(() => _StubClaims(authNLevel, scope: scope, representedAgentId: representedAgentId)),
