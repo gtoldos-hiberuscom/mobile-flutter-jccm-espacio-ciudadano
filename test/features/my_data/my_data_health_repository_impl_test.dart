@@ -178,32 +178,51 @@ void main() {
       );
     });
 
-    for (final (description, cipStatus) in [('el ciudadano tiene CIP', 200), ('el CIP no se puede consultar', 500)]) {
-      test('trata el 500/3031 de citas pendientes como servicio no disponible cuando $description', () async {
-        // El caso reportado: el CIP se muestra en Salud y las citas pendientes
-        // decían que no existía, porque el servicio de citas estaba caído.
-        final adapter = _MyDataHealthAdapter(
-          errorStatus: 500,
-          errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"Error al obtener las citas futuras"}]}}',
-          cipStatus: cipStatus,
-        );
-        final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+    for (final filter in HealthAppointmentFilter.values) {
+      for (final (description, cipStatus) in [('el ciudadano tiene CIP', 200), ('el CIP no se puede consultar', 500)]) {
+        test('trata el 500/3031 de citas ${filter.name} como servicio no disponible cuando $description', () async {
+          // El caso reportado: el CIP se muestra en Salud y las citas
+          // decían que no existía, porque el servicio de citas estaba caído.
+          final adapter = _MyDataHealthAdapter(
+            errorStatus: 500,
+            errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"Error al obtener las citas"}]}}',
+            cipStatus: cipStatus,
+          );
+          final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
 
-        await expectLater(
-          repository.loadPrimaryCareAppointments(
-            citizenId: _citizenId,
-            filter: HealthAppointmentFilter.pending,
-          ),
-          throwsA(isA<DioException>()),
-        );
-        expect(adapter.paths, contains('/api/v1/ciudadanos/sub-alt-1/salud/cip'));
-      });
+          await expectLater(
+            repository.loadPrimaryCareAppointments(
+              citizenId: _citizenId,
+              filter: filter,
+            ),
+            throwsA(isA<DioException>()),
+          );
+          expect(adapter.paths, contains('/api/v1/ciudadanos/sub-alt-1/salud/cip'));
+        });
+      }
     }
 
-    test('trata el 500/3031 de citas pasadas como servicio no disponible, no como CIP ausente', () async {
+    test('identifica el 500/3031 de citas pasadas como ausencia de CIP, igual que en pendientes (JCCMEC-266)', () async {
       final adapter = _MyDataHealthAdapter(
         errorStatus: 500,
-        errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"El servicio de citas pasadas no está disponible"}]}}',
+        errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"Error al obtener las citas pasadas"}]}}',
+        cipStatus: 404,
+      );
+      final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+      await expectLater(
+        repository.loadPrimaryCareAppointments(
+          citizenId: _citizenId,
+          filter: HealthAppointmentFilter.past,
+        ),
+        throwsA(isA<MyDataHealthCipMissing>()),
+      );
+    });
+
+    test('deja fallar un 500 de citas pasadas sin 3031 como servicio no disponible', () async {
+      final adapter = _MyDataHealthAdapter(
+        errorStatus: 500,
+        errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":5000,"mensaje-error":"Error interno"}]}}',
       );
       final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
 

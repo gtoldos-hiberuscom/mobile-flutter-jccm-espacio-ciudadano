@@ -16,8 +16,9 @@ enum ElevationOutcome {
   /// Se reidentificó, pero el método elegido no alcanza el nivel exigido.
   stillInsufficient,
 
-  /// El token nuevo era de otra persona: la sesión se ha cerrado.
-  identityChanged,
+  /// Se identificó otra persona y la sesión pasa a ser suya, como un login
+  /// nuevo: la pantalla vuelve al inicio para que el guard la trate como tal.
+  identitySwitched,
 
   /// No se pudo completar. Se mantiene el bloqueo y se puede reintentar.
   failed,
@@ -114,25 +115,42 @@ class ElevationNotifier extends Notifier<ElevationState> {
           // destructiva del guard —`clear()` + rebote— y **echaba al ciudadano
           // al landing público justo después de elevar**. Sin persistir, ese
           // mismo `ConsentRequired` lleva al gate legal, que es recuperable.
+          //
+          // **Salvo que ya estuviera persistida** (acceso rápido): entonces el
+          // guard ya no la vuelve a escribir, y el almacén se quedaba con el
+          // token de nivel bajo; al reabrir la app volvía el aviso
+          // (JCCMEC-278). Es lo mismo que hace el refresco: si había sesión
+          // guardada, se guarda la nueva. El flag no cambia, así que no reabre
+          // lo de arriba.
+          if (await session.hasPersistedSession()) {
+            await session.persistCurrentSession();
+            if (!ref.mounted) {
+              return;
+            }
+          }
           state = ElevationState(
             outcome: result is ElevationSucceeded ? ElevationOutcome.succeeded : ElevationOutcome.stillInsufficient,
           );
 
-        case ElevationIdentityMismatch(:final idToken):
-          // Acaba de identificarse otra persona en este dispositivo: no se
-          // adopta el token nuevo, y tampoco vale seguir con el viejo.
-          logger.w({'event': 'auth_elevation_identity_mismatch'});
+        case ElevationIdentitySwitched(:final tokenResponse, :final jwtClaims):
+          // Otra persona: se adopta su sesión **como un login nuevo**, igual
+          // que la web (JCCMEC-278). De la anterior no queda nada: se revoca
+          // su sesión offline —después de `clear()` ya no habría con qué— y
+          // se borra del almacén, acceso rápido incluido. Su sesión de
+          // navegador ya no existe: Cerbero la ha sustituido por la de esta
+          // persona, así que la pista de cierre pasa a ser la suya.
+          logger.i({'event': 'auth_elevation_identity_switched'});
+          await session.revokeCurrentOfflineSession();
           await session.clear();
-          // `clear()` borra la pista de navegador, pero en el navegador queda
-          // viva la sesión de esa otra persona. Se deja la suya —después del
-          // `clear()`, que si no la borraría— para que el siguiente login la
-          // cierre (`endStaleBrowserSession`). No autoriza nada: solo sirve
-          // para cerrar.
-          await session.rememberBrowserSession(idToken);
+          session.startInMemory(tokenResponse, claims: jwtClaims);
+          await session.rememberBrowserSession(tokenResponse.idToken);
           if (!ref.mounted) {
             return;
           }
-          state = const ElevationState(outcome: ElevationOutcome.identityChanged);
+          // Las cláusulas aceptadas son de cada persona: el guard las
+          // comprobará en la siguiente navegación.
+          ref.invalidate(consentProvider(ref.read(citizenEndpointIdsProvider).idAgente ?? ''));
+          state = const ElevationState(outcome: ElevationOutcome.identitySwitched);
 
         case ElevationCancelled():
           // Sin mensaje, como el login trata la cancelación, pero **con

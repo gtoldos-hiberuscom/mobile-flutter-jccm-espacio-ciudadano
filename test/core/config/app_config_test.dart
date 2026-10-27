@@ -69,8 +69,28 @@ void main() {
 
   test('resolves environment-specific service portals', () {
     expect(_config('uat').teachingStaffUrl.host, 'portalpersonaldocente-uat.cm-pre.jccm.es');
-    expect(_config('pre').digitalHealthUrl.host, 'sescampre.jccm.es');
     expect(_config('pro').employmentUrl.path, '/private/posicion-global');
+  });
+
+  test('opens Mi Salud Digital through Cerbero with the substantial level', () {
+    final pre = _config('pre').digitalHealthUrl;
+    expect(pre.host, 'sso-cerbero-pre.cm-pre.jccm.es');
+    expect(pre.path, '/auth/realms/usuarios/protocol/openid-connect/auth');
+    expect(pre.queryParameters, {
+      'client_id': 'add-sede_ciudadanos-fo',
+      'redirect_uri': 'https://sescampre.jccm.es/misaluddigital/app/sso?provider=CLAVE',
+      'response_type': 'code',
+      'scope': 'openid substantial',
+    });
+
+    final pro = _config('pro').digitalHealthUrl;
+    expect(pro.host, 'cerbero.jccm.es');
+    expect(pro.queryParameters, {
+      'client_id': 'add-sede_ciudadanos-fo',
+      'redirect_uri': 'https://sescam.jccm.es/misaluddigital/app/sso?provider=CLAVE',
+      'response_type': 'code',
+      'scope': 'openid substantial',
+    });
   });
 
   test('resolves the authenticated support facade for every environment', () {
@@ -121,6 +141,32 @@ void main() {
     test('production asks the real version server', () {
       // A mock source in production would force or hide updates for every citizen.
       expect(read('config_production.json')['APP_UPDATE_SOURCE'], 'api');
+    });
+
+    test('todos los entornos declaran el flag del modo demostración', () {
+      // Sin valor por defecto: si faltara, la app no arrancaría. Mejor verlo aquí.
+      for (final file in ['config_development.json', 'config_preproduction.json', 'config_production.json']) {
+        expect(AppConfig.fromMap(read(file)).demoModeEnabled, isA<bool>(), reason: file);
+      }
+    });
+
+    test('la demostración está apagada en producción y encendida en los demás', () {
+      // Decisión del proyecto (16/10): la build de tienda no lleva demo salvo
+      // que se genere a propósito con el flag encendido para la revisión.
+      expect(AppConfig.fromMap(read('config_production.json')).demoModeEnabled, isFalse);
+      expect(AppConfig.fromMap(read('config_development.json')).demoModeEnabled, isTrue);
+      expect(AppConfig.fromMap(read('config_preproduction.json')).demoModeEnabled, isTrue);
+    });
+  });
+
+  group('DEMO_MODE_ENABLED', () {
+    test('parsea los dos valores', () {
+      expect(const AppConfig.fromMap({'DEMO_MODE_ENABLED': 'true'}).demoModeEnabled, isTrue);
+      expect(const AppConfig.fromMap({'DEMO_MODE_ENABLED': 'false'}).demoModeEnabled, isFalse);
+    });
+
+    test('sin la clave lanza, como el resto de la configuración', () {
+      expect(() => const AppConfig.fromMap({}).demoModeEnabled, throwsException);
     });
   });
 }

@@ -104,6 +104,7 @@ class AppAgendaInfoCard extends StatelessWidget {
       details: details,
       channelBeforeTitle: channelBeforeTitle,
       titleIsRegular: titleIsRegular,
+      titleSpacing: 0,
     );
     final typeIcon = showTypeIcon ? _TypeIcon(type: type, semanticsLabel: typeLabel) : null;
 
@@ -247,6 +248,7 @@ class _ContentBlock extends StatelessWidget {
     required this.details,
     required this.channelBeforeTitle,
     required this.titleIsRegular,
+    required this.titleSpacing,
   });
 
   final String title;
@@ -257,8 +259,12 @@ class _ContentBlock extends StatelessWidget {
   final bool channelBeforeTitle;
   final bool titleIsRegular;
 
+  /// Hueco bajo el título cuando no lo sigue el canal.
+  final double titleSpacing;
+
   @override
   Widget build(final BuildContext context) {
+    final hasChannelBelowTitle = !channelBeforeTitle && channel != null && channel!.isNotEmpty;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -277,6 +283,7 @@ class _ContentBlock extends StatelessWidget {
           _displayCase(title),
           style: (titleIsRegular ? AppTypography.bodyRegular : AppTypography.bodyBold).copyWith(color: AppColors.textPrimary),
         ),
+        if (!hasChannelBelowTitle && titleSpacing > 0) SizedBox(height: titleSpacing),
         if (!channelBeforeTitle && channel != null && channel!.isNotEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: AppDimensions.space4),
@@ -317,14 +324,18 @@ class _ContentBlock extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: '${detail.label}: ',
+                      // Mismo color que el título de la tarjeta.
                       style: AppTypography.captionRegular.copyWith(
-                        color: AppColors.blueMuted900,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    // La etiqueta va en negrita y el valor en peso normal:
+                    // `captionRegular` es negrita en este sistema, así que el
+                    // valor usa `bodyCaption`.
                     TextSpan(
                       text: _displayCase(detail.value),
-                      style: AppTypography.captionRegular.copyWith(color: AppColors.textPrimary),
+                      style: AppTypography.bodyCaption.copyWith(color: AppColors.textPrimary),
                     ),
                   ],
                 ),

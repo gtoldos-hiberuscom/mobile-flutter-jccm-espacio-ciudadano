@@ -41,6 +41,50 @@
   "@landingHelpLink": {
     "description": "Text link that navigates to the access help screen."
   },
+  "landingDemoButton": "Try the demo",
+  "@landingDemoButton": {
+    "description": "Discreet link on the landing screen that opens the demo-mode confirmation sheet (for store reviewers): the app with fictitious data, no Cl@ve."
+  },
+  "demoConfirmTitle": "Demo mode",
+  "@demoConfirmTitle": {
+    "description": "Title of the confirmation sheet shown before entering demo mode."
+  },
+  "demoConfirmBody": "You will see the app with the fictitious data of an invented person, without signing in with Cl@ve. Nothing you do is sent to or stored in any real service. Sign out to leave.",
+  "@demoConfirmBody": {
+    "description": "Body of the demo-mode confirmation sheet: explains that the data is fictitious and nothing is sent."
+  },
+  "demoConfirmEnter": "Enter the demo",
+  "@demoConfirmEnter": {
+    "description": "Primary button of the demo-mode confirmation sheet."
+  },
+  "demoConfirmBack": "Back",
+  "@demoConfirmBack": {
+    "description": "Secondary button of the demo-mode confirmation sheet; closes it without entering."
+  },
+  "demoConfirmPersistedSessionBody": "There is a session saved on this device with quick access. Entering the demo will close it first: to go back to your space you will need to sign in with Cl@ve again.",
+  "@demoConfirmPersistedSessionBody": {
+    "description": "Extra paragraph of the demo-mode confirmation sheet when a real session is saved on the device (quick access): warns that entering will close it."
+  },
+  "demoConfirmCloseSessionAndEnter": "Close the saved session and enter",
+  "@demoConfirmCloseSessionAndEnter": {
+    "description": "Primary button of the demo-mode confirmation sheet when a session is saved: closes it and enters the demo."
+  },
+  "demoConfirmCodeLabel": "Access code",
+  "@demoConfirmCodeLabel": {
+    "description": "Label of the code field in the demo-mode confirmation sheet. The code is given in the store review notes."
+  },
+  "demoConfirmCodeError": "Incorrect code. Check the demo access code.",
+  "@demoConfirmCodeError": {
+    "description": "Inline error of the code field in the demo-mode sheet when the code does not match."
+  },
+  "demoBannerLabel": "DEMO",
+  "@demoBannerLabel": {
+    "description": "Text of the diagonal ribbon painted over the whole app while the session is the demo one. Very short: it goes on a ribbon."
+  },
+  "demoPersistedSessionNotice": "There is a session saved on this device. Sign in with quick access and sign out before using the demo.",
+  "@demoPersistedSessionNotice": {
+    "description": "Notice when trying to enter the demo while a real session is saved on the device (quick access): it must be closed first."
+  },
   "landingHelpPageTitle": "How to access",
   "@landingHelpPageTitle": {
     "description": "AppBar title of the access help screen."
@@ -172,9 +216,6 @@
   "loginPageError": "Sign-in error",
   "@loginPageError": {
     "description": "Error title shown when the login process fails."
-  },
-  "@loginRetryButton": {
-    "description": "Button label to retry the login process."
   },
   "logoutConfirm": "Sign out?",
   "@logoutConfirm": {
@@ -765,9 +806,49 @@
   "@agendaError": {
     "description": "Agenda — error state message."
   },
+  "agendaHealthAppointmentsUnavailable": "We couldn't load your health appointments.",
+  "@agendaHealthAppointmentsUnavailable": {
+    "description": "Agenda — partial load notice when the Primary Care appointments source (SESCAM) does not respond and the rest of the agenda has loaded."
+  },
   "agendaHealthCipMissing": "There is no health identification number (CIP) linked to your identity in the SESCAM service. We may therefore be unable to display this information. Please try again later.",
   "@agendaHealthCipMissing": {
     "description": "Agenda — informational notice when SESCAM returns code 3031 because no CIP is linked to the identity."
+  },
+  "agendaEventsUnavailable": "We couldn't load your agenda events.",
+  "@agendaEventsUnavailable": {
+    "description": "Agenda — partial load notice when the agenda events source does not respond and the rest of the agenda has loaded."
+  },
+  "agendaInfoTooltip": "Learn more about Agenda",
+  "@agendaInfoTooltip": {
+    "description": "Agenda — tooltip and accessible label of the (i) button in the top bar."
+  },
+  "agendaInfoSheetTitle": "Learn more about Agenda",
+  "@agendaInfoSheetTitle": {
+    "description": "Agenda — title of the information sheet opened by the (i) (Figma 45536:38108)."
+  },
+  "agendaInfoSheetBody": "Check your primary care and hospital appointments, your notification alerts and your cards' expiry alerts.\n\nTo show you your hospital appointments, we need you to verify your identity with a high-security method that guarantees the protection of this data.\n\nSome appointments or alerts may not appear because they are not available yet.",
+  "@agendaInfoSheetBody": {
+    "description": "Agenda — body of the (i) information sheet, three paragraphs."
+  },
+  "agendaInfoSheetFooter": "If any of your data is incorrect or out of date, contact the Junta de Comunidades de Castilla-La Mancha (JCCM).",
+  "@agendaInfoSheetFooter": {
+    "description": "Agenda — footer of the (i) information sheet."
+  },
+  "agendaInfoSheetMoreInformation": "More information",
+  "@agendaInfoSheetMoreInformation": {
+    "description": "Agenda — link at the end of the (i) information sheet; opens Help and contact."
+  },
+  "agendaHospitalLockedTitle": "Hospital appointments hidden",
+  "@agendaHospitalLockedTitle": {
+    "description": "Agenda — title of the notice shown when the authentication level does not allow viewing hospital appointments (Figma 45049:59928)."
+  },
+  "agendaHospitalLockedBody": "Your hospital data is protected. Verify your identity to view these appointments.",
+  "@agendaHospitalLockedBody": {
+    "description": "Agenda — text of the hidden hospital appointments notice."
+  },
+  "agendaHospitalLockedAction": "Verify",
+  "@agendaHospitalLockedAction": {
+    "description": "Agenda — button of the hidden hospital appointments notice: opens identity verification with Cl@ve."
   },
   "agendaLastUpdated": "Last updated: {timestamp}",
   "@agendaLastUpdated": {
@@ -1059,6 +1140,10 @@
   "educationNonUniversityTitlesInfoFooter": "If any of your data is incorrect or not updated, contact the Ministry of Education, Vocational Training and Sports.",
   "@educationNonUniversityTitlesInfoFooter": {
     "description": "Education — footer text of the non-university qualifications help modal."
+  },
+  "educationTitlesInfoMoreInformation": "More information",
+  "@educationTitlesInfoMoreInformation": {
+    "description": "External link in the education titles information panels."
   },
   "educationNonUniversityTitlesTitle": "Non-university titles",
   "@educationNonUniversityTitlesTitle": {
@@ -3251,6 +3336,14 @@
   "@familiaNumerosaNoDataMessage": {
     "description": "Familia numerosa detail — helper shown when no data exists."
   },
+  "familiaNumerosaNoDataContactHint": "If this information is incorrect or out of date, contact the Department of Social Welfare of Castilla-La Mancha.",
+  "@familiaNumerosaNoDataContactHint": {
+    "description": "Contact text shown when there is no large family data."
+  },
+  "familiaNumerosaContactListButton": "View the contact list",
+  "@familiaNumerosaContactListButton": {
+    "description": "External link to the Social Welfare contact list."
+  },
   "familiaNumerosaContactHint": "If any of your data is incorrect or not up to date, contact the Social Welfare Department of Castilla-La Mancha.",
   "@familiaNumerosaContactHint": {
     "description": "Familia numerosa detail — helper below data."
@@ -3258,6 +3351,10 @@
   "familiaNumerosaOfficeContactsButton": "Contact",
   "@familiaNumerosaOfficeContactsButton": {
     "description": "Familia numerosa detail — external office and contact button."
+  },
+  "familiaNumerosaMoreInformation": "More information",
+  "@familiaNumerosaMoreInformation": {
+    "description": "External link in the large family information panel."
   },
   "familiaNumerosaCardNumberLabel": "Card number: {number}",
   "@familiaNumerosaCardNumberLabel": {
@@ -4488,6 +4585,10 @@
   "@myDataEducationTitlesDescription": {
     "description": "Description of education qualification cards."
   },
+  "myDataEducationNonUniversityTitlesDescription": "Vocational training and other qualifications",
+  "@myDataEducationNonUniversityTitlesDescription": {
+    "description": "Description of the non-university titles card in My data > Education."
+  },
   "myDataEducationServicesEmpty": "Education information and services will be available soon.",
   "@myDataEducationServicesEmpty": {
     "description": "Temporary empty state for the Education Information and services tab."
@@ -4536,6 +4637,10 @@
   "@myDataHealthInfoSheetContactHint": {
     "description": "Helper text before the contact CTA in the Health information modal."
   },
+  "myDataHealthInfoSheetMoreInformation": "More information",
+  "@myDataHealthInfoSheetMoreInformation": {
+    "description": "External link in the Health information sheet to the SESCAM website."
+  },
   "myDataHealthDataTab": "My Health data",
   "@myDataHealthDataTab": {
     "description": "First tab on the Health detail screen."
@@ -4580,6 +4685,15 @@
   "@myDataHealthAppointmentsTitle": {
     "description": "Main title of the health appointments block."
   },
+  "myDataHealthCipLabel": "Personal Identification Code (CIP): {cip}",
+  "@myDataHealthCipLabel": {
+    "description": "Personal identification code shown above the Primary Care and hospital appointments.",
+    "placeholders": {
+      "cip": {
+        "type": "String"
+      }
+    }
+  },
   "myDataHealthAppointmentsEmpty": "There are no appointments to show.",
   "@myDataHealthAppointmentsEmpty": {
     "description": "Empty state for the health appointments list."
@@ -4604,7 +4718,7 @@
   "@myDataHealthScopeHospital": {
     "description": "Care scope selector in Health: hospital care."
   },
-  "myDataHealthHospitalAppointmentsTitle": "Hospital appointments",
+  "myDataHealthHospitalAppointmentsTitle": "Hospital care appointments",
   "@myDataHealthHospitalAppointmentsTitle": {
     "description": "Title of the hospital appointments block."
   },
@@ -4616,7 +4730,7 @@
   "@myDataHealthHospitalNavTitle": {
     "description": "Health — menu card leading to hospital appointments."
   },
-  "myDataHealthHospitalNavVerificationRequired": "Verify your identity to continue",
+  "myDataHealthHospitalNavVerificationRequired": "Your hospital data is protected. Verify your identity to access it.",
   "@myDataHealthHospitalNavVerificationRequired": {
     "description": "Health — note under the hospital appointments card, with a lock, when the current identification level is not enough to view them."
   },
@@ -4684,6 +4798,10 @@
       }
     }
   },
+  "myDataHealthCipUnavailable": "CIP unavailable",
+  "@myDataHealthCipUnavailable": {
+    "description": "Health — text shown when the CIP could not be retrieved."
+  },
   "identityVerificationDialogTitle": "Identity verification",
   "@identityVerificationDialogTitle": {
     "description": "Health — title of the notice that the query requires a higher security level."
@@ -4703,6 +4821,14 @@
   "identityVerificationDialogContinue": "Go to Cl@ve",
   "@identityVerificationDialogContinue": {
     "description": "Health — action to go to Cl@ve and identify again."
+  },
+  "identityVerificationCompletedMessage": "Verification completed",
+  "@identityVerificationCompletedMessage": {
+    "description": "Success snackbar after raising the authentication level with Cl@ve."
+  },
+  "identityVerificationSwitchedMessage": "You signed in as a different person. The previous session has been closed.",
+  "@identityVerificationSwitchedMessage": {
+    "description": "Info snackbar when a different person signs in while raising the authentication level, and the session becomes theirs."
   },
   "myDataHealthLevelRequiredMessage": "Your current access level does not meet the application security policy. Press \"Continue\" to restart the session with the required higher access level.",
   "@myDataHealthLevelRequiredMessage": {
@@ -5139,6 +5265,10 @@
   "gestionAportacionDocNumberRequiredError": "Enter the interested person's document number.",
   "@gestionAportacionDocNumberRequiredError": {
     "description": "Validation error when the document number is empty."
+  },
+  "gestionAportacionOwnExpedienteError": "This procedure is only for third parties submitting documents. To submit documents to your own files, go to My files.",
+  "@gestionAportacionOwnExpedienteError": {
+    "description": "Error when trying to submit documents through the third-party flow to a file of the authenticated user."
   },
   "gestionAportacionCamposExpedienteError": "Fill in either the case registration number or the case identifier code (only one of the two).",
   "@gestionAportacionCamposExpedienteError": {
@@ -5888,8 +6018,12 @@
   "@homeNewsLabelWithMinimumCount": {
     "description": "News card label when the count has reached the loading limit",
     "placeholders": {
-      "label": { "type": "String" },
-      "count": { "type": "int" }
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
     }
   },
   "homeRecommendedProceduresTitle": "Recommended procedures",
@@ -6268,9 +6402,13 @@
   },
   "privacyResponsibleTitle": "Who is the data controller?",
   "privacyDocumentTitle": "Information on personal data processing in Espacio Ciudadano",
-  "@privacyDocumentTitle": {"description": "Privacy page — document title."},
+  "@privacyDocumentTitle": {
+    "description": "Privacy page — document title."
+  },
   "privacyEmailCopied": "No email application is available. The address has been copied to the clipboard.",
-  "@privacyEmailCopied": {"description": "Privacy page — notice shown when email cannot be opened and the address is copied."},
+  "@privacyEmailCopied": {
+    "description": "Privacy page — notice shown when email cannot be opened and the address is copied."
+  },
   "@privacyResponsibleTitle": {
     "description": "Privacy page — heading of the data controller section."
   },
@@ -6295,7 +6433,9 @@
     "description": "Privacy page — bullet item in the controller's list of services."
   },
   "privacyResponsibleItemAgenda": "Display of the agenda",
-  "@privacyResponsibleItemAgenda": {"description": "Privacy page — bullet item in the controller's list of services."},
+  "@privacyResponsibleItemAgenda": {
+    "description": "Privacy page — bullet item in the controller's list of services."
+  },
   "privacyResponsibleOrgParagraph": "Once each of the options provided by Espacio Ciudadano is selected, the data controller will be each of the bodies and organizations with competence over that administrative procedure or event.",
   "@privacyResponsibleOrgParagraph": {
     "description": "Privacy page — paragraph on the bodies responsible for each option."
@@ -6314,7 +6454,9 @@
   },
   "privacyPurposeTitle": "What is the name and purpose of the processing?",
   "privacyPopulationControllerText": "2. The Castilla-La Mancha Data Office is the controller for Population Register data. Its contact address is C/ Cabriel, 12 – Edificio CIE III, 45071 Toledo, and its email address is oficinadeldato@jccm.es.",
-  "@privacyPopulationControllerText": {"description": "Privacy page — Population Register controller and contact."},
+  "@privacyPopulationControllerText": {
+    "description": "Privacy page — Population Register controller and contact."
+  },
   "@privacyPurposeTitle": {
     "description": "Privacy page — heading of the processing purpose section."
   },
@@ -6331,21 +6473,37 @@
     "description": "Privacy page — bullet item in the list of purposes."
   },
   "privacyLegalBasisTitle": "What is the legal basis for this processing?",
-  "@privacyLegalBasisTitle": {"description": "Privacy page — legal basis title."},
+  "@privacyLegalBasisTitle": {
+    "description": "Privacy page — legal basis title."
+  },
   "privacyLegalBasisText": "The legal bases for Espacio Ciudadano processing are legal obligation and performance of a task carried out in the public interest (Article 6.1(c) and (e) GDPR), including Law 39/2015, Royal Decree 203/2021 and Law 4/2025. Processing of State Administration information, recommendations, events and selected cards is based on consent, which may be withdrawn in the user profile.\n\nFor the Population Register, telephone and email processing is based on consent (Article 6.1(a)); other data is processed in the public interest (Article 6.1(e), Law 10/2002 on Castilla-La Mancha Statistics).",
-  "@privacyLegalBasisText": {"description": "Privacy page — legal bases."},
+  "@privacyLegalBasisText": {
+    "description": "Privacy page — legal bases."
+  },
   "privacyTransfersTitle": "Are data transferred?",
-  "@privacyTransfersTitle": {"description": "Privacy page — transfers title."},
+  "@privacyTransfersTitle": {
+    "description": "Privacy page — transfers title."
+  },
   "privacyTransfersText": "Personal data is not transferred as part of Espacio Ciudadano processing.\n\nPopulation Register data may be transferred to other regional Administration bodies for communication with citizens, after assessing purpose compatibility under Article 6.4 GDPR.",
-  "@privacyTransfersText": {"description": "Privacy page — information about transfers."},
+  "@privacyTransfersText": {
+    "description": "Privacy page — information about transfers."
+  },
   "privacyRetentionTitle": "How long will the data be retained?",
-  "@privacyRetentionTitle": {"description": "Privacy page — retention title."},
+  "@privacyRetentionTitle": {
+    "description": "Privacy page — retention title."
+  },
   "privacyRetentionText": "Data will be retained for as long as necessary to fulfil the purpose for which it was collected and to determine any liabilities arising from that purpose and processing. Archives and documentation rules will apply.",
-  "@privacyRetentionText": {"description": "Privacy page — retention period."},
+  "@privacyRetentionText": {
+    "description": "Privacy page — retention period."
+  },
   "privacyRightsTitle": "How can data-protection rights be exercised?",
-  "@privacyRightsTitle": {"description": "Privacy page — exercising rights title."},
+  "@privacyRightsTitle": {
+    "description": "Privacy page — exercising rights title."
+  },
   "privacyRightsText": "You may exercise your rights of access, rectification, erasure, restriction, objection and not to be subject to automated decisions free of charge, either in writing through a Registry Office addressed to the controller, or online at https://www.jccm.es/tramites/1001969.",
-  "@privacyRightsText": {"description": "Privacy page — ways to exercise rights."},
+  "@privacyRightsText": {
+    "description": "Privacy page — ways to exercise rights."
+  },
   "privacyAepdTitle": "Can I lodge a complaint with the Spanish Data Protection Agency?",
   "@privacyAepdTitle": {
     "description": "Privacy page — heading of the section on complaints to the AEPD."
@@ -6355,7 +6513,9 @@
     "description": "Privacy page — AEPD section text before the link to its website (ends with a comma and a space)."
   },
   "privacyAepdLinkLabel": "Spanish Data Protection Agency (AEPD)",
-  "@privacyAepdLinkLabel": {"description": "Privacy page — AEPD link text."},
+  "@privacyAepdLinkLabel": {
+    "description": "Privacy page — AEPD link text."
+  },
   "privacyAepdTextAfterLink": ". You may also lodge a complaint with the data protection officer, whose contact details are included in this information.",
   "@privacyAepdTextAfterLink": {
     "description": "Privacy page — AEPD section text after the link to its website (starts with a period)."
@@ -6523,6 +6683,14 @@
   "legalNoticeHeading": "Legal notice",
   "@legalNoticeHeading": {
     "description": "Legal notice page — H1 heading of the page (the original text includes \"(...)\")."
+  },
+  "legalNoticeOfficialDescription": "See the full, up-to-date Legal Notice on the official Espacio Ciudadano portal.",
+  "@legalNoticeOfficialDescription": {
+    "description": "Legal notice — description pointing to the official document."
+  },
+  "legalNoticeOfficialAction": "Open official Legal Notice",
+  "@legalNoticeOfficialAction": {
+    "description": "Legal notice — action to open the official document."
   },
   "supportErrorSubmitUnauthorized": "You do not have permission to submit the support form.",
   "@supportErrorSubmitUnauthorized": {

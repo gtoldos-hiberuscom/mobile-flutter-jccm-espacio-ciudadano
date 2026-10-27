@@ -38,6 +38,39 @@ class AppLocalizationsEs extends AppLocalizations {
   String get landingHelpLink => 'Ayuda y contacto';
 
   @override
+  String get landingDemoButton => 'Acceder a demostración';
+
+  @override
+  String get demoConfirmTitle => 'Modo demostración';
+
+  @override
+  String get demoConfirmBody => 'Verás la aplicación con los datos ficticios de una persona inventada, sin identificarte con Cl@ve. Nada de lo que hagas se envía ni se guarda en ningún servicio real. Para salir, cierra sesión.';
+
+  @override
+  String get demoConfirmEnter => 'Entrar en la demostración';
+
+  @override
+  String get demoConfirmBack => 'Volver';
+
+  @override
+  String get demoConfirmPersistedSessionBody => 'En este dispositivo hay una sesión guardada con acceso rápido. Para entrar en la demostración se cerrará primero: cuando quieras volver a tu espacio tendrás que identificarte de nuevo con Cl@ve.';
+
+  @override
+  String get demoConfirmCloseSessionAndEnter => 'Cerrar la sesión guardada y entrar';
+
+  @override
+  String get demoConfirmCodeLabel => 'Código de acceso';
+
+  @override
+  String get demoConfirmCodeError => 'Código incorrecto. Comprueba el código de acceso a la demostración.';
+
+  @override
+  String get demoBannerLabel => 'DEMO';
+
+  @override
+  String get demoPersistedSessionNotice => 'Hay una sesión guardada en este dispositivo. Entra con tu acceso rápido y cierra sesión antes de usar la demostración.';
+
+  @override
   String get landingHelpPageTitle => 'Cómo acceder';
 
   @override
@@ -589,6 +622,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
+
+  @override
+  String get agendaInfoTooltip => 'Saber más sobre Agenda';
+
+  @override
+  String get agendaInfoSheetTitle => 'Saber más sobre Agenda';
+
+  @override
+  String get agendaInfoSheetBody => 'Consulta tus citas de atención primaria y hospitalaria, los avisos de tus notificaciones y de la caducidad de tus carnets.\n\nPara mostrarte las citas hospitalarias, necesitamos que verifiques tu identidad con un método de seguridad alta que garantice la protección de estos datos.\n\nEs posible que algunas citas o avisos no aparezcan, porque todavía no están disponibles.';
+
+  @override
+  String get agendaInfoSheetFooter => 'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Junta de Comunidades de Castilla-La Mancha (JCCM).';
+
+  @override
+  String get agendaInfoSheetMoreInformation => 'Consultar más información';
+
+  @override
+  String get agendaHospitalLockedTitle => 'Citas hospitalarias ocultas';
+
+  @override
+  String get agendaHospitalLockedBody => 'Tus datos hospitalarios están protegidos. Verifica tu identidad para consultar estas citas.';
+
+  @override
+  String get agendaHospitalLockedAction => 'Verificar';
 
   @override
   String agendaLastUpdated(String timestamp) {
@@ -3517,7 +3574,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthScopeHospital => 'Hospitalaria';
 
   @override
-  String get myDataHealthHospitalAppointmentsTitle => 'Citas hospitalarias';
+  String get myDataHealthHospitalAppointmentsTitle => 'Citas de atención hospitalaria';
 
   @override
   String get myDataHealthPrimaryCareNavTitle => 'Citas de atención primaria';
@@ -3526,7 +3583,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthHospitalNavTitle => 'Citas de atención hospitalaria';
 
   @override
-  String get myDataHealthHospitalNavVerificationRequired => 'Verifica tu identidad para continuar';
+  String get myDataHealthHospitalNavVerificationRequired => 'Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.';
 
   @override
   String get myDataHealthHospitalLinkTitle => 'Mis citas hospitalarias';
@@ -3573,6 +3630,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get myDataHealthCipUnavailable => 'CIP no disponible';
+
+  @override
   String get identityVerificationDialogTitle => 'Verificación de identidad';
 
   @override
@@ -3586,6 +3646,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get identityVerificationDialogContinue => 'Acceder a cl@ve';
+
+  @override
+  String get identityVerificationCompletedMessage => 'Verificación completada';
+
+  @override
+  String get identityVerificationSwitchedMessage => 'Te has identificado con otra persona. Se ha cerrado la sesión anterior.';
 
   @override
   String get myDataHealthLevelRequiredMessage => 'El nivel de acceso actual es insuficiente para cumplir las políticas de seguridad de la aplicación. Pulse «Continuar» para reiniciar la sesión con el nivel de acceso superior requerido.';

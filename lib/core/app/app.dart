@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/config/app_config_provider.dart';
+import 'package:jccm_espacio_ciudadano/core/demo/demo_mode_banner.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_theme.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/app_router.dart';
@@ -65,8 +66,10 @@ class App extends ConsumerWidget {
       routerConfig: router,
       // El aviso de actualización vive por encima del router: así una
       // actualización forzada no desaparece cuando el router sustituye la
-      // página de debajo (`router.go`, redirects del guard).
-      builder: (final context, final child) => AppUpdateGate(child: child ?? const SizedBox.shrink()),
+      // página de debajo (`router.go`, redirects del guard). La cinta del
+      // modo demostración va aún más arriba: debe verse en todas las
+      // pantallas, incluido el propio aviso.
+      builder: (final context, final child) => DemoModeBanner(child: AppUpdateGate(child: child ?? const SizedBox.shrink())),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

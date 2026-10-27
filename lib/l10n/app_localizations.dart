@@ -146,6 +146,72 @@ abstract class AppLocalizations {
   /// **'Ayuda y contacto'**
   String get landingHelpLink;
 
+  /// Enlace discreto de la pantalla inicial que abre la hoja de confirmación del modo demostración (para revisores de las tiendas y curiosos): la app con datos ficticios, sin Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Acceder a demostración'**
+  String get landingDemoButton;
+
+  /// Título de la hoja de confirmación previa a entrar en el modo demostración.
+  ///
+  /// In es, this message translates to:
+  /// **'Modo demostración'**
+  String get demoConfirmTitle;
+
+  /// Cuerpo de la hoja de confirmación del modo demostración: explica que los datos son ficticios y que nada se envía.
+  ///
+  /// In es, this message translates to:
+  /// **'Verás la aplicación con los datos ficticios de una persona inventada, sin identificarte con Cl@ve. Nada de lo que hagas se envía ni se guarda en ningún servicio real. Para salir, cierra sesión.'**
+  String get demoConfirmBody;
+
+  /// Botón principal de la hoja de confirmación del modo demostración.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrar en la demostración'**
+  String get demoConfirmEnter;
+
+  /// Botón secundario de la hoja de confirmación del modo demostración; cierra la hoja sin entrar.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get demoConfirmBack;
+
+  /// Párrafo adicional de la hoja de confirmación del modo demostración cuando hay una sesión real guardada en el dispositivo (acceso rápido): avisa de que entrar la cerrará.
+  ///
+  /// In es, this message translates to:
+  /// **'En este dispositivo hay una sesión guardada con acceso rápido. Para entrar en la demostración se cerrará primero: cuando quieras volver a tu espacio tendrás que identificarte de nuevo con Cl@ve.'**
+  String get demoConfirmPersistedSessionBody;
+
+  /// Botón principal de la hoja de confirmación del modo demostración cuando hay una sesión guardada: la cierra y entra en la demostración.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar la sesión guardada y entrar'**
+  String get demoConfirmCloseSessionAndEnter;
+
+  /// Etiqueta del campo de código de la hoja de confirmación del modo demostración. El código se facilita en las notas de revisión de las tiendas.
+  ///
+  /// In es, this message translates to:
+  /// **'Código de acceso'**
+  String get demoConfirmCodeLabel;
+
+  /// Error inline del campo de código de la hoja del modo demostración cuando el código no coincide.
+  ///
+  /// In es, this message translates to:
+  /// **'Código incorrecto. Comprueba el código de acceso a la demostración.'**
+  String get demoConfirmCodeError;
+
+  /// Texto de la cinta diagonal que se pinta sobre toda la app mientras la sesión es la de demostración. Muy corto: va en una cinta.
+  ///
+  /// In es, this message translates to:
+  /// **'DEMO'**
+  String get demoBannerLabel;
+
+  /// Aviso al intentar entrar en la demostración con una sesión real guardada en el dispositivo (acceso rápido): hay que cerrarla antes.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay una sesión guardada en este dispositivo. Entra con tu acceso rápido y cierra sesión antes de usar la demostración.'**
+  String get demoPersistedSessionNotice;
+
   /// Título del AppBar de la pantalla de ayuda con el acceso.
   ///
   /// In es, this message translates to:
@@ -1213,6 +1279,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No hemos podido cargar los eventos de tu agenda.'**
   String get agendaEventsUnavailable;
+
+  /// Agenda — tooltip y etiqueta accesible del botón (i) de la barra superior.
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre Agenda'**
+  String get agendaInfoTooltip;
+
+  /// Agenda — título de la hoja informativa que abre la (i) (Figma 45536:38108).
+  ///
+  /// In es, this message translates to:
+  /// **'Saber más sobre Agenda'**
+  String get agendaInfoSheetTitle;
+
+  /// Agenda — cuerpo de la hoja informativa de la (i), tres párrafos.
+  ///
+  /// In es, this message translates to:
+  /// **'Consulta tus citas de atención primaria y hospitalaria, los avisos de tus notificaciones y de la caducidad de tus carnets.\n\nPara mostrarte las citas hospitalarias, necesitamos que verifiques tu identidad con un método de seguridad alta que garantice la protección de estos datos.\n\nEs posible que algunas citas o avisos no aparezcan, porque todavía no están disponibles.'**
+  String get agendaInfoSheetBody;
+
+  /// Agenda — pie de la hoja informativa de la (i).
+  ///
+  /// In es, this message translates to:
+  /// **'Si alguno de tus datos es incorrecto o no está actualizado, contacta con la Junta de Comunidades de Castilla-La Mancha (JCCM).'**
+  String get agendaInfoSheetFooter;
+
+  /// Agenda — enlace al final de la hoja informativa de la (i); lleva a Ayuda y contacto.
+  ///
+  /// In es, this message translates to:
+  /// **'Consultar más información'**
+  String get agendaInfoSheetMoreInformation;
+
+  /// Agenda — título del aviso cuando el nivel de autenticación no permite ver las citas hospitalarias (Figma 45049:59928).
+  ///
+  /// In es, this message translates to:
+  /// **'Citas hospitalarias ocultas'**
+  String get agendaHospitalLockedTitle;
+
+  /// Agenda — texto del aviso de citas hospitalarias ocultas.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus datos hospitalarios están protegidos. Verifica tu identidad para consultar estas citas.'**
+  String get agendaHospitalLockedBody;
+
+  /// Agenda — botón del aviso de citas hospitalarias ocultas: abre la verificación de identidad con Cl@ve.
+  ///
+  /// In es, this message translates to:
+  /// **'Verificar'**
+  String get agendaHospitalLockedAction;
 
   /// Agenda — etiqueta del timestamp de última actualización.
   ///
@@ -6779,7 +6893,7 @@ abstract class AppLocalizations {
   /// Título del bloque de citas hospitalarias.
   ///
   /// In es, this message translates to:
-  /// **'Citas hospitalarias'**
+  /// **'Citas de atención hospitalaria'**
   String get myDataHealthHospitalAppointmentsTitle;
 
   /// Salud — tarjeta del menú que lleva a las citas de atención primaria.
@@ -6797,7 +6911,7 @@ abstract class AppLocalizations {
   /// Salud — aviso bajo la tarjeta de citas hospitalarias, con un candado, cuando el nivel de identificación actual no basta para consultarlas.
   ///
   /// In es, this message translates to:
-  /// **'Verifica tu identidad para continuar'**
+  /// **'Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.'**
   String get myDataHealthHospitalNavVerificationRequired;
 
   /// Salud — enlace desde Mis datos a la pantalla de citas hospitalarias del SESCAM.
@@ -6884,6 +6998,12 @@ abstract class AppLocalizations {
   /// **'{date}, {time}'**
   String myDataHealthHospitalDateTimeValue(String date, String time);
 
+  /// Salud — texto cuando el CIP no se ha podido obtener.
+  ///
+  /// In es, this message translates to:
+  /// **'CIP no disponible'**
+  String get myDataHealthCipUnavailable;
+
   /// Salud — título del aviso de que la consulta exige más nivel de seguridad.
   ///
   /// In es, this message translates to:
@@ -6913,6 +7033,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Acceder a cl@ve'**
   String get identityVerificationDialogContinue;
+
+  /// Snackbar de éxito al terminar la elevación del nivel de seguridad con Cl@ve (Figma 45536:38213).
+  ///
+  /// In es, this message translates to:
+  /// **'Verificación completada'**
+  String get identityVerificationCompletedMessage;
+
+  /// Snackbar informativo cuando, al elevar el nivel en Cl@ve, se identifica una persona distinta y la sesión pasa a ser suya (JCCMEC-278).
+  ///
+  /// In es, this message translates to:
+  /// **'Te has identificado con otra persona. Se ha cerrado la sesión anterior.'**
+  String get identityVerificationSwitchedMessage;
 
   /// Salud — bloqueo por nivel de autenticación insuficiente para datos de salud.
   ///

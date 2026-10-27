@@ -53,6 +53,7 @@ final class SaludApi {
     return _get(
       _path(citizenId, 'primaria-citas-pasadas'),
       queryParameters: {'pagina': page},
+      confirmCipMissing: () => _isCipMissing(citizenId),
     );
   }
 
@@ -86,10 +87,10 @@ final class SaludApi {
       );
     } on DioException catch (error) {
       // SESCAM devuelve el mismo 3031 cuando el ciudadano no tiene CIP y
-      // cuando el servicio de citas está caído. Solo las pendientes pueden
-      // clasificarlo como falta de CIP, y solo si la consulta del CIP lo
-      // confirma: si el CIP existe, o no se puede consultar, es un fallo de
-      // servicio y nunca un «no tienes CIP».
+      // cuando el servicio de citas está caído. Las dos consultas de primaria
+      // lo clasifican igual (JCCMEC-266), y solo como falta de CIP si la
+      // consulta del CIP lo confirma: si el CIP existe, o no se puede
+      // consultar, es un fallo de servicio y nunca un «no tienes CIP».
       final confirm = confirmCipMissing;
       if (confirm != null && _containsErrorCode(error.response?.data, '3031') && await confirm()) {
         throw const MyDataHealthCipMissing();

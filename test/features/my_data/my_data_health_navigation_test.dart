@@ -20,7 +20,7 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 const _primaria = 'Citas de atención primaria';
 const _hospitalaria = 'Citas de atención hospitalaria';
 const _cip = 'Código de Identificación Personal (CIP): CIP-1';
-const _verificar = 'Verifica tu identidad para continuar';
+const _verificar = 'Tus datos hospitalarios están protegidos. Verifica tu identidad para acceder.';
 
 /// Salud es un **menú** de dos opciones al mismo nivel, como Bienestar Social y
 /// Educación. Antes primaria se mostraba dentro de Salud y hospitalaria se

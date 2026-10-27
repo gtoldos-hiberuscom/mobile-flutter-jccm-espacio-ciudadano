@@ -13,7 +13,8 @@ import 'package:jccm_espacio_ciudadano/features/auth/1_domain/login_use_case.dar
 ///
 /// El mecanismo de elevación es repetir el login, que ya fuerza el desafío de
 /// Cl@ve. Lo que se fija aquí es el reparto de desenlaces y, sobre todo, que
-/// una identidad distinta **no se adopta** aunque su nivel baste.
+/// una identidad distinta se entrega como **cambio de sesión** (JCCMEC-278),
+/// nunca como una elevación de la sesión anterior.
 void main() {
   const minimum = AuthenticationLevel.substantial;
 
@@ -54,6 +55,16 @@ void main() {
     expect(repository.lastExtraParameters, const {'acr_values': 'substantial'});
   });
 
+  // Sin el nivel en el scope, Cerbero no lo pide a Cl@ve y Cl@ve Permanente
+  // entra sin OTP: el token volvía con el mismo nivel (22/10).
+  test('pide a Cerbero el nivel mínimo en el scope', () async {
+    repository.tokenFor = _token(_claimsToken(document: '99999999R', level: 'substantial'));
+
+    await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
+
+    expect(repository.lastScopes, const ['openid', 'substantial']);
+  });
+
   test('nivel suficiente y misma persona: elevación correcta', () async {
     repository.tokenFor = _token(_claimsToken(document: '99999999R', level: 'substantial'));
 
@@ -61,6 +72,20 @@ void main() {
 
     expect(result, isA<ElevationSucceeded>());
     expect((result as ElevationSucceeded).reading.meets(minimum), isTrue);
+  });
+
+  // JCCMEC-278: la elevación y el gate leían el nivel con reglas distintas. Si
+  // el claim viaja solo en el id token, el gate ya dejaba pasar y la elevación
+  // decía «insuficiente».
+  test('nivel solo en el id token: misma regla que el gate, elevación correcta', () async {
+    repository.tokenFor = _token(
+      _claimsToken(document: '99999999R'),
+      idToken: _claimsToken(document: '99999999R', level: 'substantial'),
+    );
+
+    final result = await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
+
+    expect(result, isA<ElevationSucceeded>());
   });
 
   // Desenlace esperado, no error: con Permanente sin reforzar se vuelve igual.
@@ -74,16 +99,28 @@ void main() {
     expect((result as ElevationInsufficient).tokenResponse, isNotNull);
   });
 
-  // El caso del móvil compartido, y el P1 abierto del proyecto.
-  test('otro documento: mismatch, y no se adopta aunque el nivel baste', () async {
-    repository.tokenFor = _token(_claimsToken(document: '00000000T', level: 'high'));
+  // JCCMEC-278: como en la web, quien se identifica se queda con la sesión.
+  test('otro documento: cambio de persona, con la sesión de la nueva', () async {
+    final token = _token(_claimsToken(document: '00000000T', level: 'high'));
+    repository.tokenFor = token;
 
     final result = await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
 
-    expect(result, isA<ElevationIdentityMismatch>());
-    // Lleva el `id_token` de esa otra persona: sin él no habría con qué cerrar
-    // su sesión de navegador antes del siguiente login.
-    expect((result as ElevationIdentityMismatch).idToken, 'id-token');
+    expect(result, isA<ElevationIdentitySwitched>());
+    final switched = result as ElevationIdentitySwitched;
+    expect(switched.tokenResponse, same(token));
+    expect(switched.jwtClaims.effectivePersonIdentifier, '00000000T');
+  });
+
+  // Aunque no alcance el mínimo: primero es otra persona, y el gate ya la
+  // bloqueará como ella.
+  test('otro documento con nivel insuficiente: también es cambio de persona', () async {
+    repository.tokenFor = _token(_claimsToken(document: '00000000T', level: 'low'));
+
+    final result = await buildUseCase()(minimum: minimum, currentClaims: _claims(document: '99999999R', level: 'low'));
+
+    expect(result, isA<ElevationIdentitySwitched>());
+    expect((result as ElevationIdentitySwitched).reading.meets(minimum), isFalse);
   });
 
   // Elevar cambia de proveedor de identidad y con él el `sub`, así que comparar
@@ -127,16 +164,16 @@ JwtClaims _claims({required final String document, required final String level, 
 );
 
 /// Token JWT sin firmar cuyo payload es lo único que el caso de uso lee.
-String _claimsToken({required final String document, required final String level, final String subject = 'subject'}) {
-  final payload = jsonEncode({'sub': subject, 'PersonIdentifier': document, 'authNLevel': level});
+String _claimsToken({required final String document, final String? level, final String subject = 'subject'}) {
+  final payload = jsonEncode({'sub': subject, 'PersonIdentifier': document, 'authNLevel': ?level});
   return 'header.${base64Url.encode(utf8.encode(payload))}.signature';
 }
 
-TokenResponse _token(final String accessToken) => TokenResponse(
+TokenResponse _token(final String accessToken, {final String idToken = 'id-token'}) => TokenResponse(
   accessToken,
   'refresh',
   DateTime(2030),
-  'id-token',
+  idToken,
   'Bearer',
   const ['openid'],
   const <String, dynamic>{},
@@ -151,6 +188,7 @@ final class _FakeAuthRepository implements AuthRepository {
   AuthException? error;
 
   Map<String, String>? lastExtraParameters;
+  List<String>? lastScopes;
   int loginCalls = 0;
   int logoutCalls = 0;
 
@@ -162,6 +200,7 @@ final class _FakeAuthRepository implements AuthRepository {
   }) async {
     loginCalls++;
     lastExtraParameters = extraParameters;
+    lastScopes = scopes;
     onLogin();
     final pendingError = error;
     if (pendingError != null) {

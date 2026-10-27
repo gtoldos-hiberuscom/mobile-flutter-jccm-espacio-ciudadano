@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
-import 'package:jccm_espacio_ciudadano/features/auth/0_entity/jwt_decoder.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/jwt_claims_notifier.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/token_response_notifier.dart';
 
@@ -15,18 +14,9 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/to
 ///
 /// No es `autoDispose`, igual que `citizenEndpointIdsProvider`: forma parte del
 /// estado de sesión y debe sobrevivir a que ninguna pantalla lo mire.
-final authenticationLevelProvider = Provider<AuthenticationLevelReading>((final ref) {
-  final claims = ref.watch(jwtClaimsProvider);
-  if (claims != null) {
-    final fromAccessToken = AuthenticationLevelReading.parse(claims.authNLevelRaw);
-    if (fromAccessToken is! MissingAuthenticationLevel) {
-      return fromAccessToken;
-    }
-  }
-
-  final idToken = ref.watch(tokenResponseProvider)?.idToken;
-  if (idToken == null || idToken.isEmpty) {
-    return const MissingAuthenticationLevel();
-  }
-  return AuthenticationLevelReading.parse(JwtDecoder.decodePayload(idToken)['authNLevel']);
-});
+final authenticationLevelProvider = Provider<AuthenticationLevelReading>(
+  (final ref) => AuthenticationLevelReading.fromSession(
+    accessTokenClaims: ref.watch(jwtClaimsProvider),
+    idToken: ref.watch(tokenResponseProvider)?.idToken,
+  ),
+);

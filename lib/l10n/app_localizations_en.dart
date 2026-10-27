@@ -38,6 +38,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get landingHelpLink => 'How to access?';
 
   @override
+  String get landingDemoButton => 'Try the demo';
+
+  @override
+  String get demoConfirmTitle => 'Demo mode';
+
+  @override
+  String get demoConfirmBody => 'You will see the app with the fictitious data of an invented person, without signing in with Cl@ve. Nothing you do is sent to or stored in any real service. Sign out to leave.';
+
+  @override
+  String get demoConfirmEnter => 'Enter the demo';
+
+  @override
+  String get demoConfirmBack => 'Back';
+
+  @override
+  String get demoConfirmPersistedSessionBody => 'There is a session saved on this device with quick access. Entering the demo will close it first: to go back to your space you will need to sign in with Cl@ve again.';
+
+  @override
+  String get demoConfirmCloseSessionAndEnter => 'Close the saved session and enter';
+
+  @override
+  String get demoConfirmCodeLabel => 'Access code';
+
+  @override
+  String get demoConfirmCodeError => 'Incorrect code. Check the demo access code.';
+
+  @override
+  String get demoBannerLabel => 'DEMO';
+
+  @override
+  String get demoPersistedSessionNotice => 'There is a session saved on this device. Sign in with quick access and sign out before using the demo.';
+
+  @override
   String get landingHelpPageTitle => 'How to access';
 
   @override
@@ -581,13 +614,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaError => 'We couldn\'t load your agenda.';
 
   @override
-  String get agendaHealthAppointmentsUnavailable => 'No hemos podido cargar tus citas sanitarias.';
+  String get agendaHealthAppointmentsUnavailable => 'We couldn\'t load your health appointments.';
 
   @override
   String get agendaHealthCipMissing => 'There is no health identification number (CIP) linked to your identity in the SESCAM service. We may therefore be unable to display this information. Please try again later.';
 
   @override
-  String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
+  String get agendaEventsUnavailable => 'We couldn\'t load your agenda events.';
+
+  @override
+  String get agendaInfoTooltip => 'Learn more about Agenda';
+
+  @override
+  String get agendaInfoSheetTitle => 'Learn more about Agenda';
+
+  @override
+  String get agendaInfoSheetBody => 'Check your primary care and hospital appointments, your notification alerts and your cards\' expiry alerts.\n\nTo show you your hospital appointments, we need you to verify your identity with a high-security method that guarantees the protection of this data.\n\nSome appointments or alerts may not appear because they are not available yet.';
+
+  @override
+  String get agendaInfoSheetFooter => 'If any of your data is incorrect or out of date, contact the Junta de Comunidades de Castilla-La Mancha (JCCM).';
+
+  @override
+  String get agendaInfoSheetMoreInformation => 'More information';
+
+  @override
+  String get agendaHospitalLockedTitle => 'Hospital appointments hidden';
+
+  @override
+  String get agendaHospitalLockedBody => 'Your hospital data is protected. Verify your identity to view these appointments.';
+
+  @override
+  String get agendaHospitalLockedAction => 'Verify';
 
   @override
   String agendaLastUpdated(String timestamp) {
@@ -796,7 +853,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get educationNonUniversityTitlesInfoFooter => 'If any of your data is incorrect or not updated, contact the Ministry of Education, Vocational Training and Sports.';
 
   @override
-  String get educationTitlesInfoMoreInformation => 'Consultar más información';
+  String get educationTitlesInfoMoreInformation => 'More information';
 
   @override
   String get educationNonUniversityTitlesTitle => 'Non-university titles';
@@ -2430,10 +2487,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get familiaNumerosaNoDataMessage => 'We could not find large family information associated with your data in the JCCM lookup service.\n\nIf this situation is not correct or not up to date, contact the Social Welfare Department of Castilla-La Mancha.';
 
   @override
-  String get familiaNumerosaNoDataContactHint => 'Si esta información es incorrecta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+  String get familiaNumerosaNoDataContactHint => 'If this information is incorrect or out of date, contact the Department of Social Welfare of Castilla-La Mancha.';
 
   @override
-  String get familiaNumerosaContactListButton => 'Consultar el listado de contactos';
+  String get familiaNumerosaContactListButton => 'View the contact list';
 
   @override
   String get familiaNumerosaContactHint => 'If any of your data is incorrect or not up to date, contact the Social Welfare Department of Castilla-La Mancha.';
@@ -2442,7 +2499,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get familiaNumerosaOfficeContactsButton => 'Contact';
 
   @override
-  String get familiaNumerosaMoreInformation => 'Consultar más información';
+  String get familiaNumerosaMoreInformation => 'More information';
 
   @override
   String familiaNumerosaCardNumberLabel(String number) {
@@ -3418,7 +3475,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEducationTitlesDescription => 'Public and private universities';
 
   @override
-  String get myDataEducationNonUniversityTitlesDescription => 'Formación profesional y otras titulaciones';
+  String get myDataEducationNonUniversityTitlesDescription => 'Vocational training and other qualifications';
 
   @override
   String get myDataEducationServicesEmpty => 'Education information and services will be available soon.';
@@ -3457,7 +3514,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthInfoSheetContactHint => 'If any data is incorrect or out of date, contact your Health Centre.';
 
   @override
-  String get myDataHealthInfoSheetMoreInformation => 'Consultar más información';
+  String get myDataHealthInfoSheetMoreInformation => 'More information';
 
   @override
   String get myDataHealthDataTab => 'My Health data';
@@ -3494,7 +3551,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String myDataHealthCipLabel(String cip) {
-    return 'Código de Identificación Personal (CIP): $cip';
+    return 'Personal Identification Code (CIP): $cip';
   }
 
   @override
@@ -3516,7 +3573,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthScopeHospital => 'Hospital';
 
   @override
-  String get myDataHealthHospitalAppointmentsTitle => 'Hospital appointments';
+  String get myDataHealthHospitalAppointmentsTitle => 'Hospital care appointments';
 
   @override
   String get myDataHealthPrimaryCareNavTitle => 'Primary care appointments';
@@ -3525,7 +3582,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthHospitalNavTitle => 'Hospital care appointments';
 
   @override
-  String get myDataHealthHospitalNavVerificationRequired => 'Verify your identity to continue';
+  String get myDataHealthHospitalNavVerificationRequired => 'Your hospital data is protected. Verify your identity to access it.';
 
   @override
   String get myDataHealthHospitalLinkTitle => 'My hospital appointments';
@@ -3572,6 +3629,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get myDataHealthCipUnavailable => 'CIP unavailable';
+
+  @override
   String get identityVerificationDialogTitle => 'Identity verification';
 
   @override
@@ -3585,6 +3645,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get identityVerificationDialogContinue => 'Go to Cl@ve';
+
+  @override
+  String get identityVerificationCompletedMessage => 'Verification completed';
+
+  @override
+  String get identityVerificationSwitchedMessage => 'You signed in as a different person. The previous session has been closed.';
 
   @override
   String get myDataHealthLevelRequiredMessage => 'Your current access level does not meet the application security policy. Press \"Continue\" to restart the session with the required higher access level.';
@@ -3914,7 +3980,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportacionDocNumberRequiredError => 'Enter the interested person\'s document number.';
 
   @override
-  String get gestionAportacionOwnExpedienteError => 'Este trámite es solo para aportación de documentos por terceros. Si deseas aportar documentación a tus expedientes, tienes que acceder a Mis expedientes.';
+  String get gestionAportacionOwnExpedienteError => 'This procedure is only for third parties submitting documents. To submit documents to your own files, go to My files.';
 
   @override
   String get gestionAportacionCamposExpedienteError => 'Fill in either the case registration number or the case identifier code (only one of the two).';
@@ -5048,10 +5114,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get legalNoticeHeading => 'Legal notice';
 
   @override
-  String get legalNoticeOfficialDescription => 'Consulta el Aviso Legal completo y actualizado en el portal oficial de Espacio Ciudadano.';
+  String get legalNoticeOfficialDescription => 'See the full, up-to-date Legal Notice on the official Espacio Ciudadano portal.';
 
   @override
-  String get legalNoticeOfficialAction => 'Abrir Aviso Legal oficial';
+  String get legalNoticeOfficialAction => 'Open official Legal Notice';
 
   @override
   String get supportErrorSubmitUnauthorized => 'You do not have permission to submit the support form.';

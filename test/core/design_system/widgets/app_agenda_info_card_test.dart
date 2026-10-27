@@ -63,6 +63,52 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('la notificación usa el mismo borde y formato que el resto de tarjetas de agenda', (final tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        locale: Locale('es'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: Column(
+            children: [
+              AppAgendaInfoCard(
+                type: AppAgendaInfoCardType.notification,
+                day: '11',
+                weekday: 'martes',
+                time: '23:32',
+                title: 'Caducidad de notificación',
+                primaryText: 'Asunto: Gestión electrónica',
+              ),
+              AppAgendaInfoCard(
+                type: AppAgendaInfoCardType.credential,
+                day: '12',
+                weekday: 'miércoles',
+                title: 'Carnet familia numerosa',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    BoxDecoration decorationOf(final String title) {
+      final container = tester.widget<Container>(
+        find.ancestor(of: find.text(title), matching: find.byType(Container)).last,
+      );
+      return container.decoration! as BoxDecoration;
+    }
+
+    final notification = decorationOf('Caducidad de notificación');
+    // Todas las variantes conservan la barra lateral y no llevan sombra.
+    expect((notification.border! as Border).left.width, 4);
+    expect(notification.boxShadow, isNull);
+
+    final credential = decorationOf('Carnet familia numerosa');
+    expect((credential.border! as Border).left.width, 4);
+    expect(credential.boxShadow, isNull);
+  });
+
   testWidgets('al pasar a tipo frase respeta siglas y códigos', (final tester) async {
     await tester.pumpWidget(
       const MaterialApp(
@@ -94,5 +140,18 @@ void main() {
     expect(find.text('Centro: C.S. palomarejos_pren'), findsOneWidget);
     expect(find.text('Sala: Consultas B-203'), findsOneWidget);
     expect(find.text('Organismo emisor: Delegación de hacienda, aapp y TD'), findsOneWidget);
+
+    // Etiqueta en negrita, valor en peso normal.
+    final spans = <TextSpan>[];
+    tester.widget<RichText>(find.text('Sala: Consultas B-203', findRichText: true)).text.visitChildren((final span) {
+      if (span is TextSpan && span.text != null) {
+        spans.add(span);
+      }
+      return true;
+    });
+    expect(spans.map((final span) => span.text), ['Sala: ', 'Consultas B-203']);
+    expect(spans.first.style!.fontWeight, FontWeight.w700);
+    expect(spans.first.style!.color, AppColors.textPrimary, reason: 'la etiqueta va del color del título');
+    expect(spans.last.style!.fontWeight, FontWeight.w400);
   });
 }

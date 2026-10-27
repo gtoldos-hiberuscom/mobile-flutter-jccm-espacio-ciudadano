@@ -4,6 +4,7 @@
   "BASE_URL": "https://gateway-espacio-ciudadano-pre.cm-pre.jccm.es",
   "TIMEOUT": "20",
   "DEBUG_MODE": "true",
+  "DEMO_MODE_ENABLED": "true",
   "LOG_REDACTION_OFF": "true",
   "APP_UPDATE_SOURCE": "mock-recommended",
   "APP_STORE_ID": "6795089236",

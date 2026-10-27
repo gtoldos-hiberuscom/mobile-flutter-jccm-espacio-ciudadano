@@ -50,7 +50,8 @@ void main() {
     expect(find.textContaining('Sala: Planta 1'), findsOneWidget);
     expect(find.textContaining('Centro: Hospital general de tomelloso'), findsOneWidget);
     expect(find.textContaining('Agenda: Traumatologia 6 - dra. castellanos'), findsOneWidget);
-    expect(find.textContaining('Fecha y hora:'), findsNothing);
+    // La fecha y la hora ya están en el raíl: no se repiten como fila.
+    expect(find.textContaining('Fecha y hora'), findsNothing);
   });
 
   // El apartado 2.2 exige alternar «sin recargar toda la pantalla». La prueba de
@@ -118,7 +119,7 @@ void main() {
     expect(find.textContaining('Sala:'), findsNothing);
     expect(find.textContaining('Centro:'), findsNothing);
     expect(find.textContaining('Agenda:'), findsNothing);
-    expect(find.textContaining('Fecha y hora:'), findsNothing);
+    expect(find.textContaining('Fecha y hora'), findsNothing);
   });
 
   testWidgets('un fallo del SESCAM se muestra con reintento, no como lista vacía', (final tester) async {
