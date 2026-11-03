@@ -8118,7 +8118,25 @@ abstract class AppLocalizations {
   ///
   /// In es, this message translates to:
   /// **'Actualizado el {day} {month} {year} a las {time}h'**
-  String commonUpdatedAt(Object day, Object month, Object time, Object year);
+  String commonUpdatedAt(Object day, Object month, Object year, Object time);
+
+  /// Agenda — marca de última actualización cuando fue hoy (HH:MM).
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado hoy a las {time} h'**
+  String agendaUpdatedToday(Object time);
+
+  /// Agenda — marca de última actualización cuando fue ayer (HH:MM).
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado ayer a las {time} h'**
+  String agendaUpdatedYesterday(Object time);
+
+  /// Agenda — marca de última actualización en otro día (mes abreviado ya localizado, HH:MM).
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado el {day} {month} a las {time} h'**
+  String agendaUpdatedOn(Object day, Object month, Object time);
 
   /// Agenda — pestaña de filtro por número de días (7, 30, 365).
   ///

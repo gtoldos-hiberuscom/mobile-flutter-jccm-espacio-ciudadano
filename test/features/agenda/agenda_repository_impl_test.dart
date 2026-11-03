@@ -49,8 +49,10 @@ void main() {
       expect(appointments[2].kind, AgendaAppointmentKind.health);
       expect(appointments[2].channel, 'Telefónica');
       expect(appointments[2].details.map((final detail) => detail.label), ['Profesional', 'Tipo de cita', 'Modo de cita']);
-      expect(appointments[3].description, 'Consulta Medicina de Familia');
+      // Las de SESCAM también se pintan por filas, con el valor tal cual llega.
+      expect(appointments[3].title, 'Cita de Atención Primaria');
       expect(appointments[3].kind, AgendaAppointmentKind.health);
+      expect(appointments[3].details, [(label: 'Tipo de cita', value: 'Consulta Medicina de Familia')]);
       // SESCAM trae `centro`, pero en primaria no se muestra (JCCMEC-274): ni
       // como campo ni como texto secundario de reserva.
       expect(appointments[3].center, isNull);
@@ -102,10 +104,14 @@ void main() {
       final duplicated = appointments.where((final appointment) => appointment.dateTime == DateTime(2026, 6, 15, 9));
       expect(duplicated, hasLength(1));
       // Gana la de SESCAM: trae profesional y modo en campos propios en vez de
-      // dentro del mensaje del evento.
-      expect(duplicated.single.title, 'LAGUNA RUIDERA MONTESINOS');
-      expect(duplicated.single.description, 'Cita de Atención Primaria');
-      expect(duplicated.single.detail, 'Consulta a demanda');
+      // dentro del mensaje del evento. Se pinta por filas, sin reinterpretar
+      // los valores.
+      expect(duplicated.single.title, 'Cita de Atención Primaria');
+      expect(duplicated.single.details, [
+        (label: 'Profesional', value: 'LAGUNA RUIDERA MONTESINOS'),
+        (label: 'Tipo de cita', value: 'DEMANDA'),
+        (label: 'Modo de cita', value: 'Presencial'),
+      ]);
       expect(appointments, hasLength(4));
     });
 
@@ -146,7 +152,7 @@ void main() {
       )).appointments;
 
       expect(appointments, hasLength(1), reason: 'la misma cita publicada por las dos fuentes debe listarse una vez');
-      expect(appointments.single.title, 'LAGUNA RUIDERA MONTESINOS');
+      expect(appointments.single.details.first, (label: 'Profesional', value: 'LAGUNA RUIDERA MONTESINOS'));
     });
 
     test('un evento con instante UTC se guarda en hora local', () async {

@@ -5564,7 +5564,36 @@
   },
   "commonUpdatedAt": "Actualizado el {day} {month} {year} a las {time}h",
   "@commonUpdatedAt": {
-    "description": "Marca de última actualización con fecha y hora (mes ya localizado)."
+    "description": "Marca de última actualización con fecha y hora (mes ya localizado).",
+    "placeholders": {
+      "day": {},
+      "month": {},
+      "year": {},
+      "time": {}
+    }
+  },
+  "agendaUpdatedToday": "Actualizado hoy a las {time} h",
+  "@agendaUpdatedToday": {
+    "description": "Agenda — marca de última actualización cuando fue hoy (HH:MM).",
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "agendaUpdatedYesterday": "Actualizado ayer a las {time} h",
+  "@agendaUpdatedYesterday": {
+    "description": "Agenda — marca de última actualización cuando fue ayer (HH:MM).",
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "agendaUpdatedOn": "Actualizado el {day} {month} a las {time} h",
+  "@agendaUpdatedOn": {
+    "description": "Agenda — marca de última actualización en otro día (mes abreviado ya localizado, HH:MM).",
+    "placeholders": {
+      "day": {},
+      "month": {},
+      "time": {}
+    }
   },
   "agendaFilterDays": "{days} días",
   "@agendaFilterDays": {

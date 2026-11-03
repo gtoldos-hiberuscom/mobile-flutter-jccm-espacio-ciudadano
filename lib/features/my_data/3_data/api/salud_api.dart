@@ -40,83 +40,102 @@ final class SaludApi {
   }
 
   Future<Map<String, dynamic>?> getPrimaryCarePendingAppointments({required final String citizenId}) {
-    return _get(
-      _path(citizenId, 'primaria-citas-pendientes'),
-      confirmCipMissing: () => _isCipMissing(citizenId),
-    );
+    return _getAppointments(citizenId, _path(citizenId, 'primaria-citas-pendientes'));
   }
 
   Future<Map<String, dynamic>?> getPrimaryCarePastAppointments({
     required final String citizenId,
     final int page = 0,
   }) {
-    return _get(
+    return _getAppointments(
+      citizenId,
       _path(citizenId, 'primaria-citas-pasadas'),
       queryParameters: {'pagina': page},
-      confirmCipMissing: () => _isCipMissing(citizenId),
     );
   }
 
   Future<Map<String, dynamic>?> getHospitalPendingAppointments({required final String citizenId}) {
-    return _get(_path(citizenId, 'hospitalaria-citas-pendientes'));
+    return _getAppointments(citizenId, _path(citizenId, 'hospitalaria-citas-pendientes'));
   }
 
   Future<Map<String, dynamic>?> getHospitalPastAppointments({required final String citizenId}) {
-    return _get(_path(citizenId, 'hospitalaria-citas-pasadas'));
+    return _getAppointments(citizenId, _path(citizenId, 'hospitalaria-citas-pasadas'));
   }
 
   String _path(final String citizenId, final String operation) {
     return '/api/v1/ciudadanos/${Uri.encodeComponent(citizenId)}/salud/$operation';
   }
 
+  /// Consulta de citas. Cuando el servicio responde con error, la consulta
+  /// del CIP es la única forma de saber qué ha pasado: el back todavía no
+  /// distingue «sin CIP» de «sin citas» y SESCAM devuelve el mismo 3031 en
+  /// los dos casos.
+  ///
+  /// - **Sin CIP** → [MyDataHealthCipMissing], sea cual sea el código: la
+  ///   hospitalaria no responde con 3031, y sin CIP ninguna consulta de citas
+  ///   puede salir bien.
+  /// - **3031 con CIP** → `null`: el ciudadano no tiene citas.
+  /// - **CIP no consultable, o cualquier otro error** → la `DioException` se
+  ///   propaga como fallo de servicio. Nunca se afirma «no tienes CIP» ni «no
+  ///   tienes citas» sin confirmarlo.
+  Future<Map<String, dynamic>?> _getAppointments(
+    final String citizenId,
+    final String path, {
+    final Map<String, Object?>? queryParameters,
+  }) async {
+    try {
+      return await _get(path, queryParameters: queryParameters);
+    } on DioException catch (error) {
+      final hasNoAppointmentsCode = _containsErrorCode(error.response?.data, '3031');
+      final statusCode = error.response?.statusCode;
+      if (!hasNoAppointmentsCode && (statusCode == null || statusCode < 500)) {
+        rethrow;
+      }
+      switch (await _cipStatus(citizenId)) {
+        case _CipStatus.missing:
+          throw const MyDataHealthCipMissing();
+        case _CipStatus.present when hasNoAppointmentsCode:
+          return null;
+        case _CipStatus.present:
+        case _CipStatus.unknown:
+          rethrow;
+      }
+    }
+  }
+
   Future<Map<String, dynamic>?> _get(
     final String path, {
     final Map<String, Object?>? queryParameters,
-    final Future<bool> Function()? confirmCipMissing,
   }) async {
     // Lo que no acepta `isHandledIntermediacionStatus` sale como `DioException`,
     // ya mapeada a `AppError` por `ErrorInterceptor`: el 401 tras un refresco
     // fallido, el 429 y los 5xx llegan a la pantalla como error de servicio,
     // nunca como "sin datos".
-    final Response<Object?> response;
-    try {
-      response = await _dio.get<Object?>(
-        path,
-        queryParameters: queryParameters,
-        options: Options(validateStatus: isHandledIntermediacionStatus),
-      );
-    } on DioException catch (error) {
-      // SESCAM devuelve el mismo 3031 cuando el ciudadano no tiene CIP y
-      // cuando el servicio de citas está caído. Las dos consultas de primaria
-      // lo clasifican igual (JCCMEC-266), y solo como falta de CIP si la
-      // consulta del CIP lo confirma: si el CIP existe, o no se puede
-      // consultar, es un fallo de servicio y nunca un «no tienes CIP».
-      final confirm = confirmCipMissing;
-      if (confirm != null && _containsErrorCode(error.response?.data, '3031') && await confirm()) {
-        throw const MyDataHealthCipMissing();
-      }
-      rethrow;
-    }
+    final response = await _dio.get<Object?>(
+      path,
+      queryParameters: queryParameters,
+      options: Options(validateStatus: isHandledIntermediacionStatus),
+    );
 
     checkIntermediacionAuthorization(response);
     return response.statusCode == 404 ? null : decodeApiEnvelope(response.data);
   }
 
-  /// `true` solo cuando el SESCAM responde sin CIP para el ciudadano. Un fallo
-  /// de la propia consulta no confirma nada y cuenta como `false`.
-  Future<bool> _isCipMissing(final String citizenId) async {
+  /// Un fallo de la propia consulta del CIP no confirma nada:
+  /// [_CipStatus.unknown].
+  Future<_CipStatus> _cipStatus(final String citizenId) async {
     final Map<String, dynamic>? envelope;
     try {
       envelope = await getCip(citizenId: citizenId);
     } on Exception {
-      return false;
+      return _CipStatus.unknown;
     }
     final body = envelope?['body'];
     if (body is! Map) {
-      return true;
+      return _CipStatus.missing;
     }
     final cip = body.entries.where((final entry) => entry.key.toString().toLowerCase() == 'cip').map((final entry) => entry.value?.toString().trim() ?? '').firstOrNull;
-    return cip == null || cip.isEmpty;
+    return cip == null || cip.isEmpty ? _CipStatus.missing : _CipStatus.present;
   }
 
   bool _containsErrorCode(final Object? value, final String expectedCode) {
@@ -140,3 +159,5 @@ final class SaludApi {
     return visit(decodeApiEnvelope(value) ?? value);
   }
 }
+
+enum _CipStatus { present, missing, unknown }

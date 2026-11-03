@@ -4247,8 +4247,23 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String commonUpdatedAt(Object day, Object month, Object time, Object year) {
+  String commonUpdatedAt(Object day, Object month, Object year, Object time) {
     return 'Actualizado el $day $month $year a las ${time}h';
+  }
+
+  @override
+  String agendaUpdatedToday(Object time) {
+    return 'Actualizado hoy a las $time h';
+  }
+
+  @override
+  String agendaUpdatedYesterday(Object time) {
+    return 'Actualizado ayer a las $time h';
+  }
+
+  @override
+  String agendaUpdatedOn(Object day, Object month, Object time) {
+    return 'Actualizado el $day $month a las $time h';
   }
 
   @override

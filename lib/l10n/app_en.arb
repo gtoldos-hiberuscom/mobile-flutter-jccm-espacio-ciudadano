@@ -5548,8 +5548,17 @@
   },
   "commonUpdatedAt": "Updated on {day} {month} {year} at {time}",
   "@commonUpdatedAt": {
-    "description": "Last-updated stamp with date and time (month already localized)."
+    "description": "Last-updated stamp with date and time (month already localized).",
+    "placeholders": {
+      "day": {},
+      "month": {},
+      "year": {},
+      "time": {}
+    }
   },
+  "agendaUpdatedToday": "Updated today at {time}",
+  "agendaUpdatedYesterday": "Updated yesterday at {time}",
+  "agendaUpdatedOn": "Updated on {day} {month} at {time}",
   "agendaFilterDays": "{days} days",
   "@agendaFilterDays": {
     "description": "Agenda — filter tab by number of days (7, 30, 365)."

@@ -11,6 +11,8 @@ import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_health_re
 
 const _citizenId = 'sub-alt-1';
 
+const _sescam3031Body = '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"Error al obtener las citas"}]}}';
+
 void main() {
   group('MyDataHealthRepositoryImpl', () {
     test('loads CIP and pending primary care appointments from the gateway', () async {
@@ -179,28 +181,70 @@ void main() {
     });
 
     for (final filter in HealthAppointmentFilter.values) {
-      for (final (description, cipStatus) in [('el ciudadano tiene CIP', 200), ('el CIP no se puede consultar', 500)]) {
-        test('trata el 500/3031 de citas ${filter.name} como servicio no disponible cuando $description', () async {
-          // El caso reportado: el CIP se muestra en Salud y las citas
-          // decían que no existía, porque el servicio de citas estaba caído.
-          final adapter = _MyDataHealthAdapter(
-            errorStatus: 500,
-            errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"Error al obtener las citas"}]}}',
-            cipStatus: cipStatus,
-          );
-          final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+      test('trata el 500/3031 de citas ${filter.name} como «sin citas» cuando el ciudadano tiene CIP', () async {
+        // El back aún no distingue «sin CIP» de «sin citas»: SESCAM devuelve
+        // 3031 en los dos casos y el CIP es lo único que los separa. Pintarlo
+        // como servicio caído escondía que simplemente no hay citas.
+        final adapter = _MyDataHealthAdapter(
+          errorStatus: 500,
+          errorBody: _sescam3031Body,
+          cipStatus: 200,
+        );
+        final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
 
-          await expectLater(
-            repository.loadPrimaryCareAppointments(
-              citizenId: _citizenId,
-              filter: filter,
-            ),
-            throwsA(isA<DioException>()),
-          );
-          expect(adapter.paths, contains('/api/v1/ciudadanos/sub-alt-1/salud/cip'));
-        });
-      }
+        expect(await repository.loadPrimaryCareAppointments(citizenId: _citizenId, filter: filter), isEmpty);
+        expect(await repository.loadHospitalAppointments(citizenId: _citizenId, filter: filter), isEmpty);
+        expect(adapter.paths, contains('/api/v1/ciudadanos/sub-alt-1/salud/cip'));
+      });
+
+      test('trata el 500/3031 de citas ${filter.name} como servicio no disponible cuando el CIP no se puede consultar', () async {
+        final adapter = _MyDataHealthAdapter(
+          errorStatus: 500,
+          errorBody: _sescam3031Body,
+          cipStatus: 500,
+        );
+        final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+        await expectLater(
+          repository.loadPrimaryCareAppointments(citizenId: _citizenId, filter: filter),
+          throwsA(isA<DioException>()),
+        );
+        await expectLater(
+          repository.loadHospitalAppointments(citizenId: _citizenId, filter: filter),
+          throwsA(isA<DioException>()),
+        );
+      });
+
+      test('identifica un 500 de citas hospitalarias ${filter.name} como ausencia de CIP cuando el SESCAM no devuelve CIP', () async {
+        // La hospitalaria no responde con 3031: sin CIP falla con su propio
+        // error, y se pintaba como «servicio no disponible».
+        final adapter = _MyDataHealthAdapter(
+          errorStatus: 500,
+          errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":5000,"mensaje-error":"Error interno"}]}}',
+          cipStatus: 404,
+        );
+        final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+        await expectLater(
+          repository.loadHospitalAppointments(citizenId: _citizenId, filter: filter),
+          throwsA(isA<MyDataHealthCipMissing>()),
+        );
+      });
     }
+
+    test('deja fallar un 500 de citas sin 3031 como servicio no disponible aunque el ciudadano tenga CIP', () async {
+      final adapter = _MyDataHealthAdapter(
+        errorStatus: 500,
+        errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":5000,"mensaje-error":"Error interno"}]}}',
+        cipStatus: 200,
+      );
+      final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+      await expectLater(
+        repository.loadHospitalAppointments(citizenId: _citizenId, filter: HealthAppointmentFilter.pending),
+        throwsA(isA<DioException>()),
+      );
+    });
 
     test('identifica el 500/3031 de citas pasadas como ausencia de CIP, igual que en pendientes (JCCMEC-266)', () async {
       final adapter = _MyDataHealthAdapter(

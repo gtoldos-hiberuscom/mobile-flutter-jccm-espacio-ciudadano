@@ -415,6 +415,27 @@ final class AgendaRepositoryImpl implements AgendaRepository {
     final showsCenter = kind != AgendaAppointmentKind.health;
     final visibleCenter = showsCenter ? center : null;
 
+    // Las citas de SESCAM se pintan como las hospitalarias: una fila por dato,
+    // con su etiqueta y el valor tal cual llega del servicio, igual que los
+    // párrafos que publica la agenda general para la misma cita.
+    if (source == AgendaAppointmentSource.health) {
+      final details = <AgendaAppointmentDetail>[
+        if (professional != null) (label: 'Profesional', value: professional),
+        if (specialty != null) (label: 'Tipo de cita', value: specialty),
+        if (channel != null) (label: 'Modo de cita', value: channel),
+      ];
+      if (details.isNotEmpty) {
+        return AgendaAppointment(
+          dateTime: dateTime,
+          title: 'Cita de Atención Primaria',
+          description: 'Cita de Atención Primaria',
+          kind: kind,
+          channel: channel,
+          details: List<AgendaAppointmentDetail>.unmodifiable(details),
+        );
+      }
+    }
+
     // La agenda general publica el cuerpo del evento como párrafos HTML
     // («<p>Profesional: …</p> <p>Sala: …</p>»). Cuando traen filas etiquetadas
     // se conservan una a una, para pintarlas como hace la web, en vez de
