@@ -12,7 +12,7 @@ Análisis completo en `sso_portales_externos.md` §10 y `clave_certificado_sso_i
 ---
 
 ## Por qué pasa
-
+◊
 La identificación no vive en la app, sino en el navegador: la app comparte su almacén para tener
 SSO con Empleo y Educamos (decisión de JCCM, 05/10). Parte de la identidad del ciudadano anterior
 puede seguir ahí después de cerrar sesión, y la app no puede borrarla.
@@ -118,9 +118,100 @@ salvo esperar a que pase la hora.
 
 ---
 
-## Pendiente
+## Anexo · Propuesta de preguntas frecuentes para la app
 
-- E-02 en Android: confirmar que forzar la detención de Chrome soluciona el `003002`.
-- E-03: qué lo soluciona en iOS y por qué la pasarela a veces entra sin pedir nada.
-- Navegador por defecto distinto de Chrome (parque Samsung): medir dónde queda el estado.
-- Reportar E-01 y E-02 a Cl@ve, y E-04 a Educamos/Cerbero.
+Textos para el ciudadano, pensados para la categoría «Acceso y autenticación» de
+**Ayuda › Preguntas frecuentes**. Siguen el tono de las que ya hay (`helpFaq*` en `app_es.arb`):
+de tú, sin tecnicismos y nombrando la app como «Espacio ciudadano». **Pendiente de revisar por
+UX Writing.**
+
+**Notas para implementarlo:**
+
+- Las respuestas con la marca **[Android]** o **[iOS]** son distintas en cada sistema. Hay que
+  mostrar solo la del dispositivo, no las dos.
+- Los nombres de los menús de Android cambian según el fabricante. Por eso se escribe «o similar».
+- La respuesta 3 en Android y la 4 en iOS no están medidas del todo (ver E-02 y E-03). Hay que
+  confirmarlas antes de publicar o suavizarlas.
+- Claves ARB propuestas entre paréntesis.
+
+---
+
+**1. Comparto el dispositivo con otra persona. ¿Cómo cambio de usuario?**
+(`helpFaqSwitchUserQ` / `helpFaqSwitchUserA`)
+
+**[Android]**
+> Para que la otra persona entre con su propia identidad:
+> 1. En Espacio ciudadano, ve a tu perfil y pulsa «Cerrar sesión».
+> 2. Si has usado Educamos CLM, cierra sesión también dentro de Educamos.
+> 3. Si has entrado con certificado electrónico, ve a Ajustes › Aplicaciones › Chrome y pulsa
+>    «Forzar detención» (o similar).
+> 4. Vuelve a Espacio ciudadano y pulsa «Acceder».
+>
+> Si usas otro navegador por defecto en lugar de Chrome, haz el paso 3 en ese navegador.
+
+**[iOS]**
+> Para que la otra persona entre con su propia identidad:
+> 1. En Espacio ciudadano, ve a tu perfil y pulsa «Cerrar sesión».
+> 2. Cierra la aplicación por completo: desliza hacia arriba desde la parte inferior de la
+>    pantalla y retira Espacio ciudadano de la lista.
+> 3. Si has usado Educamos CLM, cierra sesión también dentro de Educamos.
+> 4. Abre de nuevo Espacio ciudadano y pulsa «Acceder».
+
+---
+
+**2. He cerrado sesión y, al volver a entrar con certificado electrónico, no me deja elegir
+certificado o entro con el de otra persona. ¿Qué hago?**
+(`helpFaqCertificateReuseQ` / `helpFaqCertificateReuseA`)
+
+**[Android]**
+> Chrome recuerda el último certificado utilizado mientras sigue abierto. Ve a Ajustes ›
+> Aplicaciones › Chrome y pulsa «Forzar detención» (o similar). Después vuelve a Espacio
+> ciudadano y pulsa «Acceder». Esta vez podrás elegir el certificado.
+>
+> Si sigue sin dejarte elegir, en Ajustes › Aplicaciones › Chrome › Almacenamiento pulsa «Borrar
+> datos». Ten en cuenta que así se cierran también las sesiones que tengas abiertas en Chrome.
+
+**[iOS]**
+> El dispositivo recuerda el último certificado utilizado mientras la aplicación está abierta.
+> Cierra Espacio ciudadano por completo (desliza hacia arriba y retírala de la lista), vuelve a
+> abrirla y pulsa «Acceder». Esta vez podrás elegir el certificado.
+
+---
+
+**3. Me aparece el error «003002 - Authentication Failed (no certificate has been submitted)» y
+no me deja volver a elegir certificado. ¿Qué hago?**
+(`helpFaqCertificateCancelledQ` / `helpFaqCertificateCancelledA`)
+
+**[Android]**
+> Ocurre si se cancela o no se completa la elección del certificado. Ve a Ajustes › Aplicaciones ›
+> Chrome, pulsa «Forzar detención» (o similar) y vuelve a intentarlo desde Espacio ciudadano.
+
+**[iOS]**
+> Ocurre si se cancela o no se completa la elección del certificado. Cierra Espacio ciudadano por
+> completo (desliza hacia arriba y retírala de la lista) y vuelve a intentarlo. También puedes
+> esperar unos minutos antes de volver a intentarlo.
+
+---
+
+**4. He pulsado «Acceder» y Cl@ve no me ha pedido mis datos. ¿Es normal?**
+(`helpFaqClaveAutoLoginQ` / `helpFaqClaveAutoLoginA`)
+
+**[Android]**
+> Cl@ve puede identificarte automáticamente si te has identificado en la última hora. Comprueba en
+> tu perfil que el nombre que aparece es el tuyo. Si no lo es, cierra sesión y, en Ajustes ›
+> Aplicaciones › Chrome › Almacenamiento, pulsa «Borrar datos». Después vuelve a pulsar «Acceder».
+
+**[iOS]**
+> Cl@ve puede identificarte automáticamente si te has identificado en la última hora. Comprueba en
+> tu perfil que el nombre que aparece es el tuyo. Si no lo es, cierra sesión, cierra la aplicación
+> por completo y espera a que pase una hora desde la última identificación antes de volver a
+> acceder.
+
+---
+
+**5. Al abrir Educamos CLM aparecen los datos de otra persona. ¿Por qué?**
+(`helpFaqEducamosOtherUserQ` / `helpFaqEducamosOtherUserA`) — misma respuesta en los dos sistemas
+
+> Educamos CLM tiene su propia sesión, independiente de Espacio ciudadano, y no se cierra al cerrar
+> sesión en la aplicación. Antes de que otra persona use el dispositivo, cierra sesión también
+> dentro de Educamos CLM.
