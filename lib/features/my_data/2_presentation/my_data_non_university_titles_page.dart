@@ -61,7 +61,7 @@ class MyDataNonUniversityTitlesPage extends ConsumerWidget {
   ) {
     return MyDataNoData(
       message: l10n.educationNonUniversityTitlesNoDataMessage,
-      actionLabel: l10n.myDataNoDataContact,
+      contactLinkText: l10n.educationNonUniversityTitlesContactLink,
       contactUrl: _nonUniversityTitlesContactUrl,
     );
   }

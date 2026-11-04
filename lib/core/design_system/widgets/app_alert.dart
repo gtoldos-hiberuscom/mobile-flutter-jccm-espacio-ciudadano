@@ -8,6 +8,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_modal_layout
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_button.dart';
+import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_inline_link.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -19,6 +20,23 @@ enum AppAlertSeverity { neutral, success, error, warning }
 
 /// Size variant for [AppAlertContextual].
 enum AppAlertContextualSize { medium, small }
+
+/// Enlace en línea que [AppAlertContextual] añade al final de su mensaje,
+/// seguido de [trailing] (por defecto, el punto final de la frase).
+@immutable
+class AppAlertMessageLink {
+  const AppAlertMessageLink({
+    required this.text,
+    required this.onTap,
+    this.trailing = '.',
+    this.isExternal = false,
+  }) : assert(text != '', 'text must not be empty');
+
+  final String text;
+  final VoidCallback onTap;
+  final String trailing;
+  final bool isExternal;
+}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // APP ALERT BANNER  (Figma "Alerts/ Banner" 82:3533)
@@ -224,6 +242,7 @@ class AppAlertContextual extends StatelessWidget {
     this.actionSpacing = AppDimensions.space16,
     this.semanticsLabel,
     this.announce = false,
+    this.messageLink,
   }) : assert(message.length > 0, 'message must not be empty'),
        assert(title == null || title.length > 0, 'title must not be empty'),
        assert(semanticsLabel == null || semanticsLabel.length > 0, 'semanticsLabel must not be empty'),
@@ -241,26 +260,47 @@ class AppAlertContextual extends StatelessWidget {
   /// Contextual help is persistent by default; enable for dynamic insertion.
   final bool announce;
 
+  /// Enlace opcional que continúa la frase de [message] (p. ej. «contacta con
+  /// soporte técnico.»). Se lee dentro de la etiqueta de la alerta y, además,
+  /// se expone como nodo de enlace propio para lectores de pantalla.
+  final AppAlertMessageLink? messageLink;
+
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final (_, severityColor, _, severityIcon) = AppAlertBanner._tokens(severity);
     final severityTitle = AppAlertBanner._defaultTitle(l10n, severity);
     final effectiveTitle = title ?? severityTitle;
-    final alertLabel = semanticsLabel ?? l10n.a11yAlert(effectiveTitle, message);
+    final link = messageLink;
+    final fullMessage = link == null ? message : '$message ${link.text}${link.trailing}';
+    final alertLabel = semanticsLabel ?? l10n.a11yAlert(effectiveTitle, fullMessage);
     final useHorizontalLayout = horizontal && MediaQuery.textScalerOf(context).scale(1) <= 1.5;
     final textStyle = size == AppAlertContextualSize.medium ? AppTypography.bodyRegular.copyWith(color: severityColor) : AppTypography.smallRegular.copyWith(color: severityColor);
 
-    final textWidget = title == null
+    final textWidget = title == null && link == null
         ? Text(message, style: textStyle)
         : Text.rich(
             TextSpan(
               children: [
-                TextSpan(
-                  text: '$title ',
-                  style: textStyle.copyWith(fontWeight: FontWeight.w700),
-                ),
+                if (title != null)
+                  TextSpan(
+                    text: '$title ',
+                    style: textStyle.copyWith(fontWeight: FontWeight.w700),
+                  ),
                 TextSpan(text: message, style: textStyle),
+                if (link != null) ...[
+                  TextSpan(text: ' ', style: textStyle),
+                  AppInlineLink.span(
+                    text: link.text,
+                    style: textStyle.copyWith(
+                      decoration: TextDecoration.underline,
+                      decorationColor: severityColor,
+                    ),
+                    onTap: link.onTap,
+                    isExternal: link.isExternal,
+                  ),
+                  TextSpan(text: link.trailing, style: textStyle),
+                ],
               ],
             ),
           );
@@ -315,6 +355,17 @@ class AppAlertContextual extends StatelessWidget {
                 liveRegion: announce,
                 child: const SizedBox(width: 1, height: 1),
               ),
+              // El contenido visual está excluido de la semántica; el enlace
+              // se expone aparte para que el lector de pantalla pueda activarlo.
+              if (link != null)
+                Semantics(
+                  container: true,
+                  link: true,
+                  label: link.text,
+                  hint: link.isExternal ? l10n.externalLinkA11yHint : null,
+                  onTap: link.onTap,
+                  child: const SizedBox(width: 1, height: 1),
+                ),
               body,
             ],
           ),

@@ -1259,7 +1259,7 @@ abstract class AppLocalizations {
   /// Agenda — mensaje de error al cargar.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido cargar tu agenda.'**
+  /// **'No podemos mostrar la información de tu agenda en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get agendaError;
 
   /// Agenda — aviso de carga parcial cuando la fuente de citas de Atención Primaria (SESCAM) no responde y el resto de la agenda sí se ha cargado.
@@ -1271,7 +1271,7 @@ abstract class AppLocalizations {
   /// Agenda — aviso informativo cuando SESCAM devuelve el código 3031 porque no existe un CIP vinculado a la identidad.
   ///
   /// In es, this message translates to:
-  /// **'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.'**
+  /// **'No encontramos tu código de identificación personal (CIP) en el Servicio de Salud de Castilla-La Mancha (SESCAM) y no podemos mostrar tus citas. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin funcionar, contacta con'**
   String get agendaHealthCipMissing;
 
   /// Agenda — aviso de carga parcial cuando la fuente de eventos de la agenda no responde y el resto de la agenda sí se ha cargado.
@@ -1919,8 +1919,14 @@ abstract class AppLocalizations {
   /// Mensaje mostrado cuando la consulta de datos JCCM no está autorizada.
   ///
   /// In es, this message translates to:
-  /// **'Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.'**
+  /// **'Para consultar la información que la Junta de Comunidades de Castilla-La Mancha (JCCM) tiene sobre ti, es necesario que autorices el acceso a tus datos. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.'**
   String get myDataJccmAuthorizationRequiredMessage;
+
+  /// Recomendaciones — aviso cuando no se ha autorizado la cláusula de recomendaciones basadas en hechos vitales.
+  ///
+  /// In es, this message translates to:
+  /// **'Para mostrarte recomendaciones basadas en tus hechos vitales, es necesario que autorices el uso de esta información. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.'**
+  String get recommendationsAuthorizationRequiredMessage;
 
   /// Mensaje de error cuando la comprobación de autorizaciones no está disponible (fallo de backend), distinto de una autorización no concedida.
   ///
@@ -1937,7 +1943,7 @@ abstract class AppLocalizations {
   /// Mensaje mostrado cuando la consulta de datos AGE no está autorizada.
   ///
   /// In es, this message translates to:
-  /// **'Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.'**
+  /// **'Para consultar la información que la Administración General del Estado (AGE) tiene sobre ti, es necesario que autorices el acceso a tus datos. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.'**
   String get myDataAgeAuthorizationRequiredMessage;
 
   /// Bienestar — sección familia numerosa.
@@ -2459,7 +2465,7 @@ abstract class AppLocalizations {
   /// Mensaje de confirmación tras el envío.
   ///
   /// In es, this message translates to:
-  /// **'Hemos recibido tu solicitud. Te confirmaremos por correo electrónico.'**
+  /// **'Hemos recibido tu consulta. Nos pondremos en contacto contigo lo antes posible.'**
   String get supportConfirmationMessage;
 
   /// Botón para enviar otra solicitud.
@@ -2471,7 +2477,7 @@ abstract class AppLocalizations {
   /// Mensaje genérico de error de envío.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido enviar tu solicitud. Inténtalo de nuevo.'**
+  /// **'No hemos podido enviar tu consulta debido a un problema técnico. Vuelve a intentarlo en unos minutos.'**
   String get supportSubmissionError;
 
   /// Error: nombre requerido.
@@ -4847,13 +4853,13 @@ abstract class AppLocalizations {
   /// Familia numerosa detail — helper mostrado cuando no hay datos.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado información sobre tu título de familia numerosa.'**
+  /// **'No hemos encontrado información de familia numerosa asociada a tus datos.'**
   String get familiaNumerosaNoDataMessage;
 
   /// Texto de contacto mostrado cuando no hay datos de familia numerosa.
   ///
   /// In es, this message translates to:
-  /// **'Si esta información es incorrecta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  /// **'Si crees que la información es incorrecta o no está actualizada, contacta con la'**
   String get familiaNumerosaNoDataContactHint;
 
   /// Enlace externo al listado de contactos de Bienestar Social.
@@ -4973,7 +4979,7 @@ abstract class AppLocalizations {
   /// Familia numerosa — mensaje mostrado cuando el servicio de consulta no está disponible.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tu título de familia numerosa no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tu información de familia numerosa en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get familiaNumerosaServiceUnavailableMessage;
 
   /// Acción común para volver a consultar un servicio no disponible de Mis datos.
@@ -4997,80 +5003,122 @@ abstract class AppLocalizations {
   /// No description provided for @discapacidadNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado información de discapacidad asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  /// **'No hemos encontrado información de discapacidad asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la'**
   String get discapacidadNoDataMessage;
 
   /// No description provided for @socialWelfareParkingNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  /// **'No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la'**
   String get socialWelfareParkingNoDataMessage;
 
   /// No description provided for @socialWelfareThermalSpaNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado información de termalismo asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  /// **'No hemos encontrado información de termalismo asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la'**
   String get socialWelfareThermalSpaNoDataMessage;
 
   /// No description provided for @socialWelfareDependencyNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado información de atención a la dependencia asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.'**
+  /// **'No hemos encontrado información de atención a la dependencia asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la'**
   String get socialWelfareDependencyNoDataMessage;
+
+  /// Bienestar Social — enlace a los contactos de la Consejería con el que terminan los avisos sin datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Consejería de Bienestar Social de Castilla-La Mancha'**
+  String get socialWelfareCouncilLink;
 
   /// No description provided for @educationUniversityTitlesNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado títulos universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Ciencia, Innovación y Universidades.'**
+  /// **'No hemos encontrado ningún título universitario asociado a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el'**
   String get educationUniversityTitlesNoDataMessage;
+
+  /// Educación — enlace al ministerio con el que termina el aviso sin títulos universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Ministerio de Ciencia, Innovación y Universidades'**
+  String get educationUniversityTitlesContactLink;
 
   /// No description provided for @educationNonUniversityTitlesNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado títulos no universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Educación, Formación Profesional y Deportes.'**
+  /// **'No hemos encontrado ningún título no universitario asociado a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el'**
   String get educationNonUniversityTitlesNoDataMessage;
+
+  /// Educación — enlace al ministerio con el que termina el aviso sin títulos no universitarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Ministerio de Educación, Formación profesional y Deportes'**
+  String get educationNonUniversityTitlesContactLink;
 
   /// No description provided for @myDataVehiclesNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado vehículos asociados a tus datos en el servicio de consulta de la DGT.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General de Tráfico.'**
+  /// **'No hemos encontrado información de vehículos asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la'**
   String get myDataVehiclesNoDataMessage;
+
+  /// Vehículos — enlace a la DGT con el que termina el aviso sin vehículos.
+  ///
+  /// In es, this message translates to:
+  /// **'Dirección General de Tráfico (DGT)'**
+  String get myDataVehiclesContactLink;
 
   /// No description provided for @myDataHousingAddressNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado información de domicilio asociada a tus datos en el servicio de consulta del padrón.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Ayuntamiento.'**
+  /// **'No hemos encontrado información de domicilio asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con tu ayuntamiento.'**
   String get myDataHousingAddressNoDataMessage;
 
   /// No description provided for @myDataHousingRealEstateNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado bienes inmuebles asociados a tus datos en el servicio de consulta de Catastro.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General del Catastro.'**
+  /// **'No hemos encontrado información de bienes inmuebles asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el Punto de Información Catastral correspondiente.'**
   String get myDataHousingRealEstateNoDataMessage;
 
   /// No description provided for @myDataHealthAppointmentsNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.'**
+  /// **'No hemos encontrado citas de atención primaria asociadas a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el centro correspondiente del'**
   String get myDataHealthAppointmentsNoDataMessage;
+
+  /// Salud — enlace al listado de centros del SESCAM con el que termina el aviso sin citas de atención primaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicio de Salud de Castilla-La Mancha (SESCAM)'**
+  String get myDataHealthAppointmentsContactLink;
 
   /// No description provided for @myDataHealthHospitalAppointmentsNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado citas hospitalarias asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu centro hospitalario.'**
+  /// **'No hemos encontrado citas hospitalarias asociadas a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el centro correspondiente del Servicio de Salud de Castilla-La Mancha (SESCAM).'**
   String get myDataHealthHospitalAppointmentsNoDataMessage;
 
   /// No description provided for @myDataEmploymentDemandNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.'**
+  /// **'No hemos encontrado información de demandante de empleo asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el'**
   String get myDataEmploymentDemandNoDataMessage;
+
+  /// Empleo — enlace al SEPE con el que termina el aviso sin datos de demandante.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicio Público de Empleo Estatal (SEPE)'**
+  String get myDataEmploymentDemandContactLink;
 
   /// No description provided for @myDataEmploymentOffersNoDataMessage.
   ///
   /// In es, this message translates to:
-  /// **'Aún no te has inscrito a ninguna oferta.\n\nSi la información es incorrecta o no está actualizada, revisa tu espacio personal en el Portal de empleo de Castilla-La Mancha.'**
+  /// **'No hemos encontrado inscripciones en ofertas de empleo asociadas a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el'**
   String get myDataEmploymentOffersNoDataMessage;
+
+  /// Empleo — enlace al portal de empleabilidad con el que termina el aviso sin inscripciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha'**
+  String get myDataEmploymentOffersContactLink;
 
   /// Mensaje mostrado cuando falta autorización para consultar las inscripciones en ofertas de empleo.
   ///
@@ -5093,67 +5141,67 @@ abstract class AppLocalizations {
   /// No description provided for @discapacidadServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tu título de discapacidad no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tu información de discapacidad en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get discapacidadServiceUnavailableMessage;
 
   /// No description provided for @socialWelfareParkingServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tu tarjeta de estacionamiento no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tu tarjeta de estacionamiento en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get socialWelfareParkingServiceUnavailableMessage;
 
   /// No description provided for @socialWelfareThermalSpaServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tu información de termalismo no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tu información de termalismo en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get socialWelfareThermalSpaServiceUnavailableMessage;
 
   /// No description provided for @socialWelfareDependencyServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tu información de atención a la dependencia no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tu información de atención a la dependencia en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get socialWelfareDependencyServiceUnavailableMessage;
 
   /// No description provided for @educationUniversityTitlesServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tus títulos universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tus títulos universitarios en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get educationUniversityTitlesServiceUnavailableMessage;
 
   /// No description provided for @educationNonUniversityTitlesServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tus títulos no universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tus títulos no universitarios en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get educationNonUniversityTitlesServiceUnavailableMessage;
 
   /// No description provided for @myDataVehiclesServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tus vehículos no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tus vehículos en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get myDataVehiclesServiceUnavailableMessage;
 
   /// No description provided for @myDataHousingAddressServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tus datos de domicilio no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tu domicilio en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get myDataHousingAddressServiceUnavailableMessage;
 
   /// No description provided for @myDataHousingRealEstateServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de tus bienes inmuebles no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tus bienes inmuebles en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get myDataHousingRealEstateServiceUnavailableMessage;
 
   /// No description provided for @myDataHealthAppointmentsServiceUnavailableMessage.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.'**
+  /// **'No podemos mostrar tus citas de atención primaria en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get myDataHealthAppointmentsServiceUnavailableMessage;
 
   /// Citas hospitalarias — el servicio del SESCAM no responde.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de consulta de datos de citas de atención hospitalaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.'**
+  /// **'No podemos mostrar tus citas hospitalarias en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get myDataHealthHospitalAppointmentsServiceUnavailableMessage;
 
   /// Familia numerosa detail — retry button label.
@@ -5537,7 +5585,7 @@ abstract class AppLocalizations {
   /// Recommendations — generic error message when the list cannot be loaded.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido cargar la información de tus recomendaciones. Vuelve a intentarlo más tarde.'**
+  /// **'No podemos mostrar tus recomendaciones en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get recommendationsLoadingError;
 
   /// Recommendations — retry button label in the error state.
@@ -5900,11 +5948,17 @@ abstract class AppLocalizations {
   /// **'Información no disponible'**
   String get representativeUnavailableTitle;
 
-  /// Mensaje mostrado al abrir una sección no disponible con certificado de representante.
+  /// Mensaje mostrado al abrir una sección no disponible con certificado de representante. Continúa con el enlace technicalSupportLink.
   ///
   /// In es, this message translates to:
-  /// **'Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'**
+  /// **'Para consultar tus datos personales, es necesario que accedas con tu certificado personal. Con el certificado de representante no podemos mostrarte esta información. Si no puedes acceder, contacta con'**
   String get representativeUnavailableMessage;
+
+  /// Enlace al formulario de soporte técnico con el que terminan los avisos de error («…contacta con soporte técnico.»).
+  ///
+  /// In es, this message translates to:
+  /// **'soporte técnico'**
+  String get technicalSupportLink;
 
   /// Título de la tarjeta de Salud en la pantalla Mis datos.
   ///
@@ -6017,7 +6071,7 @@ abstract class AppLocalizations {
   /// Mensaje del banner mostrado cuando el servicio de demanda de empleo no está disponible.
   ///
   /// In es, this message translates to:
-  /// **'El servicio de Demanda de empleo actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'**
+  /// **'No podemos mostrar tu información de demandante de empleo en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get myDataEmploymentServiceUnavailableMessage;
 
   /// Etiqueta del botón para recargar la demanda de empleo cuando el servicio no está disponible.
@@ -6029,7 +6083,7 @@ abstract class AppLocalizations {
   /// Mensaje del helper contextual mostrado cuando el servicio de inscripciones en ofertas no está disponible.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido cargar tus inscripciones en ofertas de empleo. Vuelve a intentarlo más tarde.'**
+  /// **'No podemos mostrar tus inscripciones en ofertas de empleo en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get myDataEmploymentOffersServiceUnavailableMessage;
 
   /// Título del diálogo mostrado cuando faltan autorizaciones para ver inscripciones en ofertas.
@@ -6944,18 +6998,6 @@ abstract class AppLocalizations {
   /// **'Citas pasadas'**
   String get myDataHealthHospitalPastTab;
 
-  /// Salud — mensaje cuando no hay citas hospitalarias pendientes.
-  ///
-  /// In es, this message translates to:
-  /// **'No tienes citas hospitalarias pendientes.'**
-  String get myDataHealthHospitalPendingEmpty;
-
-  /// Salud — mensaje cuando no hay citas hospitalarias pasadas.
-  ///
-  /// In es, this message translates to:
-  /// **'No tienes citas hospitalarias pasadas.'**
-  String get myDataHealthHospitalPastEmpty;
-
   /// Salud — etiqueta del servicio médico de una cita hospitalaria.
   ///
   /// In es, this message translates to:
@@ -7223,13 +7265,13 @@ abstract class AppLocalizations {
   /// Error al cargar la lista de expedientes.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido cargar tus expedientes'**
+  /// **'No podemos mostrar tus expedientes en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get gestionExpedientesLoadError;
 
   /// Mensaje de lista vacía en la pantalla de expedientes.
   ///
   /// In es, this message translates to:
-  /// **'No tienes expedientes activos'**
+  /// **'No tienes expedientes en este momento. Cuando tengas alguno, podrás consultarlos aquí.'**
   String get gestionExpedientesEmpty;
 
   /// Título de la barra de navegación en la pantalla de detalle de expediente.
@@ -7487,25 +7529,25 @@ abstract class AppLocalizations {
   /// Error al cargar la lista de entradas de registro.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido cargar tus entradas de registro'**
+  /// **'No podemos mostrar tus registros en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get gestionRegistrosEntradasLoadError;
 
   /// Error al cargar la lista de salidas de registro.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido cargar tus salidas de registro'**
+  /// **'No podemos mostrar tus registros en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get gestionRegistrosSalidasLoadError;
 
   /// Mensaje de lista vacía para entradas de registro.
   ///
   /// In es, this message translates to:
-  /// **'No tienes entradas de registro'**
+  /// **'No tienes registros en este momento. Cuando tengas alguno, podrás consultarlos aquí.'**
   String get gestionRegistrosEntradasEmpty;
 
   /// Mensaje de lista vacía para salidas de registro.
   ///
   /// In es, this message translates to:
-  /// **'No tienes salidas de registro'**
+  /// **'No tienes registros en este momento. Cuando tengas alguno, podrás consultarlos aquí.'**
   String get gestionRegistrosSalidasEmpty;
 
   /// Título de la pantalla de detalle de entrada de registro.
@@ -7715,7 +7757,7 @@ abstract class AppLocalizations {
   /// Texto del helper contextual bajo la card desactivada de notificaciones.
   ///
   /// In es, this message translates to:
-  /// **'Indica tus datos de contacto para activar los avisos y recibirlos cuando tengas una nueva notificación.'**
+  /// **'Para avisarte de nuevas notificaciones, es necesario que añadas tu número de teléfono móvil y tu correo electrónico. Puedes hacerlo desde Preferencias.'**
   String get gestionNotificacionesContextualMessage;
 
   /// Etiqueta del botón ghost del helper contextual de notificaciones.
@@ -7895,13 +7937,13 @@ abstract class AppLocalizations {
   /// Mensaje de lista vacía en la pantalla de notificaciones.
   ///
   /// In es, this message translates to:
-  /// **'No tienes notificaciones en este momento'**
+  /// **'No tienes notificaciones en este momento. Cuando tengas alguna, podrás consultarlas aquí.'**
   String get gestionNotificacionesEmpty;
 
   /// Mensaje de error al cargar la lista de notificaciones.
   ///
   /// In es, this message translates to:
-  /// **'No se han podido cargar las notificaciones'**
+  /// **'No podemos mostrar tus notificaciones en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con'**
   String get gestionNotificacionesLoadError;
 
   /// Aviso al cerrar la sesión porque la cláusula obligatoria de consentimiento ya no está aceptada.
@@ -8153,7 +8195,7 @@ abstract class AppLocalizations {
   /// Agenda — estado vacío del listado de citas.
   ///
   /// In es, this message translates to:
-  /// **'No hay citas para el periodo seleccionado.'**
+  /// **'No tienes eventos próximos en tu agenda en este momento. Cuando tengas citas o notificaciones importantes, podrás consultarlas aquí.'**
   String get agendaEmptyAppointments;
 
   /// Agenda — canal de cita sanitaria deducido: telefónica.
@@ -8429,8 +8471,14 @@ abstract class AppLocalizations {
   /// Recomendaciones — aviso cuando no hay recomendaciones que coincidan con las preferencias.
   ///
   /// In es, this message translates to:
-  /// **'Actualmente no hay recomendaciones para ti. Puedes modificar la selección actual de tus hechos vitales desde las preferencias o esperar a recibir nuevas actualizaciones.'**
+  /// **'No tenemos recomendaciones para ti en este momento. Cuando las haya, podrás consultarlas aquí. Si quieres, puedes cambiar los temas que te interesan desde Preferencias, en Mis hechos vitales.'**
   String get recommendationsEmptyNoMatches;
+
+  /// Recomendaciones — aviso cuando la cláusula está autorizada pero no hay hechos vitales seleccionados.
+  ///
+  /// In es, this message translates to:
+  /// **'Para mostrarte recomendaciones basadas en tus hechos vitales, es necesario que indiques los temas que te interesan. Puedes elegirlos y modificarlos cuando quieras desde Preferencias, en Mis hechos vitales.'**
+  String get recommendationsEmptyNoLifeEvents;
 
   /// Recomendaciones — botón para editar los hechos vitales desde el estado vacío.
   ///
@@ -8441,7 +8489,7 @@ abstract class AppLocalizations {
   /// Recomendaciones — aviso cuando el filtro aplicado no devuelve resultados.
   ///
   /// In es, this message translates to:
-  /// **'Actualmente no hay recomendaciones para los filtros seleccionados. Puedes modificar la selección de filtros o esperar a recibir nuevas actualizaciones.'**
+  /// **'No hemos encontrado recomendaciones con este filtro. Puedes quitarlo para consultar todas.'**
   String get recommendationsEmptyFiltered;
 
   /// Recomendaciones — botón para restablecer el filtro por hechos vitales.
@@ -8483,7 +8531,7 @@ abstract class AppLocalizations {
   /// Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM.
   ///
   /// In es, this message translates to:
-  /// **'Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».'**
+  /// **'Para consultar la información de tus carnets, es necesario que autorices el acceso a tus datos. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.'**
   String get digitalCardsAuthorizationRequiredMessage;
 
   /// Carnets digitales — título del diálogo del sistema para guardar el archivo (QR, PKPASS, PDF).
@@ -9827,7 +9875,7 @@ abstract class AppLocalizations {
   /// Error genérico al enviar el formulario de soporte.
   ///
   /// In es, this message translates to:
-  /// **'No hemos podido enviar tu solicitud. Inténtalo de nuevo más tarde.'**
+  /// **'No hemos podido enviar tu consulta debido a un problema técnico. Vuelve a intentarlo en unos minutos.'**
   String get supportErrorSubmitUnavailable;
 
   /// Error al guardar los datos de contacto de notificaciones sin permisos (401/403).

@@ -16,9 +16,9 @@ import '../auth/auth_session_controller_test.dart' show FakeAppStorage;
 
 const _pendientes = 'Citas pendientes';
 const _pasadas = 'Citas pasadas';
-const _sinPendientes = 'No tienes citas hospitalarias pendientes.';
-const _sinPasadas = 'No tienes citas hospitalarias pasadas.';
-const _servicioCaido = 'El servicio de consulta de datos de citas de atención hospitalaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.';
+const _sinCitas = 'No hemos encontrado citas hospitalarias asociadas a tus datos.';
+const _sinCitasContacto = 'Si crees que la información es incorrecta o no está actualizada, contacta con el centro correspondiente del Servicio de Salud de Castilla-La Mancha (SESCAM).';
+const _servicioCaido = 'No podemos mostrar tus citas hospitalarias en este momento.';
 const _avisoTitulo = 'Verificación de identidad';
 const _avisoCuerpo = 'Esta consulta necesita de un nivel de seguridad mayor y es necesario volver a identificarte.';
 
@@ -80,17 +80,17 @@ void main() {
     expect(repository.callsFor(HealthAppointmentFilter.past), 1);
   });
 
-  testWidgets('cada pestaña tiene su propio mensaje de vacío', (final tester) async {
+  testWidgets('sin citas, las dos pestañas lo explican con el texto de UX Writing', (final tester) async {
     await _pump(tester);
 
-    expect(find.text(_sinPendientes), findsOneWidget);
-    expect(find.text(_sinPasadas), findsNothing);
+    expect(find.text(_sinCitas), findsOneWidget);
+    expect(find.text(_sinCitasContacto), findsOneWidget);
 
     await tester.tap(find.text(_pasadas));
     await tester.pumpAndSettle();
 
-    expect(find.text(_sinPasadas), findsOneWidget);
-    expect(find.text(_sinPendientes), findsNothing);
+    expect(find.text(_sinCitas), findsOneWidget);
+    expect(find.text(_sinCitasContacto), findsOneWidget);
   });
 
   testWidgets('varias citas el mismo día y a la misma hora se ven todas', (final tester) async {
@@ -125,8 +125,8 @@ void main() {
   testWidgets('un fallo del SESCAM se muestra con reintento, no como lista vacía', (final tester) async {
     await _pump(tester, pendingError: Exception('SESCAM caído'));
 
-    expect(find.text(_servicioCaido), findsOneWidget);
-    expect(find.text(_sinPendientes), findsNothing);
+    expect(find.textContaining(_servicioCaido), findsOneWidget);
+    expect(find.text(_sinCitas), findsNothing);
   });
 
   // Se inyecta el error en el provider en vez de en el repositorio: la
@@ -136,8 +136,8 @@ void main() {
   testWidgets('la falta de clausulado se explica en vez de mostrar un error de servicio', (final tester) async {
     await _pump(tester, providerError: const MyDataAuthorizationRequired());
 
-    expect(find.text(_servicioCaido), findsNothing);
-    expect(find.text(_sinPendientes), findsNothing);
+    expect(find.textContaining(_servicioCaido), findsNothing);
+    expect(find.text(_sinCitas), findsNothing);
     expect(find.text(_avisoTitulo), findsNothing);
   });
 
@@ -159,7 +159,7 @@ void main() {
     expect(find.text(_avisoCuerpo), findsOneWidget);
     expect(find.text('Volver'), findsOneWidget);
     expect(find.text('Acceder a cl@ve'), findsOneWidget);
-    expect(find.text(_servicioCaido), findsNothing);
+    expect(find.textContaining(_servicioCaido), findsNothing);
     expect(repository.callsFor(HealthAppointmentFilter.pending), isZero);
   });
 

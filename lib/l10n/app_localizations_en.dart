@@ -611,13 +611,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaEmpty => 'No events for the selected period.';
 
   @override
-  String get agendaError => 'We couldn\'t load your agenda.';
+  String get agendaError => 'We cannot show your calendar information right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
   String get agendaHealthAppointmentsUnavailable => 'We couldn\'t load your health appointments.';
 
   @override
-  String get agendaHealthCipMissing => 'There is no health identification number (CIP) linked to your identity in the SESCAM service. We may therefore be unable to display this information. Please try again later.';
+  String get agendaHealthCipMissing => 'We cannot find your personal identification code (CIP) in the Castilla-La Mancha Health Service (SESCAM), so we cannot show your appointments. Try again in a few minutes. If it still does not work in a few hours, contact';
 
   @override
   String get agendaEventsUnavailable => 'We couldn\'t load your agenda events.';
@@ -957,7 +957,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get socialWelfareInfoSheetDescription => 'Check the information for your Social Welfare files and access the services available from the Government of Castilla-La Mancha.';
 
   @override
-  String get myDataJccmAuthorizationRequiredMessage => 'You must authorise the consultation of administrative facts held by the JCCM from your preferences.';
+  String get myDataJccmAuthorizationRequiredMessage => 'To view the information the Regional Government of Castilla-La Mancha (JCCM) holds about you, you need to authorise access to your data. You can do this from Preferences, under Terms of use and authorisations.';
+
+  @override
+  String get recommendationsAuthorizationRequiredMessage => 'To show you recommendations based on your life events, you need to authorise the use of this information. You can do this from Preferences, under Terms of use and authorisations.';
 
   @override
   String get authorizationCheckFailedMessage => 'We could not check your authorisations. Please try again.';
@@ -966,7 +969,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataJccmAuthorizationRequiredCta => 'Go to Terms of use and authorizations';
 
   @override
-  String get myDataAgeAuthorizationRequiredMessage => 'You must authorise the consultation of data held about you by the General State Administration from your preferences.';
+  String get myDataAgeAuthorizationRequiredMessage => 'To view the information the General State Administration (AGE) holds about you, you need to authorise access to your data. You can do this from Preferences, under Terms of use and authorisations.';
 
   @override
   String get socialWelfareFamilyTitle => 'Large family';
@@ -1229,13 +1232,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportConfirmationTitle => 'Request sent';
 
   @override
-  String get supportConfirmationMessage => 'We\'ve received your request. We\'ll confirm by e-mail.';
+  String get supportConfirmationMessage => 'We have received your enquiry. We will get back to you as soon as possible.';
 
   @override
   String get supportConfirmationNewRequest => 'Send another request';
 
   @override
-  String get supportSubmissionError => 'We couldn\'t send your request. Please try again.';
+  String get supportSubmissionError => 'We could not send your enquiry due to a technical problem. Try again in a few minutes.';
 
   @override
   String get supportErrorNameRequired => 'Please enter your name.';
@@ -2484,10 +2487,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get familiaNumerosaNo => 'No';
 
   @override
-  String get familiaNumerosaNoDataMessage => 'We could not find large family information associated with your data in the JCCM lookup service.\n\nIf this situation is not correct or not up to date, contact the Social Welfare Department of Castilla-La Mancha.';
+  String get familiaNumerosaNoDataMessage => 'We have not found any large-family information linked to your data.';
 
   @override
-  String get familiaNumerosaNoDataContactHint => 'If this information is incorrect or out of date, contact the Department of Social Welfare of Castilla-La Mancha.';
+  String get familiaNumerosaNoDataContactHint => 'If you think the information is incorrect or out of date, contact the';
 
   @override
   String get familiaNumerosaContactListButton => 'View the contact list';
@@ -2551,7 +2554,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get familiaNumerosaErrorMessage => 'Your large-family card could not be loaded.';
 
   @override
-  String get familiaNumerosaServiceUnavailableMessage => 'The service for consulting your large-family title is unavailable. You can reload the information or try again later.';
+  String get familiaNumerosaServiceUnavailableMessage => 'We cannot show your large-family information right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
   String get myDataServiceUnavailableUpdate => 'Refresh';
@@ -2563,43 +2566,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataNoDataOfficeContacts => 'Contact';
 
   @override
-  String get discapacidadNoDataMessage => 'We could not find disability information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.';
+  String get discapacidadNoDataMessage => 'We have not found any disability information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the';
 
   @override
-  String get socialWelfareParkingNoDataMessage => 'We could not find parking-card information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.';
+  String get socialWelfareParkingNoDataMessage => 'We have not found any parking card information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the';
 
   @override
-  String get socialWelfareThermalSpaNoDataMessage => 'We could not find thermal-spa information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.';
+  String get socialWelfareThermalSpaNoDataMessage => 'We have not found any spa therapy information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the';
 
   @override
-  String get socialWelfareDependencyNoDataMessage => 'We could not find dependency-care information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.';
+  String get socialWelfareDependencyNoDataMessage => 'We have not found any dependency care information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the';
 
   @override
-  String get educationUniversityTitlesNoDataMessage => 'We could not find university titles associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact the Ministry responsible for universities.';
+  String get socialWelfareCouncilLink => 'Department of Social Welfare of Castilla-La Mancha';
 
   @override
-  String get educationNonUniversityTitlesNoDataMessage => 'We could not find non-university titles associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact the Ministry of Education.';
+  String get educationUniversityTitlesNoDataMessage => 'We have not found any university degree linked to your data.\n\nIf you think the information is incorrect or out of date, contact the';
 
   @override
-  String get myDataVehiclesNoDataMessage => 'We could not find vehicles associated with your details in the DGT consultation service.\n\nIf this is incorrect or outdated, contact the Directorate-General for Traffic.';
+  String get educationUniversityTitlesContactLink => 'Ministry of Science, Innovation and Universities';
 
   @override
-  String get myDataHousingAddressNoDataMessage => 'We could not find address information associated with your details in the municipal-register consultation service.\n\nIf this is incorrect or outdated, contact your local council.';
+  String get educationNonUniversityTitlesNoDataMessage => 'We have not found any non-university qualification linked to your data.\n\nIf you think the information is incorrect or out of date, contact the';
 
   @override
-  String get myDataHousingRealEstateNoDataMessage => 'We could not find real-estate assets associated with your details in the Cadastre consultation service.\n\nIf this is incorrect or outdated, contact the Directorate-General for Cadastre.';
+  String get educationNonUniversityTitlesContactLink => 'Ministry of Education, Vocational Training and Sports';
 
   @override
-  String get myDataHealthAppointmentsNoDataMessage => 'We could not find primary-care appointments associated with your details in the SESCAM consultation service.\n\nIf this is incorrect or outdated, contact your health centre.';
+  String get myDataVehiclesNoDataMessage => 'We have not found any vehicle information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the';
 
   @override
-  String get myDataHealthHospitalAppointmentsNoDataMessage => 'We could not find any hospital appointments linked to your data in the SESCAM query service.\n\nIf this is not correct or up to date, contact your hospital.';
+  String get myDataVehiclesContactLink => 'Directorate-General for Traffic (DGT)';
 
   @override
-  String get myDataEmploymentDemandNoDataMessage => 'We could not find job-seeker information associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.';
+  String get myDataHousingAddressNoDataMessage => 'We have not found any address information linked to your data.\n\nIf you think the information is incorrect or out of date, contact your town council.';
 
   @override
-  String get myDataEmploymentOffersNoDataMessage => 'You have not registered for any offer yet.\n\nIf this information is incorrect or out of date, check your personal area in the Castilla-La Mancha Employment Portal.';
+  String get myDataHousingRealEstateNoDataMessage => 'We have not found any property information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the relevant Cadastral Information Point.';
+
+  @override
+  String get myDataHealthAppointmentsNoDataMessage => 'We have not found any primary care appointments linked to your data.\n\nIf you think the information is incorrect or out of date, contact the relevant centre of the';
+
+  @override
+  String get myDataHealthAppointmentsContactLink => 'Castilla-La Mancha Health Service (SESCAM)';
+
+  @override
+  String get myDataHealthHospitalAppointmentsNoDataMessage => 'We have not found any hospital appointments linked to your data.\n\nIf you think the information is incorrect or out of date, contact the relevant centre of the Castilla-La Mancha Health Service (SESCAM).';
+
+  @override
+  String get myDataEmploymentDemandNoDataMessage => 'We have not found any job-seeker information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the';
+
+  @override
+  String get myDataEmploymentDemandContactLink => 'State Public Employment Service (SEPE)';
+
+  @override
+  String get myDataEmploymentOffersNoDataMessage => 'We have not found any job offer applications linked to your data.\n\nIf you think the information is incorrect or out of date, contact the';
+
+  @override
+  String get myDataEmploymentOffersContactLink => 'Employability portal of the Regional Government of Castilla-La Mancha';
 
   @override
   String get myDataEmploymentOffersAuthorizationRequiredMessage => 'Authorise the use of your data in Preferences to view your employment offer registrations.';
@@ -2611,37 +2635,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthAppointmentsAuthorizationRequiredMessage => 'Authorise the use of your data in Preferences to view your primary-care appointments.';
 
   @override
-  String get discapacidadServiceUnavailableMessage => 'The service for consulting your disability title is unavailable. You can reload the information or try again later.';
+  String get discapacidadServiceUnavailableMessage => 'We cannot show your disability information right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get socialWelfareParkingServiceUnavailableMessage => 'The service for consulting your parking card is unavailable. You can reload the information or try again later.';
+  String get socialWelfareParkingServiceUnavailableMessage => 'We cannot show your parking card right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get socialWelfareThermalSpaServiceUnavailableMessage => 'The service for consulting your thermal-spa information is unavailable. You can reload the information or try again later.';
+  String get socialWelfareThermalSpaServiceUnavailableMessage => 'We cannot show your spa therapy information right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get socialWelfareDependencyServiceUnavailableMessage => 'The service for consulting your dependency care information is unavailable. You can reload the information or try again later.';
+  String get socialWelfareDependencyServiceUnavailableMessage => 'We cannot show your dependency care information right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get educationUniversityTitlesServiceUnavailableMessage => 'The service for consulting your university titles is unavailable. You can reload the information or try again later.';
+  String get educationUniversityTitlesServiceUnavailableMessage => 'We cannot show your university degrees right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get educationNonUniversityTitlesServiceUnavailableMessage => 'The service for consulting your non-university titles is unavailable. You can reload the information or try again later.';
+  String get educationNonUniversityTitlesServiceUnavailableMessage => 'We cannot show your non-university qualifications right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get myDataVehiclesServiceUnavailableMessage => 'The service for consulting your vehicles is unavailable. You can reload the information or try again later.';
+  String get myDataVehiclesServiceUnavailableMessage => 'We cannot show your vehicles right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get myDataHousingAddressServiceUnavailableMessage => 'The service for consulting your address details is unavailable. You can reload the information or try again later.';
+  String get myDataHousingAddressServiceUnavailableMessage => 'We cannot show your address right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get myDataHousingRealEstateServiceUnavailableMessage => 'The service for consulting your real-estate assets is unavailable. You can reload the information or try again later.';
+  String get myDataHousingRealEstateServiceUnavailableMessage => 'We cannot show your properties right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get myDataHealthAppointmentsServiceUnavailableMessage => 'The primary care appointments service is currently unavailable. Please try again later.';
+  String get myDataHealthAppointmentsServiceUnavailableMessage => 'We cannot show your primary care appointments right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get myDataHealthHospitalAppointmentsServiceUnavailableMessage => 'The hospital appointments service is currently unavailable. Please try again later.';
+  String get myDataHealthHospitalAppointmentsServiceUnavailableMessage => 'We cannot show your hospital appointments right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
   String get familiaNumerosaRetry => 'Retry';
@@ -2845,7 +2869,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recommendationsLifeEventsComingSoon => 'My life events will be available soon';
 
   @override
-  String get recommendationsLoadingError => 'We couldn\'t load your recommendation information. Please try again later.';
+  String get recommendationsLoadingError => 'We cannot show your recommendations right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
   String get recommendationsLoadingErrorRetry => 'Refresh';
@@ -3072,7 +3096,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get representativeUnavailableTitle => 'Information unavailable';
 
   @override
-  String get representativeUnavailableMessage => 'The identification method used to sign in does not allow you to view this information. If you have another way to identify yourself, you can try again.';
+  String get representativeUnavailableMessage => 'To view your personal data, you need to sign in with your personal certificate. We cannot show you this information with a representative certificate. If you cannot sign in, contact';
+
+  @override
+  String get technicalSupportLink => 'technical support';
 
   @override
   String get myDataHealthTitle => 'Health';
@@ -3129,13 +3156,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataEmploymentServiceUnavailableTitle => 'Service unavailable';
 
   @override
-  String get myDataEmploymentServiceUnavailableMessage => 'The Employment demand service is currently unavailable. You can reload the information or try again later.';
+  String get myDataEmploymentServiceUnavailableMessage => 'We cannot show your job-seeker information right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
   String get myDataEmploymentServiceUnavailableReload => 'Reload page';
 
   @override
-  String get myDataEmploymentOffersServiceUnavailableMessage => 'We could not load your employment offer registrations. Please try again later.';
+  String get myDataEmploymentOffersServiceUnavailableMessage => 'We cannot show your job offer applications right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
   String get myDataEmploymentAuthorizationDialogTitle => 'You have not authorised data lookup in your profile';
@@ -3600,12 +3627,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myDataHealthHospitalPastTab => 'Past appointments';
 
   @override
-  String get myDataHealthHospitalPendingEmpty => 'You have no upcoming hospital appointments.';
-
-  @override
-  String get myDataHealthHospitalPastEmpty => 'You have no past hospital appointments.';
-
-  @override
   String get myDataHealthHospitalFieldService => 'Service';
 
   @override
@@ -3740,10 +3761,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionExpedientesEstadoLabel => 'STATUS';
 
   @override
-  String get gestionExpedientesLoadError => 'We could not load your cases';
+  String get gestionExpedientesLoadError => 'We cannot show your case files right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get gestionExpedientesEmpty => 'You have no active cases';
+  String get gestionExpedientesEmpty => 'You have no case files right now. When you have one, you will be able to see it here.';
 
   @override
   String get gestionExpedientesDetalleTitle => 'Case details';
@@ -3872,16 +3893,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionRegistrosDatosRegistroTitle => 'Registry entry information';
 
   @override
-  String get gestionRegistrosEntradasLoadError => 'We could not load your incoming registry entries';
+  String get gestionRegistrosEntradasLoadError => 'We cannot show your registry entries right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get gestionRegistrosSalidasLoadError => 'We could not load your outgoing registry entries';
+  String get gestionRegistrosSalidasLoadError => 'We cannot show your registry entries right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
-  String get gestionRegistrosEntradasEmpty => 'You have no incoming registry entries';
+  String get gestionRegistrosEntradasEmpty => 'You have no registry entries right now. When you have one, you will be able to see it here.';
 
   @override
-  String get gestionRegistrosSalidasEmpty => 'You have no outgoing registry entries';
+  String get gestionRegistrosSalidasEmpty => 'You have no registry entries right now. When you have one, you will be able to see it here.';
 
   @override
   String get gestionRegistrosDetalleEntradaTitle => 'Incoming registry entry details';
@@ -3986,7 +4007,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionAportacionCamposExpedienteError => 'Fill in either the case registration number or the case identifier code (only one of the two).';
 
   @override
-  String get gestionNotificacionesContextualMessage => 'Enter your contact details to enable alerts and receive them when you have a new notification.';
+  String get gestionNotificacionesContextualMessage => 'To notify you of new notifications, you need to add your mobile phone number and your email address. You can do this from Preferences.';
 
   @override
   String get gestionNotificacionesContextualAction => 'Enter details and enable alerts';
@@ -4076,10 +4097,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gestionNotificacionesTagExpirada => 'Expired';
 
   @override
-  String get gestionNotificacionesEmpty => 'You have no notifications at the moment';
+  String get gestionNotificacionesEmpty => 'You have no notifications right now. When you have one, you will be able to see it here.';
 
   @override
-  String get gestionNotificacionesLoadError => 'The notifications could not be loaded';
+  String get gestionNotificacionesLoadError => 'We cannot show your notifications right now. Try again in a few minutes. If it still does not load in a few hours, contact';
 
   @override
   String get consentRevokedSessionClosed => 'You have withdrawn the authorization to access your data, so we have closed your session. Sign in again to grant it once more.';
@@ -4274,7 +4295,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaRefreshTooltip => 'Refresh agenda';
 
   @override
-  String get agendaEmptyAppointments => 'There are no appointments for the selected period.';
+  String get agendaEmptyAppointments => 'You have no upcoming events in your calendar right now. When you have important appointments or notifications, you will be able to see them here.';
 
   @override
   String get agendaChannelPhone => 'phone';
@@ -4422,13 +4443,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recommendationsPreferencesHint => 'Personalize your recommendations by editing your life events in Preferences whenever you want.';
 
   @override
-  String get recommendationsEmptyNoMatches => 'There are currently no recommendations for you. You can change your current life-event selection in Preferences or wait for new updates.';
+  String get recommendationsEmptyNoMatches => 'We have no recommendations for you right now. When there are some, you will be able to see them here. If you like, you can change the topics you are interested in from Preferences, under My life events.';
+
+  @override
+  String get recommendationsEmptyNoLifeEvents => 'To show you recommendations based on your life events, you need to choose the topics you are interested in. You can choose and change them whenever you like from Preferences, under My life events.';
 
   @override
   String get recommendationsEditLifeEventsCta => 'Go to Preferences';
 
   @override
-  String get recommendationsEmptyFiltered => 'There are currently no recommendations for the selected filters. You can change the filter selection or wait for new updates.';
+  String get recommendationsEmptyFiltered => 'We have not found any recommendations with this filter. You can remove it to see them all.';
 
   @override
   String get recommendationsResetFilterCta => 'Restart filter';
@@ -4453,7 +4477,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitalCardsInfoSheetBody => 'View and download the digital cards linked to your profile and use them to complete your formalities at any time.';
 
   @override
-  String get digitalCardsAuthorizationRequiredMessage => 'To view and download your digital cards, you must authorize the use of this data in ‘Terms of use and authorizations’.';
+  String get digitalCardsAuthorizationRequiredMessage => 'To view your cards\' information, you need to authorise access to your data. You can do this from Preferences, under Terms of use and authorisations.';
 
   @override
   String digitalCardsSaveDialogTitle(Object format) {
@@ -5141,7 +5165,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supportErrorSubmitInvalidData => 'We could not validate the information provided.';
 
   @override
-  String get supportErrorSubmitUnavailable => 'We could not send your request. Please try again later.';
+  String get supportErrorSubmitUnavailable => 'We could not send your enquiry due to a technical problem. Try again in a few minutes.';
 
   @override
   String get notificationContactSaveUnauthorizedError => 'You do not have permission to save these contact details.';

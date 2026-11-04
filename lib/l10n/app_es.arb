@@ -802,7 +802,7 @@
   "@agendaEmpty": {
     "description": "Agenda — mensaje cuando no hay eventos visibles."
   },
-  "agendaError": "No hemos podido cargar tu agenda.",
+  "agendaError": "No podemos mostrar la información de tu agenda en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
   "@agendaError": {
     "description": "Agenda — mensaje de error al cargar."
   },
@@ -810,7 +810,7 @@
   "@agendaHealthAppointmentsUnavailable": {
     "description": "Agenda — aviso de carga parcial cuando la fuente de citas de Atención Primaria (SESCAM) no responde y el resto de la agenda sí se ha cargado."
   },
-  "agendaHealthCipMissing": "En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.",
+  "agendaHealthCipMissing": "No encontramos tu código de identificación personal (CIP) en el Servicio de Salud de Castilla-La Mancha (SESCAM) y no podemos mostrar tus citas. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin funcionar, contacta con",
   "@agendaHealthCipMissing": {
     "description": "Agenda — aviso informativo cuando SESCAM devuelve el código 3031 porque no existe un CIP vinculado a la identidad."
   },
@@ -1282,9 +1282,13 @@
   "@socialWelfareInfoSheetDescription": {
     "description": "Mis datos de Bienestar — descripción del modal informativo."
   },
-  "myDataJccmAuthorizationRequiredMessage": "Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.",
+  "myDataJccmAuthorizationRequiredMessage": "Para consultar la información que la Junta de Comunidades de Castilla-La Mancha (JCCM) tiene sobre ti, es necesario que autorices el acceso a tus datos. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.",
   "@myDataJccmAuthorizationRequiredMessage": {
     "description": "Mensaje mostrado cuando la consulta de datos JCCM no está autorizada."
+  },
+  "recommendationsAuthorizationRequiredMessage": "Para mostrarte recomendaciones basadas en tus hechos vitales, es necesario que autorices el uso de esta información. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.",
+  "@recommendationsAuthorizationRequiredMessage": {
+    "description": "Recomendaciones — aviso cuando no se ha autorizado la cláusula de recomendaciones basadas en hechos vitales."
   },
   "authorizationCheckFailedMessage": "No hemos podido comprobar tus autorizaciones. Inténtalo de nuevo.",
   "@authorizationCheckFailedMessage": {
@@ -1294,7 +1298,7 @@
   "@myDataJccmAuthorizationRequiredCta": {
     "description": "Texto accesible del botón para abrir condiciones de uso y autorizaciones."
   },
-  "myDataAgeAuthorizationRequiredMessage": "Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.",
+  "myDataAgeAuthorizationRequiredMessage": "Para consultar la información que la Administración General del Estado (AGE) tiene sobre ti, es necesario que autorices el acceso a tus datos. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.",
   "@myDataAgeAuthorizationRequiredMessage": {
     "description": "Mensaje mostrado cuando la consulta de datos AGE no está autorizada."
   },
@@ -1650,7 +1654,7 @@
   "@supportConfirmationTitle": {
     "description": "Título de la pantalla de confirmación."
   },
-  "supportConfirmationMessage": "Hemos recibido tu solicitud. Te confirmaremos por correo electrónico.",
+  "supportConfirmationMessage": "Hemos recibido tu consulta. Nos pondremos en contacto contigo lo antes posible.",
   "@supportConfirmationMessage": {
     "description": "Mensaje de confirmación tras el envío."
   },
@@ -1658,7 +1662,7 @@
   "@supportConfirmationNewRequest": {
     "description": "Botón para enviar otra solicitud."
   },
-  "supportSubmissionError": "No hemos podido enviar tu solicitud. Inténtalo de nuevo.",
+  "supportSubmissionError": "No hemos podido enviar tu consulta debido a un problema técnico. Vuelve a intentarlo en unos minutos.",
   "@supportSubmissionError": {
     "description": "Mensaje genérico de error de envío."
   },
@@ -3332,11 +3336,11 @@
   "@familiaNumerosaNo": {
     "description": "Familia numerosa detail — valor negativo."
   },
-  "familiaNumerosaNoDataMessage": "No hemos encontrado información sobre tu título de familia numerosa.",
+  "familiaNumerosaNoDataMessage": "No hemos encontrado información de familia numerosa asociada a tus datos.",
   "@familiaNumerosaNoDataMessage": {
     "description": "Familia numerosa detail — helper mostrado cuando no hay datos."
   },
-  "familiaNumerosaNoDataContactHint": "Si esta información es incorrecta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
+  "familiaNumerosaNoDataContactHint": "Si crees que la información es incorrecta o no está actualizada, contacta con la",
   "@familiaNumerosaNoDataContactHint": {
     "description": "Texto de contacto mostrado cuando no hay datos de familia numerosa."
   },
@@ -3428,7 +3432,7 @@
   "@familiaNumerosaErrorMessage": {
     "description": "Familia numerosa detail — generic error message."
   },
-  "familiaNumerosaServiceUnavailableMessage": "El servicio de consulta de tu título de familia numerosa no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "familiaNumerosaServiceUnavailableMessage": "No podemos mostrar tu información de familia numerosa en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
   "@familiaNumerosaServiceUnavailableMessage": {
     "description": "Familia numerosa — mensaje mostrado cuando el servicio de consulta no está disponible."
   },
@@ -3438,19 +3442,47 @@
   },
   "myDataNoDataContact": "Contacto",
   "myDataNoDataOfficeContacts": "Contacto",
-  "discapacidadNoDataMessage": "No hemos encontrado información de discapacidad asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
-  "socialWelfareParkingNoDataMessage": "No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
-  "socialWelfareThermalSpaNoDataMessage": "No hemos encontrado información de termalismo asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
-  "socialWelfareDependencyNoDataMessage": "No hemos encontrado información de atención a la dependencia asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.",
-  "educationUniversityTitlesNoDataMessage": "No hemos encontrado títulos universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Ciencia, Innovación y Universidades.",
-  "educationNonUniversityTitlesNoDataMessage": "No hemos encontrado títulos no universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Educación, Formación Profesional y Deportes.",
-  "myDataVehiclesNoDataMessage": "No hemos encontrado vehículos asociados a tus datos en el servicio de consulta de la DGT.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General de Tráfico.",
-  "myDataHousingAddressNoDataMessage": "No hemos encontrado información de domicilio asociada a tus datos en el servicio de consulta del padrón.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Ayuntamiento.",
-  "myDataHousingRealEstateNoDataMessage": "No hemos encontrado bienes inmuebles asociados a tus datos en el servicio de consulta de Catastro.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General del Catastro.",
-  "myDataHealthAppointmentsNoDataMessage": "No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.",
-  "myDataHealthHospitalAppointmentsNoDataMessage": "No hemos encontrado citas hospitalarias asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu centro hospitalario.",
-  "myDataEmploymentDemandNoDataMessage": "No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.",
-  "myDataEmploymentOffersNoDataMessage": "Aún no te has inscrito a ninguna oferta.\n\nSi la información es incorrecta o no está actualizada, revisa tu espacio personal en el Portal de empleo de Castilla-La Mancha.",
+  "discapacidadNoDataMessage": "No hemos encontrado información de discapacidad asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la",
+  "socialWelfareParkingNoDataMessage": "No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la",
+  "socialWelfareThermalSpaNoDataMessage": "No hemos encontrado información de termalismo asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la",
+  "socialWelfareDependencyNoDataMessage": "No hemos encontrado información de atención a la dependencia asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la",
+  "socialWelfareCouncilLink": "Consejería de Bienestar Social de Castilla-La Mancha",
+  "@socialWelfareCouncilLink": {
+    "description": "Bienestar Social — enlace a los contactos de la Consejería con el que terminan los avisos sin datos."
+  },
+  "educationUniversityTitlesNoDataMessage": "No hemos encontrado ningún título universitario asociado a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el",
+  "educationUniversityTitlesContactLink": "Ministerio de Ciencia, Innovación y Universidades",
+  "@educationUniversityTitlesContactLink": {
+    "description": "Educación — enlace al ministerio con el que termina el aviso sin títulos universitarios."
+  },
+  "educationNonUniversityTitlesNoDataMessage": "No hemos encontrado ningún título no universitario asociado a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el",
+  "educationNonUniversityTitlesContactLink": "Ministerio de Educación, Formación profesional y Deportes",
+  "@educationNonUniversityTitlesContactLink": {
+    "description": "Educación — enlace al ministerio con el que termina el aviso sin títulos no universitarios."
+  },
+  "myDataVehiclesNoDataMessage": "No hemos encontrado información de vehículos asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la",
+  "myDataVehiclesContactLink": "Dirección General de Tráfico (DGT)",
+  "@myDataVehiclesContactLink": {
+    "description": "Vehículos — enlace a la DGT con el que termina el aviso sin vehículos."
+  },
+  "myDataHousingAddressNoDataMessage": "No hemos encontrado información de domicilio asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con tu ayuntamiento.",
+  "myDataHousingRealEstateNoDataMessage": "No hemos encontrado información de bienes inmuebles asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el Punto de Información Catastral correspondiente.",
+  "myDataHealthAppointmentsNoDataMessage": "No hemos encontrado citas de atención primaria asociadas a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el centro correspondiente del",
+  "myDataHealthAppointmentsContactLink": "Servicio de Salud de Castilla-La Mancha (SESCAM)",
+  "@myDataHealthAppointmentsContactLink": {
+    "description": "Salud — enlace al listado de centros del SESCAM con el que termina el aviso sin citas de atención primaria."
+  },
+  "myDataHealthHospitalAppointmentsNoDataMessage": "No hemos encontrado citas hospitalarias asociadas a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el centro correspondiente del Servicio de Salud de Castilla-La Mancha (SESCAM).",
+  "myDataEmploymentDemandNoDataMessage": "No hemos encontrado información de demandante de empleo asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el",
+  "myDataEmploymentDemandContactLink": "Servicio Público de Empleo Estatal (SEPE)",
+  "@myDataEmploymentDemandContactLink": {
+    "description": "Empleo — enlace al SEPE con el que termina el aviso sin datos de demandante."
+  },
+  "myDataEmploymentOffersNoDataMessage": "No hemos encontrado inscripciones en ofertas de empleo asociadas a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el",
+  "myDataEmploymentOffersContactLink": "Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha",
+  "@myDataEmploymentOffersContactLink": {
+    "description": "Empleo — enlace al portal de empleabilidad con el que termina el aviso sin inscripciones."
+  },
   "myDataEmploymentOffersAuthorizationRequiredMessage": "Autoriza el uso de tus datos desde tus preferencias para consultar tus inscripciones en ofertas de empleo.",
   "@myDataEmploymentOffersAuthorizationRequiredMessage": {
     "description": "Mensaje mostrado cuando falta autorización para consultar las inscripciones en ofertas de empleo."
@@ -3463,17 +3495,17 @@
   "@myDataHealthAppointmentsAuthorizationRequiredMessage": {
     "description": "Mensaje mostrado cuando falta autorización para consultar las citas de Atención Primaria."
   },
-  "discapacidadServiceUnavailableMessage": "El servicio de consulta de tu título de discapacidad no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "socialWelfareParkingServiceUnavailableMessage": "El servicio de consulta de tu tarjeta de estacionamiento no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "socialWelfareThermalSpaServiceUnavailableMessage": "El servicio de consulta de tu información de termalismo no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "socialWelfareDependencyServiceUnavailableMessage": "El servicio de consulta de tu información de atención a la dependencia no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "educationUniversityTitlesServiceUnavailableMessage": "El servicio de consulta de tus títulos universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "educationNonUniversityTitlesServiceUnavailableMessage": "El servicio de consulta de tus títulos no universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "myDataVehiclesServiceUnavailableMessage": "El servicio de consulta de tus vehículos no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "myDataHousingAddressServiceUnavailableMessage": "El servicio de consulta de tus datos de domicilio no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "myDataHousingRealEstateServiceUnavailableMessage": "El servicio de consulta de tus bienes inmuebles no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
-  "myDataHealthAppointmentsServiceUnavailableMessage": "El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.",
-  "myDataHealthHospitalAppointmentsServiceUnavailableMessage": "El servicio de consulta de datos de citas de atención hospitalaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.",
+  "discapacidadServiceUnavailableMessage": "No podemos mostrar tu información de discapacidad en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
+  "socialWelfareParkingServiceUnavailableMessage": "No podemos mostrar tu tarjeta de estacionamiento en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
+  "socialWelfareThermalSpaServiceUnavailableMessage": "No podemos mostrar tu información de termalismo en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
+  "socialWelfareDependencyServiceUnavailableMessage": "No podemos mostrar tu información de atención a la dependencia en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
+  "educationUniversityTitlesServiceUnavailableMessage": "No podemos mostrar tus títulos universitarios en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
+  "educationNonUniversityTitlesServiceUnavailableMessage": "No podemos mostrar tus títulos no universitarios en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
+  "myDataVehiclesServiceUnavailableMessage": "No podemos mostrar tus vehículos en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
+  "myDataHousingAddressServiceUnavailableMessage": "No podemos mostrar tu domicilio en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
+  "myDataHousingRealEstateServiceUnavailableMessage": "No podemos mostrar tus bienes inmuebles en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
+  "myDataHealthAppointmentsServiceUnavailableMessage": "No podemos mostrar tus citas de atención primaria en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
+  "myDataHealthHospitalAppointmentsServiceUnavailableMessage": "No podemos mostrar tus citas hospitalarias en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
   "@myDataHealthHospitalAppointmentsServiceUnavailableMessage": {
     "description": "Citas hospitalarias — el servicio del SESCAM no responde."
   },
@@ -3754,7 +3786,7 @@
   "@recommendationsLifeEventsComingSoon": {
     "description": "Recommendations — STORY-57 SnackBar shown when tapping the 'Ver mis hechos vitales' secondary CTA before that surface ships."
   },
-  "recommendationsLoadingError": "No hemos podido cargar la información de tus recomendaciones. Vuelve a intentarlo más tarde.",
+  "recommendationsLoadingError": "No podemos mostrar tus recomendaciones en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
   "@recommendationsLoadingError": {
     "description": "Recommendations — generic error message when the list cannot be loaded."
   },
@@ -4055,9 +4087,13 @@
   "@representativeUnavailableTitle": {
     "description": "Título mostrado al abrir una sección no disponible con certificado de representante."
   },
-  "representativeUnavailableMessage": "Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.",
+  "representativeUnavailableMessage": "Para consultar tus datos personales, es necesario que accedas con tu certificado personal. Con el certificado de representante no podemos mostrarte esta información. Si no puedes acceder, contacta con",
   "@representativeUnavailableMessage": {
-    "description": "Mensaje mostrado al abrir una sección no disponible con certificado de representante."
+    "description": "Mensaje mostrado al abrir una sección no disponible con certificado de representante. Continúa con el enlace technicalSupportLink."
+  },
+  "technicalSupportLink": "soporte técnico",
+  "@technicalSupportLink": {
+    "description": "Enlace al formulario de soporte técnico con el que terminan los avisos de error («…contacta con soporte técnico.»)."
   },
   "myDataHealthTitle": "Salud",
   "@myDataHealthTitle": {
@@ -4131,7 +4167,7 @@
   "@myDataEmploymentServiceUnavailableTitle": {
     "description": "Título del banner mostrado cuando el servicio de demanda de empleo no está disponible."
   },
-  "myDataEmploymentServiceUnavailableMessage": "El servicio de Demanda de empleo actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.",
+  "myDataEmploymentServiceUnavailableMessage": "No podemos mostrar tu información de demandante de empleo en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
   "@myDataEmploymentServiceUnavailableMessage": {
     "description": "Mensaje del banner mostrado cuando el servicio de demanda de empleo no está disponible."
   },
@@ -4139,7 +4175,7 @@
   "@myDataEmploymentServiceUnavailableReload": {
     "description": "Etiqueta del botón para recargar la demanda de empleo cuando el servicio no está disponible."
   },
-  "myDataEmploymentOffersServiceUnavailableMessage": "No hemos podido cargar tus inscripciones en ofertas de empleo. Vuelve a intentarlo más tarde.",
+  "myDataEmploymentOffersServiceUnavailableMessage": "No podemos mostrar tus inscripciones en ofertas de empleo en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
   "@myDataEmploymentOffersServiceUnavailableMessage": {
     "description": "Mensaje del helper contextual mostrado cuando el servicio de inscripciones en ofertas no está disponible."
   },
@@ -4764,14 +4800,6 @@
   "@myDataHealthHospitalPastTab": {
     "description": "Salud — pestaña de citas hospitalarias pasadas."
   },
-  "myDataHealthHospitalPendingEmpty": "No tienes citas hospitalarias pendientes.",
-  "@myDataHealthHospitalPendingEmpty": {
-    "description": "Salud — mensaje cuando no hay citas hospitalarias pendientes."
-  },
-  "myDataHealthHospitalPastEmpty": "No tienes citas hospitalarias pasadas.",
-  "@myDataHealthHospitalPastEmpty": {
-    "description": "Salud — mensaje cuando no hay citas hospitalarias pasadas."
-  },
   "myDataHealthHospitalFieldService": "Servicio",
   "@myDataHealthHospitalFieldService": {
     "description": "Salud — etiqueta del servicio médico de una cita hospitalaria."
@@ -4956,11 +4984,11 @@
   "@gestionExpedientesEstadoLabel": {
     "description": "Etiqueta del estado en la tarjeta de expediente."
   },
-  "gestionExpedientesLoadError": "No hemos podido cargar tus expedientes",
+  "gestionExpedientesLoadError": "No podemos mostrar tus expedientes en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
   "@gestionExpedientesLoadError": {
     "description": "Error al cargar la lista de expedientes."
   },
-  "gestionExpedientesEmpty": "No tienes expedientes activos",
+  "gestionExpedientesEmpty": "No tienes expedientes en este momento. Cuando tengas alguno, podrás consultarlos aquí.",
   "@gestionExpedientesEmpty": {
     "description": "Mensaje de lista vacía en la pantalla de expedientes."
   },
@@ -5132,19 +5160,19 @@
   "@gestionRegistrosDatosRegistroTitle": {
     "description": "Título de la sección de datos del registro en el detalle."
   },
-  "gestionRegistrosEntradasLoadError": "No hemos podido cargar tus entradas de registro",
+  "gestionRegistrosEntradasLoadError": "No podemos mostrar tus registros en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
   "@gestionRegistrosEntradasLoadError": {
     "description": "Error al cargar la lista de entradas de registro."
   },
-  "gestionRegistrosSalidasLoadError": "No hemos podido cargar tus salidas de registro",
+  "gestionRegistrosSalidasLoadError": "No podemos mostrar tus registros en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
   "@gestionRegistrosSalidasLoadError": {
     "description": "Error al cargar la lista de salidas de registro."
   },
-  "gestionRegistrosEntradasEmpty": "No tienes entradas de registro",
+  "gestionRegistrosEntradasEmpty": "No tienes registros en este momento. Cuando tengas alguno, podrás consultarlos aquí.",
   "@gestionRegistrosEntradasEmpty": {
     "description": "Mensaje de lista vacía para entradas de registro."
   },
-  "gestionRegistrosSalidasEmpty": "No tienes salidas de registro",
+  "gestionRegistrosSalidasEmpty": "No tienes registros en este momento. Cuando tengas alguno, podrás consultarlos aquí.",
   "@gestionRegistrosSalidasEmpty": {
     "description": "Mensaje de lista vacía para salidas de registro."
   },
@@ -5284,7 +5312,7 @@
   "@gestionAportacionCamposExpedienteError": {
     "description": "Error de validación cuando no se ha rellenado exactamente uno de los dos campos de expediente."
   },
-  "gestionNotificacionesContextualMessage": "Indica tus datos de contacto para activar los avisos y recibirlos cuando tengas una nueva notificación.",
+  "gestionNotificacionesContextualMessage": "Para avisarte de nuevas notificaciones, es necesario que añadas tu número de teléfono móvil y tu correo electrónico. Puedes hacerlo desde Preferencias.",
   "@gestionNotificacionesContextualMessage": {
     "description": "Texto del helper contextual bajo la card desactivada de notificaciones."
   },
@@ -5404,11 +5432,11 @@
   "@gestionNotificacionesTagExpirada": {
     "description": "Etiqueta del tag de estado expirada en notificaciones."
   },
-  "gestionNotificacionesEmpty": "No tienes notificaciones en este momento",
+  "gestionNotificacionesEmpty": "No tienes notificaciones en este momento. Cuando tengas alguna, podrás consultarlas aquí.",
   "@gestionNotificacionesEmpty": {
     "description": "Mensaje de lista vacía en la pantalla de notificaciones."
   },
-  "gestionNotificacionesLoadError": "No se han podido cargar las notificaciones",
+  "gestionNotificacionesLoadError": "No podemos mostrar tus notificaciones en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con",
   "@gestionNotificacionesLoadError": {
     "description": "Mensaje de error al cargar la lista de notificaciones."
   },
@@ -5603,7 +5631,7 @@
   "@agendaRefreshTooltip": {
     "description": "Agenda — tooltip del botón de refrescar los eventos."
   },
-  "agendaEmptyAppointments": "No hay citas para el periodo seleccionado.",
+  "agendaEmptyAppointments": "No tienes eventos próximos en tu agenda en este momento. Cuando tengas citas o notificaciones importantes, podrás consultarlas aquí.",
   "@agendaEmptyAppointments": {
     "description": "Agenda — estado vacío del listado de citas."
   },
@@ -5787,15 +5815,19 @@
   "@recommendationsPreferencesHint": {
     "description": "Recomendaciones — aviso para personalizar los hechos vitales desde Preferencias."
   },
-  "recommendationsEmptyNoMatches": "Actualmente no hay recomendaciones para ti. Puedes modificar la selección actual de tus hechos vitales desde las preferencias o esperar a recibir nuevas actualizaciones.",
+  "recommendationsEmptyNoMatches": "No tenemos recomendaciones para ti en este momento. Cuando las haya, podrás consultarlas aquí. Si quieres, puedes cambiar los temas que te interesan desde Preferencias, en Mis hechos vitales.",
   "@recommendationsEmptyNoMatches": {
     "description": "Recomendaciones — aviso cuando no hay recomendaciones que coincidan con las preferencias."
+  },
+  "recommendationsEmptyNoLifeEvents": "Para mostrarte recomendaciones basadas en tus hechos vitales, es necesario que indiques los temas que te interesan. Puedes elegirlos y modificarlos cuando quieras desde Preferencias, en Mis hechos vitales.",
+  "@recommendationsEmptyNoLifeEvents": {
+    "description": "Recomendaciones — aviso cuando la cláusula está autorizada pero no hay hechos vitales seleccionados."
   },
   "recommendationsEditLifeEventsCta": "Ir a Preferencias",
   "@recommendationsEditLifeEventsCta": {
     "description": "Recomendaciones — botón para editar los hechos vitales desde el estado vacío."
   },
-  "recommendationsEmptyFiltered": "Actualmente no hay recomendaciones para los filtros seleccionados. Puedes modificar la selección de filtros o esperar a recibir nuevas actualizaciones.",
+  "recommendationsEmptyFiltered": "No hemos encontrado recomendaciones con este filtro. Puedes quitarlo para consultar todas.",
   "@recommendationsEmptyFiltered": {
     "description": "Recomendaciones — aviso cuando el filtro aplicado no devuelve resultados."
   },
@@ -5823,7 +5855,7 @@
   "@digitalCardsInfoSheetBody": {
     "description": "Carnets digitales — cuerpo del bottom sheet informativo."
   },
-  "digitalCardsAuthorizationRequiredMessage": "Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».",
+  "digitalCardsAuthorizationRequiredMessage": "Para consultar la información de tus carnets, es necesario que autorices el acceso a tus datos. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.",
   "@digitalCardsAuthorizationRequiredMessage": {
     "description": "Carnets digitales — aviso cuando falta la autorización de consulta de datos de la JCCM."
   },
@@ -6745,7 +6777,7 @@
   "@supportErrorSubmitInvalidData": {
     "description": "Error al enviar el formulario de soporte con datos rechazados por el servidor (400)."
   },
-  "supportErrorSubmitUnavailable": "No hemos podido enviar tu solicitud. Inténtalo de nuevo más tarde.",
+  "supportErrorSubmitUnavailable": "No hemos podido enviar tu consulta debido a un problema técnico. Vuelve a intentarlo en unos minutos.",
   "@supportErrorSubmitUnavailable": {
     "description": "Error genérico al enviar el formulario de soporte."
   },

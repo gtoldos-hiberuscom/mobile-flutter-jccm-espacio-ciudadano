@@ -802,7 +802,7 @@
   "@agendaEmpty": {
     "description": "Agenda — empty state message."
   },
-  "agendaError": "We couldn't load your agenda.",
+  "agendaError": "We cannot show your calendar information right now. Try again in a few minutes. If it still does not load in a few hours, contact",
   "@agendaError": {
     "description": "Agenda — error state message."
   },
@@ -810,7 +810,7 @@
   "@agendaHealthAppointmentsUnavailable": {
     "description": "Agenda — partial load notice when the Primary Care appointments source (SESCAM) does not respond and the rest of the agenda has loaded."
   },
-  "agendaHealthCipMissing": "There is no health identification number (CIP) linked to your identity in the SESCAM service. We may therefore be unable to display this information. Please try again later.",
+  "agendaHealthCipMissing": "We cannot find your personal identification code (CIP) in the Castilla-La Mancha Health Service (SESCAM), so we cannot show your appointments. Try again in a few minutes. If it still does not work in a few hours, contact",
   "@agendaHealthCipMissing": {
     "description": "Agenda — informational notice when SESCAM returns code 3031 because no CIP is linked to the identity."
   },
@@ -1282,9 +1282,13 @@
   "@socialWelfareInfoSheetDescription": {
     "description": "Social welfare data — info sheet description."
   },
-  "myDataJccmAuthorizationRequiredMessage": "You must authorise the consultation of administrative facts held by the JCCM from your preferences.",
+  "myDataJccmAuthorizationRequiredMessage": "To view the information the Regional Government of Castilla-La Mancha (JCCM) holds about you, you need to authorise access to your data. You can do this from Preferences, under Terms of use and authorisations.",
   "@myDataJccmAuthorizationRequiredMessage": {
     "description": "Message shown when JCCM data consultation is not authorised."
+  },
+  "recommendationsAuthorizationRequiredMessage": "To show you recommendations based on your life events, you need to authorise the use of this information. You can do this from Preferences, under Terms of use and authorisations.",
+  "@recommendationsAuthorizationRequiredMessage": {
+    "description": "Recommendations — notice shown when the life-event recommendations clause has not been authorised."
   },
   "authorizationCheckFailedMessage": "We could not check your authorisations. Please try again.",
   "@authorizationCheckFailedMessage": {
@@ -1294,7 +1298,7 @@
   "@myDataJccmAuthorizationRequiredCta": {
     "description": "Accessible text for the button that opens terms of use and authorizations."
   },
-  "myDataAgeAuthorizationRequiredMessage": "You must authorise the consultation of data held about you by the General State Administration from your preferences.",
+  "myDataAgeAuthorizationRequiredMessage": "To view the information the General State Administration (AGE) holds about you, you need to authorise access to your data. You can do this from Preferences, under Terms of use and authorisations.",
   "@myDataAgeAuthorizationRequiredMessage": {
     "description": "Message shown when AGE data consultation is not authorised."
   },
@@ -1650,7 +1654,7 @@
   "@supportConfirmationTitle": {
     "description": "Confirmation screen title."
   },
-  "supportConfirmationMessage": "We've received your request. We'll confirm by e-mail.",
+  "supportConfirmationMessage": "We have received your enquiry. We will get back to you as soon as possible.",
   "@supportConfirmationMessage": {
     "description": "Confirmation message after submitting."
   },
@@ -1658,7 +1662,7 @@
   "@supportConfirmationNewRequest": {
     "description": "Send another request button."
   },
-  "supportSubmissionError": "We couldn't send your request. Please try again.",
+  "supportSubmissionError": "We could not send your enquiry due to a technical problem. Try again in a few minutes.",
   "@supportSubmissionError": {
     "description": "Generic submission error."
   },
@@ -3332,11 +3336,11 @@
   "@familiaNumerosaNo": {
     "description": "Familia numerosa detail — negative value."
   },
-  "familiaNumerosaNoDataMessage": "We could not find large family information associated with your data in the JCCM lookup service.\n\nIf this situation is not correct or not up to date, contact the Social Welfare Department of Castilla-La Mancha.",
+  "familiaNumerosaNoDataMessage": "We have not found any large-family information linked to your data.",
   "@familiaNumerosaNoDataMessage": {
     "description": "Familia numerosa detail — helper shown when no data exists."
   },
-  "familiaNumerosaNoDataContactHint": "If this information is incorrect or out of date, contact the Department of Social Welfare of Castilla-La Mancha.",
+  "familiaNumerosaNoDataContactHint": "If you think the information is incorrect or out of date, contact the",
   "@familiaNumerosaNoDataContactHint": {
     "description": "Contact text shown when there is no large family data."
   },
@@ -3428,23 +3432,51 @@
   "@familiaNumerosaErrorMessage": {
     "description": "Familia numerosa detail — generic error message."
   },
-  "familiaNumerosaServiceUnavailableMessage": "The service for consulting your large-family title is unavailable. You can reload the information or try again later.",
+  "familiaNumerosaServiceUnavailableMessage": "We cannot show your large-family information right now. Try again in a few minutes. If it still does not load in a few hours, contact",
   "myDataServiceUnavailableUpdate": "Refresh",
   "myDataNoDataContact": "Contact",
   "myDataNoDataOfficeContacts": "Contact",
-  "discapacidadNoDataMessage": "We could not find disability information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.",
-  "socialWelfareParkingNoDataMessage": "We could not find parking-card information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.",
-  "socialWelfareThermalSpaNoDataMessage": "We could not find thermal-spa information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.",
-  "socialWelfareDependencyNoDataMessage": "We could not find dependency-care information associated with your details in the JCCM consultation service.\n\nIf this is incorrect or outdated, contact the Social Welfare Department of Castilla-La Mancha.",
-  "educationUniversityTitlesNoDataMessage": "We could not find university titles associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact the Ministry responsible for universities.",
-  "educationNonUniversityTitlesNoDataMessage": "We could not find non-university titles associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact the Ministry of Education.",
-  "myDataVehiclesNoDataMessage": "We could not find vehicles associated with your details in the DGT consultation service.\n\nIf this is incorrect or outdated, contact the Directorate-General for Traffic.",
-  "myDataHousingAddressNoDataMessage": "We could not find address information associated with your details in the municipal-register consultation service.\n\nIf this is incorrect or outdated, contact your local council.",
-  "myDataHousingRealEstateNoDataMessage": "We could not find real-estate assets associated with your details in the Cadastre consultation service.\n\nIf this is incorrect or outdated, contact the Directorate-General for Cadastre.",
-  "myDataHealthAppointmentsNoDataMessage": "We could not find primary-care appointments associated with your details in the SESCAM consultation service.\n\nIf this is incorrect or outdated, contact your health centre.",
-  "myDataHealthHospitalAppointmentsNoDataMessage": "We could not find any hospital appointments linked to your data in the SESCAM query service.\n\nIf this is not correct or up to date, contact your hospital.",
-  "myDataEmploymentDemandNoDataMessage": "We could not find job-seeker information associated with your details in the consultation service.\n\nIf this is incorrect or outdated, contact an employment office in Castilla-La Mancha.",
-  "myDataEmploymentOffersNoDataMessage": "You have not registered for any offer yet.\n\nIf this information is incorrect or out of date, check your personal area in the Castilla-La Mancha Employment Portal.",
+  "discapacidadNoDataMessage": "We have not found any disability information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the",
+  "socialWelfareParkingNoDataMessage": "We have not found any parking card information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the",
+  "socialWelfareThermalSpaNoDataMessage": "We have not found any spa therapy information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the",
+  "socialWelfareDependencyNoDataMessage": "We have not found any dependency care information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the",
+  "socialWelfareCouncilLink": "Department of Social Welfare of Castilla-La Mancha",
+  "@socialWelfareCouncilLink": {
+    "description": "Social Welfare — link to the Department contacts that ends the no-data notices."
+  },
+  "educationUniversityTitlesNoDataMessage": "We have not found any university degree linked to your data.\n\nIf you think the information is incorrect or out of date, contact the",
+  "educationUniversityTitlesContactLink": "Ministry of Science, Innovation and Universities",
+  "@educationUniversityTitlesContactLink": {
+    "description": "Education — ministry link that ends the no university degrees notice."
+  },
+  "educationNonUniversityTitlesNoDataMessage": "We have not found any non-university qualification linked to your data.\n\nIf you think the information is incorrect or out of date, contact the",
+  "educationNonUniversityTitlesContactLink": "Ministry of Education, Vocational Training and Sports",
+  "@educationNonUniversityTitlesContactLink": {
+    "description": "Education — ministry link that ends the no non-university qualifications notice."
+  },
+  "myDataVehiclesNoDataMessage": "We have not found any vehicle information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the",
+  "myDataVehiclesContactLink": "Directorate-General for Traffic (DGT)",
+  "@myDataVehiclesContactLink": {
+    "description": "Vehicles — DGT link that ends the no vehicles notice."
+  },
+  "myDataHousingAddressNoDataMessage": "We have not found any address information linked to your data.\n\nIf you think the information is incorrect or out of date, contact your town council.",
+  "myDataHousingRealEstateNoDataMessage": "We have not found any property information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the relevant Cadastral Information Point.",
+  "myDataHealthAppointmentsNoDataMessage": "We have not found any primary care appointments linked to your data.\n\nIf you think the information is incorrect or out of date, contact the relevant centre of the",
+  "myDataHealthAppointmentsContactLink": "Castilla-La Mancha Health Service (SESCAM)",
+  "@myDataHealthAppointmentsContactLink": {
+    "description": "Health — SESCAM centres link that ends the no primary care appointments notice."
+  },
+  "myDataHealthHospitalAppointmentsNoDataMessage": "We have not found any hospital appointments linked to your data.\n\nIf you think the information is incorrect or out of date, contact the relevant centre of the Castilla-La Mancha Health Service (SESCAM).",
+  "myDataEmploymentDemandNoDataMessage": "We have not found any job-seeker information linked to your data.\n\nIf you think the information is incorrect or out of date, contact the",
+  "myDataEmploymentDemandContactLink": "State Public Employment Service (SEPE)",
+  "@myDataEmploymentDemandContactLink": {
+    "description": "Employment — SEPE link that ends the no job-seeker data notice."
+  },
+  "myDataEmploymentOffersNoDataMessage": "We have not found any job offer applications linked to your data.\n\nIf you think the information is incorrect or out of date, contact the",
+  "myDataEmploymentOffersContactLink": "Employability portal of the Regional Government of Castilla-La Mancha",
+  "@myDataEmploymentOffersContactLink": {
+    "description": "Employment — employability portal link that ends the no applications notice."
+  },
   "myDataEmploymentOffersAuthorizationRequiredMessage": "Authorise the use of your data in Preferences to view your employment offer registrations.",
   "@myDataEmploymentOffersAuthorizationRequiredMessage": {
     "description": "Message shown when authorisation is required to view employment offer registrations."
@@ -3457,17 +3489,17 @@
   "@myDataHealthAppointmentsAuthorizationRequiredMessage": {
     "description": "Message shown when authorisation is required to view primary-care appointments."
   },
-  "discapacidadServiceUnavailableMessage": "The service for consulting your disability title is unavailable. You can reload the information or try again later.",
-  "socialWelfareParkingServiceUnavailableMessage": "The service for consulting your parking card is unavailable. You can reload the information or try again later.",
-  "socialWelfareThermalSpaServiceUnavailableMessage": "The service for consulting your thermal-spa information is unavailable. You can reload the information or try again later.",
-  "socialWelfareDependencyServiceUnavailableMessage": "The service for consulting your dependency care information is unavailable. You can reload the information or try again later.",
-  "educationUniversityTitlesServiceUnavailableMessage": "The service for consulting your university titles is unavailable. You can reload the information or try again later.",
-  "educationNonUniversityTitlesServiceUnavailableMessage": "The service for consulting your non-university titles is unavailable. You can reload the information or try again later.",
-  "myDataVehiclesServiceUnavailableMessage": "The service for consulting your vehicles is unavailable. You can reload the information or try again later.",
-  "myDataHousingAddressServiceUnavailableMessage": "The service for consulting your address details is unavailable. You can reload the information or try again later.",
-  "myDataHousingRealEstateServiceUnavailableMessage": "The service for consulting your real-estate assets is unavailable. You can reload the information or try again later.",
-  "myDataHealthAppointmentsServiceUnavailableMessage": "The primary care appointments service is currently unavailable. Please try again later.",
-  "myDataHealthHospitalAppointmentsServiceUnavailableMessage": "The hospital appointments service is currently unavailable. Please try again later.",
+  "discapacidadServiceUnavailableMessage": "We cannot show your disability information right now. Try again in a few minutes. If it still does not load in a few hours, contact",
+  "socialWelfareParkingServiceUnavailableMessage": "We cannot show your parking card right now. Try again in a few minutes. If it still does not load in a few hours, contact",
+  "socialWelfareThermalSpaServiceUnavailableMessage": "We cannot show your spa therapy information right now. Try again in a few minutes. If it still does not load in a few hours, contact",
+  "socialWelfareDependencyServiceUnavailableMessage": "We cannot show your dependency care information right now. Try again in a few minutes. If it still does not load in a few hours, contact",
+  "educationUniversityTitlesServiceUnavailableMessage": "We cannot show your university degrees right now. Try again in a few minutes. If it still does not load in a few hours, contact",
+  "educationNonUniversityTitlesServiceUnavailableMessage": "We cannot show your non-university qualifications right now. Try again in a few minutes. If it still does not load in a few hours, contact",
+  "myDataVehiclesServiceUnavailableMessage": "We cannot show your vehicles right now. Try again in a few minutes. If it still does not load in a few hours, contact",
+  "myDataHousingAddressServiceUnavailableMessage": "We cannot show your address right now. Try again in a few minutes. If it still does not load in a few hours, contact",
+  "myDataHousingRealEstateServiceUnavailableMessage": "We cannot show your properties right now. Try again in a few minutes. If it still does not load in a few hours, contact",
+  "myDataHealthAppointmentsServiceUnavailableMessage": "We cannot show your primary care appointments right now. Try again in a few minutes. If it still does not load in a few hours, contact",
+  "myDataHealthHospitalAppointmentsServiceUnavailableMessage": "We cannot show your hospital appointments right now. Try again in a few minutes. If it still does not load in a few hours, contact",
   "familiaNumerosaRetry": "Retry",
   "@familiaNumerosaRetry": {
     "description": "Familia numerosa detail — retry button label."
@@ -3745,7 +3777,7 @@
   "@recommendationsLifeEventsComingSoon": {
     "description": "Recommendations — STORY-57 SnackBar shown when tapping the 'View my life events' secondary CTA before that surface ships."
   },
-  "recommendationsLoadingError": "We couldn't load your recommendation information. Please try again later.",
+  "recommendationsLoadingError": "We cannot show your recommendations right now. Try again in a few minutes. If it still does not load in a few hours, contact",
   "@recommendationsLoadingError": {
     "description": "Recommendations — generic error message when the list cannot be loaded."
   },
@@ -4045,9 +4077,13 @@
   "@representativeUnavailableTitle": {
     "description": "Title shown when opening a section unavailable with a representative certificate."
   },
-  "representativeUnavailableMessage": "The identification method used to sign in does not allow you to view this information. If you have another way to identify yourself, you can try again.",
+  "representativeUnavailableMessage": "To view your personal data, you need to sign in with your personal certificate. We cannot show you this information with a representative certificate. If you cannot sign in, contact",
   "@representativeUnavailableMessage": {
     "description": "Message shown when opening a section unavailable with a representative certificate."
+  },
+  "technicalSupportLink": "technical support",
+  "@technicalSupportLink": {
+    "description": "Link to the technical support form that ends error notices (\"…contact technical support.\")."
   },
   "myDataHealthTitle": "Health",
   "@myDataHealthTitle": {
@@ -4121,7 +4157,7 @@
   "@myDataEmploymentServiceUnavailableTitle": {
     "description": "Banner title shown when the employment demand service is unavailable."
   },
-  "myDataEmploymentServiceUnavailableMessage": "The Employment demand service is currently unavailable. You can reload the information or try again later.",
+  "myDataEmploymentServiceUnavailableMessage": "We cannot show your job-seeker information right now. Try again in a few minutes. If it still does not load in a few hours, contact",
   "@myDataEmploymentServiceUnavailableMessage": {
     "description": "Banner message shown when the employment demand service is unavailable."
   },
@@ -4129,7 +4165,7 @@
   "@myDataEmploymentServiceUnavailableReload": {
     "description": "Button label to reload employment demand when the service is unavailable."
   },
-  "myDataEmploymentOffersServiceUnavailableMessage": "We could not load your employment offer registrations. Please try again later.",
+  "myDataEmploymentOffersServiceUnavailableMessage": "We cannot show your job offer applications right now. Try again in a few minutes. If it still does not load in a few hours, contact",
   "@myDataEmploymentOffersServiceUnavailableMessage": {
     "description": "Contextual helper message shown when the offer registrations service is unavailable."
   },
@@ -4754,14 +4790,6 @@
   "@myDataHealthHospitalPastTab": {
     "description": "Health — past hospital appointments tab."
   },
-  "myDataHealthHospitalPendingEmpty": "You have no upcoming hospital appointments.",
-  "@myDataHealthHospitalPendingEmpty": {
-    "description": "Health — message when there are no upcoming hospital appointments."
-  },
-  "myDataHealthHospitalPastEmpty": "You have no past hospital appointments.",
-  "@myDataHealthHospitalPastEmpty": {
-    "description": "Health — message when there are no past hospital appointments."
-  },
   "myDataHealthHospitalFieldService": "Service",
   "@myDataHealthHospitalFieldService": {
     "description": "Health — label for the medical service of a hospital appointment."
@@ -4946,11 +4974,11 @@
   "@gestionExpedientesEstadoLabel": {
     "description": "Status label on the case card."
   },
-  "gestionExpedientesLoadError": "We could not load your cases",
+  "gestionExpedientesLoadError": "We cannot show your case files right now. Try again in a few minutes. If it still does not load in a few hours, contact",
   "@gestionExpedientesLoadError": {
     "description": "Error when loading the list of cases."
   },
-  "gestionExpedientesEmpty": "You have no active cases",
+  "gestionExpedientesEmpty": "You have no case files right now. When you have one, you will be able to see it here.",
   "@gestionExpedientesEmpty": {
     "description": "Empty list message on the cases screen."
   },
@@ -5122,19 +5150,19 @@
   "@gestionRegistrosDatosRegistroTitle": {
     "description": "Title of the registry data section on the detail screen."
   },
-  "gestionRegistrosEntradasLoadError": "We could not load your incoming registry entries",
+  "gestionRegistrosEntradasLoadError": "We cannot show your registry entries right now. Try again in a few minutes. If it still does not load in a few hours, contact",
   "@gestionRegistrosEntradasLoadError": {
     "description": "Error when loading the list of incoming registry entries."
   },
-  "gestionRegistrosSalidasLoadError": "We could not load your outgoing registry entries",
+  "gestionRegistrosSalidasLoadError": "We cannot show your registry entries right now. Try again in a few minutes. If it still does not load in a few hours, contact",
   "@gestionRegistrosSalidasLoadError": {
     "description": "Error when loading the list of outgoing registry entries."
   },
-  "gestionRegistrosEntradasEmpty": "You have no incoming registry entries",
+  "gestionRegistrosEntradasEmpty": "You have no registry entries right now. When you have one, you will be able to see it here.",
   "@gestionRegistrosEntradasEmpty": {
     "description": "Empty list message for incoming registry entries."
   },
-  "gestionRegistrosSalidasEmpty": "You have no outgoing registry entries",
+  "gestionRegistrosSalidasEmpty": "You have no registry entries right now. When you have one, you will be able to see it here.",
   "@gestionRegistrosSalidasEmpty": {
     "description": "Empty list message for outgoing registry entries."
   },
@@ -5274,7 +5302,7 @@
   "@gestionAportacionCamposExpedienteError": {
     "description": "Validation error when exactly one of the two case fields has not been filled in."
   },
-  "gestionNotificacionesContextualMessage": "Enter your contact details to enable alerts and receive them when you have a new notification.",
+  "gestionNotificacionesContextualMessage": "To notify you of new notifications, you need to add your mobile phone number and your email address. You can do this from Preferences.",
   "@gestionNotificacionesContextualMessage": {
     "description": "Text of the contextual helper under the disabled notifications card."
   },
@@ -5394,11 +5422,11 @@
   "@gestionNotificacionesTagExpirada": {
     "description": "Expired status tag in notifications."
   },
-  "gestionNotificacionesEmpty": "You have no notifications at the moment",
+  "gestionNotificacionesEmpty": "You have no notifications right now. When you have one, you will be able to see it here.",
   "@gestionNotificacionesEmpty": {
     "description": "Empty list message on the notifications screen."
   },
-  "gestionNotificacionesLoadError": "The notifications could not be loaded",
+  "gestionNotificacionesLoadError": "We cannot show your notifications right now. Try again in a few minutes. If it still does not load in a few hours, contact",
   "@gestionNotificacionesLoadError": {
     "description": "Error message when loading the list of notifications."
   },
@@ -5567,7 +5595,7 @@
   "@agendaRefreshTooltip": {
     "description": "Agenda — tooltip of the refresh events button."
   },
-  "agendaEmptyAppointments": "There are no appointments for the selected period.",
+  "agendaEmptyAppointments": "You have no upcoming events in your calendar right now. When you have important appointments or notifications, you will be able to see them here.",
   "@agendaEmptyAppointments": {
     "description": "Agenda — empty state of the appointments list."
   },
@@ -5751,15 +5779,19 @@
   "@recommendationsPreferencesHint": {
     "description": "Recommendations — hint to personalize life events from Preferences."
   },
-  "recommendationsEmptyNoMatches": "There are currently no recommendations for you. You can change your current life-event selection in Preferences or wait for new updates.",
+  "recommendationsEmptyNoMatches": "We have no recommendations for you right now. When there are some, you will be able to see them here. If you like, you can change the topics you are interested in from Preferences, under My life events.",
   "@recommendationsEmptyNoMatches": {
     "description": "Recommendations — notice when no recommendations match the preferences."
+  },
+  "recommendationsEmptyNoLifeEvents": "To show you recommendations based on your life events, you need to choose the topics you are interested in. You can choose and change them whenever you like from Preferences, under My life events.",
+  "@recommendationsEmptyNoLifeEvents": {
+    "description": "Recommendations — notice when the clause is authorised but no life events are selected."
   },
   "recommendationsEditLifeEventsCta": "Go to Preferences",
   "@recommendationsEditLifeEventsCta": {
     "description": "Recommendations — button to edit life events from the empty state."
   },
-  "recommendationsEmptyFiltered": "There are currently no recommendations for the selected filters. You can change the filter selection or wait for new updates.",
+  "recommendationsEmptyFiltered": "We have not found any recommendations with this filter. You can remove it to see them all.",
   "@recommendationsEmptyFiltered": {
     "description": "Recommendations — notice when the applied filter returns no results."
   },
@@ -5787,7 +5819,7 @@
   "@digitalCardsInfoSheetBody": {
     "description": "Digital cards — body of the info bottom sheet."
   },
-  "digitalCardsAuthorizationRequiredMessage": "To view and download your digital cards, you must authorize the use of this data in ‘Terms of use and authorizations’.",
+  "digitalCardsAuthorizationRequiredMessage": "To view your cards' information, you need to authorise access to your data. You can do this from Preferences, under Terms of use and authorisations.",
   "@digitalCardsAuthorizationRequiredMessage": {
     "description": "Digital cards — notice when the JCCM data consultation authorization is missing."
   },
@@ -6709,7 +6741,7 @@
   "@supportErrorSubmitInvalidData": {
     "description": "Error when the server rejects the support form data (400)."
   },
-  "supportErrorSubmitUnavailable": "We could not send your request. Please try again later.",
+  "supportErrorSubmitUnavailable": "We could not send your enquiry due to a technical problem. Try again in a few minutes.",
   "@supportErrorSubmitUnavailable": {
     "description": "Generic error when submitting the support form."
   },

@@ -60,7 +60,7 @@ class MyDataUniversityTitlesPage extends ConsumerWidget {
   ) {
     return MyDataNoData(
       message: l10n.educationUniversityTitlesNoDataMessage,
-      actionLabel: l10n.educationUniversityTitlesInfoContactButton,
+      contactLinkText: l10n.educationUniversityTitlesContactLink,
       contactUrl: _universityTitlesContactUrl,
     );
   }

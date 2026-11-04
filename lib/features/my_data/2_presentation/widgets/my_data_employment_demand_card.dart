@@ -63,7 +63,7 @@ class MyDataEmploymentDemandEmpty extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     return MyDataNoData(
       message: l10n.myDataEmploymentDemandNoDataMessage,
-      actionLabel: l10n.myDataEmploymentInfoSheetOfficeContactsButton,
+      contactLinkText: l10n.myDataEmploymentDemandContactLink,
       contactUrl: 'https://www.sepe.es/HomeSepe',
       scrollable: false,
     );
