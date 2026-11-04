@@ -5156,7 +5156,7 @@
   "@gestionRegistrosConsejeriaDestinoLabel": {
     "description": "Etiqueta del campo consejería de destino (entradas)."
   },
-  "gestionRegistrosDatosRegistroTitle": "Datos del Registro",
+  "gestionRegistrosDatosRegistroTitle": "Datos de registro",
   "@gestionRegistrosDatosRegistroTitle": {
     "description": "Título de la sección de datos del registro en el detalle."
   },

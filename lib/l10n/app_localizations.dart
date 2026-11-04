@@ -7523,7 +7523,7 @@ abstract class AppLocalizations {
   /// Título de la sección de datos del registro en el detalle.
   ///
   /// In es, this message translates to:
-  /// **'Datos del Registro'**
+  /// **'Datos de registro'**
   String get gestionRegistrosDatosRegistroTitle;
 
   /// Error al cargar la lista de entradas de registro.

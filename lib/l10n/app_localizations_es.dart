@@ -3891,7 +3891,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionRegistrosConsejeriaDestinoLabel => 'CONSEJERÍA DE DESTINO';
 
   @override
-  String get gestionRegistrosDatosRegistroTitle => 'Datos del Registro';
+  String get gestionRegistrosDatosRegistroTitle => 'Datos de registro';
 
   @override
   String get gestionRegistrosEntradasLoadError => 'No podemos mostrar tus registros en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
