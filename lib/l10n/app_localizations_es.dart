@@ -3622,6 +3622,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthHospitalFieldAgenda => 'Agenda';
 
   @override
+  String get myDataHealthHospitalFieldDateTime => 'Fecha y hora';
+
+  @override
+  String myDataHealthHospitalDateTimeValue(String date, String time) {
+    return '$date, $time';
+  }
+
+  @override
   String get myDataHealthCipUnavailable => 'CIP no disponible';
 
   @override
@@ -4239,8 +4247,23 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String commonUpdatedAt(Object day, Object month, Object time, Object year) {
+  String commonUpdatedAt(Object day, Object month, Object year, Object time) {
     return 'Actualizado el $day $month $year a las ${time}h';
+  }
+
+  @override
+  String agendaUpdatedToday(Object time) {
+    return 'Actualizado hoy a las $time h';
+  }
+
+  @override
+  String agendaUpdatedYesterday(Object time) {
+    return 'Actualizado ayer a las $time h';
+  }
+
+  @override
+  String agendaUpdatedOn(Object day, Object month, Object time) {
+    return 'Actualizado el $day $month a las $time h';
   }
 
   @override
@@ -4976,7 +4999,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyAepdTitle => '¿Puedo reclamar ante la Agencia Española de Protección de Datos?';
 
   @override
-  String get privacyAepdTextBeforeLink => 'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la ';
+  String get privacyAepdTextBeforeLink => 'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD), ';
 
   @override
   String get privacyAepdLinkLabel => 'Agencia Española de Protección de Datos (AEPD)';

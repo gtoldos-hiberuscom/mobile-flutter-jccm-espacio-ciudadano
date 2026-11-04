@@ -20,6 +20,25 @@ const _verificar = 'Verificar';
 const _verificacionCompletada = 'Verificación completada';
 
 void main() {
+  group('marca «Actualizado…»', () {
+    testWidgets('si fue hoy dice «hoy a las HH:MM h»', (final tester) async {
+      final now = DateTime.now();
+      await _pumpAgenda(tester, appointments: const [], updatedAt: DateTime(now.year, now.month, now.day, 0, 5));
+      expect(find.text('Actualizado hoy a las 00:05 h'), findsOneWidget);
+    });
+
+    testWidgets('si fue ayer dice «ayer a las HH:MM h»', (final tester) async {
+      final yesterday = DateUtils.addDaysToDate(DateUtils.dateOnly(DateTime.now()), -1);
+      await _pumpAgenda(tester, appointments: const [], updatedAt: DateTime(yesterday.year, yesterday.month, yesterday.day, 23));
+      expect(find.text('Actualizado ayer a las 23:00 h'), findsOneWidget);
+    });
+
+    testWidgets('otro día dice «el DD mmm a las HH:MM h», sin año', (final tester) async {
+      await _pumpAgenda(tester, appointments: const [], updatedAt: DateTime(2026, 10, 30, 12, 10));
+      expect(find.text('Actualizado el 30 oct a las 12:10 h'), findsOneWidget);
+    });
+  });
+
   testWidgets('con una fuente caída se pintan las citas que sí llegaron y un aviso que nombra la que falta', (final tester) async {
     await _pumpAgenda(
       tester,
@@ -135,7 +154,10 @@ void main() {
     );
 
     expect(find.text('Cita de atención hospitalaria'), findsOneWidget);
-    expect(find.text('Tiene una cita de atención hospitalaria para el próximo 02/11/2026'), findsOneWidget);
+    expect(find.text('Tiene una cita de atención hospitalaria para el próximo 02/11/2026'), findsNothing);
+    final hospitalTitle = tester.widget<Text>(find.text('Cita de atención hospitalaria'));
+    expect(hospitalTitle.style?.fontSize, AppTypography.bodyBold.fontSize);
+    expect(hospitalTitle.style?.fontWeight, AppTypography.bodyBold.fontWeight);
     expect(find.text('Servicio: Medicina interna'), findsOneWidget);
     expect(find.text('Centro: Hospital universitario de toledo'), findsOneWidget);
     expect(find.text('Sala: Consultas B-203'), findsOneWidget);
@@ -165,7 +187,8 @@ void main() {
     );
 
     expect(find.text('Cita de atención primaria'), findsOneWidget);
-    expect(find.text('Tiene una cita de atención primaria el próximo 19/10/2026'), findsOneWidget);
+    // Como en hospitalaria, la intro «Tiene una cita…» no se pinta.
+    expect(find.text('Tiene una cita de atención primaria el próximo 19/10/2026'), findsNothing);
     expect(find.text('Profesional: Campo criptana molino'), findsOneWidget);
     expect(find.text('Tipo de cita: Vacuna gripe'), findsOneWidget);
     expect(find.text('Modo de cita: Presencial'), findsOneWidget);
@@ -283,6 +306,7 @@ Future<void> _pumpAgenda(
   final bool healthCipMissing = false,
   final bool hospitalAppointmentsLocked = false,
   final ElevationNotifier Function()? elevation,
+  final DateTime? updatedAt,
 }) async {
   await tester.pumpWidget(
     ProviderScope(
@@ -291,7 +315,7 @@ Future<void> _pumpAgenda(
         agendaAppointmentsProvider.overrideWith(
           (final ref) async => AgendaAppointmentsState(
             appointments: appointments,
-            updatedAt: DateTime(2026, 9, 10),
+            updatedAt: updatedAt ?? DateTime(2026, 9, 10),
             hasJccmAuthorization: true,
             failedSources: failedSources,
             healthCipMissing: healthCipMissing,

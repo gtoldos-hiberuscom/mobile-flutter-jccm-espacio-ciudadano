@@ -11,6 +11,8 @@ import 'package:jccm_espacio_ciudadano/features/my_data/3_data/my_data_health_re
 
 const _citizenId = 'sub-alt-1';
 
+const _sescam3031Body = '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"Error al obtener las citas"}]}}';
+
 void main() {
   group('MyDataHealthRepositoryImpl', () {
     test('loads CIP and pending primary care appointments from the gateway', () async {
@@ -161,10 +163,11 @@ void main() {
       );
     });
 
-    test('identifica el 500/3031 como ausencia de CIP en SESCAM', () async {
+    test('identifica el 500/3031 como ausencia de CIP cuando el SESCAM no devuelve CIP', () async {
       final adapter = _MyDataHealthAdapter(
         errorStatus: 500,
         errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"Error al obtener las citas futuras"}]}}',
+        cipStatus: 404,
       );
       final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
 
@@ -177,10 +180,77 @@ void main() {
       );
     });
 
+    for (final filter in HealthAppointmentFilter.values) {
+      test('trata el 500/3031 de citas ${filter.name} como «sin citas» cuando el ciudadano tiene CIP', () async {
+        // El back aún no distingue «sin CIP» de «sin citas»: SESCAM devuelve
+        // 3031 en los dos casos y el CIP es lo único que los separa. Pintarlo
+        // como servicio caído escondía que simplemente no hay citas.
+        final adapter = _MyDataHealthAdapter(
+          errorStatus: 500,
+          errorBody: _sescam3031Body,
+          cipStatus: 200,
+        );
+        final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+        expect(await repository.loadPrimaryCareAppointments(citizenId: _citizenId, filter: filter), isEmpty);
+        expect(await repository.loadHospitalAppointments(citizenId: _citizenId, filter: filter), isEmpty);
+        expect(adapter.paths, contains('/api/v1/ciudadanos/sub-alt-1/salud/cip'));
+      });
+
+      test('trata el 500/3031 de citas ${filter.name} como servicio no disponible cuando el CIP no se puede consultar', () async {
+        final adapter = _MyDataHealthAdapter(
+          errorStatus: 500,
+          errorBody: _sescam3031Body,
+          cipStatus: 500,
+        );
+        final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+        await expectLater(
+          repository.loadPrimaryCareAppointments(citizenId: _citizenId, filter: filter),
+          throwsA(isA<DioException>()),
+        );
+        await expectLater(
+          repository.loadHospitalAppointments(citizenId: _citizenId, filter: filter),
+          throwsA(isA<DioException>()),
+        );
+      });
+
+      test('identifica un 500 de citas hospitalarias ${filter.name} como ausencia de CIP cuando el SESCAM no devuelve CIP', () async {
+        // La hospitalaria no responde con 3031: sin CIP falla con su propio
+        // error, y se pintaba como «servicio no disponible».
+        final adapter = _MyDataHealthAdapter(
+          errorStatus: 500,
+          errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":5000,"mensaje-error":"Error interno"}]}}',
+          cipStatus: 404,
+        );
+        final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+        await expectLater(
+          repository.loadHospitalAppointments(citizenId: _citizenId, filter: filter),
+          throwsA(isA<MyDataHealthCipMissing>()),
+        );
+      });
+    }
+
+    test('deja fallar un 500 de citas sin 3031 como servicio no disponible aunque el ciudadano tenga CIP', () async {
+      final adapter = _MyDataHealthAdapter(
+        errorStatus: 500,
+        errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":5000,"mensaje-error":"Error interno"}]}}',
+        cipStatus: 200,
+      );
+      final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
+
+      await expectLater(
+        repository.loadHospitalAppointments(citizenId: _citizenId, filter: HealthAppointmentFilter.pending),
+        throwsA(isA<DioException>()),
+      );
+    });
+
     test('identifica el 500/3031 de citas pasadas como ausencia de CIP, igual que en pendientes (JCCMEC-266)', () async {
       final adapter = _MyDataHealthAdapter(
         errorStatus: 500,
         errorBody: '{"body":null,"codigo-respuesta":"500.00","info-error":{"errores":[{"codigo-error":3031,"mensaje-error":"Error al obtener las citas pasadas"}]}}',
+        cipStatus: 404,
       );
       final repository = MyDataHealthRepositoryImpl(dio: _dio(adapter));
 
@@ -250,7 +320,7 @@ Dio _dio(final _MyDataHealthAdapter adapter) {
 }
 
 final class _MyDataHealthAdapter implements HttpClientAdapter {
-  _MyDataHealthAdapter({this.errorStatus, this.errorBody = ''});
+  _MyDataHealthAdapter({this.errorStatus, this.errorBody = '', this.cipStatus});
 
   /// Código HTTP con el que responder a todo, en vez del cuerpo de ejemplo.
   final int? errorStatus;
@@ -258,6 +328,10 @@ final class _MyDataHealthAdapter implements HttpClientAdapter {
   /// Cuerpo de esa respuesta de error: vacío como el "[no body]" real de la
   /// fachada, o el sobre de autorización.
   final String errorBody;
+
+  /// Código con el que responde `/salud/cip`, por encima de [errorStatus]:
+  /// permite tumbar las citas y decidir aparte qué dice el CIP.
+  final int? cipStatus;
   final List<String> paths = [];
   final List<Map<String, String>> queries = [];
 
@@ -270,7 +344,8 @@ final class _MyDataHealthAdapter implements HttpClientAdapter {
     paths.add(options.path);
     queries.add(options.uri.queryParameters);
 
-    final status = errorStatus;
+    final isCip = options.path.endsWith('/salud/cip');
+    final status = isCip && cipStatus != null ? (cipStatus == 200 ? null : cipStatus) : errorStatus;
     if (status != null) {
       return ResponseBody.fromString(
         errorBody,
@@ -281,7 +356,7 @@ final class _MyDataHealthAdapter implements HttpClientAdapter {
       );
     }
 
-    if (options.path.endsWith('/salud/cip')) {
+    if (isCip) {
       return _jsonResponse({
         'body': {'cip': 'PNRV901264600010'},
       });

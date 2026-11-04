@@ -58,3 +58,5 @@ app.*.map.json
 
 # Ficheros de bloqueo de Excel (~$Libro.xlsx) que deja abierto el visor
 ~$*
+# Widget Preview related
+.widget_preview/

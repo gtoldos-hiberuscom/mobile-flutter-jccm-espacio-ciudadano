@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
-import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_health_cip_missing.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_health_provider.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -10,11 +9,12 @@ import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 /// Se muestra una sola vez, en el menú de Salud y encima de las dos consultas
 /// de citas (Figma `45045:57735`): es un dato del ciudadano, no de una de ellas.
 ///
-/// Se resuelve con `when` y **nunca** con `asData?.value`: con lo segundo, un
-/// fallo del servicio se presentaba como «no tienes CIP», que es justo el tipo
-/// de mensaje falso que prohíbe el apartado 2.2 del requisito. Son tres cosas
-/// distintas y se cuentan distinto: no hay CIP registrado, no se ha podido
-/// consultar, o aquí está.
+/// Sin CIP, o sin poder consultarlo, se muestra «CIP: -» y nada más: el menú no
+/// afirma que el CIP no exista ni deshabilita las consultas, porque cada una
+/// tiene su propio servicio y cuenta su propio error al entrar. Hospitalaria ni
+/// siquiera depende del CIP.
+const _noCip = '-';
+
 class MyDataHealthCipField extends ConsumerWidget {
   const MyDataHealthCipField({super.key});
 
@@ -26,16 +26,8 @@ class MyDataHealthCipField extends ConsumerWidget {
 
     return ref.watch(myDataHealthCipProvider).when(
       loading: () => Text(l10n.myDataHealthCipLabel('…'), style: style),
-      error: (final error, final _) => error is MyDataHealthCipMissing
-          ? AppAlertContextual(
-              message: l10n.agendaHealthCipMissing,
-              size: AppAlertContextualSize.small,
-              announce: true,
-            )
-          : Text(l10n.myDataHealthCipUnavailable, style: style),
-      data: (final cip) => cip == null || cip.isEmpty
-          ? Text(l10n.myDataHealthCipUnavailable, style: style)
-          : Text(l10n.myDataHealthCipLabel(cip), style: style),
+      error: (final _, final _) => Text(l10n.myDataHealthCipLabel(_noCip), style: style),
+      data: (final cip) => Text(l10n.myDataHealthCipLabel(cip == null || cip.isEmpty ? _noCip : cip), style: style),
     );
   }
 }
