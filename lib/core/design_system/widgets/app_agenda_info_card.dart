@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_colors.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_dimensions.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_icons.dart';
-import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_shadows.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/theme/app_typography.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
@@ -91,15 +90,11 @@ class AppAgendaInfoCard extends StatelessWidget {
     ].where((final part) => part.isNotEmpty);
     final effectiveLabel = semanticsLabel ?? l10n.a11yAgendaCard(typeLabel, semanticParts.join(', '));
     final useVerticalLayout = MediaQuery.textScalerOf(context).scale(1) > 1.5;
-    // Las notificaciones usan su propia variante de Card-info en Figma
-    // (`791:1258`): borde de marca, esquinas redondeadas, sombra y sin la
-    // línea vertical tras la fecha.
-    final isNotification = type == AppAgendaInfoCardType.notification;
     final dateBlock = _DateBlock(
       day: day,
       weekday: weekday,
       time: time,
-      showVerticalDivider: !useVerticalLayout && !isNotification,
+      showVerticalDivider: !useVerticalLayout,
     );
     final contentBlock = _ContentBlock(
       title: title,
@@ -109,7 +104,7 @@ class AppAgendaInfoCard extends StatelessWidget {
       details: details,
       channelBeforeTitle: channelBeforeTitle,
       titleIsRegular: titleIsRegular,
-      titleSpacing: isNotification ? AppDimensions.space8 : 0,
+      titleSpacing: 0,
     );
     final typeIcon = showTypeIcon ? _TypeIcon(type: type, semanticsLabel: typeLabel) : null;
 
@@ -119,13 +114,11 @@ class AppAgendaInfoCard extends StatelessWidget {
       child: ExcludeSemantics(
         child: Container(
           width: double.infinity,
-          padding: isNotification
-              ? const EdgeInsets.all(AppDimensions.space16)
-              : const EdgeInsets.all(AppDimensions.space8).copyWith(
-                  top: AppDimensions.space16,
-                  bottom: AppDimensions.space16,
-                ),
-          decoration: isNotification ? _notificationDecoration : _decoration,
+          padding: const EdgeInsets.all(AppDimensions.space8).copyWith(
+            top: AppDimensions.space16,
+            bottom: AppDimensions.space16,
+          ),
+          decoration: _decoration,
           child: useVerticalLayout
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -147,7 +140,7 @@ class AppAgendaInfoCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       dateBlock,
-                      SizedBox(width: isNotification ? AppDimensions.space4 : AppDimensions.space8),
+                      const SizedBox(width: AppDimensions.space8),
                       Expanded(child: contentBlock),
                       if (typeIcon != null) ...[
                         const SizedBox(width: AppDimensions.space4),
@@ -170,13 +163,6 @@ class AppAgendaInfoCard extends StatelessWidget {
       bottom: BorderSide(color: AppColors.borderBlueMutedLight),
     ),
     borderRadius: BorderRadius.all(Radius.circular(1)),
-  );
-
-  BoxDecoration get _notificationDecoration => BoxDecoration(
-    color: AppColors.surface,
-    border: Border.all(color: AppColors.secondaryLight400, width: 2),
-    borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-    boxShadow: AppShadows.medium,
   );
 }
 

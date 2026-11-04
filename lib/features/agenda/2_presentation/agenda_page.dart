@@ -506,6 +506,7 @@ class _AgendaAppointmentCard extends StatelessWidget {
     // (JCCMEC-274).
     final hasStructuredDetails = appointment.details.isNotEmpty;
     final isHealthLayout = appointment.kind == AgendaAppointmentKind.health && !hasStructuredDetails;
+    final hidesIntro = appointment.kind == AgendaAppointmentKind.hospital || (appointment.kind == AgendaAppointmentKind.health && hasStructuredDetails);
     final legacyDetail = appointment.detail ?? appointment.center?.trim() ?? '';
     final String? secondaryText;
     if (hasStructuredDetails || appointment.kind == AgendaAppointmentKind.credential) {
@@ -527,7 +528,10 @@ class _AgendaAppointmentCard extends StatelessWidget {
       time: appointment.kind == AgendaAppointmentKind.credential ? null : _formatAppointmentTime(date),
       title: isHealthLayout ? appointment.description : appointment.title,
       channel: isHealthLayout ? _appointmentChannel(l10n, appointment.channel, legacyDetail) : null,
-      primaryText: isHealthLayout ? appointment.title : appointment.description,
+      // En las citas hospitalarias y en las de primaria por filas el mensaje
+      // de introducción («Tiene una cita…») repite la información que ya
+      // muestran la fecha, hora y filas de detalle.
+      primaryText: hidesIntro ? null : (isHealthLayout ? appointment.title : appointment.description),
       secondaryText: secondaryText,
       details: appointment.details,
     );
@@ -730,12 +734,22 @@ enum _AgendaFilter {
   }
 }
 
+/// «Actualizado hoy a las HH:MM h», «Actualizado ayer a las HH:MM h» o
+/// «Actualizado el DD mmm a las HH:MM h» según el día de la actualización.
 String _formatUpdateDate(final AppLocalizations l10n, final DateTime dateTime) {
-  return l10n.commonUpdatedAt(
+  final time = _formatAppointmentTime(dateTime);
+  final today = DateUtils.dateOnly(DateTime.now());
+  final updatedDay = DateUtils.dateOnly(dateTime);
+  if (DateUtils.isSameDay(updatedDay, today)) {
+    return l10n.agendaUpdatedToday(time);
+  }
+  if (DateUtils.isSameDay(updatedDay, DateUtils.addDaysToDate(today, -1))) {
+    return l10n.agendaUpdatedYesterday(time);
+  }
+  return l10n.agendaUpdatedOn(
     dateTime.day,
     l10n.commonMonthShortName(_monthKey(dateTime.month)),
-    dateTime.year,
-    _formatAppointmentTime(dateTime),
+    time,
   );
 }
 

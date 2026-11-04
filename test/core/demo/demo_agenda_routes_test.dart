@@ -48,10 +48,11 @@ void main() {
 
       // Gana la de SESCAM: trae profesional y modo en campos propios.
       final primaryCare = snapshot.appointments.firstWhere((final appointment) => appointment.kind == AgendaAppointmentKind.health);
-      expect(primaryCare.title, DemoHealthFixtures.primaryCareProfessional);
-      expect(primaryCare.description, 'Cita de Atención Primaria');
+      expect(primaryCare.title, 'Cita de Atención Primaria');
       expect(primaryCare.channel, 'Presencial');
-      expect(primaryCare.detail, 'Consulta a demanda');
+      // Se pinta por filas, con los valores tal cual llegan de SESCAM.
+      expect(primaryCare.details.first, (label: 'Profesional', value: DemoHealthFixtures.primaryCareProfessional));
+      expect(primaryCare.details.last, (label: 'Modo de cita', value: 'Presencial'));
       // El centro llega de SESCAM, pero en primaria no se muestra (JCCMEC-274).
       expect(primaryCare.center, isNull);
     });

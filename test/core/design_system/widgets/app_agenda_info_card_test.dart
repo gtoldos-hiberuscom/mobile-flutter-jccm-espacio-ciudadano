@@ -63,7 +63,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('la notificación usa su variante de Card-info: borde de marca, esquinas y sombra (Figma 791:1258)', (final tester) async {
+  testWidgets('la notificación usa el mismo borde y formato que el resto de tarjetas de agenda', (final tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         locale: Locale('es'),
@@ -100,11 +100,10 @@ void main() {
     }
 
     final notification = decorationOf('Caducidad de notificación');
-    expect(notification.border, Border.all(color: AppColors.secondaryLight400, width: 2));
-    expect(notification.borderRadius, BorderRadius.circular(AppDimensions.radiusMedium));
-    expect(notification.boxShadow, AppShadows.medium);
+    // Todas las variantes conservan la barra lateral y no llevan sombra.
+    expect((notification.border! as Border).left.width, 4);
+    expect(notification.boxShadow, isNull);
 
-    // El resto de variantes conserva la barra lateral y no lleva sombra.
     final credential = decorationOf('Carnet familia numerosa');
     expect((credential.border! as Border).left.width, 4);
     expect(credential.boxShadow, isNull);

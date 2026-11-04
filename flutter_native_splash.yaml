@@ -6,6 +6,8 @@ flutter_native_splash:
   color: "#FFFFFF"
   image: assets/images/app_icon.png
 
+  # Android 12+ recorta el icono a un círculo de 2/3 del lienzo: el logo debe
+  # ir centrado con margen, por eso se usa el foreground del icono adaptativo.
   android_12:
-    image: assets/images/app_icon.png
+    image: assets/icons/app/app_icon_foreground.png
     color: "#FFFFFF"
