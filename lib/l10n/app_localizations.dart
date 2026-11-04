@@ -6986,6 +6986,18 @@ abstract class AppLocalizations {
   /// **'Agenda'**
   String get myDataHealthHospitalFieldAgenda;
 
+  /// Salud — etiqueta de la fecha y hora de una cita hospitalaria.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha y hora'**
+  String get myDataHealthHospitalFieldDateTime;
+
+  /// Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».
+  ///
+  /// In es, this message translates to:
+  /// **'{date}, {time}'**
+  String myDataHealthHospitalDateTimeValue(String date, String time);
+
   /// Salud — texto cuando el CIP no se ha podido obtener.
   ///
   /// In es, this message translates to:
@@ -8106,7 +8118,25 @@ abstract class AppLocalizations {
   ///
   /// In es, this message translates to:
   /// **'Actualizado el {day} {month} {year} a las {time}h'**
-  String commonUpdatedAt(Object day, Object month, Object time, Object year);
+  String commonUpdatedAt(Object day, Object month, Object year, Object time);
+
+  /// Agenda — marca de última actualización cuando fue hoy (HH:MM).
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado hoy a las {time} h'**
+  String agendaUpdatedToday(Object time);
+
+  /// Agenda — marca de última actualización cuando fue ayer (HH:MM).
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado ayer a las {time} h'**
+  String agendaUpdatedYesterday(Object time);
+
+  /// Agenda — marca de última actualización en otro día (mes abreviado ya localizado, HH:MM).
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizado el {day} {month} a las {time} h'**
+  String agendaUpdatedOn(Object day, Object month, Object time);
 
   /// Agenda — pestaña de filtro por número de días (7, 30, 365).
   ///
@@ -9509,7 +9539,7 @@ abstract class AppLocalizations {
   /// Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio).
   ///
   /// In es, this message translates to:
-  /// **'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la '**
+  /// **'Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD), '**
   String get privacyAepdTextBeforeLink;
 
   /// Protección de datos — texto del enlace a la AEPD.

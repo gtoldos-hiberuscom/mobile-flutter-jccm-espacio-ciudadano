@@ -217,9 +217,6 @@
   "@loginPageError": {
     "description": "Título del mensaje de error mostrado cuando falla la autenticación."
   },
-  "@loginRetryButton": {
-    "description": "Texto del botón para reintentar el proceso de login."
-  },
   "logoutConfirm": "¿Cerrar sesión?",
   "@logoutConfirm": {
     "description": "Texto de confirmación para cerrar la sesión del usuario."
@@ -4795,6 +4792,22 @@
   "@myDataHealthHospitalFieldAgenda": {
     "description": "Salud — etiqueta de la agenda de una cita hospitalaria."
   },
+  "myDataHealthHospitalFieldDateTime": "Fecha y hora",
+  "@myDataHealthHospitalFieldDateTime": {
+    "description": "Salud — etiqueta de la fecha y hora de una cita hospitalaria."
+  },
+  "myDataHealthHospitalDateTimeValue": "{date}, {time}",
+  "@myDataHealthHospitalDateTimeValue": {
+    "description": "Salud — fecha y hora de una cita hospitalaria, p. ej. «03/02/2026, 11:40».",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "myDataHealthCipUnavailable": "CIP no disponible",
   "@myDataHealthCipUnavailable": {
     "description": "Salud — texto cuando el CIP no se ha podido obtener."
@@ -5551,7 +5564,36 @@
   },
   "commonUpdatedAt": "Actualizado el {day} {month} {year} a las {time}h",
   "@commonUpdatedAt": {
-    "description": "Marca de última actualización con fecha y hora (mes ya localizado)."
+    "description": "Marca de última actualización con fecha y hora (mes ya localizado).",
+    "placeholders": {
+      "day": {},
+      "month": {},
+      "year": {},
+      "time": {}
+    }
+  },
+  "agendaUpdatedToday": "Actualizado hoy a las {time} h",
+  "@agendaUpdatedToday": {
+    "description": "Agenda — marca de última actualización cuando fue hoy (HH:MM).",
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "agendaUpdatedYesterday": "Actualizado ayer a las {time} h",
+  "@agendaUpdatedYesterday": {
+    "description": "Agenda — marca de última actualización cuando fue ayer (HH:MM).",
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "agendaUpdatedOn": "Actualizado el {day} {month} a las {time} h",
+  "@agendaUpdatedOn": {
+    "description": "Agenda — marca de última actualización en otro día (mes abreviado ya localizado, HH:MM).",
+    "placeholders": {
+      "day": {},
+      "month": {},
+      "time": {}
+    }
   },
   "agendaFilterDays": "{days} días",
   "@agendaFilterDays": {
@@ -6021,8 +6063,12 @@
   "@homeNewsLabelWithMinimumCount": {
     "description": "Etiqueta de una tarjeta de novedades cuando el recuento ha alcanzado el límite de carga",
     "placeholders": {
-      "label": { "type": "String" },
-      "count": { "type": "int" }
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
     }
   },
   "homeRecommendedProceduresTitle": "Para mí",
@@ -6472,31 +6518,49 @@
     "description": "Protección de datos — elemento de la lista de finalidades."
   },
   "privacyLegalBasisTitle": "¿Cuál es la legitimación de este tratamiento?",
-  "@privacyLegalBasisTitle": {"description": "Protección de datos — título de legitimación."},
+  "@privacyLegalBasisTitle": {
+    "description": "Protección de datos — título de legitimación."
+  },
   "privacyLegalBasisText": "Las bases jurídicas que hacen lícito el tratamiento de Espacio Ciudadano son las siguientes:\n\n• Para el acceso a servicios como la consulta del estado de tramitación de un expediente, notificaciones, así como el resto de información administrativa en poder de esta Administración, las bases jurídicas son: 6.1.c) Obligación legal y la 6.1.e) Misión en interés público o ejercicio de poderes públicos.\nY su detalle, entre otras normas legales:\nArtículo 53 de la Ley 39/2015, de 1 de octubre, del Procedimiento Administrativo Común de las Administraciones Públicas.\nReal Decreto 203/2021, de 30 de marzo, por el que se aprueba el Reglamento de actuación y funcionamiento del sector público por medios electrónicos.\nLey 4/2025, de 11 de julio, de Simplificación, Agilización y Digitalización Administrativa.\n• En el caso de consulta de su información administrativa en poder de la Administración General del Estado, la base jurídica es el consentimiento que se recoge al marcar la opción seleccionada, que podrá retirar en cualquier momento retirando la autorización inicial en el apartado \"Perfil de usuario\", sin que ello le impida poder seguir disfrutando del resto de servicios.\n• La base jurídica para el tratamiento de las recomendaciones realizadas en base a los hechos vitales marcados es el consentimiento, que podrá retirar en cualquier momento retirando la autorización inicial de los hechos vitales anteriormente marcados en el apartado \"Perfil de usuario\", sin que ello le impida poder seguir disfrutando del resto de servicios.\n• La base jurídica para el tratamiento de los eventos es el consentimiento expreso, que podrá retirar en cualquier momento retirando la autorización inicial en el apartado \"Perfil de usuario\".\n• Asimismo, la base jurídica para la consulta y descarga de los carnets seleccionados es el consentimiento expreso, que podrá retirar en cualquier momento retirando la autorización inicial en el apartado \"Perfil de usuario\".\n\nLas bases jurídicas que hacen lícito el tratamiento del Registro de Población son las siguientes:\n\n• Para el teléfono y el correo electrónico: 6.1.a) Consentimiento del interesado/a que podrá retirar en cualquier momento.\n• Para el resto de los datos: 6.1.e) Misión en interés público o ejercicio de poderes públicos (Ley 10/2002, de Estadística de Castilla-La Mancha).",
-  "@privacyLegalBasisText": {"description": "Protección de datos — bases jurídicas."},
+  "@privacyLegalBasisText": {
+    "description": "Protección de datos — bases jurídicas."
+  },
   "privacyTransfersTitle": "¿Existen cesiones de datos?",
-  "@privacyTransfersTitle": {"description": "Protección de datos — título de cesiones."},
+  "@privacyTransfersTitle": {
+    "description": "Protección de datos — título de cesiones."
+  },
   "privacyTransfersText": "No existen cesiones de datos personales en el tratamiento de Espacio Ciudadano.\n\nEn el caso del tratamiento del Registro de Población se podrán ceder datos a otros órganos de la Administración regional para la comunicación de estos con la ciudadanía, previa valoración de la compatibilidad de la finalidad del tratamiento, en aplicación del artículo 6.4 del Reglamento General de Protección de Datos.",
-  "@privacyTransfersText": {"description": "Protección de datos — información sobre cesiones."},
+  "@privacyTransfersText": {
+    "description": "Protección de datos — información sobre cesiones."
+  },
   "privacyRetentionTitle": "¿Durante cuánto tiempo se conservarán los datos?",
-  "@privacyRetentionTitle": {"description": "Protección de datos — título de conservación."},
+  "@privacyRetentionTitle": {
+    "description": "Protección de datos — título de conservación."
+  },
   "privacyRetentionText": "El plazo de conservación de los datos será el necesario para cumplir con la finalidad para la que se recabaron y para determinar las posibles responsabilidades que se pudieran derivar de dicha finalidad y del tratamiento de los datos. Será de aplicación lo dispuesto en la normativa de archivos y documentación.",
-  "@privacyRetentionText": {"description": "Protección de datos — plazo de conservación."},
+  "@privacyRetentionText": {
+    "description": "Protección de datos — plazo de conservación."
+  },
   "privacyRightsTitle": "¿Cómo se pueden ejercer los derechos previstos en la normativa de protección de datos?",
-  "@privacyRightsTitle": {"description": "Protección de datos — título de ejercicio de derechos."},
+  "@privacyRightsTitle": {
+    "description": "Protección de datos — título de ejercicio de derechos."
+  },
   "privacyRightsText": "Podrá ejercer de forma gratuita sus derechos de acceso, rectificación, supresión, limitación, oposición y a no ser objeto de decisiones automatizadas por los siguientes medios:\n\n• Mediante escrito presentado en las Oficinas de Registro y dirigido al responsable del tratamiento, la Agencia de Transformación Digital o la Oficina del Dato de Castilla-La Mancha\n• A través de la sede electrónica de esta administración, https://www.jccm.es/tramites/1001969.",
-  "@privacyRightsText": {"description": "Protección de datos — medios para ejercer derechos."},
+  "@privacyRightsText": {
+    "description": "Protección de datos — medios para ejercer derechos."
+  },
   "privacyAepdTitle": "¿Puedo reclamar ante la Agencia Española de Protección de Datos?",
   "@privacyAepdTitle": {
     "description": "Protección de datos — título de la sección sobre reclamaciones ante la AEPD."
   },
-  "privacyAepdTextBeforeLink": "Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la ",
+  "privacyAepdTextBeforeLink": "Si dispones de pruebas o indicios que acrediten la vulneración de tu derecho a la protección de datos en Espacio Ciudadano, puedes presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD), ",
   "@privacyAepdTextBeforeLink": {
     "description": "Protección de datos — texto de la sección AEPD antes del enlace a su web (termina en coma y espacio)."
   },
   "privacyAepdLinkLabel": "Agencia Española de Protección de Datos (AEPD)",
-  "@privacyAepdLinkLabel": {"description": "Protección de datos — texto del enlace a la AEPD."},
+  "@privacyAepdLinkLabel": {
+    "description": "Protección de datos — texto del enlace a la AEPD."
+  },
   "privacyAepdTextAfterLink": ".\n\nTambién puedes reclamar ante la Delegada de Protección de Datos de la Administración de la Junta de Comunidades de Castilla-La Mancha (JCCM), cuya información de contacto está indicada más adelante.",
   "@privacyAepdTextAfterLink": {
     "description": "Protección de datos — texto de la sección AEPD después del enlace a su web (empieza con punto)."

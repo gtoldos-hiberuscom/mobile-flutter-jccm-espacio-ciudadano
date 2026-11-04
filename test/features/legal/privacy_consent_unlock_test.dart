@@ -21,7 +21,7 @@ void main() {
 
   setUp(() => repository = _FakeConsentRepository());
 
-  Future<void> pumpPrivacyPage(final WidgetTester tester) async {
+  Future<void> pumpPrivacyPage(final WidgetTester tester, {final TextScaler textScaler = TextScaler.noScaling}) async {
     router = GoRouter(
       routes: [
         GoRoute(path: '/', builder: (final _, final _) => const PrivacyPage()),
@@ -45,6 +45,10 @@ void main() {
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
               routerConfig: router,
+              builder: (final context, final child) => MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaler: textScaler),
+                child: child!,
+              ),
             );
           },
         ),
@@ -107,6 +111,24 @@ void main() {
     expect(firstHeading.text.style?.color, AppColors.primary);
     expect(body.text.style?.color, AppColors.primaryDark);
     expect(finalHeading.text.style?.color, AppColors.textBase);
+  });
+
+  testWidgets('con texto ampliado todos los párrafos y enlaces se escalan igual', (final tester) async {
+    const scaler = TextScaler.linear(1.5);
+    await pumpPrivacyPage(tester, textScaler: scaler);
+    final content = find.byType(SingleChildScrollView);
+    final links = find.descendant(of: content, matching: find.byType(AppInlineLink));
+
+    // El párrafo escala los enlaces que contiene; el enlace no debe volver a
+    // escalarse o se ve más grande que el texto que lo rodea.
+    final linkParagraphs = tester.widgetList<RichText>(find.descendant(of: links, matching: find.byType(RichText))).toSet();
+    expect(linkParagraphs, isNotEmpty);
+    for (final paragraph in tester.widgetList<RichText>(find.descendant(of: content, matching: find.byType(RichText)))) {
+      expect(paragraph.textScaler, linkParagraphs.contains(paragraph) ? TextScaler.noScaling : scaler, reason: paragraph.text.toPlainText());
+    }
+
+    final linkTargets = tester.widgetList<AppInlineLink>(links).map((final link) => (link.text, link.isExternal)).toList();
+    expect(linkTargets, containsAll(<(String, bool)>[('https://www.jccm.es/tramites/1001969', true), ('https://www.aepd.es/', true), ('protecciondatos@jccm.es', false)]));
   });
 
   testWidgets('a failed clause load still unlocks Continuar at the bottom, and tapping it retries', (final tester) async {

@@ -49,8 +49,10 @@ void main() {
       expect(appointments[2].kind, AgendaAppointmentKind.health);
       expect(appointments[2].channel, 'Telefónica');
       expect(appointments[2].details.map((final detail) => detail.label), ['Profesional', 'Tipo de cita', 'Modo de cita']);
-      expect(appointments[3].description, 'Consulta Medicina de Familia');
+      // Las de SESCAM también se pintan por filas, con el valor tal cual llega.
+      expect(appointments[3].title, 'Cita de Atención Primaria');
       expect(appointments[3].kind, AgendaAppointmentKind.health);
+      expect(appointments[3].details, [(label: 'Tipo de cita', value: 'Consulta Medicina de Familia')]);
       // SESCAM trae `centro`, pero en primaria no se muestra (JCCMEC-274): ni
       // como campo ni como texto secundario de reserva.
       expect(appointments[3].center, isNull);
@@ -102,10 +104,14 @@ void main() {
       final duplicated = appointments.where((final appointment) => appointment.dateTime == DateTime(2026, 6, 15, 9));
       expect(duplicated, hasLength(1));
       // Gana la de SESCAM: trae profesional y modo en campos propios en vez de
-      // dentro del mensaje del evento.
-      expect(duplicated.single.title, 'LAGUNA RUIDERA MONTESINOS');
-      expect(duplicated.single.description, 'Cita de Atención Primaria');
-      expect(duplicated.single.detail, 'Consulta a demanda');
+      // dentro del mensaje del evento. Se pinta por filas, sin reinterpretar
+      // los valores.
+      expect(duplicated.single.title, 'Cita de Atención Primaria');
+      expect(duplicated.single.details, [
+        (label: 'Profesional', value: 'LAGUNA RUIDERA MONTESINOS'),
+        (label: 'Tipo de cita', value: 'DEMANDA'),
+        (label: 'Modo de cita', value: 'Presencial'),
+      ]);
       expect(appointments, hasLength(4));
     });
 
@@ -146,7 +152,7 @@ void main() {
       )).appointments;
 
       expect(appointments, hasLength(1), reason: 'la misma cita publicada por las dos fuentes debe listarse una vez');
-      expect(appointments.single.title, 'LAGUNA RUIDERA MONTESINOS');
+      expect(appointments.single.details.first, (label: 'Profesional', value: 'LAGUNA RUIDERA MONTESINOS'));
     });
 
     test('un evento con instante UTC se guarda en hora local', () async {
@@ -316,10 +322,11 @@ void main() {
       expect(snapshot.appointments, hasLength(4));
     });
 
-    test('un 500/3031 de SESCAM se identifica como usuario sin CIP y no como fuente caída', () async {
+    test('un 500/3031 de SESCAM con el CIP confirmado como inexistente se identifica como usuario sin CIP y no como fuente caída', () async {
       final adapter = _AgendaAdapter(
         healthStatusCode: 500,
         healthErrorCode: 3031,
+        cipStatusCode: 404,
       );
       final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
       final repository = AgendaRepositoryImpl(dio: dio);
@@ -334,6 +341,29 @@ void main() {
       expect(snapshot.healthCipMissing, isTrue);
       expect(snapshot.appointments, hasLength(4));
     });
+
+    for (final (description, cipStatusCode) in [('el ciudadano tiene CIP', 200), ('el CIP no se puede consultar', 500)]) {
+      test('un 500/3031 de SESCAM cuando $description es fuente caída, no usuario sin CIP', () async {
+        // El 3031 también llega con el servicio de citas caído en SESCAM: solo
+        // la consulta del CIP puede confirmar que de verdad falta.
+        final adapter = _AgendaAdapter(
+          healthStatusCode: 500,
+          healthErrorCode: 3031,
+          cipStatusCode: cipStatusCode,
+        );
+        final dio = Dio(BaseOptions(baseUrl: 'https://example.test'))..httpClientAdapter = adapter;
+        final repository = AgendaRepositoryImpl(dio: dio);
+
+        final snapshot = await repository.loadAppointments(
+          documentNumber: '12345678A',
+          agentId: 'agent-1',
+        );
+
+        expect(snapshot.healthCipMissing, isFalse);
+        expect(snapshot.failedSources, unorderedEquals(<AgendaAppointmentSource>{AgendaAppointmentSource.health}));
+        expect(adapter.paths, contains('/api/v1/ciudadanos/12345678A/salud/cip'));
+      });
+    }
 
     for (final statusCode in [401, 403]) {
       test('un $statusCode de SESCAM se trata como lista vacía y no muestra aviso', () async {
@@ -434,6 +464,7 @@ final class _AgendaAdapter implements HttpClientAdapter {
     this.healthStatusCode = 200,
     this.eventosStatusCode = 200,
     this.healthErrorCode,
+    this.cipStatusCode = 200,
   }) : _primaryCareAppointments = primaryCareAppointments ?? _defaultPrimaryCareAppointments;
 
   /// Eventos de la agenda general; `null` usa la lista de ejemplo del test base.
@@ -444,6 +475,9 @@ final class _AgendaAdapter implements HttpClientAdapter {
   final int healthStatusCode;
   final int eventosStatusCode;
   final int? healthErrorCode;
+
+  /// Respuesta de `/salud/cip`, que decide si un 3031 es falta de CIP.
+  final int cipStatusCode;
 
   static ResponseBody _errorBody(final int statusCode, {final int? errorCode}) => ResponseBody.fromString(
     jsonEncode({
@@ -532,6 +566,21 @@ final class _AgendaAdapter implements HttpClientAdapter {
             },
           },
         ),
+        200,
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
+      );
+    }
+
+    if (options.path.endsWith('/salud/cip')) {
+      if (cipStatusCode != 200) {
+        return _errorBody(cipStatusCode);
+      }
+      return ResponseBody.fromString(
+        jsonEncode({
+          'body': {'cip': 'PNRV901264600010'},
+        }),
         200,
         headers: {
           Headers.contentTypeHeader: [Headers.jsonContentType],

@@ -74,7 +74,15 @@ class AppInlineLink extends StatelessWidget {
             focusColor: Colors.transparent,
             hoverColor: Colors.transparent,
             borderRadius: const BorderRadius.all(Radius.circular(AppDimensions.radiusXs)),
-            child: Text(isExternal ? '$text$externalMark' : text, style: style),
+            // El párrafo que contiene el `WidgetSpan` ya escala el enlace con
+            // el tamaño de texto del sistema; si el `Text` volviera a
+            // aplicarlo, el enlace se vería más grande que el texto que lo
+            // rodea.
+            child: Text(
+              isExternal ? '$text$externalMark' : text,
+              style: style,
+              textScaler: TextScaler.noScaling,
+            ),
           ),
         ),
       ),
