@@ -52,7 +52,7 @@ void main() {
 
     await tester.tap(find.text(l10n.gestionNotificacionesTabAceptadas));
     await tester.pump();
-    expect(find.text(l10n.gestionNotificacionesLoadError), findsOneWidget);
+    expect(find.textContaining(l10n.gestionNotificacionesLoadError), findsOneWidget);
 
     await tester.tap(find.text(l10n.errorStateRetry));
     await tester.pumpAndSettle();

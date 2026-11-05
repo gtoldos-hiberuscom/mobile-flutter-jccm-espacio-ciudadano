@@ -148,7 +148,7 @@ class _AuthorizedVehiclesData extends ConsumerWidget {
     if (vehicles.isEmpty) {
       return MyDataNoData(
         message: l10n.myDataVehiclesNoDataMessage,
-        actionLabel: l10n.myDataVehiclesInfoSheetContactButton,
+        contactLinkText: l10n.myDataVehiclesContactLink,
         contactUrl: _dgtContactUrl,
       );
     }

@@ -93,8 +93,8 @@ class _ThermalSpaEmpty extends StatelessWidget {
 
     return MyDataNoData(
       message: l10n.socialWelfareThermalSpaNoDataMessage,
-      actionLabel: l10n.familiaNumerosaOfficeContactsButton,
-      onAction: () => launchSocialWelfareOfficeContacts(context, ref),
+      contactLinkText: l10n.socialWelfareCouncilLink,
+      onContact: () => launchSocialWelfareOfficeContacts(context, ref),
     );
   }
 }

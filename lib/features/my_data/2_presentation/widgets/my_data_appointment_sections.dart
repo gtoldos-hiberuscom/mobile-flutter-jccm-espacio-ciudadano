@@ -24,6 +24,7 @@ class MyDataAppointmentSections extends StatelessWidget {
     required this.entries,
     required this.emptyMessage,
     super.key,
+    this.contactLinkText,
     this.contactUrl = sescamHealthCentersUrl,
   });
 
@@ -38,6 +39,10 @@ class MyDataAppointmentSections extends StatelessWidget {
   /// no dice lo mismo que «no tienes pasadas».
   final String emptyMessage;
 
+  /// Texto del enlace con el que termina [emptyMessage]; sin él, el vacío no
+  /// enlaza a ningún sitio.
+  final String? contactLinkText;
+
   final String contactUrl;
 
   @override
@@ -47,7 +52,7 @@ class MyDataAppointmentSections extends StatelessWidget {
     if (entries.isEmpty) {
       return MyDataNoData(
         message: emptyMessage,
-        actionLabel: l10n.myDataNoDataContact,
+        contactLinkText: contactLinkText,
         contactUrl: contactUrl,
         scrollable: false,
       );

@@ -29,7 +29,7 @@ class GestionRegistroDetailPage extends StatelessWidget {
       if (_hasValue(registro.fecha))
         _DetailField(
           label: l10n.gestionRegistrosFechaLabel,
-          value: _formatDate(context, registro.fecha!),
+          value: _formatDate(registro.fecha!),
         ),
       if (_hasValue(registro.consejeria))
         _DetailField(
@@ -77,7 +77,7 @@ class GestionRegistroDetailPage extends StatelessWidget {
                   child: Text(
                     _sentenceCase(registro.titulo),
                     style: AppTypography.h2.copyWith(
-                      color: AppColors.textBase,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -92,7 +92,7 @@ class GestionRegistroDetailPage extends StatelessWidget {
                   child: Text(
                     l10n.gestionRegistrosDatosRegistroTitle,
                     style: AppTypography.h3.copyWith(
-                      color: AppColors.textBase,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -116,15 +116,13 @@ class GestionRegistroDetailPage extends StatelessWidget {
 
   bool _hasValue(final String? value) => value != null && value.trim().isNotEmpty;
 
-  String _formatDate(final BuildContext context, final String rawDate) {
+  /// DD/MM/AAAA, como en el listado de registros y el resto de Mis gestiones.
+  String _formatDate(final String rawDate) {
     final date = DateTime.tryParse(rawDate);
     if (date == null) {
       return rawDate;
     }
-    return DateFormat(
-      'd MMM yyyy',
-      Localizations.localeOf(context).languageCode,
-    ).format(date);
+    return DateFormat('dd/MM/yyyy').format(date);
   }
 }
 

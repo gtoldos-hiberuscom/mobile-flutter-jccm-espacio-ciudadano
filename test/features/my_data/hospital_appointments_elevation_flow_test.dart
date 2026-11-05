@@ -159,7 +159,7 @@ void main() {
 
     expect(find.text(_acceder), findsNothing);
     expect(find.text('Verificación completada'), findsOneWidget);
-    expect(find.text('No tienes citas hospitalarias pendientes.'), findsOneWidget);
+    expect(find.text('No hemos encontrado citas hospitalarias asociadas a tus datos.'), findsOneWidget);
     expect(clave.calls, 1);
   });
 

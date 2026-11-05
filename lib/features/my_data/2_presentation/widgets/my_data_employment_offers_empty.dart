@@ -11,7 +11,7 @@ class MyDataEmploymentOffersEmpty extends StatelessWidget {
 
     return MyDataNoData(
       message: l10n.myDataEmploymentOffersNoDataMessage,
-      actionLabel: l10n.myDataEmploymentInfoSheetOfficeContactsButton,
+      contactLinkText: l10n.myDataEmploymentOffersContactLink,
       contactUrl: 'https://empleo.castillalamancha.es/',
       scrollable: false,
     );

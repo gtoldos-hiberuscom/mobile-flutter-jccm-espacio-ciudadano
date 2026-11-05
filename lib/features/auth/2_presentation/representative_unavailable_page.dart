@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Explains why a section cannot be queried with a representative certificate.
@@ -34,10 +35,7 @@ class RepresentativeUnavailablePage extends StatelessWidget {
             top: AppDimensions.space24,
             bottom: AppDimensions.space24,
           ),
-          child: AppAlertContextual(
-            size: AppAlertContextualSize.small,
-            message: l10n.representativeUnavailableMessage,
-          ),
+          child: const MyDataRepresentativeUnavailableAlert(),
         ),
       ),
     );

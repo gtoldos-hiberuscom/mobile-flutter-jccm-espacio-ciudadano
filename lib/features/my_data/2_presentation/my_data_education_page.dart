@@ -12,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/ex
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Education data detail — Figma node 43973:1875.
@@ -101,10 +102,7 @@ class _EducationDataContent extends StatelessWidget {
             const SizedBox(height: AppDimensions.space16),
           ],
           if (isRepresentative)
-            AppAlertContextual(
-              size: AppAlertContextualSize.small,
-              message: l10n.representativeUnavailableMessage,
-            )
+            const MyDataRepresentativeUnavailableAlert()
           else if (hasAgeAuthorization)
             AppNavigationCard(
               title: l10n.myDataEducationUniversityTitles,

@@ -76,6 +76,32 @@ void main() {
     expect(presses, 1);
   });
 
+  testWidgets('completa el mensaje con un enlace en línea accesible', (final tester) async {
+    var taps = 0;
+    await tester.pumpWidget(
+      buildApp(
+        AppAlertContextual(
+          message: 'Si no puedes acceder, contacta con',
+          messageLink: AppAlertMessageLink(text: 'soporte técnico', onTap: () => taps++),
+        ),
+      ),
+    );
+
+    expect(find.semantics.byLabel('Aviso del sistema: Si no puedes acceder, contacta con soporte técnico.'), findsOneWidget);
+
+    final link = find.semantics.byLabel('soporte técnico');
+    final data = link.evaluate().single.getSemanticsData();
+    expect(data.flagsCollection.isLink, isTrue);
+    expect(data.hasAction(SemanticsAction.tap), isTrue);
+    tester.semantics.tap(link);
+    await tester.pump();
+    expect(taps, 1);
+
+    await tester.tap(find.text('soporte técnico'));
+    await tester.pump();
+    expect(taps, 2);
+  });
+
   testWidgets('permite personalizar la etiqueta accesible', (final tester) async {
     await tester.pumpWidget(
       buildApp(

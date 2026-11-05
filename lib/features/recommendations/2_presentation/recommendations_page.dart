@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/technical_support_link.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/widgets/authenticated_profile_menu.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/recommendations/0_entity/recommendation.dart';
@@ -207,6 +208,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
         const SizedBox(height: AppDimensions.space24),
         if (showNoRecommendationsHelper) ...[
           _NoRecommendationsContextualHelper(
+            hasConfiguredLifeEvents: state.hasConfiguredLifeEvents,
             onEditLifeEvents: () => unawaited(_openLifeEvents()),
           ),
           const SizedBox(height: AppDimensions.space24),
@@ -261,6 +263,7 @@ class _RecommendationsPageState extends ConsumerState<RecommendationsPage> {
         // suelto con un botón primario debajo.
         AppAlertContextual(
           message: l10n.recommendationsLoadingError,
+          messageLink: technicalSupportMessageLink(context),
           action: AppButton(
             label: l10n.recommendationsLoadingErrorRetry,
             hierarchy: AppButtonHierarchy.ghost,
@@ -331,7 +334,7 @@ class _RecommendationsAuthorizationRequired extends StatelessWidget {
         ),
         const SizedBox(height: AppDimensions.space24),
         AppAlertContextual(
-          message: l10n.myDataJccmAuthorizationRequiredMessage,
+          message: l10n.recommendationsAuthorizationRequiredMessage,
           action: AppButton(
             label: l10n.myDataJccmAuthorizationRequiredCta,
             onPressed: onReviewConsents,
@@ -550,9 +553,13 @@ List<String> _categoryLabels(
 
 class _NoRecommendationsContextualHelper extends StatelessWidget {
   const _NoRecommendationsContextualHelper({
+    required this.hasConfiguredLifeEvents,
     required this.onEditLifeEvents,
   });
 
+  /// Sin hechos vitales elegidos se pide elegirlos; con ellos, solo se avisa
+  /// de que todavía no hay recomendaciones.
+  final bool hasConfiguredLifeEvents;
   final VoidCallback onEditLifeEvents;
 
   @override
@@ -560,7 +567,7 @@ class _NoRecommendationsContextualHelper extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     return AppAlertContextual(
       size: AppAlertContextualSize.small,
-      message: l10n.recommendationsEmptyNoMatches,
+      message: hasConfiguredLifeEvents ? l10n.recommendationsEmptyNoMatches : l10n.recommendationsEmptyNoLifeEvents,
       actionSpacing: AppDimensions.space4,
       action: AppButton(
         label: l10n.recommendationsEditLifeEventsCta,

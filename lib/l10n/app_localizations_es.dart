@@ -612,13 +612,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get agendaEmpty => 'No hay eventos para el periodo seleccionado.';
 
   @override
-  String get agendaError => 'No hemos podido cargar tu agenda.';
+  String get agendaError => 'No podemos mostrar la información de tu agenda en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
   String get agendaHealthAppointmentsUnavailable => 'No hemos podido cargar tus citas sanitarias.';
 
   @override
-  String get agendaHealthCipMissing => 'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.';
+  String get agendaHealthCipMissing => 'No encontramos tu código de identificación personal (CIP) en el Servicio de Salud de Castilla-La Mancha (SESCAM) y no podemos mostrar tus citas. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin funcionar, contacta con';
 
   @override
   String get agendaEventsUnavailable => 'No hemos podido cargar los eventos de tu agenda.';
@@ -958,7 +958,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get socialWelfareInfoSheetDescription => 'Consulta la información de tus expedientes de Bienestar Social y accede a los servicios disponibles en la Junta de Comunidades de Castilla-La Mancha.';
 
   @override
-  String get myDataJccmAuthorizationRequiredMessage => 'Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.';
+  String get myDataJccmAuthorizationRequiredMessage => 'Para consultar la información que la Junta de Comunidades de Castilla-La Mancha (JCCM) tiene sobre ti, es necesario que autorices el acceso a tus datos. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.';
+
+  @override
+  String get recommendationsAuthorizationRequiredMessage => 'Para mostrarte recomendaciones basadas en tus hechos vitales, es necesario que autorices el uso de esta información. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.';
 
   @override
   String get authorizationCheckFailedMessage => 'No hemos podido comprobar tus autorizaciones. Inténtalo de nuevo.';
@@ -967,7 +970,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataJccmAuthorizationRequiredCta => 'Ir a Condiciones de uso y autorizaciones';
 
   @override
-  String get myDataAgeAuthorizationRequiredMessage => 'Autoriza el uso de tus datos desde tus preferencias para consultar la información que la Administración tiene sobre ti.';
+  String get myDataAgeAuthorizationRequiredMessage => 'Para consultar la información que la Administración General del Estado (AGE) tiene sobre ti, es necesario que autorices el acceso a tus datos. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.';
 
   @override
   String get socialWelfareFamilyTitle => 'Familia numerosa';
@@ -1230,13 +1233,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get supportConfirmationTitle => 'Solicitud enviada';
 
   @override
-  String get supportConfirmationMessage => 'Hemos recibido tu solicitud. Te confirmaremos por correo electrónico.';
+  String get supportConfirmationMessage => 'Hemos recibido tu consulta. Nos pondremos en contacto contigo lo antes posible.';
 
   @override
   String get supportConfirmationNewRequest => 'Enviar otra solicitud';
 
   @override
-  String get supportSubmissionError => 'No hemos podido enviar tu solicitud. Inténtalo de nuevo.';
+  String get supportSubmissionError => 'No hemos podido enviar tu consulta debido a un problema técnico. Vuelve a intentarlo en unos minutos.';
 
   @override
   String get supportErrorNameRequired => 'Indica tu nombre.';
@@ -2485,10 +2488,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get familiaNumerosaNo => 'No';
 
   @override
-  String get familiaNumerosaNoDataMessage => 'No hemos encontrado información sobre tu título de familia numerosa.';
+  String get familiaNumerosaNoDataMessage => 'No hemos encontrado información de familia numerosa asociada a tus datos.';
 
   @override
-  String get familiaNumerosaNoDataContactHint => 'Si esta información es incorrecta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+  String get familiaNumerosaNoDataContactHint => 'Si crees que la información es incorrecta o no está actualizada, contacta con la';
 
   @override
   String get familiaNumerosaContactListButton => 'Consultar el listado de contactos';
@@ -2552,7 +2555,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get familiaNumerosaErrorMessage => 'No se ha podido cargar tu carnet de familia numerosa.';
 
   @override
-  String get familiaNumerosaServiceUnavailableMessage => 'El servicio de consulta de tu título de familia numerosa no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get familiaNumerosaServiceUnavailableMessage => 'No podemos mostrar tu información de familia numerosa en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
   String get myDataServiceUnavailableUpdate => 'Actualizar';
@@ -2564,43 +2567,64 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataNoDataOfficeContacts => 'Contacto';
 
   @override
-  String get discapacidadNoDataMessage => 'No hemos encontrado información de discapacidad asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+  String get discapacidadNoDataMessage => 'No hemos encontrado información de discapacidad asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la';
 
   @override
-  String get socialWelfareParkingNoDataMessage => 'No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+  String get socialWelfareParkingNoDataMessage => 'No hemos encontrado información de tarjeta de estacionamiento asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la';
 
   @override
-  String get socialWelfareThermalSpaNoDataMessage => 'No hemos encontrado información de termalismo asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+  String get socialWelfareThermalSpaNoDataMessage => 'No hemos encontrado información de termalismo asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la';
 
   @override
-  String get socialWelfareDependencyNoDataMessage => 'No hemos encontrado información de atención a la dependencia asociada a tus datos en el servicio de consulta de la JCCM.\n\nSi la situación no es correcta o no está actualizada, contacta con la Consejería de Bienestar Social de Castilla-La Mancha.';
+  String get socialWelfareDependencyNoDataMessage => 'No hemos encontrado información de atención a la dependencia asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la';
 
   @override
-  String get educationUniversityTitlesNoDataMessage => 'No hemos encontrado títulos universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Ciencia, Innovación y Universidades.';
+  String get socialWelfareCouncilLink => 'Consejería de Bienestar Social de Castilla-La Mancha';
 
   @override
-  String get educationNonUniversityTitlesNoDataMessage => 'No hemos encontrado títulos no universitarios asociados a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con el Ministerio de Educación, Formación Profesional y Deportes.';
+  String get educationUniversityTitlesNoDataMessage => 'No hemos encontrado ningún título universitario asociado a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el';
 
   @override
-  String get myDataVehiclesNoDataMessage => 'No hemos encontrado vehículos asociados a tus datos en el servicio de consulta de la DGT.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General de Tráfico.';
+  String get educationUniversityTitlesContactLink => 'Ministerio de Ciencia, Innovación y Universidades';
 
   @override
-  String get myDataHousingAddressNoDataMessage => 'No hemos encontrado información de domicilio asociada a tus datos en el servicio de consulta del padrón.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Ayuntamiento.';
+  String get educationNonUniversityTitlesNoDataMessage => 'No hemos encontrado ningún título no universitario asociado a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el';
 
   @override
-  String get myDataHousingRealEstateNoDataMessage => 'No hemos encontrado bienes inmuebles asociados a tus datos en el servicio de consulta de Catastro.\n\nSi la situación no es correcta o no está actualizada, contacta con la Dirección General del Catastro.';
+  String get educationNonUniversityTitlesContactLink => 'Ministerio de Educación, Formación profesional y Deportes';
 
   @override
-  String get myDataHealthAppointmentsNoDataMessage => 'No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.';
+  String get myDataVehiclesNoDataMessage => 'No hemos encontrado información de vehículos asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con la';
 
   @override
-  String get myDataHealthHospitalAppointmentsNoDataMessage => 'No hemos encontrado citas hospitalarias asociadas a tus datos en el servicio de consulta del SESCAM.\n\nSi la situación no es correcta o no está actualizada, contacta con tu centro hospitalario.';
+  String get myDataVehiclesContactLink => 'Dirección General de Tráfico (DGT)';
 
   @override
-  String get myDataEmploymentDemandNoDataMessage => 'No hemos encontrado información de demanda de empleo asociada a tus datos en el servicio de consulta.\n\nSi la situación no es correcta o no está actualizada, contacta con una oficina de empleo de Castilla-La Mancha.';
+  String get myDataHousingAddressNoDataMessage => 'No hemos encontrado información de domicilio asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con tu ayuntamiento.';
 
   @override
-  String get myDataEmploymentOffersNoDataMessage => 'Aún no te has inscrito a ninguna oferta.\n\nSi la información es incorrecta o no está actualizada, revisa tu espacio personal en el Portal de empleo de Castilla-La Mancha.';
+  String get myDataHousingRealEstateNoDataMessage => 'No hemos encontrado información de bienes inmuebles asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el Punto de Información Catastral correspondiente.';
+
+  @override
+  String get myDataHealthAppointmentsNoDataMessage => 'No hemos encontrado citas de atención primaria asociadas a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el centro correspondiente del';
+
+  @override
+  String get myDataHealthAppointmentsContactLink => 'Servicio de Salud de Castilla-La Mancha (SESCAM)';
+
+  @override
+  String get myDataHealthHospitalAppointmentsNoDataMessage => 'No hemos encontrado citas hospitalarias asociadas a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el centro correspondiente del Servicio de Salud de Castilla-La Mancha (SESCAM).';
+
+  @override
+  String get myDataEmploymentDemandNoDataMessage => 'No hemos encontrado información de demandante de empleo asociada a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el';
+
+  @override
+  String get myDataEmploymentDemandContactLink => 'Servicio Público de Empleo Estatal (SEPE)';
+
+  @override
+  String get myDataEmploymentOffersNoDataMessage => 'No hemos encontrado inscripciones en ofertas de empleo asociadas a tus datos.\n\nSi crees que la información es incorrecta o no está actualizada, contacta con el';
+
+  @override
+  String get myDataEmploymentOffersContactLink => 'Portal de empleabilidad de la Junta de Comunidades de Castilla-La Mancha';
 
   @override
   String get myDataEmploymentOffersAuthorizationRequiredMessage => 'Autoriza el uso de tus datos desde tus preferencias para consultar tus inscripciones en ofertas de empleo.';
@@ -2612,37 +2636,37 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthAppointmentsAuthorizationRequiredMessage => 'Autoriza el uso de tus datos desde tus preferencias para consultar tus citas de Atención Primaria.';
 
   @override
-  String get discapacidadServiceUnavailableMessage => 'El servicio de consulta de tu título de discapacidad no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get discapacidadServiceUnavailableMessage => 'No podemos mostrar tu información de discapacidad en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get socialWelfareParkingServiceUnavailableMessage => 'El servicio de consulta de tu tarjeta de estacionamiento no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get socialWelfareParkingServiceUnavailableMessage => 'No podemos mostrar tu tarjeta de estacionamiento en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get socialWelfareThermalSpaServiceUnavailableMessage => 'El servicio de consulta de tu información de termalismo no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get socialWelfareThermalSpaServiceUnavailableMessage => 'No podemos mostrar tu información de termalismo en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get socialWelfareDependencyServiceUnavailableMessage => 'El servicio de consulta de tu información de atención a la dependencia no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get socialWelfareDependencyServiceUnavailableMessage => 'No podemos mostrar tu información de atención a la dependencia en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get educationUniversityTitlesServiceUnavailableMessage => 'El servicio de consulta de tus títulos universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get educationUniversityTitlesServiceUnavailableMessage => 'No podemos mostrar tus títulos universitarios en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get educationNonUniversityTitlesServiceUnavailableMessage => 'El servicio de consulta de tus títulos no universitarios no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get educationNonUniversityTitlesServiceUnavailableMessage => 'No podemos mostrar tus títulos no universitarios en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get myDataVehiclesServiceUnavailableMessage => 'El servicio de consulta de tus vehículos no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get myDataVehiclesServiceUnavailableMessage => 'No podemos mostrar tus vehículos en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get myDataHousingAddressServiceUnavailableMessage => 'El servicio de consulta de tus datos de domicilio no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get myDataHousingAddressServiceUnavailableMessage => 'No podemos mostrar tu domicilio en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get myDataHousingRealEstateServiceUnavailableMessage => 'El servicio de consulta de tus bienes inmuebles no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get myDataHousingRealEstateServiceUnavailableMessage => 'No podemos mostrar tus bienes inmuebles en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get myDataHealthAppointmentsServiceUnavailableMessage => 'El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.';
+  String get myDataHealthAppointmentsServiceUnavailableMessage => 'No podemos mostrar tus citas de atención primaria en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get myDataHealthHospitalAppointmentsServiceUnavailableMessage => 'El servicio de consulta de datos de citas de atención hospitalaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.';
+  String get myDataHealthHospitalAppointmentsServiceUnavailableMessage => 'No podemos mostrar tus citas hospitalarias en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
   String get familiaNumerosaRetry => 'Reintentar';
@@ -2846,7 +2870,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsLifeEventsComingSoon => 'Mis hechos vitales estará disponible próximamente';
 
   @override
-  String get recommendationsLoadingError => 'No hemos podido cargar la información de tus recomendaciones. Vuelve a intentarlo más tarde.';
+  String get recommendationsLoadingError => 'No podemos mostrar tus recomendaciones en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
   String get recommendationsLoadingErrorRetry => 'Actualizar';
@@ -3073,7 +3097,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get representativeUnavailableTitle => 'Información no disponible';
 
   @override
-  String get representativeUnavailableMessage => 'Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.';
+  String get representativeUnavailableMessage => 'Para consultar tus datos personales, es necesario que accedas con tu certificado personal. Con el certificado de representante no podemos mostrarte esta información. Si no puedes acceder, contacta con';
+
+  @override
+  String get technicalSupportLink => 'soporte técnico';
 
   @override
   String get myDataHealthTitle => 'Salud';
@@ -3130,13 +3157,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataEmploymentServiceUnavailableTitle => 'Servicio no disponible';
 
   @override
-  String get myDataEmploymentServiceUnavailableMessage => 'El servicio de Demanda de empleo actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.';
+  String get myDataEmploymentServiceUnavailableMessage => 'No podemos mostrar tu información de demandante de empleo en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
   String get myDataEmploymentServiceUnavailableReload => 'Recargar página';
 
   @override
-  String get myDataEmploymentOffersServiceUnavailableMessage => 'No hemos podido cargar tus inscripciones en ofertas de empleo. Vuelve a intentarlo más tarde.';
+  String get myDataEmploymentOffersServiceUnavailableMessage => 'No podemos mostrar tus inscripciones en ofertas de empleo en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
   String get myDataEmploymentAuthorizationDialogTitle => 'No has autorizado la consulta de datos en tu perfil';
@@ -3601,12 +3628,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get myDataHealthHospitalPastTab => 'Citas pasadas';
 
   @override
-  String get myDataHealthHospitalPendingEmpty => 'No tienes citas hospitalarias pendientes.';
-
-  @override
-  String get myDataHealthHospitalPastEmpty => 'No tienes citas hospitalarias pasadas.';
-
-  @override
   String get myDataHealthHospitalFieldService => 'Servicio';
 
   @override
@@ -3741,10 +3762,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionExpedientesEstadoLabel => 'ESTADO';
 
   @override
-  String get gestionExpedientesLoadError => 'No hemos podido cargar tus expedientes';
+  String get gestionExpedientesLoadError => 'No podemos mostrar tus expedientes en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get gestionExpedientesEmpty => 'No tienes expedientes activos';
+  String get gestionExpedientesEmpty => 'No tienes expedientes en este momento. Cuando tengas alguno, podrás consultarlos aquí.';
 
   @override
   String get gestionExpedientesDetalleTitle => 'Detalle de expediente';
@@ -3870,19 +3891,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionRegistrosConsejeriaDestinoLabel => 'CONSEJERÍA DE DESTINO';
 
   @override
-  String get gestionRegistrosDatosRegistroTitle => 'Datos del Registro';
+  String get gestionRegistrosDatosRegistroTitle => 'Datos de registro';
 
   @override
-  String get gestionRegistrosEntradasLoadError => 'No hemos podido cargar tus entradas de registro';
+  String get gestionRegistrosEntradasLoadError => 'No podemos mostrar tus registros en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get gestionRegistrosSalidasLoadError => 'No hemos podido cargar tus salidas de registro';
+  String get gestionRegistrosSalidasLoadError => 'No podemos mostrar tus registros en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
-  String get gestionRegistrosEntradasEmpty => 'No tienes entradas de registro';
+  String get gestionRegistrosEntradasEmpty => 'No tienes registros en este momento. Cuando tengas alguno, podrás consultarlos aquí.';
 
   @override
-  String get gestionRegistrosSalidasEmpty => 'No tienes salidas de registro';
+  String get gestionRegistrosSalidasEmpty => 'No tienes registros en este momento. Cuando tengas alguno, podrás consultarlos aquí.';
 
   @override
   String get gestionRegistrosDetalleEntradaTitle => 'Detalle de entrada de registro';
@@ -3987,7 +4008,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionAportacionCamposExpedienteError => 'Rellena el número de registro o el código identificador del expediente (solo uno de los dos).';
 
   @override
-  String get gestionNotificacionesContextualMessage => 'Indica tus datos de contacto para activar los avisos y recibirlos cuando tengas una nueva notificación.';
+  String get gestionNotificacionesContextualMessage => 'Para avisarte de nuevas notificaciones, es necesario que añadas tu número de teléfono móvil y tu correo electrónico. Puedes hacerlo desde Preferencias.';
 
   @override
   String get gestionNotificacionesContextualAction => 'Indicar datos y activar avisos';
@@ -4077,10 +4098,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gestionNotificacionesTagExpirada => 'Expirada';
 
   @override
-  String get gestionNotificacionesEmpty => 'No tienes notificaciones en este momento';
+  String get gestionNotificacionesEmpty => 'No tienes notificaciones en este momento. Cuando tengas alguna, podrás consultarlas aquí.';
 
   @override
-  String get gestionNotificacionesLoadError => 'No se han podido cargar las notificaciones';
+  String get gestionNotificacionesLoadError => 'No podemos mostrar tus notificaciones en este momento. Vuelve a intentarlo en unos minutos. Si en unas horas sigue sin cargar, contacta con';
 
   @override
   String get consentRevokedSessionClosed => 'Has retirado la autorización para consultar tus datos, así que hemos cerrado la sesión. Vuelve a iniciarla para concederla de nuevo.';
@@ -4275,7 +4296,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get agendaRefreshTooltip => 'Actualizar agenda';
 
   @override
-  String get agendaEmptyAppointments => 'No hay citas para el periodo seleccionado.';
+  String get agendaEmptyAppointments => 'No tienes eventos próximos en tu agenda en este momento. Cuando tengas citas o notificaciones importantes, podrás consultarlas aquí.';
 
   @override
   String get agendaChannelPhone => 'telefónica';
@@ -4423,13 +4444,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recommendationsPreferencesHint => 'Personaliza tus recomendaciones editando tus hechos vitales en Preferencias siempre que quieras.';
 
   @override
-  String get recommendationsEmptyNoMatches => 'Actualmente no hay recomendaciones para ti. Puedes modificar la selección actual de tus hechos vitales desde las preferencias o esperar a recibir nuevas actualizaciones.';
+  String get recommendationsEmptyNoMatches => 'No tenemos recomendaciones para ti en este momento. Cuando las haya, podrás consultarlas aquí. Si quieres, puedes cambiar los temas que te interesan desde Preferencias, en Mis hechos vitales.';
+
+  @override
+  String get recommendationsEmptyNoLifeEvents => 'Para mostrarte recomendaciones basadas en tus hechos vitales, es necesario que indiques los temas que te interesan. Puedes elegirlos y modificarlos cuando quieras desde Preferencias, en Mis hechos vitales.';
 
   @override
   String get recommendationsEditLifeEventsCta => 'Ir a Preferencias';
 
   @override
-  String get recommendationsEmptyFiltered => 'Actualmente no hay recomendaciones para los filtros seleccionados. Puedes modificar la selección de filtros o esperar a recibir nuevas actualizaciones.';
+  String get recommendationsEmptyFiltered => 'No hemos encontrado recomendaciones con este filtro. Puedes quitarlo para consultar todas.';
 
   @override
   String get recommendationsResetFilterCta => 'Reiniciar filtro';
@@ -4454,7 +4478,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get digitalCardsInfoSheetBody => 'Consulta y descarga los carnets digitales asociados a tu perfil y utilízalos para realizar tus gestiones en cualquier momento.';
 
   @override
-  String get digitalCardsAuthorizationRequiredMessage => 'Para consultar y descargar tus carnets digitales, debes autorizar el uso de estos datos en «Condiciones de uso y autorizaciones».';
+  String get digitalCardsAuthorizationRequiredMessage => 'Para consultar la información de tus carnets, es necesario que autorices el acceso a tus datos. Puedes hacerlo desde Preferencias, en Condiciones de uso y autorizaciones.';
 
   @override
   String digitalCardsSaveDialogTitle(Object format) {
@@ -5143,7 +5167,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get supportErrorSubmitInvalidData => 'No hemos podido validar los datos introducidos.';
 
   @override
-  String get supportErrorSubmitUnavailable => 'No hemos podido enviar tu solicitud. Inténtalo de nuevo más tarde.';
+  String get supportErrorSubmitUnavailable => 'No hemos podido enviar tu consulta debido a un problema técnico. Vuelve a intentarlo en unos minutos.';
 
   @override
   String get notificationContactSaveUnauthorizedError => 'No tienes permisos para guardar estos datos de contacto.';
