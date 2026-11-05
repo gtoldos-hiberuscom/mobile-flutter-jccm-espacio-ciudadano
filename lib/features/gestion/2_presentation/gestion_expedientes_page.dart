@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empt
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/technical_support_link.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/expediente.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_expedientes_provider.dart';
@@ -85,6 +86,7 @@ class _GestionExpedientesPageState extends ConsumerState<GestionExpedientesPage>
                       ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
                       : ErrorStateWidget(
                           message: l10n.gestionExpedientesLoadError,
+                          messageLink: technicalSupportMessageLink(context),
                           onRetry: () => ref.refresh(expedientesProvider),
                         ),
                   data: (final expedientes) {

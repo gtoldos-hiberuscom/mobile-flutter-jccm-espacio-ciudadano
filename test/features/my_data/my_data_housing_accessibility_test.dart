@@ -115,7 +115,7 @@ void main() {
       findsOneWidget,
     );
     expect(
-      find.text('Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'),
+      find.textContaining('Con el certificado de representante no podemos mostrarte esta información.'),
       findsOneWidget,
     );
   });

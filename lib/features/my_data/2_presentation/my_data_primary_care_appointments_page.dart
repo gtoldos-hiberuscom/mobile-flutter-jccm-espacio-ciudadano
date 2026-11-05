@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/technical_support_link.dart';
 import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/external_navigation_confirmation.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/health_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authorization_required.dart';
@@ -175,6 +176,7 @@ class _PendingAppointmentsList extends ConsumerWidget {
       data: (final appointments) => MyDataAppointmentSections(
         entries: _entries(appointments, filters),
         emptyMessage: l10n.myDataHealthAppointmentsNoDataMessage,
+        contactLinkText: l10n.myDataHealthAppointmentsContactLink,
       ),
     );
   }
@@ -223,6 +225,7 @@ class _PastAppointmentsList extends ConsumerWidget {
               MyDataAppointmentSections(
                 entries: entries,
                 emptyMessage: l10n.myDataHealthAppointmentsNoDataMessage,
+                contactLinkText: l10n.myDataHealthAppointmentsContactLink,
               ),
             if (state.hasMore) ...[
               const SizedBox(height: AppDimensions.space16),
@@ -301,6 +304,7 @@ class _HealthCipMissingState extends StatelessWidget {
   Widget build(final BuildContext context) {
     return AppAlertContextual(
       message: AppLocalizations.of(context).agendaHealthCipMissing,
+      messageLink: technicalSupportMessageLink(context),
       size: AppAlertContextualSize.small,
       announce: true,
     );

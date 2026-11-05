@@ -11,10 +11,10 @@ import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/au
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 const _citasSanitariasCaidas = 'No hemos podido cargar tus citas sanitarias.';
-const _sinCip = 'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.';
+const _sinCip = 'No encontramos tu código de identificación personal (CIP) en el Servicio de Salud de Castilla-La Mancha (SESCAM)';
 const _eventosCaidos = 'No hemos podido cargar los eventos de tu agenda.';
 const _errorTotal = 'No hemos podido cargar tu agenda.';
-const _sinCitas = 'No hay citas para el periodo seleccionado.';
+const _sinCitas = 'No tienes eventos próximos en tu agenda en este momento. Cuando tengas citas o notificaciones importantes, podrás consultarlas aquí.';
 const _hospitalariasOcultas = 'Citas hospitalarias ocultas';
 const _verificar = 'Verificar';
 const _verificacionCompletada = 'Verificación completada';
@@ -205,10 +205,10 @@ void main() {
       healthCipMissing: true,
     );
 
-    expect(find.text(_sinCip), findsOneWidget);
+    expect(find.textContaining(_sinCip), findsOneWidget);
     expect(find.text(_citasSanitariasCaidas), findsNothing);
     expect(find.text(_sinCitas), findsNothing);
-    expect(tester.getTopLeft(find.text(_sinCip)).dy, lessThan(tester.getTopLeft(find.byType(AppCalendar)).dy));
+    expect(tester.getTopLeft(find.textContaining(_sinCip)).dy, lessThan(tester.getTopLeft(find.byType(AppCalendar)).dy));
   });
 
   testWidgets('si la fuente que sobrevive no trae nada, el aviso sustituye al estado vacío', (final tester) async {

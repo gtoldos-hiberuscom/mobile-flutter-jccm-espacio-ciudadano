@@ -16,10 +16,10 @@ const _pendientes = 'Pendientes';
 const _pasadas = 'Pasadas';
 // `MyDataNoData` parte el mensaje en dos: el resultado, dentro del aviso, y la
 // indicación de dónde corregirlo, debajo.
-const _sinCitas = 'No hemos encontrado citas de Atención Primaria asociadas a tus datos en el servicio de consulta del SESCAM.';
-const _sinCitasContacto = 'Si la situación no es correcta o no está actualizada, contacta con tu Centro de Salud.';
-const _servicioCaido = 'El servicio de consulta de datos de citas de atención primaria no se encuentra actualmente disponible. Inténtalo de nuevo más tarde.';
-const _sinCip = 'En el servicio del SESCAM no existe ningún CIP vinculado a su identidad. Puede que no podamos mostrar esta información ahora. Inténtelo de nuevo más tarde.';
+const _sinCitas = 'No hemos encontrado citas de atención primaria asociadas a tus datos.';
+const _sinCitasContacto = 'Si crees que la información es incorrecta o no está actualizada, contacta con el centro correspondiente del';
+const _servicioCaido = 'No podemos mostrar tus citas de atención primaria en este momento.';
+const _sinCip = 'No encontramos tu código de identificación personal (CIP) en el Servicio de Salud de Castilla-La Mancha (SESCAM)';
 
 /// Atención primaria sale de la pantalla de Salud, que pasa a ser un menú.
 ///
@@ -83,21 +83,21 @@ void main() {
     await _pump(tester);
 
     expect(find.text(_sinCitas), findsOneWidget);
-    expect(find.text(_sinCitasContacto), findsOneWidget);
+    expect(find.textContaining(_sinCitasContacto), findsOneWidget);
   });
 
   testWidgets('un fallo del servicio se muestra con reintento', (final tester) async {
     await _pump(tester, pendingError: Exception('SESCAM caído'));
 
-    expect(find.text(_servicioCaido), findsOneWidget);
+    expect(find.textContaining(_servicioCaido), findsOneWidget);
     expect(find.text(_sinCitas), findsNothing);
   });
 
   testWidgets('el CIP ausente se explica y no se confunde con un fallo', (final tester) async {
     await _pump(tester, pendingError: const MyDataHealthCipMissing());
 
-    expect(find.text(_sinCip), findsOneWidget);
-    expect(find.text(_servicioCaido), findsNothing);
+    expect(find.textContaining(_sinCip), findsOneWidget);
+    expect(find.textContaining(_servicioCaido), findsNothing);
   });
 
   // JCCMEC-266: SESCAM devuelve el 3031 en las dos consultas para un ciudadano
@@ -110,13 +110,13 @@ void main() {
     );
     await _pump(tester, repository: repository);
 
-    expect(find.text(_sinCip), findsOneWidget);
+    expect(find.textContaining(_sinCip), findsOneWidget);
 
     await tester.tap(find.text(_pasadas));
     await tester.pumpAndSettle();
 
-    expect(find.text(_sinCip), findsOneWidget);
-    expect(find.text(_servicioCaido), findsNothing);
+    expect(find.textContaining(_sinCip), findsOneWidget);
+    expect(find.textContaining(_servicioCaido), findsNothing);
   });
 
   testWidgets('sin autorización no se pintan las pestañas', (final tester) async {

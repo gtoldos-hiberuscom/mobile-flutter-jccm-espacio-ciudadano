@@ -6,6 +6,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/technical_support_link.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/0_entity/authentication_level_required.dart';
 import 'package:jccm_espacio_ciudadano/features/auth/2_presentation/providers/authentication_level_elevation_notifier.dart';
@@ -219,6 +220,7 @@ class _HospitalAppointmentsList extends ConsumerWidget {
         ),
         MyDataHealthCipMissing() => AppAlertContextual(
           message: l10n.agendaHealthCipMissing,
+          messageLink: technicalSupportMessageLink(context),
           size: AppAlertContextualSize.small,
           announce: true,
         ),
@@ -231,12 +233,12 @@ class _HospitalAppointmentsList extends ConsumerWidget {
           scrollable: false,
         ),
       },
-      // Mensaje propio de cada pestaña: el apartado 2.2 pide no dejar la
-      // pantalla vacía sin explicación, y «no tienes pendientes» no dice lo
-      // mismo que «no tienes pasadas».
+      // Sin citas en la pestaña se explica (apartado 2.2: nunca una pantalla
+      // vacía sin explicación) con el texto validado por UX Writing, igual en
+      // pendientes y en pasadas.
       data: (final appointments) => MyDataAppointmentSections(
         entries: _entries(appointments, filters),
-        emptyMessage: filter == HealthAppointmentFilter.pending ? l10n.myDataHealthHospitalPendingEmpty : l10n.myDataHealthHospitalPastEmpty,
+        emptyMessage: l10n.myDataHealthHospitalAppointmentsNoDataMessage,
       ),
     );
   }
