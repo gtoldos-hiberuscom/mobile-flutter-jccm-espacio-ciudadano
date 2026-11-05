@@ -11,6 +11,7 @@ import 'package:jccm_espacio_ciudadano/features/my_data/0_entity/my_data_authori
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/my_data_social_welfare_contact_actions.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_social_welfare_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_no_data.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_service_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -237,19 +238,10 @@ class _FamilyContactHelper extends StatelessWidget {
         Padding(
           // Alineado con el texto del aviso: 4 de padding + icono de 24 + 8 de gap.
           padding: const EdgeInsets.only(left: AppDimensions.space32 + AppDimensions.space4),
-          child: Text(
-            contactMessage,
-            style: AppTypography.bodyRegular.copyWith(color: AppColors.primaryDark),
-          ),
-        ),
-        const SizedBox(height: AppDimensions.space16),
-        Align(
-          child: AppButton(
-            label: l10n.familiaNumerosaContactListButton,
-            hierarchy: AppButtonHierarchy.ghost,
-            trailingIcon: AppIcons.openInNew,
-            isExternalLink: true,
-            onPressed: () => launchSocialWelfareOfficeContacts(context, ref),
+          child: MyDataContactParagraph(
+            message: contactMessage,
+            linkText: l10n.socialWelfareCouncilLink,
+            onLinkTap: () => launchSocialWelfareOfficeContacts(context, ref),
           ),
         ),
       ],

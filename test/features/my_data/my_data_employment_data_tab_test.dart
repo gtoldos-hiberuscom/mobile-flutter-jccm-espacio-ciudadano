@@ -53,7 +53,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('El servicio de Demanda de empleo actualmente no está disponible. Puedes recargar la información o intentarlo de nuevo más tarde.'), findsOneWidget);
+    expect(find.textContaining('No podemos mostrar tu información de demandante de empleo en este momento.'), findsOneWidget);
     expect(find.text('-'), findsOneWidget);
     expect(find.text('INSCRIPCIÓN NO ACTIVA'), findsNothing);
     expect(find.text('Inscripciones en ofertas'), findsOneWidget);

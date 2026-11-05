@@ -108,8 +108,6 @@ class _PropertiesContent extends StatelessWidget {
             properties.isEmpty
                 ? MyDataNoData(
                     message: l10n.myDataHousingRealEstateNoDataMessage,
-                    actionLabel: l10n.myDataNoDataContact,
-                    contactUrl: _catastroUrl,
                     scrollable: false,
                   )
                 : _PropertiesEmpty(message: l10n.myDataHousingRealEstateFilteredEmpty)

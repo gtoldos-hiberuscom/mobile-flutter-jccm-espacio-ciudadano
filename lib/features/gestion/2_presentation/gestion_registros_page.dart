@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empt
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/technical_support_link.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/registro.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/2_presentation/providers/gestion_registros_provider.dart';
@@ -151,6 +152,7 @@ class _EntradasTab extends ConsumerWidget {
               ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
               : ErrorStateWidget(
                   message: l10n.gestionRegistrosEntradasLoadError,
+                  messageLink: technicalSupportMessageLink(context),
                   onRetry: () => ref.refresh(entradasProvider),
                 ),
           data: (final registros) => _RegistrosList(registros: registros, filters: filters, isEntrada: true),
@@ -180,6 +182,7 @@ class _SalidasTab extends ConsumerWidget {
               ? EmptyStateWidget(message: l10n.authorizationRevokedMessage, icon: AppIcons.info)
               : ErrorStateWidget(
                   message: l10n.gestionRegistrosSalidasLoadError,
+                  messageLink: technicalSupportMessageLink(context),
                   onRetry: () => ref.refresh(salidasProvider),
                 ),
           data: (final registros) => _RegistrosList(registros: registros, filters: filters, isEntrada: false),

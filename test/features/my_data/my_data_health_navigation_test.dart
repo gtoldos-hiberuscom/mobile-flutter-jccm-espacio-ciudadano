@@ -107,13 +107,13 @@ void main() {
 
     expect(find.text(_cip), findsOneWidget);
     expect(find.text(_primaria), findsOneWidget);
-    expect(find.text('Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'), findsNothing);
+    expect(find.textContaining('Con el certificado de representante no podemos mostrarte esta información.'), findsNothing);
   });
 
   testWidgets('un representante abre Salud en Mis datos, no en Información y servicios', (final tester) async {
     await _pumpHealth(tester, representedAgentId: 'PER-REPRESENTADO');
 
-    expect(find.text('Con la identificación que se ha usado para entrar no es posible ver esta información. Si dispones de otra forma de identificarte, puedes probar de nuevo.'), findsOneWidget);
+    expect(find.textContaining('Con el certificado de representante no podemos mostrarte esta información.'), findsOneWidget);
     expect(find.text('Trámites que te pueden interesar'), findsNothing);
   });
 

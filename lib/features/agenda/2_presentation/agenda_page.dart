@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/design_system.dart';
 import 'package:jccm_espacio_ciudadano/core/logger/logger.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/technical_support_link.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointment.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/0_entity/agenda_appointments_snapshot.dart';
 import 'package:jccm_espacio_ciudadano/features/agenda/1_domain/usecases/refresh_agenda_events_usecase.dart';
@@ -585,6 +586,7 @@ class _AgendaHealthCipMissingNotice extends StatelessWidget {
   Widget build(final BuildContext context) {
     return AppAlertContextual(
       message: AppLocalizations.of(context).agendaHealthCipMissing,
+      messageLink: technicalSupportMessageLink(context),
       size: AppAlertContextualSize.small,
       announce: true,
     );
@@ -677,6 +679,7 @@ class _AgendaErrorState extends StatelessWidget {
     // Mismo tratamiento visual que el resto de errores de servicio de la app.
     return AppAlertContextual(
       message: l10n.agendaError,
+      messageLink: technicalSupportMessageLink(context),
       action: AppButton(
         label: l10n.agendaParseErrorRetry,
         hierarchy: AppButtonHierarchy.tertiary,

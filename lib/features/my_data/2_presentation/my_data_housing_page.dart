@@ -12,6 +12,7 @@ import 'package:jccm_espacio_ciudadano/features/external_links/2_presentation/ex
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/providers/my_data_authorization_provider.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_authorization_contextual_helper.dart';
 import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_disabled_navigation_card.dart';
+import 'package:jccm_espacio_ciudadano/features/my_data/2_presentation/widgets/my_data_representative_unavailable.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
 
 /// Housing detail page — Figma nodes 43973:2061 and 43973:2085.
@@ -123,10 +124,7 @@ class _HousingDataContent extends StatelessWidget {
             ),
           if (isRepresentative) ...[
             const SizedBox(height: AppDimensions.space16),
-            AppAlertContextual(
-              size: AppAlertContextualSize.small,
-              message: l10n.representativeUnavailableMessage,
-            ),
+            const MyDataRepresentativeUnavailableAlert(),
           ],
         ],
       ),

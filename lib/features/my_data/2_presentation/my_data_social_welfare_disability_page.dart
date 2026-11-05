@@ -98,8 +98,8 @@ class _DisabilityEmpty extends StatelessWidget {
 
     return MyDataNoData(
       message: l10n.discapacidadNoDataMessage,
-      actionLabel: l10n.familiaNumerosaOfficeContactsButton,
-      onAction: () => launchSocialWelfareOfficeContacts(context, ref),
+      contactLinkText: l10n.socialWelfareCouncilLink,
+      onContact: () => launchSocialWelfareOfficeContacts(context, ref),
     );
   }
 }

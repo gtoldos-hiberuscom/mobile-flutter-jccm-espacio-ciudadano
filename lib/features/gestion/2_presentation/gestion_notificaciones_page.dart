@@ -7,6 +7,7 @@ import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/empt
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/error_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/ui_states/loading_state_widget.dart';
 import 'package:jccm_espacio_ciudadano/core/routing/route_registry.dart';
+import 'package:jccm_espacio_ciudadano/core/routing/technical_support_link.dart';
 import 'package:jccm_espacio_ciudadano/features/consent/1_domain/usecases/resolve_authorization_failure_usecase.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion.dart';
 import 'package:jccm_espacio_ciudadano/features/gestion/0_entity/notificacion_estado.dart';
@@ -113,6 +114,7 @@ class _GestionNotificacionesPageState extends ConsumerState<GestionNotificacione
                         )
                       : ErrorStateWidget(
                           message: l10n.gestionNotificacionesLoadError,
+                          messageLink: technicalSupportMessageLink(context),
                           onRetry: () => ref.invalidate(gestionNotificacionesProvider(null)),
                         ),
                   data: (final notifs) {

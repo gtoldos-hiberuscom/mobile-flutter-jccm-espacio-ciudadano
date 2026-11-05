@@ -23,7 +23,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('contacta con tu Ayuntamiento'), findsOneWidget);
+    expect(find.textContaining('contacta con tu ayuntamiento'), findsOneWidget);
     expect(find.byType(AppButton), findsNothing);
   });
 
