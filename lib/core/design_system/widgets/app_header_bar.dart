@@ -107,18 +107,18 @@ class AppHeaderBar extends StatelessWidget implements PreferredSizeWidget {
       shape: const Border(
         bottom: BorderSide(color: AppColors.backgroundBlueMutedLight),
       ),
-      // El H1 es el propio título visible y se lee antes que el botón de
-      // volver. Un nodo auxiliar de 1×1 junto al botón no lo alcanzaba
-      // VoiceOver: el foco saltaba de la flecha a las pestañas. Todos los
-      // hijos llevan clave de orden: las claves solo ordenan entre hermanos
-      // que la tengan.
+      // El H1 es el propio título visible y se lee justo después del botón de
+      // volver, como en las barras nativas. Si va antes, al entrar en la
+      // pantalla el lector se sitúa en la flecha y de ahí salta a las
+      // pestañas sin leer el título. Todos los hijos llevan clave de orden:
+      // las claves solo ordenan entre hermanos que la tengan.
       title: Semantics(
         container: true,
         explicitChildNodes: true,
         child: Row(
           children: [
             Semantics(
-              sortKey: const OrdinalSortKey(1),
+              sortKey: const OrdinalSortKey(0),
               child: _withFocusRing(
                 IconButton(
                   icon: AppIcon(leadingIcon, size: AppDimensions.iconLarge, color: AppColors.textPrimary),
@@ -132,7 +132,7 @@ class AppHeaderBar extends StatelessWidget implements PreferredSizeWidget {
               child: Semantics(
                 header: true,
                 headingLevel: 1,
-                sortKey: const OrdinalSortKey(0),
+                sortKey: const OrdinalSortKey(1),
                 label: semanticTitle,
                 child: ExcludeSemantics(
                   // Sin límite de líneas: la barra crece con el título. `AppBar`

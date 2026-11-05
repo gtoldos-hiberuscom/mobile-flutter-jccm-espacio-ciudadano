@@ -21,7 +21,7 @@ void main() {
     home: Scaffold(appBar: header, body: const Text('Contenido principal')),
   );
 
-  testWidgets('expone un único H1 antes de la navegación', (final tester) async {
+  testWidgets('expone un único H1', (final tester) async {
     await tester.pumpWidget(
       buildApp(AppHeaderBar(title: 'Mis preferencias', onBack: () {})),
     );
@@ -36,7 +36,7 @@ void main() {
     expect(find.byTooltip('Atrás'), findsOneWidget);
   });
 
-  testWidgets('el título se lee antes que la flecha y que las acciones', (final tester) async {
+  testWidgets('se lee la flecha, después el título y después las acciones', (final tester) async {
     await tester.pumpWidget(
       buildApp(AppHeaderBar(title: 'Salud', onBack: () {}, onInfo: () {})),
     );
@@ -53,7 +53,7 @@ void main() {
 
     visit(tester.getSemantics(find.byType(Scaffold)));
     final relevant = labels.where(['Salud', 'Atrás', 'Información', 'Contenido principal'].contains).toList();
-    expect(relevant, ['Salud', 'Atrás', 'Información', 'Contenido principal']);
+    expect(relevant, ['Atrás', 'Salud', 'Información', 'Contenido principal']);
   });
 
   testWidgets('localiza las acciones predeterminadas en inglés', (final tester) async {
