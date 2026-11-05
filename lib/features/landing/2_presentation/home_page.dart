@@ -578,39 +578,52 @@ class _QuickAccessGrid extends StatelessWidget {
           width: cellWidth,
           iconAreaHeight: tablet ? 112 : 80,
         );
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: items.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            mainAxisExtent: cellHeight,
-            mainAxisSpacing: AppDimensions.space8,
-            crossAxisSpacing: AppDimensions.space8,
-          ),
-          itemBuilder: (final context, final index) {
-            final item = items[index];
-            return AppQuickAccessCard(
-              label: item.label,
-              icon: item.icon,
-              iconAsset: item.iconAsset,
-              onTap: () {
-                final route = item.route;
-                if (route == null) {
-                  onComingSoon();
-                  return;
-                }
-                unawaited(
-                  context.push(
-                    Uri(
-                      path: route,
-                      queryParameters: const {'from': 'home'},
-                    ).toString(),
-                  ),
-                );
-              },
+        Widget card(final _QuickAccessItem item) => AppQuickAccessCard(
+          label: item.label,
+          icon: item.icon,
+          iconAsset: item.iconAsset,
+          onTap: () {
+            final route = item.route;
+            if (route == null) {
+              onComingSoon();
+              return;
+            }
+            unawaited(
+              context.push(
+                Uri(
+                  path: route,
+                  queryParameters: const {'from': 'home'},
+                ).toString(),
+              ),
             );
           },
+        );
+
+        // Filas en lugar de una `GridView`: una rejilla sin desplazamiento
+        // dentro del scroll de la página sigue siendo un scroll anidado, y en
+        // iOS el acceso total con teclado no llegaba a sus tarjetas (el motor
+        // presenta cada scroll al sistema de foco como un `UIScrollView`
+        // propio).
+        return Column(
+          children: [
+            for (var start = 0; start < items.length; start += crossAxisCount) ...[
+              if (start > 0) const SizedBox(height: AppDimensions.space8),
+              SizedBox(
+                height: cellHeight,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (var column = 0; column < crossAxisCount; column++) ...[
+                      if (column > 0) const SizedBox(width: AppDimensions.space8),
+                      Expanded(
+                        child: start + column < items.length ? card(items[start + column]) : const SizedBox.shrink(),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ],
         );
       },
     );
