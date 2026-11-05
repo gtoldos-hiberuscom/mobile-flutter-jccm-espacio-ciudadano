@@ -107,49 +107,67 @@ class AppHeaderBar extends StatelessWidget implements PreferredSizeWidget {
       shape: const Border(
         bottom: BorderSide(color: AppColors.backgroundBlueMutedLight),
       ),
-      title: Row(
-        children: [
-          Semantics(
-            header: true,
-            headingLevel: 1,
-            sortKey: const OrdinalSortKey(0),
-            label: semanticTitle,
-            child: const SizedBox(width: 1, height: 1),
-          ),
-          _withFocusRing(
-            IconButton(
-              icon: AppIcon(leadingIcon, size: AppDimensions.iconLarge, color: AppColors.textPrimary),
-              onPressed: onBack,
-              tooltip: leadingTooltip ?? l10n.a11yBack,
-            ),
-          ),
-          const SizedBox(width: AppDimensions.space8),
-          Expanded(
-            child: ExcludeSemantics(
-              // Sin límite de líneas: la barra crece con el título. `AppBar`
-              // limita la ampliación del título a 1,34; se recupera la del
-              // sistema para que llegue al 200 % (WCAG 1.4.4).
-              // `AppBar` impone además un título de una sola línea con puntos
-              // suspensivos: se permite el salto de línea.
-              child: Text(
-                title,
-                softWrap: true,
-                overflow: TextOverflow.visible,
-                textScaler: systemTextScaler,
-                style: AppTypography.h3.copyWith(color: AppColors.primary),
+      // El H1 es el propio título visible y se lee justo después del botón de
+      // volver, como en las barras nativas. Si va antes, al entrar en la
+      // pantalla el lector se sitúa en la flecha y de ahí salta a las
+      // pestañas sin leer el título. Todos los hijos llevan clave de orden:
+      // las claves solo ordenan entre hermanos que la tengan.
+      title: Semantics(
+        container: true,
+        explicitChildNodes: true,
+        child: Row(
+          children: [
+            Semantics(
+              sortKey: const OrdinalSortKey(0),
+              child: _withFocusRing(
+                IconButton(
+                  icon: AppIcon(leadingIcon, size: AppDimensions.iconLarge, color: AppColors.textPrimary),
+                  onPressed: onBack,
+                  tooltip: leadingTooltip ?? l10n.a11yBack,
+                ),
               ),
             ),
-          ),
-          ...actions.map(_withFocusRing),
-          if (onInfo != null)
-            _withFocusRing(
-              IconButton(
-                icon: const AppIcon(AppIcons.info, color: AppColors.textPrimary),
-                onPressed: onInfo,
-                tooltip: infoTooltip ?? l10n.a11yInformation,
+            const SizedBox(width: AppDimensions.space8),
+            Expanded(
+              child: Semantics(
+                header: true,
+                headingLevel: 1,
+                sortKey: const OrdinalSortKey(1),
+                label: semanticTitle,
+                child: ExcludeSemantics(
+                  // Sin límite de líneas: la barra crece con el título. `AppBar`
+                  // limita la ampliación del título a 1,34; se recupera la del
+                  // sistema para que llegue al 200 % (WCAG 1.4.4).
+                  // `AppBar` impone además un título de una sola línea con puntos
+                  // suspensivos: se permite el salto de línea.
+                  child: Text(
+                    title,
+                    softWrap: true,
+                    overflow: TextOverflow.visible,
+                    textScaler: systemTextScaler,
+                    style: AppTypography.h3.copyWith(color: AppColors.primary),
+                  ),
+                ),
               ),
             ),
-        ],
+            for (final (index, action) in actions.indexed)
+              Semantics(
+                sortKey: OrdinalSortKey(2.0 + index),
+                child: _withFocusRing(action),
+              ),
+            if (onInfo != null)
+              Semantics(
+                sortKey: OrdinalSortKey(2.0 + actions.length),
+                child: _withFocusRing(
+                  IconButton(
+                    icon: const AppIcon(AppIcons.info, color: AppColors.textPrimary),
+                    onPressed: onInfo,
+                    tooltip: infoTooltip ?? l10n.a11yInformation,
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,6 @@
-import 'dart:ui' show SemanticsAction;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jccm_espacio_ciudadano/core/design_system/widgets/app_header_bar.dart';
 import 'package:jccm_espacio_ciudadano/l10n/app_localizations.dart';
@@ -21,7 +21,7 @@ void main() {
     home: Scaffold(appBar: header, body: const Text('Contenido principal')),
   );
 
-  testWidgets('expone un único H1 antes de la navegación', (final tester) async {
+  testWidgets('expone un único H1', (final tester) async {
     await tester.pumpWidget(
       buildApp(AppHeaderBar(title: 'Mis preferencias', onBack: () {})),
     );
@@ -31,9 +31,29 @@ void main() {
     expect(heading.headingLevel, 1);
     expect(heading.getSemanticsData().hasAction(SemanticsAction.tap), isFalse);
 
-    final row = tester.widget<Row>(find.descendant(of: find.byType(AppBar), matching: find.byType(Row)).first);
-    expect(row.children.first, isA<Semantics>());
+    // El H1 cubre el título visible, no un nodo auxiliar diminuto.
+    expect(heading.rect.width, greaterThan(1));
     expect(find.byTooltip('Atrás'), findsOneWidget);
+  });
+
+  testWidgets('se lee la flecha, después el título y después las acciones', (final tester) async {
+    await tester.pumpWidget(
+      buildApp(AppHeaderBar(title: 'Salud', onBack: () {}, onInfo: () {})),
+    );
+
+    final labels = <String>[];
+    void visit(final SemanticsNode node) {
+      final data = node.getSemanticsData();
+      final name = data.label.isNotEmpty ? data.label : data.tooltip;
+      if (name.isNotEmpty) {
+        labels.add(name);
+      }
+      node.debugListChildrenInOrder(DebugSemanticsDumpOrder.traversalOrder).forEach(visit);
+    }
+
+    visit(tester.getSemantics(find.byType(Scaffold)));
+    final relevant = labels.where(['Salud', 'Atrás', 'Información', 'Contenido principal'].contains).toList();
+    expect(relevant, ['Atrás', 'Salud', 'Información', 'Contenido principal']);
   });
 
   testWidgets('localiza las acciones predeterminadas en inglés', (final tester) async {
