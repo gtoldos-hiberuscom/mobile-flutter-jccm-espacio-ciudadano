@@ -2,7 +2,7 @@
 
 Comandos para generar los artefactos de release contra **preproducción** (`config_preproduction.json`). Para otro entorno basta cambiar el fichero de config: `config_development.json` (UAT) o `config_production.json` (PRO).
 
-> Atajo: `./build_full_runner.sh` hace todo esto de una vez (clean, pub get, codegen, pod install y los tres artefactos), preguntando el entorno. Este documento desglosa los pasos por si hace falta lanzarlos por separado.
+> Atajo: `./build_full_runner.sh` hace todo esto de una vez (clean, pub get, codegen y los tres artefactos), preguntando el entorno. Este documento desglosa los pasos por si hace falta lanzarlos por separado.
 
 ## 0. Requisitos previos
 
@@ -13,7 +13,7 @@ Comandos para generar los artefactos de release contra **preproducción** (`conf
   test -f android/key.properties && echo "OK: keystore configurado" || echo "FALTA android/key.properties — el AAB saldría firmado con DEBUG"
   ```
 
-- **iOS — firma**: firma automática con el team `C4GLV84757` (bundle `es.jccm.espaciociudadano`). Hace falta sesión de Xcode con una cuenta de ese team y CocoaPods instalado.
+- **iOS — firma**: firma automática con el team `C4GLV84757` (bundle `es.jccm.espaciociudadano`). Hace falta sesión de Xcode con una cuenta de ese team. Los plugins se integran con Swift Package Manager (sin CocoaPods: no hay `Podfile` ni `pod install`).
 - **Versión**: la fija `version: X.Y.Z+B` de `pubspec.yaml` (alimenta `versionName`/`versionCode` en Android y `CFBundleShortVersionString`/`CFBundleVersion` en iOS). Si es una release nueva, subir la versión ahí antes de compilar.
 
 ## 1. Preparación (una vez por sesión de build)
@@ -24,9 +24,6 @@ fvm flutter pub get
 
 # Solo si se ha tocado el swagger / cliente generado:
 cd generated/dart_dio_client && fvm dart run build_runner build --delete-conflicting-outputs && cd ../..
-
-# iOS: refrescar pods (build_full_runner.sh borra antes ios/Pods y ios/Podfile.lock para un rebuild limpio)
-cd ios && pod install && cd ..
 ```
 
 ## 2. Android — AAB (PRE)
