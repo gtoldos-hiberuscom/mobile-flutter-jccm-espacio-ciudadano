@@ -32,12 +32,26 @@
             "flutterMode": "profile"
         },
         {
+            "name": "Production debug",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": ["--dart-define-from-file=config_production.json"],
+        },
+        {
             "name": "Production",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
             "args": ["--dart-define-from-file=config_production.json"],
             "flutterMode": "release"
+        },
+        {
+            "name": "Production (debug, simulator)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": ["--dart-define-from-file=config_production.json"]
         },
         {
             "name": "dart_dio_client",
